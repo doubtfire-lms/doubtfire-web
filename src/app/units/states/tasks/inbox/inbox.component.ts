@@ -28,6 +28,8 @@ interface InboxTaskData {
     unit: Unit,
     taskDef?: TaskDefinition | number,
     fetchMyStudentsOnly?: boolean,
+    viewAsUnitRoleId?: number,
+    includeWithdrawn?: boolean,
   ) => Observable<Task[]> | null;
   selectedTask: Task | null;
   taskKey: unknown;

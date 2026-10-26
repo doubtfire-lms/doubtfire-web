@@ -145,7 +145,7 @@ describe('StaffTaskListComponent', () => {
     component.viewAsUnitRoleId = 7;
     component.viewAsChanged();
 
-    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, true, 7);
+    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, true, 7, false);
     expect(component.filters.tutorialIdSelected).toBe('mine');
   });
 
@@ -293,5 +293,25 @@ describe('StaffTaskListComponent', () => {
     (component as unknown as {refreshData: () => void}).refreshData();
 
     expect(routerStub.navigate).not.toHaveBeenCalled();
+  });
+
+  it('requests withdrawn students only while the Explorer checkbox is checked', () => {
+    const source = vi.fn(() => of([]));
+    component.unit = {id: 20} as never;
+    component.viewType = 'explorer';
+    component.filters = {tutorialIdSelected: 'all'};
+    component.taskData = {
+      source,
+      selectedTask: null,
+      taskKey: null,
+      onSelectedTaskChange: () => {},
+      taskDefMode: true,
+    };
+
+    component.toggleFilter('showWithdrawnStudents', true);
+    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, false, undefined, true);
+
+    component.resetViewPreferences();
+    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, false, undefined, false);
   });
 });
