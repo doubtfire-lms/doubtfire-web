@@ -158,6 +158,7 @@ export class TaskService extends CachedEntityService<Task> {
   public queryTasksForTaskExplorer(
     unit: Unit,
     taskDef?: TaskDefinition | number,
+    includeWithdrawn: boolean = false,
   ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
     return this.query(
@@ -173,7 +174,7 @@ export class TaskService extends CachedEntityService<Task> {
     ).pipe(
       map((tasks: Task[]) => {
         unit.incorporateTasks(tasks);
-        return unit.fillWithUnStartedTasks(tasks, taskDef);
+        return unit.fillWithUnStartedTasks(tasks, taskDef, includeWithdrawn);
       }),
     );
   }

@@ -19,15 +19,24 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
   ) {
     super(httpClient, API_URL);
 
-    this.mapping.addKeys('id', 'note', 'createdAt', 'updatedAt', 'replyToId', {
-      keys: ['user', 'user_id'],
-      toEntityFn: (data: object, key: string, staffNote: StaffNote) => {
-        const userRole = staffNote.project.unit.staff.find((s) => s.user.id === data['user_id']);
+    this.mapping.addKeys(
+      'id',
+      'note',
+      'createdAt',
+      'updatedAt',
+      'replyToId',
+      'hasAttachment',
+      'attachmentType',
+      {
+        keys: ['user', 'user_id'],
+        toEntityFn: (data: object, key: string, staffNote: StaffNote) => {
+          const userRole = staffNote.project.unit.staff.find((s) => s.user.id === data['user_id']);
 
-        // const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
-        return userRole.user;
+          // const user = this.userService.cache.getOrCreate(data[key]?.id, userService, data[key]);
+          return userRole.user;
+        },
       },
-    });
+    );
 
     this.mapping.addJsonKey('note', 'createdAt', 'updatedAt');
   }
@@ -36,7 +45,12 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     return new StaffNote(other);
   }
 
-  public addNote(project: Project, text: string, originalNote: StaffNote): Observable<StaffNote> {
+  public addNote(
+    project: Project,
+    text: string,
+    originalNote: StaffNote,
+    attachment?: File,
+  ): Observable<StaffNote> {
     const pathId = {
       projectId: project.id,
     };
@@ -47,6 +61,9 @@ export class StaffNoteService extends CachedEntityService<StaffNote> {
     }
 
     body.append('note', text);
+    if (attachment) {
+      body.append('attachment', attachment);
+    }
 
     const opts: RequestOptions<StaffNote> = {endpointFormat: this.endpointFormat};
     opts.cache = project.staffNoteCache;

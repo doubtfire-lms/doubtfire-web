@@ -106,6 +106,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       },
       'plagiarismWarnPct',
       'restrictStatusUpdates',
+      'staffManagedTask',
       {
         keys: ['groupSet', 'group_set_id'],
         toEntityFn: (data: object, key: string, taskDef: TaskDefinition) => {

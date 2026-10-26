@@ -17,6 +17,7 @@ import {UserService} from 'src/app/api/services/user.service';
 import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
 import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {ExistingSubmissionChoiceModalService} from 'src/app/tasks/modals/existing-submission-choice-modal/existing-submission-choice-modal.service';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
 
@@ -40,6 +41,7 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
     private submissionTypeModalService: SubmissionTypeModalService,
     private userService: UserService,
     private feedbackAppealService: FeedbackAppealModalService,
+    private existingSubmissionChoiceModal: ExistingSubmissionChoiceModalService,
   ) {
     this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
       if (this.isCurrentTask(task)) {
@@ -114,13 +116,33 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
     }
 
     if (trigger === 'ready_for_feedback') {
-      this.uploadSubmission();
+      this.selectReadyForFeedback();
     } else {
       this.task.triggerTransition(trigger);
     }
   }
 
+  private selectReadyForFeedback(): void {
+    if (
+      this.isTutor &&
+      this.task.status !== 'ready_for_feedback' &&
+      this.task.requiresFileUpload() &&
+      this.task.hasPdf &&
+      this.task.submissionDate
+    ) {
+      this.existingSubmissionChoiceModal.show(this.task);
+      return;
+    }
+
+    this.uploadSubmission();
+  }
+
   uploadSubmission(): void {
+    if (this.isTutor && this.task.requiresFileUpload()) {
+      this.task.presentTaskSubmissionModal('ready_for_feedback');
+      return;
+    }
+
     if (this.task.definition.assessInPortfolioOnly) {
       this.submissionTypeModalService.show(this.task);
     } else {
@@ -162,5 +184,9 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
       this.currentUnitRole?.role === 'Tutor' ||
       this.userService.currentUser?.systemRole === 'Admin'
     );
+  }
+
+  public get canManageStaffTask(): boolean {
+    return this.currentUnitRole?.role === 'Convenor' || this.currentUnitRole?.role === 'Tutor';
   }
 }

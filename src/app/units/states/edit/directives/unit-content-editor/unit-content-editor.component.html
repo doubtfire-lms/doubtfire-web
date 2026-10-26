@@ -20,7 +20,69 @@
         (filesDropped)="uploadSites($event)"
       ></f-file-drop>
 
-      @if (sites.length) {
+      @if (loading) {
+        <div aria-busy="true" aria-label="Loading content sites" role="status">
+          <table aria-hidden="true" class="w-full table-fixed border-collapse">
+            <colgroup>
+              <col class="w-[32%]" />
+              <col class="w-[29%]" />
+              <col class="w-[19%]" />
+              <col class="w-[20%]" />
+            </colgroup>
+            <thead>
+              <tr class="h-14 border-b border-gray-300">
+                <th class="px-4 text-left text-sm font-normal">Site</th>
+                <th class="px-4 text-left text-sm font-normal">Root directory</th>
+                <th class="px-4 text-left text-sm font-normal">Default Unit Content</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="h-[53px] border-b border-gray-300">
+                <td class="px-4">
+                  <div class="flex flex-col gap-1 leading-none">
+                    <ngx-skeleton-loader
+                      [theme]="{
+                        width: '100px',
+                        height: '14px',
+                        'border-radius': '4px',
+                        margin: '0',
+                      }"
+                    ></ngx-skeleton-loader>
+                    <ngx-skeleton-loader
+                      [theme]="{width: '70px', height: '10px', 'border-radius': '4px', margin: '0'}"
+                    ></ngx-skeleton-loader>
+                  </div>
+                </td>
+                <td class="px-4 leading-none">
+                  <ngx-skeleton-loader
+                    [theme]="{width: '140px', height: '16px', 'border-radius': '4px', margin: '0'}"
+                  ></ngx-skeleton-loader>
+                </td>
+                <td class="px-4 leading-none">
+                  <ngx-skeleton-loader
+                    [theme]="{width: '20px', height: '20px', 'border-radius': '50%', margin: '0'}"
+                  ></ngx-skeleton-loader>
+                </td>
+                <td class="px-4">
+                  <div class="flex justify-end gap-2 leading-none">
+                    @for (button of [0, 1, 2]; track button) {
+                      <ngx-skeleton-loader
+                        [theme]="{
+                          width: '32px',
+                          height: '32px',
+                          'border-radius': '50%',
+                          margin: '0',
+                        }"
+                      ></ngx-skeleton-loader>
+                    }
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      } @else if (sites.length) {
         <table class="w-full" mat-table [dataSource]="sites">
           <ng-container matColumnDef="name">
             <th *matHeaderCellDef mat-header-cell>Site</th>
@@ -183,99 +245,118 @@
   </mat-card>
 
   @for (section of routeSections; track section.id) {
-    <mat-card appearance="outlined">
-      <mat-card-header>
-        <mat-card-title>{{ section.title }}</mat-card-title>
-        <mat-card-subtitle>{{ section.subtitle }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <table class="w-full" mat-table [dataSource]="section.rows">
-          <ng-container matColumnDef="context">
-            <th *matHeaderCellDef mat-header-cell>Content link</th>
-            <td *matCellDef="let row" mat-cell>
-              <div class="flex flex-col">
-                <span>{{ row.label }}</span>
-                <span class="text-xs text-gray-600">{{ row.description }}</span>
-              </div>
-            </td>
-          </ng-container>
+    @if (loading) {
+      <div
+        aria-busy="true"
+        class="leading-none"
+        role="status"
+        [attr.aria-label]="'Loading ' + section.title"
+      >
+        <ngx-skeleton-loader
+          animation="pulse"
+          [theme]="{
+            width: '100%',
+            height: skeletonHeightForSection(section) + 'px',
+            'border-radius': '4px',
+            margin: '0',
+          }"
+        ></ngx-skeleton-loader>
+      </div>
+    } @else {
+      <mat-card appearance="outlined" [style.min-height.px]="section.id === 'grades' ? 480 : null">
+        <mat-card-header>
+          <mat-card-title>{{ section.title }}</mat-card-title>
+          <mat-card-subtitle>{{ section.subtitle }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="w-full" mat-table [dataSource]="section.rows">
+            <ng-container matColumnDef="context">
+              <th *matHeaderCellDef mat-header-cell>Content link</th>
+              <td *matCellDef="let row" mat-cell>
+                <div class="flex flex-col">
+                  <span>{{ row.label }}</span>
+                  <span class="text-xs text-gray-600">{{ row.description }}</span>
+                </div>
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="site">
-            <th *matHeaderCellDef mat-header-cell>Site</th>
-            <td *matCellDef="let row" mat-cell>
-              <mat-select
-                class="min-w-52"
-                placeholder="No site"
-                [ngModel]="row.unitContentSiteId"
-                (ngModelChange)="updateRowSite(row, $event)"
-              >
-                <mat-option [value]="null">No site</mat-option>
-                @for (site of sites; track site.id) {
-                  <mat-option [value]="site.id">{{ site.name }}</mat-option>
-                }
-              </mat-select>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="route">
-            <th *matHeaderCellDef mat-header-cell>{{ section.valueLabel }}</th>
-            <td *matCellDef="let row" mat-cell>
-              @if (row.unitContentSiteId) {
-                @if (row.valueKind === 'file') {
-                  <mat-form-field
-                    appearance="outline"
-                    class="w-full py-2"
-                    subscriptSizing="dynamic"
-                  >
-                    <mat-select placeholder="Select a file" [(ngModel)]="row.route">
-                      @for (path of filePathsForRow(row); track path) {
-                        <mat-option [value]="path">{{ path }}</mat-option>
-                      }
-                    </mat-select>
-                    @if (!resourcePathIsValid(row)) {
-                      <mat-hint class="text-red-600"
-                        >Select a file from this content site.</mat-hint
-                      >
-                    }
-                  </mat-form-field>
-                } @else {
-                  <mat-form-field
-                    appearance="outline"
-                    class="w-full py-2"
-                    subscriptSizing="dynamic"
-                  >
-                    <input matInput [placeholder]="row.defaultRoute" [(ngModel)]="row.route" />
-                  </mat-form-field>
-                }
-              }
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="preview">
-            <th *matHeaderCellDef mat-header-cell></th>
-            <td *matCellDef="let row" mat-cell>
-              @if (row.valueKind === 'route') {
-                <button
-                  aria-label="Preview content route"
-                  mat-icon-button
-                  type="button"
-                  [disabled]="!routeCanBePreviewed(row)"
-                  [ngClass]="{
-                    'opacity-40': !routeCanBePreviewed(row),
-                  }"
-                  (click)="previewRoute(row)"
+            <ng-container matColumnDef="site">
+              <th *matHeaderCellDef mat-header-cell>Site</th>
+              <td *matCellDef="let row" mat-cell>
+                <mat-select
+                  class="min-w-52"
+                  placeholder="No site"
+                  [ngModel]="row.unitContentSiteId"
+                  (ngModelChange)="updateRowSite(row, $event)"
                 >
-                  <mat-icon>open_in_new</mat-icon>
-                </button>
-              }
-            </td>
-          </ng-container>
+                  <mat-option [value]="null">No site</mat-option>
+                  @for (site of sites; track site.id) {
+                    <mat-option [value]="site.id">{{ site.name }}</mat-option>
+                  }
+                </mat-select>
+              </td>
+            </ng-container>
 
-          <tr *matHeaderRowDef="routeDisplayedColumns" mat-header-row></tr>
-          <tr *matRowDef="let row; columns: routeDisplayedColumns" mat-row></tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
+            <ng-container matColumnDef="route">
+              <th *matHeaderCellDef mat-header-cell>{{ section.valueLabel }}</th>
+              <td *matCellDef="let row" mat-cell>
+                @if (row.unitContentSiteId) {
+                  @if (row.valueKind === 'file') {
+                    <mat-form-field
+                      appearance="outline"
+                      class="w-full py-2"
+                      subscriptSizing="dynamic"
+                    >
+                      <mat-select placeholder="Select a file" [(ngModel)]="row.route">
+                        @for (path of filePathsForRow(row); track path) {
+                          <mat-option [value]="path">{{ path }}</mat-option>
+                        }
+                      </mat-select>
+                      @if (!resourcePathIsValid(row)) {
+                        <mat-hint class="text-red-600"
+                          >Select a file from this content site.</mat-hint
+                        >
+                      }
+                    </mat-form-field>
+                  } @else {
+                    <mat-form-field
+                      appearance="outline"
+                      class="w-full py-2"
+                      subscriptSizing="dynamic"
+                    >
+                      <input matInput [placeholder]="row.defaultRoute" [(ngModel)]="row.route" />
+                    </mat-form-field>
+                  }
+                }
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="preview">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let row" mat-cell>
+                @if (row.valueKind === 'route') {
+                  <button
+                    aria-label="Preview content route"
+                    mat-icon-button
+                    type="button"
+                    [disabled]="!routeCanBePreviewed(row)"
+                    [ngClass]="{
+                      'opacity-40': !routeCanBePreviewed(row),
+                    }"
+                    (click)="previewRoute(row)"
+                  >
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                }
+              </td>
+            </ng-container>
+
+            <tr *matHeaderRowDef="routeDisplayedColumns" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: routeDisplayedColumns" mat-row></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    }
   }
 
   <div class="sticky bottom-0 z-10 flex justify-end bg-white py-3">
@@ -283,7 +364,7 @@
       color="primary"
       mat-flat-button
       type="button"
-      [disabled]="saving || hasInvalidResourcePaths || !hasUnsavedRouteChanges"
+      [disabled]="loading || saving || hasInvalidResourcePaths || !hasUnsavedRouteChanges"
       (click)="saveContentRoutes()"
     >
       Save Content Links

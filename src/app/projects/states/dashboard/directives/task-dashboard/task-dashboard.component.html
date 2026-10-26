@@ -96,7 +96,10 @@
           <f-task-status-card [task]="task"></f-task-status-card>
           <f-task-due-card [task]="task"></f-task-due-card>
           <f-task-assessment-card [task]="task"></f-task-assessment-card>
-          <f-task-submission-card [task]="task"></f-task-submission-card>
+          <f-task-submission-card
+            [isTutor]="canManageStaffTask"
+            [task]="task"
+          ></f-task-submission-card>
         </div>
       }
       <!-- <ng-template [ngSwitchCase]="DashboardViews.task">

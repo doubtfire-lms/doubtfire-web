@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Ready for Feedback</h2>
+
+<mat-dialog-content>
+  <p class="text-gray-600">Choose which submission to use for feedback.</p>
+
+  <div class="choice-grid">
+    <button
+      class="choice-button"
+      mat-stroked-button
+      type="button"
+      [disabled]="busy"
+      (click)="useExistingSubmission()"
+    >
+      <span class="choice-content">
+        <mat-icon class="choice-icon">task_alt</mat-icon>
+        <span class="choice-label">
+          <span>{{ busy ? 'Moving task...' : 'Use existing submission' }}</span>
+          <span class="choice-detail">Change status only</span>
+        </span>
+      </span>
+    </button>
+
+    <button
+      class="choice-button"
+      mat-stroked-button
+      type="button"
+      [disabled]="busy"
+      (click)="uploadNewSubmission()"
+    >
+      <span class="choice-content">
+        <mat-icon class="choice-icon">upload_file</mat-icon>
+        <span class="choice-label">
+          <span>Upload new submission</span>
+          <span class="choice-detail">Select new files</span>
+        </span>
+      </span>
+    </button>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" [disabled]="busy" [mat-dialog-close]>Cancel</button>
+</mat-dialog-actions>

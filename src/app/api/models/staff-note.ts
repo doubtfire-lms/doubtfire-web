@@ -1,6 +1,7 @@
 import {Entity} from 'ngx-entity-service';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {StaffNoteService} from '../services/staff-note.service';
 import {Project, User, UserService} from './doubtfire-model';
 
@@ -12,6 +13,8 @@ export class StaffNote extends Entity {
   note: string;
   replyTo?: StaffNote;
   replyToId: number;
+  hasAttachment: boolean;
+  attachmentType?: 'image' | 'pdf';
   createdAt: Date;
   updatedAt: Date;
 
@@ -34,6 +37,10 @@ export class StaffNote extends Entity {
   public get authorIsMe(): boolean {
     const userService: UserService = AppInjector.get(UserService);
     return this.user.id === userService.currentUser.id;
+  }
+
+  public get attachmentUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/staff_notes/${this.id}/attachment`;
   }
 
   public delete() {

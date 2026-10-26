@@ -213,6 +213,15 @@
               {{ option.label }}
             </mat-checkbox>
           }
+          @if (viewType === 'explorer') {
+            <mat-checkbox
+              color="primary"
+              [ngModel]="isFilterActive('showWithdrawnStudents')"
+              (ngModelChange)="toggleFilter('showWithdrawnStudents', $event)"
+            >
+              Show tasks from withdrawn students
+            </mat-checkbox>
+          }
         </div>
 
         @if (showStatusFilter) {
@@ -410,6 +419,9 @@
                     }
 
                     <span class="truncate">{{ task.project.student.name }}</span>
+                    @if (viewType === 'explorer' && !task.project.enrolled) {
+                      <span class="shrink-0 text-xs text-gray-500">(Withdrawn)</span>
+                    }
                   </h4>
                   <div class="task-details truncate">
                     {{ task.definition.abbreviation }} -

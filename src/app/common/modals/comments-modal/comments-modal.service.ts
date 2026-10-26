@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {TaskComment} from 'src/app/api/models/doubtfire-model';
 import {CommentsModalComponent, CommentsModalData} from './comments-modal.component';
 
 @Injectable({
@@ -9,7 +8,7 @@ import {CommentsModalComponent, CommentsModalData} from './comments-modal.compon
 export class CommentsModalService {
   constructor(public dialog: MatDialog) {}
 
-  public show(commentResourceUrl: string, comment: TaskComment) {
+  public show(commentResourceUrl: string, comment: {commentType: string}) {
     this.dialog.open<CommentsModalComponent, CommentsModalData>(CommentsModalComponent, {
       data: {commentResourceUrl, comment},
       width: '100%',
