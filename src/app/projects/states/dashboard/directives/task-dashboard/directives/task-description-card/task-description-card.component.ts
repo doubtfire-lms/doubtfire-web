@@ -78,7 +78,39 @@ export class TaskDescriptionCardComponent {
     return this.taskDef?.localDeadlineDate();
   }
 
-  public shouldShowDeadline(): boolean {
-    return this.task && this.task.daysUntilDeadlineDate() <= 14;
+  public targetGradeDueDate(): Date {
+    if (this.task) {
+      return (
+        this.taskDef?.gradeTargetDate(this.task.project.targetGrade) ?? this.taskDef?.localDueDate()
+      );
+    }
+
+    return this.taskDef?.localDueDate();
+  }
+
+  public daysFromTargetDueDate(date: Date): number {
+    const targetDate = this.targetGradeDueDate();
+    if (!date || !targetDate) {
+      return 0;
+    }
+
+    return Math.round(
+      (this.calendarDayTimestamp(date) - this.calendarDayTimestamp(targetDate)) /
+        (24 * 60 * 60 * 1000),
+    );
+  }
+
+  public plannedSubmissionIsAfterFeedbackDeadline(): boolean {
+    const plannedDate = this.dueDate();
+    const feedbackDate = this.feedbackDate();
+    if (!plannedDate || !feedbackDate) {
+      return false;
+    }
+
+    return this.calendarDayTimestamp(plannedDate) > this.calendarDayTimestamp(feedbackDate);
+  }
+
+  private calendarDayTimestamp(date: Date): number {
+    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
   }
 }
