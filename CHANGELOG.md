@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0-110](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-109...v11.0.0-110) (2026-10-26)
+
+
+### Features
+
+* add skeleton ui to content sites ([09d9737](https://github.com/b0ink/doubtfire-deploy/commit/09d973795ba764fa48e6f7956b3bb0341d65295c))
+* add staff-managed task setting and student read-only view ([#1681](https://github.com/b0ink/doubtfire-deploy/issues/1681)) ([27eaceb](https://github.com/b0ink/doubtfire-deploy/commit/27eacebc539132d9aba6666ee48c27878b34a2cb))
+* let staff choose existing evidence for feedback ([#1682](https://github.com/b0ink/doubtfire-deploy/issues/1682)) ([c3e2731](https://github.com/b0ink/doubtfire-deploy/commit/c3e27310447e9e7b5d034cd6312aaa7e95a9e70f))
+* support image and pdf attachments in staff notes ([#1688](https://github.com/b0ink/doubtfire-deploy/issues/1688)) ([3149f58](https://github.com/b0ink/doubtfire-deploy/commit/3149f588ae912e852f2b91d822ef7744de836ef8))
+
 ## [11.0.0-109](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-108...v11.0.0-109) (2026-10-25)
 
 
