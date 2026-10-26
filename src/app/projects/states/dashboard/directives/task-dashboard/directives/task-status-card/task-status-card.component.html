@@ -54,7 +54,7 @@
         [disabled]="
           isReadyForFeedback() ||
           (task?.blockedByPrerequisiteTasks() && !isTutor) ||
-          isSubmittedForPortfolio()
+          (isSubmittedForPortfolio() && !isTutor)
         "
         (click)="uploadSubmission()"
       >
