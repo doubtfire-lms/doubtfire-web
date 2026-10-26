@@ -100,6 +100,15 @@
       <mat-datepicker #potfoliogendatepicker> </mat-datepicker>
     </mat-form-field>
 
+    <f-setting-toggle
+      class="mb-5.5"
+      label="Lock project when portfolio is submitted"
+      [(checked)]="unit.lockProjectOnPortfolioSubmission"
+    >
+      Task statuses, submissions, and comments are locked after a student submits their portfolio.
+      Students can delete their portfolio to make changes again.
+    </f-setting-toggle>
+
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Draft Learning Summary</mat-label>
       <mat-select placeholder="Select Learning Summary Task" [(ngModel)]="unit.draftTaskDefinition">
