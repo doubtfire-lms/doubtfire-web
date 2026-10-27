@@ -16,6 +16,71 @@
   border-right-width: 1px;
 }
 
+f-tutor-discussion {
+  .discussion-layout {
+    height: calc(100vh - 105px);
+    height: calc(100dvh - 105px);
+
+    &.discussion-layout--fullscreen {
+      height: 100vh;
+      height: 100dvh;
+    }
+  }
+
+  .discussion-controls {
+    flex: 0 1 auto;
+    min-height: 64px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+
+    .mat-mdc-tooltip-trigger {
+      touch-action: pan-y pinch-zoom !important;
+    }
+  }
+
+  .task-comment-panel {
+    min-height: 350px;
+
+    // Keep long-press tooltips from blocking scrolling or pinch zoom on iOS.
+    .mat-mdc-tooltip-trigger {
+      touch-action: pan-y pinch-zoom !important;
+    }
+
+    task-comments-viewer {
+      display: block;
+      height: 100%;
+    }
+
+    .comments-panel,
+    .comments-body {
+      min-height: 0;
+    }
+
+    .comments-body {
+      height: auto;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .comments-footer .composer-container #textField[placeholder]:empty::before {
+      content: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    // The route uses a 0.8 viewport scale, so 20px renders at 16px on phones.
+    .task-comment-panel .comments-footer .composer-container #textField {
+      font-size: 20px;
+    }
+
+    f-staff-notes .mat-mdc-form-field textarea.mat-mdc-input-element {
+      font-size: 20px;
+    }
+  }
+}
+
 :host ::ng-deep div.mat-expansion-panel-body {
   padding-right: 0 !important;
 }
@@ -26,6 +91,15 @@ user-icon {
 
 .mat-mdc-list-item {
   border: none;
+  border-radius: 6px;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.mat-mdc-list-option.selected-task {
+  background-color: #eff6ff;
+  box-shadow: inset 3px 0 0 #3b82f6;
 }
 
 .mat-mdc-list-item .notification {
@@ -67,11 +141,6 @@ user-icon {
 //     color: gray;
 //   }
 // }
-
-.mdc-list-item__start.mat-mdc-list-option-checkbox-before {
-  margin-right: 0 !important;
-  padding: 0 !important;
-}
 
 .medium-icon-button {
   width: 75px !important;

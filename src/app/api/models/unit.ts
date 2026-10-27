@@ -14,7 +14,13 @@ import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
-import {MILLISECONDS_PER_WEEK, startOfDay} from './calendar-day';
+import {
+  MILLISECONDS_PER_WEEK,
+  addDays,
+  dayOffsetInWeek,
+  startOfDay,
+  toLocalDay,
+} from './calendar-day';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {
   Campus,
@@ -71,6 +77,7 @@ export class Unit extends Entity {
   teachingPeriod: TeachingPeriod;
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
+  lastTeachingDate: Date;
   portfolioAutoGenerationDate: Date;
   currentUnitWeek: number | null;
 
@@ -98,6 +105,7 @@ export class Unit extends Entity {
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
   discussTimeoutEnabled: boolean;
+  discussTimeoutActive: boolean;
   discussTimeoutWarningDays: number;
   discussTimeoutExpireDays: number;
   gradeDefinitions: GradeDefinition[] = [
@@ -353,6 +361,27 @@ export class Unit extends Entity {
   }
 
   /**
+   * The inverse of {@link weekNumber}.
+   *
+   * @param day the day of the week, 0 = Sunday
+   * @returns local midnight on that day
+   */
+  public dateForWeekAndDay(week: number, day: number): Date | null {
+    if (this.teachingPeriod) {
+      return this.teachingPeriod.dateForWeekAndDay(week, day);
+    }
+
+    const startDate = startOfDay(this.startDate);
+    if (!startDate || week === null || day === null) {
+      return null;
+    }
+
+    return toLocalDay(
+      addDays(startDate, (Math.floor(week) - 1) * 7 + dayOffsetInWeek(startDate.getUTCDay(), day)),
+    );
+  }
+
+  /**
    * Calculate how much time has elapsed in the teaching period, based on the start and
    * end date of the unit relative to the current date.
    *
@@ -376,7 +405,7 @@ export class Unit extends Entity {
 
   public rolloverTo(
     body:
-      | {new_unit_code?: string; start_date: Date; end_date: Date}
+      | {new_unit_code?: string; start_date: Date; end_date: Date; last_teaching_date?: Date}
       | {new_unit_code?: string; teaching_period_id: number},
   ): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
@@ -413,12 +442,16 @@ export class Unit extends Entity {
     });
   }
 
-  public fillWithUnStartedTasks(tasks: Task[], taskDef: TaskDefinition | number): Task[] {
+  public fillWithUnStartedTasks(
+    tasks: Task[],
+    taskDef: TaskDefinition | number,
+    includeWithdrawn: boolean = false,
+  ): Task[] {
     // Make sure the task definition is a task definition object from the unit
     const td = taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
 
-    // Now fill for the students in the unit
-    return this.students.map((p) => {
+    // Fill rows for enrolled students, and withdrawn students when requested
+    return (includeWithdrawn ? this.students : this.activeStudents).map((p) => {
       // See if we already have the task
       let t = tasks.find((t) => t.project.id === p.id && t.definition.id === td.id);
       if (!t) {

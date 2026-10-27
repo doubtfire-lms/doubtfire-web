@@ -50,6 +50,18 @@
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Last Teaching Date</mat-label>
+        <input
+          matInput
+          name="lastTeachingDate"
+          [matDatepicker]="lastTeachingDatePicker"
+          [(ngModel)]="lastTeachingDate"
+        />
+        <mat-hint>Defaults to the end date when left blank.</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="lastTeachingDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #lastTeachingDatePicker></mat-datepicker>
+      </mat-form-field>
     }
 
     <mat-dialog-actions align="end">

@@ -2,6 +2,105 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-111...v11.0.0) (2026-10-26)
+
+## [11.0.0-111](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-110...v11.0.0-111) (2026-10-26)
+
+
+### Features
+
+* add filter to exclude tasks in explorer from withdrawn students ([6d7e691](https://github.com/b0ink/doubtfire-deploy/commit/6d7e691c019e7f42af4e283ed70c4663dfa76d41))
+
+## [11.0.0-110](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-109...v11.0.0-110) (2026-10-26)
+
+
+### Features
+
+* add skeleton ui to content sites ([09d9737](https://github.com/b0ink/doubtfire-deploy/commit/09d973795ba764fa48e6f7956b3bb0341d65295c))
+* add staff-managed task setting and student read-only view ([#1681](https://github.com/b0ink/doubtfire-deploy/issues/1681)) ([27eaceb](https://github.com/b0ink/doubtfire-deploy/commit/27eacebc539132d9aba6666ee48c27878b34a2cb))
+* let staff choose existing evidence for feedback ([#1682](https://github.com/b0ink/doubtfire-deploy/issues/1682)) ([c3e2731](https://github.com/b0ink/doubtfire-deploy/commit/c3e27310447e9e7b5d034cd6312aaa7e95a9e70f))
+* support image and pdf attachments in staff notes ([#1688](https://github.com/b0ink/doubtfire-deploy/issues/1688)) ([3149f58](https://github.com/b0ink/doubtfire-deploy/commit/3149f588ae912e852f2b91d822ef7744de836ef8))
+
+## [11.0.0-109](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-108...v11.0.0-109) (2026-10-25)
+
+
+### Bug Fixes
+
+* show weeks up until last teaching date ([d479e8a](https://github.com/b0ink/doubtfire-deploy/commit/d479e8a3297b2e952eea56832f3c2c6bb226b013))
+
+## [11.0.0-108](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-107...v11.0.0-108) (2026-10-23)
+
+
+### Features
+
+* support last teaching date in teaching period and unit forms ([#1666](https://github.com/b0ink/doubtfire-deploy/issues/1666)) ([ca4c11f](https://github.com/b0ink/doubtfire-deploy/commit/ca4c11fbc0beb3259bee2edc09877805aa8145fe))
+
+## [11.0.0-107](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-106...v11.0.0-107) (2026-10-22)
+
+## [11.0.0-106](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-105...v11.0.0-106) (2026-10-22)
+
+
+### Bug Fixes
+
+* replace deprecated method ([80e0e04](https://github.com/b0ink/doubtfire-deploy/commit/80e0e046439aa40b742a2c54c5c6070c74cd6c29))
+
+## [11.0.0-105](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-104...v11.0.0-105) (2026-10-21)
+
+
+### Bug Fixes
+
+* get correct error ([fe8e6d8](https://github.com/b0ink/doubtfire-deploy/commit/fe8e6d84c4a820c7f1487f0b18f36088f53949c6))
+
+## [11.0.0-104](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-103...v11.0.0-104) (2026-10-21)
+
+
+### Features
+
+* add template variable for main convenor name ([fbedc3b](https://github.com/b0ink/doubtfire-deploy/commit/fbedc3b627ac5835b358756822f5998849466fda))
+
+
+### Bug Fixes
+
+* add missing route guards ([cf159ba](https://github.com/b0ink/doubtfire-deploy/commit/cf159ba8e05244bd990a4080104bb07cea7cccf4))
+* show the discussion deadline as inclusive ([e34ce52](https://github.com/b0ink/doubtfire-deploy/commit/e34ce520d9626bf1531d9aa202f43e5e064c3c19))
+
+## [11.0.0-103](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-102...v11.0.0-103) (2026-10-20)
+
+
+### Bug Fixes
+
+* add back tooltip ([56018f1](https://github.com/b0ink/doubtfire-deploy/commit/56018f1fdf66505a906f8c9d87e65f7f9aa4d801))
+* record attendance when tutors open a qr code externally ([2149954](https://github.com/b0ink/doubtfire-deploy/commit/2149954d6f2562ddb00aeb5743861d1f6cf50a69))
+
+## [11.0.0-102](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-101...v11.0.0-102) (2026-10-16)
+
+
+### Bug Fixes
+
+* show unique student counts in task status chart tooltips ([1313b51](https://github.com/b0ink/doubtfire-deploy/commit/1313b5192dbadd4d2ff7c599bfd5164754994f84))
+
+## [11.0.0-101](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-100...v11.0.0-101) (2026-10-15)
+
+
+### Features
+
+* add feedback deadline ui ([a06a9d7](https://github.com/b0ink/doubtfire-deploy/commit/a06a9d719ace72461018ac303a90e579904dc0de))
+* set per-grade target dates by week and day ([7244b1f](https://github.com/b0ink/doubtfire-deploy/commit/7244b1f04233897234d4bd60bbdaaca3030f7712))
+* target grade sankey diagram ([#1612](https://github.com/b0ink/doubtfire-deploy/issues/1612)) ([2a51eab](https://github.com/b0ink/doubtfire-deploy/commit/2a51eabbaa47c10b99e6f2de1a8c371fa2b5dd67))
+
+
+### Bug Fixes
+
+* skip welcome screen in lti context ([b191de3](https://github.com/b0ink/doubtfire-deploy/commit/b191de338dc814f15e4efd1111b740979097f7f3))
+
+## [11.0.0-100](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-99...v11.0.0-100) (2026-09-28)
+
+
+### Bug Fixes
+
+* load jplag report viewer route ([31014bb](https://github.com/b0ink/doubtfire-deploy/commit/31014bb000d64590f64a3af13407594b97b0528f))
+* revert status select when transition is rejected ([d4213ce](https://github.com/b0ink/doubtfire-deploy/commit/d4213ce7bc607402f0fe76238c6a60436998dae4))
+
 ## [11.0.0-99](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-98...v11.0.0-99) (2026-09-24)
 
 

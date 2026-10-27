@@ -133,9 +133,16 @@ export class GlobalStateService implements OnDestroy {
       // Try to login using the refresh token
       this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
         if (result) {
+          const ltiLaunch =
+            sessionStorage.getItem('ltiLaunch') === 'true' ||
+            window.location.pathname === '/lti' ||
+            (window.location.pathname === '/sign_in' &&
+              new URLSearchParams(window.location.search).get('isLtiLogin')?.toLowerCase() ===
+                'true');
           if (
             this.userService.currentUser.hasRunFirstTimeSetup === false &&
-            window.location.pathname !== '/welcome'
+            window.location.pathname !== '/welcome' &&
+            !ltiLaunch
           ) {
             this.router.navigateByUrl('/welcome');
           }

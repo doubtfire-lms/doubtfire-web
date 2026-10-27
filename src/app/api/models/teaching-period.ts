@@ -1,7 +1,13 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {Observable} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
-import {MILLISECONDS_PER_WEEK, addDays, startOfDay} from './calendar-day';
+import {
+  MILLISECONDS_PER_WEEK,
+  addDays,
+  dayOffsetInWeek,
+  startOfDay,
+  toLocalDay,
+} from './calendar-day';
 import {TeachingPeriodBreakService, TeachingPeriodService, Unit} from './doubtfire-model';
 
 export class TeachingPeriodBreak extends Entity {
@@ -45,6 +51,7 @@ export class TeachingPeriod extends Entity {
   year: string;
   startDate: Date;
   endDate: Date;
+  lastTeachingDate: Date;
   activeUntil: string;
   active: boolean;
 
@@ -235,6 +242,39 @@ export class TeachingPeriod extends Entity {
     }
 
     return result;
+  }
+
+  /**
+   * The inverse of {@link weekNumber}, mirroring TeachingPeriod#date_for_week_and_day in the API
+   * so dates set by week and day match those from a task CSV import.
+   *
+   * @param day the day of the week, 0 = Sunday
+   * @returns local midnight on that day
+   */
+  public dateForWeekAndDay(week: number, day: number): Date | null {
+    const startDate = this.normalizeDay(this.startDate);
+    if (!startDate || week === null || day === null) {
+      return null;
+    }
+
+    let result = addDays(startDate, (Math.floor(week) - 1) * 7);
+    for (const teachingBreak of this.weekPausingBreaks) {
+      const breakStart = this.normalizeDay(teachingBreak.startDate);
+      if (breakStart && result >= breakStart) {
+        result = addDays(result, teachingBreak.numberOfDays);
+      }
+    }
+
+    result = addDays(result, dayOffsetInWeek(startDate.getUTCDay(), day));
+    for (const teachingBreak of this.weekPausingBreaks) {
+      const breakStart = this.normalizeDay(teachingBreak.startDate);
+      const breakEnd = this.breakEndDate(teachingBreak);
+      if (breakStart && breakEnd && result >= breakStart && result < breakEnd) {
+        result = addDays(result, teachingBreak.numberOfDays);
+      }
+    }
+
+    return toLocalDay(result);
   }
 
   private normalizeDay(date: Date | string | null | undefined): Date | null {

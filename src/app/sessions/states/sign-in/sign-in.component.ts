@@ -79,6 +79,7 @@ export class SignInComponent implements OnInit {
         this.isLoading = false;
 
         if (params.isLtiLogin?.toLowerCase() === 'true') {
+          sessionStorage.setItem('ltiLaunch', 'true');
           this.globalState.hideHeader();
           return this.router.navigate(['/lti'], {replaceUrl: true});
         } else if (this.userService.currentUser.hasRunFirstTimeSetup === false) {
@@ -241,8 +242,10 @@ export class SignInComponent implements OnInit {
     this.authService.signIn(signInCredentials).subscribe({
       next: () => {
         if (this.isLtiLogin) {
+          sessionStorage.setItem('ltiLaunch', 'true');
           this.router.navigate(['/lti'], {replaceUrl: true});
         } else {
+          sessionStorage.removeItem('ltiLaunch');
           this.actionSignInSuccess();
         }
       },

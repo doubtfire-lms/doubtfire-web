@@ -5,6 +5,7 @@ import {
   displayWeekNumber,
   dropLeadingEmptySnapshots,
   formatSnapshotLabel,
+  getTaskPopulationStats,
   isEmptySnapshot,
 } from './chart-data-helpers';
 
@@ -86,5 +87,36 @@ describe('dropLeadingEmptySnapshots', () => {
   it('keeps everything when every snapshot is empty', () => {
     const snapshots = [snapshot('2025-02-17'), snapshot('2025-02-18')];
     expect(dropLeadingEmptySnapshots(snapshots)).toBe(snapshots);
+  });
+});
+
+describe('getTaskPopulationStats', () => {
+  it('uses unique all-tutorial counts and respects tutorial and target-grade filters', () => {
+    const unit = {
+      taskDefinitions: [{abbreviation: 'T1', targetGrade: 0}],
+    } as unknown as Unit;
+    const selectedSnapshot = {
+      ...snapshot('2025-03-07'),
+      stats: {Burwood: {T1: {T1: {complete: 2}}, T2: {T1: {complete: 1}}}},
+      status_population_stats: {
+        all: {
+          Burwood: {
+            __all__: {T1: {complete: 2, not_started: 1}},
+            T1: {T1: {complete: 2, not_started: 1}},
+            T2: {T1: {complete: 1}},
+          },
+        },
+        target_grades: {
+          '0': {Burwood: {__all__: {T1: {complete: 1}}, T2: {T1: {complete: 1}}}},
+        },
+      },
+    } as TaskCompletionSnapshot;
+
+    expect(getTaskPopulationStats(selectedSnapshot, 'all', 'all', [], [], unit)).toEqual({
+      T1: {complete: 2, not_started: 1},
+    });
+    expect(getTaskPopulationStats(selectedSnapshot, 'Burwood', 'T2', [], [0], unit)).toEqual({
+      T1: {complete: 1},
+    });
   });
 });

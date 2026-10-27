@@ -63,6 +63,11 @@
       <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_tutors">Tutors</mat-checkbox>
       <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_convenors">Convenors</mat-checkbox>
     </div>
+    <mat-checkbox
+      matTooltip="Send only the text you enter, without the OnTrack notification layout or footer."
+      [(ngModel)]="editor.actionFor(rule).plain_text"
+      >Send as plain text</mat-checkbox
+    >
     <div class="text-sm text-black/50">Sent from the main convenor.</div>
   </div>
 } @else {
@@ -135,6 +140,11 @@
       <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_tutors">Tutors</mat-checkbox>
       <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_convenors">Convenors</mat-checkbox>
     </div>
+    <mat-checkbox
+      matTooltip="Send only the text you enter, without the OnTrack notification layout or footer."
+      [(ngModel)]="editor.actionFor(rule).plain_text"
+      >Send as plain text</mat-checkbox
+    >
     <div class="text-sm text-black/50">Sent from the main convenor.</div>
   </div>
 }

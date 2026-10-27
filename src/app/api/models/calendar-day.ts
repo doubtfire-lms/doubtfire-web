@@ -28,4 +28,18 @@ export function addDays(day: Date, days: number): Date {
   return new Date(Date.UTC(day.getUTCFullYear(), day.getUTCMonth(), day.getUTCDate() + days));
 }
 
+/**
+ * Convert a day produced by {@link startOfDay} back to local midnight on the same calendar day.
+ */
+export function toLocalDay(day: Date): Date {
+  return new Date(day.getUTCFullYear(), day.getUTCMonth(), day.getUTCDate());
+}
+
+/**
+ * Days from the start of a teaching week beginning on `startDay` to `day` (0 = Sunday).
+ */
+export function dayOffsetInWeek(startDay: number, day: number): number {
+  return (((day - startDay) % 7) + 7) % 7;
+}
+
 export const MILLISECONDS_PER_WEEK = 1000 * 60 * 60 * 24 * 7;

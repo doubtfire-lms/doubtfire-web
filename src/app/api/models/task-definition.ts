@@ -50,6 +50,7 @@ export class TaskDefinition extends Entity {
   plagiarismReportUrl: string;
   plagiarismWarnPct: number;
   restrictStatusUpdates: boolean;
+  staffManagedTask: boolean;
   // groupSetId: number;
   groupSet: GroupSet = null;
   hasTaskSheet: boolean;

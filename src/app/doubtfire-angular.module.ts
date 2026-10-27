@@ -7,6 +7,7 @@ import {
   LineChartComponent,
   NumberCardComponent,
   PieChartComponent,
+  SankeyComponent,
 } from '@glitchtip/ng-charts';
 import {CodeEditorModule} from '@ngstack/code-editor';
 import * as Sentry from '@sentry/angular';
@@ -312,6 +313,7 @@ import {TutorialsComponent} from './projects/states/tutorials/tutorials.componen
 // import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {CheckForUpdateService} from './sessions/service-worker-updater/check-for-update.service';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
+import {ExistingSubmissionChoiceModalComponent} from './tasks/modals/existing-submission-choice-modal/existing-submission-choice-modal.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 import {SubmissionRequestDeniedModalComponent} from './tasks/modals/submission-request-denied-modal/submission-request-denied-modal.component';
@@ -337,6 +339,7 @@ import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-en
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
 import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
 import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
+import {TargetGradeSankeyComponent} from './units/states/analytics/directives/charts/target-grade-sankey/target-grade-sankey.component';
 import {TaskStatusSummaryChartsComponent} from './units/states/analytics/directives/charts/task-status-summary-charts/task-status-summary-charts.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
 import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
@@ -664,12 +667,14 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     NormalisedTaskStatusChartComponent,
     StackedAreaStatusChartComponent,
     TaskStatusSummaryChartsComponent,
+    TargetGradeSankeyComponent,
     SubmissionFilesModalComponent,
     TutorNotesComponent,
     TutorNotesViewComponent,
     ModerationComponent,
     TutorNotesModalComponent,
     FeedbackAppealModalComponent,
+    ExistingSubmissionChoiceModalComponent,
     SubmissionRequestDeniedModalComponent,
     UploadSubmissionModalComponent,
     ConfirmModerationModalComponent,
@@ -881,6 +886,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     LineChartComponent,
     NumberCardComponent,
     PieChartComponent,
+    SankeyComponent,
     PdfViewerModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

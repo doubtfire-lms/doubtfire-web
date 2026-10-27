@@ -165,6 +165,10 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     return this.tutor || !!this.currentUnitRole;
   }
 
+  public get canManageStaffTask(): boolean {
+    return this.currentUnitRole?.role === 'Convenor' || this.currentUnitRole?.role === 'Tutor';
+  }
+
   public get currentUnitRole(): UnitRole | undefined {
     const currentUser = this.userService.currentUser;
     if (!currentUser) {

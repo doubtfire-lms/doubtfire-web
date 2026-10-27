@@ -5,8 +5,10 @@ import {
   ElementRef,
   Input,
   OnDestroy,
+  OnInit,
   ViewChild,
 } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
@@ -15,7 +17,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class JplagReportViewerComponent implements OnDestroy {
+export class JplagReportViewerComponent implements OnInit, OnDestroy {
   @ViewChild('jplagIframe', {static: true}) jplagIframe!: ElementRef<HTMLIFrameElement>;
 
   @Input() hidden: boolean = false;
@@ -23,7 +25,17 @@ export class JplagReportViewerComponent implements OnDestroy {
   private reportUrl: string | null = null;
   private deepLinkSupport: Promise<boolean> | null = null;
 
-  constructor(private alertService: AlertService) {}
+  constructor(
+    private alertService: AlertService,
+    private route: ActivatedRoute,
+  ) {}
+
+  // Embedded viewers are navigated by openComparison; the route lets users load a report themselves.
+  public ngOnInit() {
+    if (this.route.snapshot.data['standalone']) {
+      this.navigateViewer('/JPlag/');
+    }
+  }
 
   /** Opens one comparison from a report, skipping the viewer's overview. */
   public async openComparison(file: Blob, firstSubmissionId: string, secondSubmissionId: string) {

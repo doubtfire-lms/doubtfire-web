@@ -11,7 +11,7 @@ import {
 import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskService} from 'src/app/api/services/task.service';
-import {formatSnapshotLabel, getTaskStats, statusMapping} from '../chart-data-helpers';
+import {getLastSnapshotByWeek, getTaskStats, statusMapping} from '../chart-data-helpers';
 
 @Component({
   selector: 'f-stacked-area-status-chart',
@@ -62,26 +62,19 @@ export class StackedAreaStatusChartComponent implements OnChanges {
   }
 
   private buildWeeklyChartData(): MultiSeries {
-    const lastSnapshotByWeek: Map<string, TaskCompletionSnapshot> = new Map();
-
-    this.snapshots.forEach((snapshot) => {
-      const weekNumber = formatSnapshotLabel(this.unit, snapshot.snapshot_date, 'short');
-      if (weekNumber) {
-        lastSnapshotByWeek.set(weekNumber, snapshot);
-      }
-    });
-
-    const weeks = [...lastSnapshotByWeek.entries()].map(([name, snapshot]) => ({
-      name,
-      taskStats: getTaskStats(
-        snapshot,
-        this.campusFilter,
-        this.tutorialFilter,
-        this.taskGradeFilter,
-        this.studentTargetGradeFilter,
-        this.unit,
-      ),
-    }));
+    const weeks = [...getLastSnapshotByWeek(this.unit, this.snapshots).entries()].map(
+      ([name, snapshot]) => ({
+        name,
+        taskStats: getTaskStats(
+          snapshot,
+          this.campusFilter,
+          this.tutorialFilter,
+          this.taskGradeFilter,
+          this.studentTargetGradeFilter,
+          this.unit,
+        ),
+      }),
+    );
 
     return statusMapping.map((status) => ({
       name: this.taskService.statusLabels.get(status) || status,
