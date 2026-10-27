@@ -55,10 +55,10 @@ export class EditProfileFormComponent implements OnInit {
       this.modal = this.data.modal;
     }
 
-    this.user.optInToResearch = false;
-    this.user.receiveFeedbackNotifications = true;
-    this.user.receivePortfolioNotifications = true;
-    this.user.receiveTaskNotifications = true;
+    // Only a new account starts opted out, so editing keeps the user's choice.
+    if (this.mode !== 'edit') {
+      this.user.optInToResearch = false;
+    }
   }
 
   public signOut(): void {
@@ -67,6 +67,10 @@ export class EditProfileFormComponent implements OnInit {
 
   public get newUser(): boolean {
     return this.mode === 'new';
+  }
+
+  public get isCurrentUser(): boolean {
+    return this.user.id === this.userService.currentUser.id;
   }
 
   public get canEditSystemRole(): boolean {
