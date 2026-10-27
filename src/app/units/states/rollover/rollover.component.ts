@@ -26,6 +26,7 @@ export class RolloverComponent implements OnInit {
 
   public newStartDate: Date;
   public newEndDate: Date;
+  public newLastTeachingDate: Date;
 
   constructor(
     private globalStateService: GlobalStateService,
@@ -72,6 +73,7 @@ export class RolloverComponent implements OnInit {
           new_unit_code: this.newUnitCode,
           start_date: this.newStartDate,
           end_date: this.newEndDate,
+          last_teaching_date: this.newLastTeachingDate || this.newEndDate,
         };
 
     this.unit.rolloverTo(body).subscribe({

@@ -20,13 +20,17 @@ export class TaskDueCardComponent {
 
   public get discussTimeoutExpiryDate(): string | null {
     const expiryDateString = this.task?.discussTimeoutExpiryDate;
-    const timeoutEnabled = this.task?.unit?.discussTimeoutEnabled;
+    const timeoutEnabled = this.task?.unit?.discussTimeoutActive;
     if (this.task?.status !== 'discuss' || !timeoutEnabled || !expiryDateString) {
       return null;
     }
 
     const [year, month, day] = expiryDateString.split('-').map(Number);
     const expiryDate = new Date(year, month - 1, day, 12);
+    const lastTeachingDate = this.task.unit.lastTeachingDate;
+    if (lastTeachingDate && expiryDate >= lastTeachingDate) {
+      return null;
+    }
 
     const suffix = day >= 11 && day <= 13 ? 'th' : (['th', 'st', 'nd', 'rd'][day % 10] ?? 'th');
     const includeYear = expiryDate.getFullYear() !== new Date().getFullYear();

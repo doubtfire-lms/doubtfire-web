@@ -45,6 +45,19 @@
           <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
           <mat-datepicker #enddatepicker></mat-datepicker>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Last Teaching Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="lastTeachingDatePicker"
+            [(ngModel)]="unit.lastTeachingDate"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="lastTeachingDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #lastTeachingDatePicker></mat-datepicker>
+        </mat-form-field>
       } @else {
         <mat-form-field appearance="outline" class="w-full" disabled>
           <mat-label>{{ unit.teachingPeriod.name }} Start Date</mat-label>
@@ -62,6 +75,15 @@
             matInput
             readonly
             [value]="$safeNavigationMigration(unit.teachingPeriod?.endDate) | date"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full" disabled>
+          <mat-label>{{ unit.teachingPeriod.name }} Last Teaching Date</mat-label>
+          <input
+            disabled
+            matInput
+            readonly
+            [value]="$safeNavigationMigration(unit.teachingPeriod?.lastTeachingDate) | date"
           />
         </mat-form-field>
       }

@@ -50,6 +50,7 @@ type TaskSource = (
   taskDef?: TaskDefinition | number,
   fetchMyStudentsOnly?: boolean,
   viewAsUnitRoleId?: number,
+  includeWithdrawn?: boolean,
 ) => Observable<Task[]>;
 
 @Component({
@@ -174,7 +175,22 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   private getTaskSource(): TaskSource {
     switch (this.routeMode) {
       case 'definition':
-        return this.taskService.queryTasksForTaskExplorer.bind(this.taskService);
+        return (
+          unit,
+          taskDef,
+          _fetchMyStudentsOnly,
+          _viewAsUnitRoleId,
+          includeWithdrawn = false,
+        ) => {
+          const tasks$ = this.taskService.queryTasksForTaskExplorer(
+            unit,
+            taskDef,
+            includeWithdrawn,
+          );
+          return includeWithdrawn
+            ? this.projectService.loadStudents(unit, true, true).pipe(switchMap(() => tasks$))
+            : tasks$;
+        };
       case 'moderation':
         return this.taskService.queryTasksForMentorModeration.bind(this.taskService);
       case 'overflow':

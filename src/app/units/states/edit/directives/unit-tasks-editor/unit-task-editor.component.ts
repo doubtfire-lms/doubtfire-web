@@ -291,6 +291,7 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
     task.weighting = 4;
     task.targetGrade = 0;
     task.restrictStatusUpdates = false;
+    task.staffManagedTask = false;
     task.plagiarismWarnPct = 80;
     task.isGraded = false;
     task.maxQualityPts = 0;

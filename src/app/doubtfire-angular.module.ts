@@ -307,6 +307,7 @@ import {TutorialsComponent} from './projects/states/tutorials/tutorials.componen
 // import {PrivacyPolicy} from './config/privacy-policy/privacy-policy';
 import {CheckForUpdateService} from './sessions/service-worker-updater/check-for-update.service';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
+import {ExistingSubmissionChoiceModalComponent} from './tasks/modals/existing-submission-choice-modal/existing-submission-choice-modal.component';
 import {FeedbackAppealModalComponent} from './tasks/modals/feedback-appeal-modal/feedback-appeal-modal.component';
 import {GradeTaskModalComponent} from './tasks/modals/grade-task-modal/grade-task-modal.component';
 import {SubmissionRequestDeniedModalComponent} from './tasks/modals/submission-request-denied-modal/submission-request-denied-modal.component';
@@ -665,6 +666,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     ModerationComponent,
     TutorNotesModalComponent,
     FeedbackAppealModalComponent,
+    ExistingSubmissionChoiceModalComponent,
     SubmissionRequestDeniedModalComponent,
     UploadSubmissionModalComponent,
     ConfirmModerationModalComponent,

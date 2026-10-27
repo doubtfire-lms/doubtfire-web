@@ -145,8 +145,50 @@ describe('StaffTaskListComponent', () => {
     component.viewAsUnitRoleId = 7;
     component.viewAsChanged();
 
-    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, true, 7);
+    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, true, 7, false);
     expect(component.filters.tutorialIdSelected).toBe('mine');
+  });
+
+  it('shows every unit escalation to convenors while keeping routine moderation scoped', () => {
+    const ownRoutine = Object.assign(buildTask(), {
+      moderationType: 'random_sample',
+      tutorialId: 11,
+      tutor: {mentorId: 1},
+    });
+    const otherEscalation = Object.assign(buildTask(), {
+      moderationType: 'escalation',
+      tutorialId: 12,
+      tutor: {mentorId: 2},
+    });
+    const otherRoutine = Object.assign(buildTask(), {
+      moderationType: 'random_sample',
+      tutorialId: 12,
+      tutor: {mentorId: 2},
+    });
+    const otherDefinitionEscalation = Object.assign(buildTask(), {
+      moderationType: 'escalation',
+      tutorialId: 12,
+      tutor: {mentorId: 2},
+      definition: {id: 2},
+    });
+
+    component.viewType = 'moderation';
+    component.filters = {
+      taskDefinition: {id: 1} as never,
+      tutorials: [{id: 11} as never],
+      forceStream: true,
+      unitRoleIdSelected: 'mentoring_all',
+    };
+    component.taskData = {selectedTask: null} as never;
+    component.tasks = [otherEscalation, ownRoutine, otherRoutine, otherDefinitionEscalation];
+
+    component.unitRole = {id: 1, role: 'Convenor'} as never;
+    component.applyFilters();
+    expect(component.filteredTasks).toEqual([otherEscalation, ownRoutine]);
+
+    component.unitRole = {id: 1, role: 'Tutor'} as never;
+    component.applyFilters();
+    expect(component.filteredTasks).toEqual([ownRoutine]);
   });
 
   describe('view preferences', () => {
@@ -293,5 +335,25 @@ describe('StaffTaskListComponent', () => {
     (component as unknown as {refreshData: () => void}).refreshData();
 
     expect(routerStub.navigate).not.toHaveBeenCalled();
+  });
+
+  it('requests withdrawn students only while the Explorer checkbox is checked', () => {
+    const source = vi.fn(() => of([]));
+    component.unit = {id: 20} as never;
+    component.viewType = 'explorer';
+    component.filters = {tutorialIdSelected: 'all'};
+    component.taskData = {
+      source,
+      selectedTask: null,
+      taskKey: null,
+      onSelectedTaskChange: () => {},
+      taskDefMode: true,
+    };
+
+    component.toggleFilter('showWithdrawnStudents', true);
+    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, false, undefined, true);
+
+    component.resetViewPreferences();
+    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, false, undefined, false);
   });
 });

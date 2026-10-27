@@ -51,6 +51,7 @@ export class TeachingPeriod extends Entity {
   year: string;
   startDate: Date;
   endDate: Date;
+  lastTeachingDate: Date;
   activeUntil: string;
   active: boolean;
 
