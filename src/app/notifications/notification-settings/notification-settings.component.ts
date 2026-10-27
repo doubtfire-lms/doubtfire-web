@@ -1,8 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription, combineLatest} from 'rxjs';
+import {Observable, Subscription, combineLatest, of, switchMap} from 'rxjs';
 import {NotificationFrequency} from 'src/app/api/models/notification';
 import {NotificationSettings} from 'src/app/api/models/notification-settings';
 import {Unit} from 'src/app/api/models/unit';
+import {User} from 'src/app/api/models/user/user';
 import {NotificationSettingsService} from 'src/app/api/services/notification-settings.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -66,8 +67,11 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   public digestIntervalHours = 4;
   public digestStartTime = '07:00';
   public digestTime = '07:00';
-  public digestTimezone = 'UTC';
   public digestWeekday = 1;
+
+  public readonly browserTimezone = User.browserTimezone;
+  public autoTimezone = true;
+  public timezone = this.browserTimezone;
 
   private readonly subscriptions: Subscription[] = [];
 
@@ -82,6 +86,10 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
+    const user = this.userService.currentUser;
+    this.autoTimezone = user?.autoTimezone ?? true;
+    this.timezone = (!this.autoTimezone && user?.timezone) || this.browserTimezone;
+
     // Units taught and units studied - the same set the header's unit picker uses.
     this.subscriptions.push(
       combineLatest([
@@ -112,6 +120,19 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     for (const subscription of this.subscriptions) {
       subscription.unsubscribe();
+    }
+  }
+
+  /** Every IANA timezone, plus the current one in case the browser reports an alias. */
+  public get timezones(): string[] {
+    const zones = Intl.supportedValuesOf('timeZone');
+    return zones.includes(this.timezone) ? zones : [this.timezone, ...zones];
+  }
+
+  public autoTimezoneChanged(checked: boolean): void {
+    this.autoTimezone = checked;
+    if (checked) {
+      this.timezone = this.browserTimezone;
     }
   }
 
@@ -220,16 +241,30 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
 
   public save(): void {
     this.saving = true;
-    this.settingsService.save(this.currentSettings()).subscribe({
-      next: () => {
-        this.saving = false;
-        this.alerts.success('Notification settings saved', 3000);
-      },
-      error: () => {
-        this.saving = false;
-        this.alerts.error('Unable to save your notification settings', 5000);
-      },
-    });
+    this.saveTimezone()
+      .pipe(switchMap(() => this.settingsService.save(this.currentSettings())))
+      .subscribe({
+        next: () => {
+          this.saving = false;
+          this.alerts.success('Notification settings saved', 3000);
+        },
+        error: () => {
+          this.saving = false;
+          this.alerts.error('Unable to save your notification settings', 5000);
+        },
+      });
+  }
+
+  // Saved on the user first, so the digest schedule is rebuilt in the new timezone.
+  private saveTimezone(): Observable<unknown> {
+    const user = this.userService.currentUser;
+    const unchanged =
+      this.autoTimezone === (user?.autoTimezone ?? true) &&
+      (this.autoTimezone || this.timezone === user?.timezone);
+    if (unchanged) {
+      return of(null);
+    }
+    return user.updateTimezone(this.timezone, this.autoTimezone);
   }
 
   private currentSettings(): NotificationSettings {
@@ -271,7 +306,6 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     this.digestIntervalHours = this.saved.digestIntervalHours;
     this.digestStartTime = this.saved.digestStartTime;
     this.digestTime = this.saved.digestTime;
-    this.digestTimezone = this.saved.digestTimezone;
     this.digestWeekday = this.saved.digestWeekday;
     this.scopes[0].channels = channelsFromWire(this.saved.channels);
 

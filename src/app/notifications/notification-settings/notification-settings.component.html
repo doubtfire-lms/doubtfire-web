@@ -75,9 +75,7 @@
       @if (isGlobalScope) {
         <mat-card appearance="outlined" class="p-4">
           <h2 class="mb-0 text-base">Email digest</h2>
-          <p class="mb-4 text-sm text-gray-600">
-            Applies to all units. Times use {{ digestTimezone }}.
-          </p>
+          <p class="mb-4 text-sm text-gray-600">Applies to all units. Times use {{ timezone }}.</p>
 
           <div class="flex flex-wrap items-baseline gap-3">
             <mat-form-field appearance="outline" class="min-w-45">
@@ -133,6 +131,25 @@
               </mat-form-field>
             }
           </div>
+
+          <f-setting-toggle
+            label="Set timezone automatically"
+            [checked]="autoTimezone"
+            (changed)="autoTimezoneChanged($event.checked)"
+          >
+            Follow the timezone of the device you sign in on, currently {{ browserTimezone }}.
+          </f-setting-toggle>
+
+          @if (!autoTimezone) {
+            <mat-form-field appearance="outline" class="mt-3 min-w-75">
+              <mat-label>Timezone</mat-label>
+              <mat-select [(ngModel)]="timezone">
+                @for (zone of timezones; track zone) {
+                  <mat-option [value]="zone">{{ zone }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
         </mat-card>
       }
 

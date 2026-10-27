@@ -271,7 +271,6 @@ describe('NotificationSettingsComponent', () => {
     expect(component.digestIntervalHours).toBe(6);
     expect(component.digestStartTime).toBe('09:00');
     expect(component.digestTime).toBe('09:30');
-    expect(component.digestTimezone).toBe('Australia/Melbourne');
     expect(component.digestWeekday).toBe(3);
 
     // Channels absent from the saved payload fall back to off, not to the defaults.
@@ -306,6 +305,21 @@ describe('NotificationSettingsComponent', () => {
     expect(payload.units).toHaveLength(1);
     expect(payload.units[0].unitId).toBe(1);
     expect(payload.units[0].channels['new_task_comment']).toContain('push');
+  });
+
+  it('saves a chosen timezone on the user before the settings', () => {
+    const updateTimezone = vi.fn(() => of(null));
+    const userService = TestBed.inject(UserService) as unknown as {
+      currentUser: {updateTimezone: typeof updateTimezone};
+    };
+    userService.currentUser.updateTimezone = updateTimezone;
+
+    component.autoTimezoneChanged(false);
+    component.timezone = 'Asia/Kuala_Lumpur';
+    component.save();
+
+    expect(updateTimezone).toHaveBeenCalledWith('Asia/Kuala_Lumpur', false);
+    expect(saveSettings).toHaveBeenCalled();
   });
 
   it('stores a muted unit without channels, so it keeps following the defaults', () => {
