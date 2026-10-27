@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-0](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0...v11.1.0-0) (2026-10-27)
+
+
+### Features
+
+* show escalated tasks in all convenor queues ([#1690](https://github.com/b0ink/doubtfire-deploy/issues/1690)) ([d4195f9](https://github.com/b0ink/doubtfire-deploy/commit/d4195f97f304606f1de5ec3fe33d1634b9bd943d))
+
+
+### Bug Fixes
+
+* improve tutor discussion ux ([#1691](https://github.com/b0ink/doubtfire-deploy/issues/1691)) ([7886558](https://github.com/b0ink/doubtfire-deploy/commit/788655852f87406261e383a1f10e5e06bf9f8950))
+
 ## [11.0.0](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-111...v11.0.0) (2026-10-26)
 
 ## [11.0.0-111](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-110...v11.0.0-111) (2026-10-26)
