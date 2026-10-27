@@ -3,15 +3,10 @@
     <div>
       <h1>Notification settings</h1>
     </div>
-    <div class="flex gap-2">
-      <button mat-stroked-button routerLink="/notifications" type="button">
-        <mat-icon>arrow_back</mat-icon>
-        Notifications
-      </button>
-      <button color="primary" mat-flat-button type="button" [disabled]="saving" (click)="save()">
-        Save changes
-      </button>
-    </div>
+    <button mat-stroked-button routerLink="/notifications" type="button">
+      <mat-icon>arrow_back</mat-icon>
+      Notifications
+    </button>
   </header>
 
   @if (loading) {
@@ -199,6 +194,21 @@
           </mat-card>
         }
       }
+    </div>
+  }
+
+  @if (!loading && hasUnits) {
+    <div class="fixed right-[50px] bottom-[50px] z-50">
+      <button
+        color="primary"
+        mat-fab
+        matTooltip="Save changes"
+        type="button"
+        [disabled]="saving"
+        (click)="save()"
+      >
+        <mat-icon>save</mat-icon>
+      </button>
     </div>
   }
 </main>
