@@ -101,6 +101,24 @@ describe('NotificationsComponent', () => {
     expect(component.visibleUnits.map((u) => u.code)).toContain('COS20007');
   });
 
+  it('hides withdrawn units even when they have unread notifications', () => {
+    const unit = {
+      id: 3,
+      code: 'COS30045',
+      name: 'COS30045',
+      active: true,
+      startDate: new Date(Date.now() - 86_400_000),
+      endDate: new Date(Date.now() + 86_400_000),
+    };
+    projects.next([{unit, enrolled: false}] as unknown as Project[]);
+    fixture.detectChanges();
+
+    expect(component.visibleUnits).toHaveLength(0);
+
+    component.showPastUnits = true;
+    expect(component.visibleUnits.map((u) => u.code)).toEqual(['COS30045']);
+  });
+
   it('delegates opening a notification row to the notification actions service', () => {
     const group = {notificationIds: [1, 2]} as NotificationGroup;
 

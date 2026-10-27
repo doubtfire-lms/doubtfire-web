@@ -106,6 +106,12 @@ describe('NotificationSettingsComponent', () => {
     ]);
   });
 
+  it('drops units the student has withdrawn from', () => {
+    projects.next([{unit: running(2, 'COS20007'), enrolled: false}]);
+
+    expect(component.scopes.map((scope) => scope.code)).toEqual(['All units', 'COS10009']);
+  });
+
   it('drops units flagged inactive even while inside their dates', () => {
     projects.next([{unit: {...running(2, 'COS20007'), active: false}}]);
 

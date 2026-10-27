@@ -22,7 +22,7 @@ import {NotificationActionsService} from './notification-actions.service';
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
   public groups: NotificationGroup[] = [];
-  public units: (NotificationUnit & {running: boolean})[] = [];
+  public units: (NotificationUnit & {running: boolean; withdrawn: boolean})[] = [];
   public showPastUnits = false;
   public loading = true;
   public loadFailed = false;
@@ -95,17 +95,20 @@ export class NotificationsComponent implements OnInit, OnDestroy {
           ]),
         );
 
-        const units: Map<number, NotificationUnit & {running: boolean}> = new Map();
-        for (const unit of [
-          ...(unitRoles ?? []).map((unitRole) => unitRole.unit),
-          ...(projects ?? []).map((project) => project.unit),
+        const units: Map<number, NotificationUnit & {running: boolean; withdrawn: boolean}> =
+          new Map();
+        // Teaching a unit outranks a withdrawn enrolment in it.
+        for (const [unit, withdrawn] of [
+          ...(unitRoles ?? []).map((unitRole) => [unitRole.unit, false] as const),
+          ...(projects ?? []).map((project) => [project.unit, project.enrolled === false] as const),
         ]) {
-          if (unit) {
+          if (unit && !units.has(unit.id)) {
             units.set(unit.id, {
               id: unit.id,
               code: unit.code,
               name: unit.name,
-              running: isUnitRunning(unit),
+              running: isUnitRunning(unit) && !withdrawn,
+              withdrawn,
             });
           }
         }
@@ -169,14 +172,16 @@ export class NotificationsComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
-  /** Past units stay hidden unless asked for, selected, or still holding unread notifications. */
+  /** Past and withdrawn units stay hidden unless asked for or selected. Past units with unread notifications still show. */
   public get visibleUnits(): NotificationUnit[] {
     if (this.showPastUnits) {
       return this.units;
     }
     return this.units.filter(
       (unit) =>
-        unit.running || unit.id === this.selectedUnitId || this.unreadCountForUnit(unit.id) > 0,
+        unit.running ||
+        unit.id === this.selectedUnitId ||
+        (!unit.withdrawn && this.unreadCountForUnit(unit.id) > 0),
     );
   }
 

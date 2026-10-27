@@ -99,7 +99,10 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
       ]).subscribe(([unitRoles, projects]) => {
         this.units = [
           ...(unitRoles ?? []).map((unitRole) => unitRole.unit),
-          ...(projects ?? []).map((project) => project.unit),
+          // Withdrawn students are not notified, so there is nothing to set for those units.
+          ...(projects ?? [])
+            .filter((project) => project.enrolled !== false)
+            .map((project) => project.unit),
         ];
         this.rebuildScopes();
       }),
