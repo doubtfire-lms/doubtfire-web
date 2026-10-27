@@ -563,7 +563,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   applyFilters() {
-    let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
+    const tasksForDefinition = this.definedTasksPipe.transform(
+      this.tasks,
+      this.filters.taskDefinition,
+    );
+    let filteredTasks = tasksForDefinition;
     if (this.filters.tutorials) {
       filteredTasks = this.tasksInTutorialsPipe.transform(
         filteredTasks,
@@ -577,6 +581,14 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.unitRole,
         filteredTasks,
         this.filters.unitRoleIdSelected,
+      );
+    }
+
+    if (this.viewType === 'moderation' && this.unitRole?.role === 'Convenor' && filteredTasks) {
+      // Escalations are shared across convenors, regardless of tutor or tutorial scope.
+      const scopedTasks = new Set(filteredTasks);
+      filteredTasks = tasksForDefinition.filter(
+        (task) => task?.moderationType === 'escalation' || scopedTasks.has(task),
       );
     }
 
