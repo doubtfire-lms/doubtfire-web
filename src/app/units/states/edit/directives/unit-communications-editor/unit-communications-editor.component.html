@@ -1,6 +1,29 @@
 <div class="flex flex-col gap-4">
-  <div>
+  <div class="flex flex-col gap-2">
     <p>Current unit week: {{ currentUnitWeek <= 0 ? 'Not started' : currentUnitWeek }}</p>
+
+    @if (teachingBreaks.length) {
+      <div class="flex flex-col gap-1">
+        <p class="text-sm font-medium">Teaching period breaks</p>
+        <ul class="flex flex-col gap-1">
+          @for (teachingBreak of teachingBreaks; track teachingBreak.id) {
+            <li class="flex flex-wrap items-center gap-2 text-sm">
+              <span>
+                {{ teachingBreak.startDate | date: 'd MMM' }} &ndash;
+                {{ teachingBreak.endDate | date: 'd MMM' }}
+              </span>
+              @if (teachingBreak.label) {
+                <span class="text-gray-600">{{ teachingBreak.label }}</span>
+              }
+              <span class="text-gray-600">{{ breakCampusSummary(teachingBreak) }}</span>
+              @if (isCurrentBreak(teachingBreak)) {
+                <span class="rounded bg-blue-50 px-1.5 py-0.5 text-xs text-blue-700">On now</span>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+    }
   </div>
 
   @if (loading) {
@@ -78,7 +101,7 @@
                     <button
                       color="warn"
                       mat-icon-button
-                      (click)="confirmDeleteRule(rule); $event.stopPropagation()"
+                      (click)="confirmDeleteRule(set, rule); $event.stopPropagation()"
                     >
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -283,12 +306,19 @@
                           <ng-container matColumnDef="full_name">
                             <th *matHeaderCellDef mat-header-cell>Full Name</th>
                             <td *matCellDef="let student" mat-cell>
-                              {{
-                                (student.full_name || '-') +
-                                  (student.preferred_name
-                                    ? ' (' + student.preferred_name + ')'
-                                    : '')
-                              }}
+                              <a
+                                class="text-formatif-blue hover:underline"
+                                rel="noopener noreferrer"
+                                target="_blank"
+                                [routerLink]="['/projects', student.project_id, 'dashboard']"
+                              >
+                                {{
+                                  (student.full_name || '-') +
+                                    (student.preferred_name
+                                      ? ' (' + student.preferred_name + ')'
+                                      : '')
+                                }}
+                              </a>
                             </td>
                           </ng-container>
 

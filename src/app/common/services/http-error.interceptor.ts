@@ -64,7 +64,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
     if (!this.refreshTokenInProgress) {
-      console.log('Refreshing access token');
       this.refreshTokenInProgress = true;
       this.refreshTokenSubject.next(null);
       return this.attemptRefresh$().pipe(
@@ -119,19 +118,20 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   private extractErrorMessage(error: HttpErrorResponse) {
     let errorMessage: string;
     let logMessage: string = '';
+    const fallbackMessage = error.status === 500 ? 'Internal Server Error' : 'Unknown error';
     if (error.error instanceof ErrorEvent) {
       // client-side error
       errorMessage = error.error.message;
     } else if (error.error instanceof ProgressEvent) {
-      errorMessage = error.statusText;
+      errorMessage = fallbackMessage;
     } else {
       // server-side error
-      if (error.error.error) {
+      if (error.error?.error) {
         errorMessage = error.error.error;
       } else if (error.error instanceof Blob) {
-        errorMessage = error.statusText;
+        errorMessage = fallbackMessage;
       } else {
-        errorMessage = error.error;
+        errorMessage = error.error || fallbackMessage;
       }
       logMessage = `Error Code: ${error.status}`;
     }

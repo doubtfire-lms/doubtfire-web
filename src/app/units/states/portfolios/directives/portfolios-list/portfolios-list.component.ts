@@ -107,7 +107,7 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
 
   openProject(event: Event, project: Project) {
     event.stopPropagation();
-    window.open(`/projects/${project.id}/dashboard/?tutor=true`, '_blank');
+    window.open(`/projects/${project.id}/dashboard`, '_blank');
   }
 
   downloadGrades() {
@@ -119,10 +119,7 @@ export class PortfoliosListComponent implements OnChanges, AfterViewInit {
       next: (newJob) => {
         this.sidekiq.show(`Downloading Portfolios: ${this.unit.code}`, newJob.id).subscribe({
           next: () => {
-            this.fileDownloaderService.downloadFile(
-              this.unit.portfoliosUrl,
-              `${this.unit.code}-portfolios.zip`,
-            );
+            this.fileDownloaderService.downloadNativeFile(this.unit.portfoliosUrl);
           },
           error: (error) => {
             this.alertService.error(error, 6000);

@@ -158,6 +158,11 @@ export class UnitService extends CachedEntityService<Unit> {
         },
         toJsonFn: MappingFunctions.mapDayToJson,
       },
+      {
+        keys: 'lastTeachingDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
       'currentUnitWeek',
       {
         keys: 'portfolioAutoGenerationDate',
@@ -288,12 +293,15 @@ export class UnitService extends CachedEntityService<Unit> {
       'feedbackWarningThresholdDays',
       'feedbackOverflowThresholdDays',
       'discussTimeoutEnabled',
+      'discussTimeoutActive',
       'discussTimeoutWarningDays',
       'discussTimeoutExpireDays',
       {
         keys: ['gradeDefinitions', 'grade_definitions'],
       },
       'hasMainContentSite',
+      'mainContentSiteId',
+      'contentSiteVersions',
       {
         keys: 'contentLinks',
         toEntityOp: (data: object, key: string, unit: Unit) => {
@@ -319,6 +327,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'teachingPeriod',
       'startDate',
       'endDate',
+      'lastTeachingDate',
       'portfolioAutoGenerationDate',
 
       'assessmentEnabled',

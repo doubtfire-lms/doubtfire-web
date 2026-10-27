@@ -30,6 +30,7 @@ export * from './task-outcome-alignment';
 export * from './learning-outcome';
 export * from './grade';
 export * from './task-status';
+export * from './task-completion-snapshot';
 export * from './task-comment/discussion-comment';
 export * from '../services/task-outcome-alignment.service';
 export * from './task-similarity';
@@ -42,6 +43,7 @@ export * from './task-comment/scorm-extension-comment';
 export * from './feedback-template';
 export * from './communication';
 export * from './engagement';
+export * from './lms-integration';
 
 // Users -- are students or staff
 export * from './user/user';
@@ -66,6 +68,8 @@ export * from '../services/webcal.service';
 export * from '../services/teaching-period.service';
 export * from '../services/teaching-period-break.service';
 export * from '../services/learning-outcome.service';
+export * from '../services/lms-integration.service';
+export * from '../services/lms-group-mapping.service';
 export * from '../services/group-set.service';
 export * from '../services/task-similarity.service';
 export * from '../../common/services/grade.service';

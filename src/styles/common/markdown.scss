@@ -7,6 +7,32 @@
 // outer edges.
 .markdown-to-html,
 .markdown-to-pdf {
+  // Preflight makes anchors inherit both their colour and text decoration,
+  // which leaves rendered Markdown links indistinguishable from surrounding
+  // text. Use a custom property so contexts with coloured backgrounds (such as
+  // task comment bubbles) can provide an accessible link colour.
+  a {
+    color: var(--markdown-link-color, #0645ad);
+    text-decoration: underline;
+    text-underline-offset: 0.1em;
+  }
+
+  // Distinguish inline backtick code without affecting fenced code blocks.
+  :not(pre) > code {
+    padding: 0.1em 0.3em;
+    border-radius: 0.25em;
+    background-color: rgb(0 0 0 / 12%);
+  }
+
+  // Give fenced code blocks the same visual distinction as inline code while
+  // allowing long lines to scroll instead of widening their container.
+  pre {
+    padding: 0.75em 1em;
+    overflow-x: auto;
+    border-radius: 0.375em;
+    background-color: rgb(0 0 0 / 12%);
+  }
+
   > * {
     margin-top: 0;
     margin-bottom: 0.75em;

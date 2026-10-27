@@ -1,15 +1,26 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable, tap} from 'rxjs';
+import {Observable, shareReplay, switchMap, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {
+  ResumableUploadService,
+  UploadEvent,
+} from 'src/app/common/services/resumable-upload.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GroupService} from '../services/group.service';
 import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
+import {
+  MILLISECONDS_PER_WEEK,
+  addDays,
+  dayOffsetInWeek,
+  startOfDay,
+  toLocalDay,
+} from './calendar-day';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {
   Campus,
@@ -20,6 +31,7 @@ import {
   OverseerImage,
   Project,
   Task,
+  TaskCompletionSnapshot,
   TaskDefinition,
   TaskOutcomeAlignment,
   TeachingPeriod,
@@ -65,6 +77,7 @@ export class Unit extends Entity {
   teachingPeriod: TeachingPeriod;
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
+  lastTeachingDate: Date;
   portfolioAutoGenerationDate: Date;
   currentUnitWeek: number | null;
 
@@ -79,6 +92,8 @@ export class Unit extends Entity {
 
   draftTaskDefinition: TaskDefinition;
   hasMainContentSite: boolean = false;
+  mainContentSiteId?: number;
+  contentSiteVersions: Record<number, string> = {};
 
   allowStudentExtensionRequests: boolean;
   allowFlexibleDates: boolean = false;
@@ -90,6 +105,7 @@ export class Unit extends Entity {
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
   discussTimeoutEnabled: boolean;
+  discussTimeoutActive: boolean;
   discussTimeoutWarningDays: number;
   discussTimeoutExpireDays: number;
   gradeDefinitions: GradeDefinition[] = [
@@ -148,6 +164,15 @@ export class Unit extends Entity {
     return `${this.code} (${
       this.teachingPeriod ? this.teachingPeriod.name : this.startDate.toLocaleDateString()
     })`;
+  }
+
+  public get periodLabel(): string {
+    if (this.teachingPeriod?.name) {
+      return this.teachingPeriod.name;
+    }
+    const format = (date: Date) =>
+      `${date.toLocaleString('en-US', {month: 'short'})} '${String(date.getFullYear()).slice(-2)}`;
+    return `${format(this.startDate)} - ${format(this.endDate)}`;
   }
 
   public get isActive(): boolean {
@@ -326,25 +351,33 @@ export class Unit extends Entity {
       return this.teachingPeriod.weekNumber(date);
     }
 
-    const targetDate = date instanceof Date ? date : new Date(date);
-    if (Number.isNaN(targetDate.valueOf())) {
+    const targetDate = startOfDay(date);
+    const startDate = startOfDay(this.startDate);
+    if (!targetDate || !startDate) {
       return null;
     }
-    const normalizedTargetDate = new Date(
-      targetDate.getFullYear(),
-      targetDate.getMonth(),
-      targetDate.getDate(),
-    );
-    const normalizedStartDate = new Date(
-      this.startDate.getFullYear(),
-      this.startDate.getMonth(),
-      this.startDate.getDate(),
-    );
-    const millisecondsPerWeek = 1000 * 60 * 60 * 24 * 7;
-    return (
-      Math.floor(
-        (normalizedTargetDate.valueOf() - normalizedStartDate.valueOf()) / millisecondsPerWeek,
-      ) + 1
+
+    return Math.floor((targetDate.valueOf() - startDate.valueOf()) / MILLISECONDS_PER_WEEK) + 1;
+  }
+
+  /**
+   * The inverse of {@link weekNumber}.
+   *
+   * @param day the day of the week, 0 = Sunday
+   * @returns local midnight on that day
+   */
+  public dateForWeekAndDay(week: number, day: number): Date | null {
+    if (this.teachingPeriod) {
+      return this.teachingPeriod.dateForWeekAndDay(week, day);
+    }
+
+    const startDate = startOfDay(this.startDate);
+    if (!startDate || week === null || day === null) {
+      return null;
+    }
+
+    return toLocalDay(
+      addDays(startDate, (Math.floor(week) - 1) * 7 + dayOffsetInWeek(startDate.getUTCDay(), day)),
     );
   }
 
@@ -372,7 +405,7 @@ export class Unit extends Entity {
 
   public rolloverTo(
     body:
-      | {new_unit_code?: string; start_date: Date; end_date: Date}
+      | {new_unit_code?: string; start_date: Date; end_date: Date; last_teaching_date?: Date}
       | {new_unit_code?: string; teaching_period_id: number},
   ): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
@@ -409,12 +442,16 @@ export class Unit extends Entity {
     });
   }
 
-  public fillWithUnStartedTasks(tasks: Task[], taskDef: TaskDefinition | number): Task[] {
+  public fillWithUnStartedTasks(
+    tasks: Task[],
+    taskDef: TaskDefinition | number,
+    includeWithdrawn: boolean = false,
+  ): Task[] {
     // Make sure the task definition is a task definition object from the unit
     const td = taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
 
-    // Now fill for the students in the unit
-    return this.students.map((p) => {
+    // Fill rows for enrolled students, and withdrawn students when requested
+    return (includeWithdrawn ? this.students : this.activeStudents).map((p) => {
       // See if we already have the task
       let t = tasks.find((t) => t.project.id === p.id && t.definition.id === td.id);
       if (!t) {
@@ -437,9 +474,6 @@ export class Unit extends Entity {
     AppInjector.get(UnitService)
       .fetch(this.id)
       .subscribe({
-        next: (unit) => {
-          console.log(unit.teachingPeriod?.name);
-        },
         error: (message) => alerts.error(message, 6000),
       });
   }
@@ -465,6 +499,7 @@ export class Unit extends Entity {
   }
 
   public refreshGroups(): void {
+    // TODO: Implement group refresh.
     // return unless unit.groups?.length > 0
     // # Query the groups within the unit.
     // Unit.groups.query( {id: unit.id} ,
@@ -474,8 +509,6 @@ export class Unit extends Entity {
     //   (failure) ->
     //     alertService.error( "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
     // )
-
-    console.log('implement refresh groups');
   }
 
   public getGroups(groupSet: GroupSet): Observable<Group[]> {
@@ -572,13 +605,28 @@ export class Unit extends Entity {
       );
   }
 
-  public refreshStudents(includeWithdrawnStudents: boolean = false) {
+  public refreshStudents(includeWithdrawnStudents: boolean = false): Observable<Project[]> {
     const projectService: ProjectService = AppInjector.get(ProjectService);
-    projectService.loadStudents(this, includeWithdrawnStudents, true);
+    const alerts = AppInjector.get(AlertService);
+    // loadStudents asks for either the enrolled or the withdrawn students, so both are
+    // needed to refresh the whole cohort.
+    const enrolled = projectService.loadStudents(this, false, true);
+    const result = (
+      includeWithdrawnStudents
+        ? enrolled.pipe(switchMap(() => projectService.loadStudents(this, true, true)))
+        : enrolled
+    ).pipe(shareReplay({bufferSize: 1, refCount: false}));
+
+    // Subscribe here so that the refresh runs even when the caller ignores the result.
+    result.subscribe({
+      error: (message) => alerts.error(message, 6000),
+    });
+
+    return result;
   }
 
   public findProjectForUsername(username: string): Project {
-    return this.students.find((s) => s.student.username === username);
+    return this.students.find((s) => s.student?.username === username);
   }
 
   public get groupSets(): readonly GroupSet[] {
@@ -600,8 +648,7 @@ export class Unit extends Entity {
 
   private addStudentTypeAheadData(students: readonly Project[], appendTo: string[]): void {
     students.forEach((project) => {
-      appendTo.push(project.student.name);
-      appendTo.push(project.student.username);
+      appendTo.push(project.student?.name, project.student?.username);
     });
   }
 
@@ -617,7 +664,9 @@ export class Unit extends Entity {
 
     this.addStudentTypeAheadData(this.activeStudents, result);
 
-    return result;
+    // Students and tutorials can be missing any of these details, so drop the gaps
+    // rather than offering blank suggestions.
+    return result.filter(Boolean);
   }
 
   public studentsForGroupTypeAhead(group: Group): Project[] {
@@ -692,14 +741,18 @@ export class Unit extends Entity {
     }`;
   }
 
-  public getBatchFeedbackUploadUrl(taskDefinition: TaskDefinition | number): string {
-    const params = new URLSearchParams({unit_id: `${this.id}`});
+  public uploadBatchFeedback(
+    taskDefinition: TaskDefinition | number,
+    file: File,
+  ): Observable<UploadEvent> {
     const taskDefinitionId =
       taskDefinition instanceof TaskDefinition ? taskDefinition.id : taskDefinition;
 
-    params.set('task_definition_id', `${taskDefinitionId}`);
-
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_csv.json?${params.toString()}`;
+    return AppInjector.get(ResumableUploadService).upload(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_uploads`,
+      file,
+      {unit_id: this.id, task_definition_id: taskDefinitionId},
+    );
   }
 
   public getTaskDefinitionBatchUploadUrl(): string {
@@ -867,5 +920,36 @@ export class Unit extends Entity {
   public getTaskPrerequisites(): Observable<TaskPrerequisite[]> {
     const prerequisiteService = AppInjector.get(TaskPrerequisiteService);
     return prerequisiteService.getUnitPrerequisites(this.id);
+  }
+
+  public getTaskCompletionSnapshots(
+    startDate?: Date,
+    endDate?: Date,
+    limit: number = 365,
+  ): Observable<TaskCompletionSnapshot[]> {
+    let params = new HttpParams();
+
+    [startDate, endDate].forEach((date) => {
+      if (date) {
+        params = params.set(
+          date === startDate ? 'start_date' : 'end_date',
+          `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
+        );
+      }
+    });
+
+    params = params.set('limit', limit.toString());
+
+    return AppInjector.get(HttpClient).get<TaskCompletionSnapshot[]>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
+      {params},
+    );
+  }
+
+  public captureTaskCompletionSnapshot(): Observable<SidekiqJob> {
+    return AppInjector.get(HttpClient).post<SidekiqJob>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots/capture`,
+      {},
+    );
   }
 }

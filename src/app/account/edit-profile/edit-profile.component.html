@@ -1,9 +1,13 @@
-<div FxLayout="row" fxLayoutAlign="center center" id="parent">
-  <div fxFlex.gt-sm="20"></div>
-  <div class="form-container" fxFlex>
+<div class="flex flex-row items-center justify-center" id="parent">
+  <div
+    class="min-[960px]:max-w-[20%] min-[960px]:shrink min-[960px]:grow min-[960px]:basis-full"
+  ></div>
+  <div class="form-container flex-1">
     @if (!loading) {
       <f-edit-profile-form mode="edit"></f-edit-profile-form>
     }
   </div>
-  <div fxFlex.gt-sm="20"></div>
+  <div
+    class="min-[960px]:max-w-[20%] min-[960px]:shrink min-[960px]:grow min-[960px]:basis-full"
+  ></div>
 </div>

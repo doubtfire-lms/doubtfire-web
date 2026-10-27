@@ -58,11 +58,29 @@
           placeholder="End date"
           required
           [(ngModel)]="newOrSelectedTeachingPeriod.endDate"
+          (ngModelChange)="defaultLastTeachingDate($event)"
         />
       </mat-date-range-input>
 
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="outline"
+      matTooltip="Discussion deadlines and weekly summaries stop after this date"
+      matTooltipShowDelay="1000"
+    >
+      <mat-label>Last Teaching Date</mat-label>
+      <input
+        matInput
+        name="lastTeachingDate"
+        required
+        [matDatepicker]="lastTeachingDatePicker"
+        [(ngModel)]="newOrSelectedTeachingPeriod.lastTeachingDate"
+      />
+      <mat-datepicker-toggle matIconSuffix [for]="lastTeachingDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #lastTeachingDatePicker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -74,7 +92,6 @@
         [matDatepicker]="activeUntilPicker"
         [(ngModel)]="newOrSelectedTeachingPeriod.activeUntil"
       />
-      <mat-hint>DD/MM/YYYY</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="activeUntilPicker"></mat-datepicker-toggle>
       <mat-datepicker #activeUntilPicker></mat-datepicker>
     </mat-form-field>
@@ -128,8 +145,22 @@
                 required
                 type="number"
                 [(ngModel)]="editingBreak.numberOfDays"
+                (ngModelChange)="breakDurationChanged(editingBreak)"
               />
             </mat-form-field>
+
+            <mat-checkbox
+              name="editBreakPauseWeekCount"
+              [disabled]="!editingBreak.canPauseWeekCount"
+              [matTooltip]="
+                editingBreak.canPauseWeekCount
+                  ? 'Week numbers pause for the length of this break'
+                  : 'Only breaks that are a multiple of 7 days can pause the week count'
+              "
+              [(ngModel)]="editingBreak.pauseWeekCount"
+            >
+              Pause week count
+            </mat-checkbox>
 
             <span class="grow"></span>
             <button
@@ -153,6 +184,9 @@
               }
               <span matListItemLine>{{ break.numberOfDays }} day(s)</span>
               <span matListItemLine>{{ campusSummary(break.campusIds) }}</span>
+              <span matListItemLine>{{
+                break.pauseWeekCount ? 'Pauses the week count' : 'Week count continues'
+              }}</span>
             </span>
             <span class="grow"></span>
             <button mat-icon-button (click)="editTeachingBreak(break)">
@@ -208,8 +242,23 @@
           required
           type="number"
           [(ngModel)]="tempBreak.numberOfDays"
+          (ngModelChange)="breakDurationChanged(tempBreak)"
         />
       </mat-form-field>
+
+      <mat-checkbox
+        class="self-start"
+        name="breakPauseWeekCount"
+        [disabled]="!tempBreak.canPauseWeekCount"
+        [matTooltip]="
+          tempBreak.canPauseWeekCount
+            ? 'Week numbers pause for the length of this break'
+            : 'Only breaks that are a multiple of 7 days can pause the week count'
+        "
+        [(ngModel)]="tempBreak.pauseWeekCount"
+      >
+        Pause week count
+      </mat-checkbox>
 
       <button
         class="self-start"

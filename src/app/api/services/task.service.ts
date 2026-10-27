@@ -11,6 +11,7 @@ import {
   TaskStatusUiData,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {MappingFunctions} from './mapping-fn';
 
@@ -26,7 +27,10 @@ export class TaskService extends CachedEntityService<Task> {
   private readonly taskOverflowEndpoint = '/units/:id:/tasks/overflow';
   private readonly refreshTaskEndpoint = 'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
 
-  constructor(httpClient: HttpClient) {
+  constructor(
+    httpClient: HttpClient,
+    private alertService: AlertService,
+  ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
@@ -66,10 +70,15 @@ export class TaskService extends CachedEntityService<Task> {
         keys: 'discussTimeoutExpiryAt',
         toEntityFn: MappingFunctions.mapDate,
       },
+      'discussTimeoutExpiryDate',
       'extensions',
       'scormExtensions',
       {
         keys: 'submissionDate',
+        toEntityFn: MappingFunctions.mapDate,
+      },
+      {
+        keys: 'waitingSince',
         toEntityFn: MappingFunctions.mapDate,
       },
       {
@@ -122,6 +131,7 @@ export class TaskService extends CachedEntityService<Task> {
     unit: Unit,
     taskDef?: TaskDefinition | number,
     fetchMyStudentsOnly?: boolean,
+    viewAsUnitRoleId?: number,
   ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
 
@@ -135,6 +145,7 @@ export class TaskService extends CachedEntityService<Task> {
         constructorParams: unit,
         params: {
           my_students_only: fetchMyStudentsOnly,
+          ...(viewAsUnitRoleId ? {view_as_unit_role_id: viewAsUnitRoleId} : {}),
         },
       },
     ).pipe(
@@ -147,6 +158,7 @@ export class TaskService extends CachedEntityService<Task> {
   public queryTasksForTaskExplorer(
     unit: Unit,
     taskDef?: TaskDefinition | number,
+    includeWithdrawn: boolean = false,
   ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
     return this.query(
@@ -162,7 +174,7 @@ export class TaskService extends CachedEntityService<Task> {
     ).pipe(
       map((tasks: Task[]) => {
         unit.incorporateTasks(tasks);
-        return unit.fillWithUnStartedTasks(tasks, taskDef);
+        return unit.fillWithUnStartedTasks(tasks, taskDef, includeWithdrawn);
       }),
     );
   }
@@ -218,7 +230,8 @@ export class TaskService extends CachedEntityService<Task> {
 
     this.get(pathIds, options).subscribe({
       error: (message) => {
-        console.log(`Failed to refresh tasks ${message}`);
+        console.error('Failed to refresh task details', message);
+        this.alertService.error('Failed to refresh task details.', 6000);
       },
     });
   }

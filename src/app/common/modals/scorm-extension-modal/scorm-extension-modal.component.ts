@@ -62,7 +62,7 @@ export class ScormExtensionModalComponent {
         }).bind(this),
         error: ((response: never) => {
           this.alerts.error('Error requesting extra attempt ' + response);
-          console.log(response);
+          console.error('Error requesting extra attempt', response);
         }).bind(this),
       });
   }

@@ -4,6 +4,8 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {environment} from 'src/environments/environment';
 import {DoubtfireAngularModule} from './app/doubtfire-angular.module';
 
+Object.assign(window, {pdfWorkerSrc: '/assets/pdfjs/pdf.worker.min.js'});
+
 if (environment.sentryDsn) {
   Sentry.init({
     dsn: environment.sentryDsn,

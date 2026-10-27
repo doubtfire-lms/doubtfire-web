@@ -1,7 +1,11 @@
 @if (loading$ | async) {
-  <div class="app-splash-screen">
-    <div class="app-splash-inner">
-      <ng-lottie width="70vw" [options]="options"></ng-lottie>
+  <div class="fixed inset-0 z-100 flex size-full items-center justify-center bg-white">
+    <div class="flex flex-col items-center justify-center">
+      <div
+        #splashAnimation
+        aria-hidden="true"
+        class="flex items-center justify-center [&>svg]:h-auto [&>svg]:max-h-[60vh] [&>svg]:w-96 [&>svg]:max-w-[85vw]"
+      ></div>
     </div>
   </div>
 }

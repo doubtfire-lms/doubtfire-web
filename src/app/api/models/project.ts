@@ -79,7 +79,7 @@ export class Project extends Entity {
 
   public matches(text: string): boolean {
     return (
-      this.student.matches(text) ||
+      this.student?.matches(text) ||
       this.campus?.matches(text) ||
       this.matchesTutorialEnrolments(text) ||
       this.matchesGroup(text)
@@ -87,18 +87,16 @@ export class Project extends Entity {
   }
 
   public matchesTutorialEnrolments(matchText): boolean {
-    return (
-      this.tutorials.filter(
-        (enrol) =>
-          enrol.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
-          enrol.tutorName.toLowerCase().indexOf(matchText) >= 0,
-      ).length > 0
+    return this.tutorials.some(
+      (enrol) =>
+        enrol?.abbreviation?.toLowerCase().includes(matchText) ||
+        enrol?.tutorName?.toLowerCase().includes(matchText),
     );
   }
 
   // Search through the student's groups for a match
   public matchesGroup(matchText: string): boolean {
-    return this.groups.find((grp) => grp.name.toLowerCase().indexOf(matchText) >= 0) !== undefined;
+    return this.groups.some((grp) => grp?.name?.toLowerCase().includes(matchText));
   }
 
   public groupForGroupSet(gs: GroupSet) {

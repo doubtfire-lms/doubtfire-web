@@ -63,9 +63,9 @@ export class EngagementPassportCardComponent implements OnChanges {
       icon: 'record_voice_over',
       classes: 'border-cyan-300 bg-cyan-50 text-cyan-700',
     },
-    forum: {
-      label: 'Forum post',
-      icon: 'forum',
+    community: {
+      label: 'Community',
+      icon: 'public',
       classes: 'border-blue-300 bg-blue-50 text-blue-700',
     },
     email: {
@@ -182,16 +182,21 @@ export class EngagementPassportCardComponent implements OnChanges {
   }
 
   private buildWeeks(engagements: readonly Engagement[]): void {
-    const totalWeeks = Math.max(1, this.project.unit.totalWeeks);
-    this.weeks = Array.from({length: totalWeeks}, (_, index) => ({
+    const unit = this.project.unit;
+    const lastTeachingWeek = unit.weekNumber(unit.lastTeachingDate ?? unit.endDate);
+    this.weeks = Array.from({length: Math.max(1, lastTeachingWeek ?? 0)}, (_, index) => ({
       week: index + 1,
       stamps: [],
     }));
 
     for (const engagement of engagements) {
-      const weekNumber = this.project.unit.weekNumber(engagement.occurredAt);
-      if (weekNumber === null || weekNumber < 1 || weekNumber > totalWeeks) {
+      const weekNumber = unit.weekNumber(engagement.occurredAt);
+      if (weekNumber === null || weekNumber < 1) {
         continue;
+      }
+
+      while (this.weeks.length < weekNumber) {
+        this.weeks.push({week: this.weeks.length + 1, stamps: []});
       }
 
       const type = this.normalizeEngagementType(engagement.engagementType);
@@ -208,6 +213,9 @@ export class EngagementPassportCardComponent implements OnChanges {
 
   private normalizeEngagementType(engagementType: string): string {
     const type = engagementType?.trim().toLowerCase();
-    return type === 'discuss' ? 'discussion' : type;
+    if (type === 'discuss') {
+      return 'discussion';
+    }
+    return type === 'forum' ? 'community' : type;
   }
 }

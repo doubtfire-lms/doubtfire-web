@@ -12,6 +12,7 @@ interface SettingsResponseFormat {
   overseerEnabled: boolean;
   tiiEnabled: boolean;
   d2lEnabled: boolean;
+  ltiEnabled: boolean;
 }
 
 export interface LogoSettings {
@@ -54,6 +55,11 @@ export class DoubtfireConstants {
   public IsD2LEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   /**
+   * Whether or not LTI is enabled, which enables the unit LMS tab.
+   */
+  public IsLtiEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  /**
    * Details on the logo
    */
   public LogoSettings: BehaviorSubject<LogoSettings> = new BehaviorSubject<LogoSettings>({
@@ -92,6 +98,7 @@ export class DoubtfireConstants {
       this.IsOverseerEnabled.next(result.overseerEnabled);
       this.IsTiiEnabled.next(result.tiiEnabled);
       this.IsD2LEnabled.next(result.d2lEnabled);
+      this.IsLtiEnabled.next(result.ltiEnabled === true);
 
       this.LogoSettings.next({
         hasLogo: result.hasLogo,

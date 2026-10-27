@@ -53,6 +53,9 @@ export class Task extends Entity {
   extensions: number;
   scormExtensions: number;
   submissionDate: Date;
+  // When the inbox started waiting on this task: the submission, or the oldest
+  // unread comment for tasks listed only because of comments
+  waitingSince: Date;
   completionDate: Date;
   timesAssessed: number;
   grade?: number;
@@ -83,6 +86,7 @@ export class Task extends Entity {
   targetDueDate: Date;
   movedToDiscussAt: Date;
   discussTimeoutExpiryAt: Date;
+  discussTimeoutExpiryDate: string;
 
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
@@ -237,7 +241,7 @@ export class Task extends Entity {
     );
   }
 
-  public hasTaskKey(key: {studentId: number; taskDefAbbr: string}): boolean {
+  public hasTaskKey(key: {studentId: number | string; taskDefAbbr: string}): boolean {
     if (!key) {
       return false;
     }

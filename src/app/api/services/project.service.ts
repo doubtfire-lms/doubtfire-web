@@ -159,7 +159,15 @@ export class ProjectService extends CachedEntityService<Project> {
           data[key]?.forEach((tutorialEnrolment: {tutorial_id: number}) => {
             if (tutorialEnrolment.tutorial_id) {
               const tutorial = unit.tutorialsCache.get(tutorialEnrolment.tutorial_id);
-              project.tutorialEnrolmentsCache.add(tutorial);
+              // The unit's tutorials may not have loaded yet - project mappings can run
+              // against a unit stub, as the progressive route resolution creates. Dropping
+              // the enrolment leaves this project without a tutorial until it is mapped
+              // again, which hides it behind the "My Tutorials" filter, but failing here
+              // would abort the mapping of this project and every project after it in the
+              // response.
+              if (tutorial) {
+                project.tutorialEnrolmentsCache.add(tutorial);
+              }
             }
           });
         },

@@ -1,9 +1,5 @@
 <div class="flex flex-row items-start justify-start">
-  <a
-    style="display: flex"
-    [queryParams]="unselected ? null : {tutor: true}"
-    [routerLink]="studentDashboardRoute"
-  >
+  <a style="display: flex" [routerLink]="studentDashboardRoute">
     <user-icon
       style="margin-right: 8px"
       [size]="40"
@@ -14,20 +10,12 @@
   <div class="flex-col items-start justify-center" style="line-height: 0.5em; margin-top: 4px">
     <div id="placeholder1" style="margin-top: 6px" [hidden]="!unselected"></div>
     <div id="placeholder2" [hidden]="!unselected"></div>
-    <a
-      style="display: flex"
-      [queryParams]="unselected ? null : {tutor: true}"
-      [routerLink]="studentDashboardRoute"
-    >
+    <a style="display: flex" [routerLink]="studentDashboardRoute">
       <h4 class="mat-h4" style="margin-bottom: 1px">
         {{ selectedTask?.project.student.firstName }} {{ selectedTask?.project.student.lastName }}
       </h4>
     </a>
-    <a
-      style="display: flex"
-      [queryParams]="unselected ? null : {tutor: true}"
-      [routerLink]="studentTaskRoute"
-    >
+    <a style="display: flex" [routerLink]="studentTaskRoute">
       <p class="mat-caption">{{ selectedTask?.definition.name }}</p>
     </a>
   </div>

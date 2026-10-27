@@ -167,7 +167,7 @@ export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDes
   }
 
   public gotoStudent(student: Project) {
-    this.router.navigate(['/projects', student.id, 'dashboard'], {queryParams: {tutor: true}});
+    this.router.navigate(['/projects', student.id, 'dashboard']);
   }
 
   enrolStudent() {

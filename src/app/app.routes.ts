@@ -78,7 +78,12 @@ export const routes: Routes = [
   {path: 'eula', component: AcceptEulaComponent},
   {path: 'lti', component: LtiDashboardComponent},
   {path: 'lti/link', component: LtiUnitLinkComponent},
-  {path: 'jplag-report-viewer', component: JplagReportViewerComponent},
+  {
+    path: 'jplag-report-viewer',
+    component: JplagReportViewerComponent,
+    canActivate: [roleWhitelistGuard],
+    data: {standalone: true, roleWhitelist: ['Tutor', 'Convenor', 'Admin']},
+  },
   {
     path: 'projects/:projectId/task_def_id/:taskDefId/scorm-player/normal',
     component: ScormPlayerComponent,
@@ -128,12 +133,17 @@ export const routes: Routes = [
     path: 'tutor-discussion',
     component: TutorDiscussionComponent,
     canActivate: [roleWhitelistGuard],
-    data: {task: 'Discussion', roleWhitelist: ['Admin', 'Auditor', 'Tutor']},
+    data: {task: 'Discussion', roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor']},
   },
   {
     path: 'tutor-attendance',
     component: TutorDiscussionComponent,
-    data: {attendance: true, task: 'Check-in'},
+    canActivate: [roleWhitelistGuard],
+    data: {
+      attendance: true,
+      task: 'Check-in',
+      roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+    },
   },
   {
     matcher: unitCodeContentRouteMatcher,
@@ -152,29 +162,75 @@ export const routes: Routes = [
         },
         children: [
           {path: '', pathMatch: 'full', redirectTo: 'tasks/inbox'},
-          {path: 'analytics', component: UnitAnalyticsComponent, data: {task: 'Unit Analytics'}},
-          {path: 'students/groups', component: UnitGroupsComponent, data: {task: 'Student Groups'}},
+          {
+            path: 'analytics',
+            component: UnitAnalyticsComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {
+              task: 'Unit Analytics',
+              roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+            },
+          },
+          {
+            path: 'analytics/:tab',
+            component: UnitAnalyticsComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {
+              task: 'Unit Analytics',
+              roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+            },
+          },
+          {
+            path: 'students/groups',
+            component: UnitGroupsComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {
+              task: 'Student Groups',
+              roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+            },
+          },
           {
             path: 'students/portfolios',
             component: PortfoliosComponent,
-            data: {task: 'Student Portfolios'},
+            canActivate: [roleWhitelistGuard],
+            data: {
+              task: 'Student Portfolios',
+              roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+            },
           },
           {
             path: 'students/portfolios/:projectId',
             component: PortfoliosComponent,
-            data: {task: 'Student Portfolios'},
+            canActivate: [roleWhitelistGuard],
+            data: {
+              task: 'Student Portfolios',
+              roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+            },
           },
           {
             path: 'students/portfolios/:projectId/:tab',
             component: PortfoliosComponent,
-            data: {task: 'Student Portfolios'},
+            canActivate: [roleWhitelistGuard],
+            data: {
+              task: 'Student Portfolios',
+              roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+            },
           },
           {
             path: 'students/portfolios/:projectId/:tab/:taskAbbreviation',
             component: PortfoliosComponent,
-            data: {task: 'Student Portfolios'},
+            canActivate: [roleWhitelistGuard],
+            data: {
+              task: 'Student Portfolios',
+              roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+            },
           },
-          {path: 'students', component: StudentsListComponent, data: {task: 'Student List'}},
+          {
+            path: 'students',
+            component: StudentsListComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Student List', roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor']},
+          },
           {
             matcher: unitContentRouteMatcher,
             component: UnitContentViewerComponent,
@@ -192,12 +248,27 @@ export const routes: Routes = [
             canActivate: [roleWhitelistGuard],
             data: {task: 'Unit Administration', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
           },
-          {path: 'rollover', component: RolloverComponent, data: {task: 'Unit Rollover'}},
-          {path: 'discussion', component: TutorDiscussionComponent, data: {task: 'Discussion'}},
+          {
+            path: 'rollover',
+            component: RolloverComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Unit Rollover', roleWhitelist: ['Convenor', 'Admin', 'Auditor']},
+          },
+          {
+            path: 'discussion',
+            component: TutorDiscussionComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Discussion', roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor']},
+          },
           {
             path: 'check-in',
             component: TutorDiscussionComponent,
-            data: {attendance: true, task: 'Check-in'},
+            canActivate: [roleWhitelistGuard],
+            data: {
+              attendance: true,
+              task: 'Check-in',
+              roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+            },
           },
           {
             path: 'tasks',
@@ -258,7 +329,8 @@ export const routes: Routes = [
           {
             path: 'tasks/:taskAbbreviation',
             component: TaskViewerStateComponent,
-            data: {task: 'Task Lists'},
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Task Lists', roleWhitelist: ['Convenor', 'Admin', 'Auditor', 'Tutor']},
           },
         ],
       },
