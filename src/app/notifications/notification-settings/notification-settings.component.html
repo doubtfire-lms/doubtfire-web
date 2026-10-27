@@ -108,13 +108,17 @@
 
             @if (digestFrequency === 'hourly') {
               <mat-form-field appearance="outline" class="min-w-32.5">
-                <mat-label>Starting at</mat-label>
+                <mat-label>Between</mat-label>
                 <input
                   class="digest-time-input"
                   matInput
                   type="time"
                   [(ngModel)]="digestStartTime"
                 />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="min-w-32.5">
+                <mat-label>And</mat-label>
+                <input class="digest-time-input" matInput type="time" [(ngModel)]="digestEndTime" />
               </mat-form-field>
             }
 

@@ -66,6 +66,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   public digestFrequency: NotificationFrequency = 'weekly';
   public digestIntervalHours = 4;
   public digestStartTime = '07:00';
+  public digestEndTime = '22:00';
   public digestTime = '07:00';
   public digestWeekday = 1;
 
@@ -277,6 +278,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     settings.digestFrequency = this.digestFrequency;
     settings.digestIntervalHours = this.digestIntervalHours;
     settings.digestStartTime = this.digestStartTime;
+    settings.digestEndTime = this.digestEndTime;
     settings.digestTime = this.digestTime;
     settings.digestWeekday = this.digestWeekday;
     // Units following the defaults have nothing to store.
@@ -305,6 +307,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     this.digestFrequency = this.saved.digestFrequency;
     this.digestIntervalHours = this.saved.digestIntervalHours;
     this.digestStartTime = this.saved.digestStartTime;
+    this.digestEndTime = this.saved.digestEndTime;
     this.digestTime = this.saved.digestTime;
     this.digestWeekday = this.saved.digestWeekday;
     this.scopes[0].channels = channelsFromWire(this.saved.channels);

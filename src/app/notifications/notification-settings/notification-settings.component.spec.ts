@@ -38,6 +38,7 @@ describe('NotificationSettingsComponent', () => {
     digestFrequency: 'daily',
     digestIntervalHours: 6,
     digestStartTime: '09:00',
+    digestEndTime: '21:00',
     digestTime: '09:30',
     digestTimezone: 'Australia/Melbourne',
     digestWeekday: 3,
@@ -270,6 +271,7 @@ describe('NotificationSettingsComponent', () => {
     expect(component.digestFrequency).toBe('daily');
     expect(component.digestIntervalHours).toBe(6);
     expect(component.digestStartTime).toBe('09:00');
+    expect(component.digestEndTime).toBe('21:00');
     expect(component.digestTime).toBe('09:30');
     expect(component.digestWeekday).toBe(3);
 
@@ -302,6 +304,7 @@ describe('NotificationSettingsComponent', () => {
     expect(payload.digestFrequency).toBe('daily');
     expect(payload.digestIntervalHours).toBe(6);
     expect(payload.digestStartTime).toBe('09:00');
+    expect(payload.digestEndTime).toBe('21:00');
     expect(payload.units).toHaveLength(1);
     expect(payload.units[0].unitId).toBe(1);
     expect(payload.units[0].channels['new_task_comment']).toContain('push');

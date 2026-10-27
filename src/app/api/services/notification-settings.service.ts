@@ -21,6 +21,7 @@ export class NotificationSettingsService extends EntityService<NotificationSetti
       'digestFrequency',
       'digestIntervalHours',
       'digestStartTime',
+      'digestEndTime',
       'digestTime',
       'digestTimezone',
       'digestWeekday',
