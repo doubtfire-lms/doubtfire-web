@@ -142,8 +142,11 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   }
 
   public get sections(): NotificationSection[] {
+    // Digest types are hidden while the digest is off, keeping their settings for when it is back on.
     return NOTIFICATION_SECTIONS.filter(
-      (section) => section.audience === 'student' || this.isStaff,
+      (section) =>
+        (section.audience === 'student' || this.isStaff) &&
+        (section.delivery === 'alert' || this.digestFrequency !== 'off'),
     );
   }
 

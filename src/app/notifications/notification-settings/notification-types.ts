@@ -164,7 +164,7 @@ export const NOTIFICATION_SECTIONS: NotificationSection[] = [
   {
     key: 'moderation',
     title: 'Moderation notes',
-    delivery: 'alert',
+    delivery: 'digest',
     audience: 'staff',
     types: [
       {

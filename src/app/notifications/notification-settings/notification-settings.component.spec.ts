@@ -310,6 +310,17 @@ describe('NotificationSettingsComponent', () => {
     expect(payload.units[0].channels['new_task_comment']).toContain('push');
   });
 
+  it('hides digest types while the digest is off', () => {
+    component.digestFrequency = 'off';
+
+    expect(component.sections.every((section) => section.delivery === 'alert')).toBe(true);
+    // The hidden choices are kept for when the digest is turned back on.
+    expect(component.isChecked('new_task_comment', 'email')).toBe(true);
+
+    component.digestFrequency = 'daily';
+    expect(component.sections.some((section) => section.delivery === 'digest')).toBe(true);
+  });
+
   it('saves a chosen timezone on the user before the settings', () => {
     const updateTimezone = vi.fn(() => of(null));
     const userService = TestBed.inject(UserService) as unknown as {
