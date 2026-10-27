@@ -90,6 +90,11 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   public TutorDiscussionTabView = TutorDiscussionTabView;
   public footerTabView: TutorDiscussionTabView = TutorDiscussionTabView.SHOW_COMMENTS;
 
+  public get isTutorDiscussionRoute(): boolean {
+    const path = this.activatedRoute.snapshot.routeConfig?.path;
+    return path === 'tutor-discussion' || path === 'discussion';
+  }
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private unitService: UnitService,
