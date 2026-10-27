@@ -149,6 +149,48 @@ describe('StaffTaskListComponent', () => {
     expect(component.filters.tutorialIdSelected).toBe('mine');
   });
 
+  it('shows every unit escalation to convenors while keeping routine moderation scoped', () => {
+    const ownRoutine = Object.assign(buildTask(), {
+      moderationType: 'random_sample',
+      tutorialId: 11,
+      tutor: {mentorId: 1},
+    });
+    const otherEscalation = Object.assign(buildTask(), {
+      moderationType: 'escalation',
+      tutorialId: 12,
+      tutor: {mentorId: 2},
+    });
+    const otherRoutine = Object.assign(buildTask(), {
+      moderationType: 'random_sample',
+      tutorialId: 12,
+      tutor: {mentorId: 2},
+    });
+    const otherDefinitionEscalation = Object.assign(buildTask(), {
+      moderationType: 'escalation',
+      tutorialId: 12,
+      tutor: {mentorId: 2},
+      definition: {id: 2},
+    });
+
+    component.viewType = 'moderation';
+    component.filters = {
+      taskDefinition: {id: 1} as never,
+      tutorials: [{id: 11} as never],
+      forceStream: true,
+      unitRoleIdSelected: 'mentoring_all',
+    };
+    component.taskData = {selectedTask: null} as never;
+    component.tasks = [otherEscalation, ownRoutine, otherRoutine, otherDefinitionEscalation];
+
+    component.unitRole = {id: 1, role: 'Convenor'} as never;
+    component.applyFilters();
+    expect(component.filteredTasks).toEqual([otherEscalation, ownRoutine]);
+
+    component.unitRole = {id: 1, role: 'Tutor'} as never;
+    component.applyFilters();
+    expect(component.filteredTasks).toEqual([ownRoutine]);
+  });
+
   describe('view preferences', () => {
     beforeEach(() => {
       component.unit = {id: 20} as never;
