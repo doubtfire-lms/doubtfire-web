@@ -1,6 +1,6 @@
 {
   "name": "doubtfire",
-  "version": "11.0.0",
+  "version": "11.1.0-1",
   "homepage": "http://github.com/doubtfire-lms/",
   "description": "Learning and feedback tool.",
   "license": "AGPL-3.0",
@@ -82,7 +82,7 @@
     "@angular/cli": "^22.2.4",
     "@angular/compiler-cli": "^22.2.3",
     "@angular/language-service": "^22.2.3",
-    "@commitlint/cli": "^21.2.3",
+    "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.2",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "@types/canvas-confetti": "^1.6.0",
@@ -104,19 +104,19 @@
     "npm-run-all2": "^9.0.4",
     "postcss": "^8.5.31",
     "postcss-scss": "^4.0.9",
-    "prettier": "^3.9.6",
-    "sass": "^1.105.2",
+    "prettier": "^3.9.10",
+    "sass": "^1.106.1",
     "tailwindcss": "^4.3.3",
     "ts-node": "~10.9",
     "typescript": "~6.0.3",
     "vitest": "^5.0.5"
   },
   "optionalDependencies": {
-    "@nx/nx-darwin-arm64": "^23.2.1",
-    "@nx/nx-darwin-x64": "^23.3.0",
-    "@nx/nx-linux-arm64-gnu": "^23.3.0",
-    "@nx/nx-linux-x64-gnu": "^23.3.0",
-    "@nx/nx-win32-x64-msvc": "^23.3.0",
+    "@nx/nx-darwin-arm64": "^24.0.2",
+    "@nx/nx-darwin-x64": "^24.0.2",
+    "@nx/nx-linux-arm64-gnu": "^24.0.2",
+    "@nx/nx-linux-x64-gnu": "^24.0.2",
+    "@nx/nx-win32-x64-msvc": "^24.0.2",
     "@rollup/rollup-linux-arm64-gnu": "^4.64.10",
     "@rollup/rollup-linux-x64-gnu": "^4.65.0"
   }

@@ -78,7 +78,7 @@
     <td *matFooterCellDef mat-footer-cell [colSpan]="columns.length">
       <mat-toolbar>
         <mat-toolbar-row>
-          <span class="flex flex-grow"></span>
+          <span class="flex grow"></span>
           <button color="primary" mat-flat-button (click)="addUpReq()">
             <mat-icon>add</mat-icon> Add
           </button>
@@ -99,7 +99,7 @@
 }
 
 @if (taskDefinition.needsJplag) {
-  <div class="flex flex-grow flex-row gap-2.5">
+  <div class="flex grow flex-row gap-2.5">
     <mat-form-field appearance="outline" class="basis-1/2">
       <mat-label>Language used for JPLAG checks</mat-label>
       <mat-select [(ngModel)]="taskDefinition.similarityLanguage">

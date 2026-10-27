@@ -307,7 +307,7 @@
     <div class="min-h-0 flex-1 overflow-hidden" [ngClass]="isNarrow ? 'pt-0' : 'pt-[10px]'">
       @for (row of skeletonRows; track row) {
         <div
-          class="flex h-[60px] items-center"
+          class="flex h-15 items-center"
           [ngClass]="isNarrow ? 'justify-center gap-0 px-[5px]' : 'gap-[10px] pr-[8px] pl-[6px]'"
         >
           <ngx-skeleton-loader

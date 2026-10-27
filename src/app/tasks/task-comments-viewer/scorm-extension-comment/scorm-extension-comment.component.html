@@ -2,9 +2,9 @@
   @if (comment.assessed) {
     <div class="flex w-full flex-col items-center gap-2 text-center">
       <div class="flex w-full items-center gap-3 text-[#969696]">
-        <span class="h-px flex-1 bg-gradient-to-r from-transparent to-[#9696969d]"></span>
+        <span class="h-px flex-1 bg-linear-to-r from-transparent to-[#9696969d]"></span>
         <span class="text-sm font-medium">{{ message }}</span>
-        <span class="h-px flex-1 bg-gradient-to-r from-[#9696969d] to-transparent"></span>
+        <span class="h-px flex-1 bg-linear-to-r from-[#9696969d] to-transparent"></span>
       </div>
       <p class="m-0 text-sm text-[#969696] opacity-80">
         <strong>Reason:</strong> {{ comment.text }}
@@ -15,19 +15,19 @@
   @if (!comment.assessed) {
     <div class="flex w-full flex-col items-center gap-3 text-center">
       <span
-        class="h-px w-full bg-gradient-to-r from-transparent via-[#9696969d] to-transparent"
+        class="h-px w-full bg-linear-to-r from-transparent via-[#9696969d] to-transparent"
       ></span>
       <p class="m-0 text-sm text-[#2c2c2c]">
         <span class="block">{{ message }}</span>
         <strong>Reason:</strong> {{ comment.text }}
       </p>
       @if (isNotStudent) {
-        <button class="!bg-[#43a047]" color="primary" mat-flat-button (click)="grantExtension()">
+        <button class="bg-[#43a047]!" color="primary" mat-flat-button (click)="grantExtension()">
           Grant
         </button>
       }
       <span
-        class="h-px w-full bg-gradient-to-r from-transparent via-[#9696969d] to-transparent"
+        class="h-px w-full bg-linear-to-r from-transparent via-[#9696969d] to-transparent"
       ></span>
     </div>
   }
