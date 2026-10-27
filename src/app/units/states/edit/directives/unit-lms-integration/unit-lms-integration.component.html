@@ -47,7 +47,7 @@
           >
           <div class="min-w-0">
             <div class="flex items-center gap-2">
-              <h4 class="m-0 min-w-0 font-medium break-words">
+              <h4 class="m-0 min-w-0 font-medium wrap-break-word">
                 @if (courseLabel && !courseTitle.startsWith(courseLabel)) {
                   {{ courseLabel }} ·
                 }
@@ -381,7 +381,7 @@
                 <div class="mt-4 flex max-w-xl items-center gap-2 px-2">
                   <div class="min-w-0 flex-1">
                     <div class="text-sm opacity-70">Portfolio assignment</div>
-                    <div class="break-words">
+                    <div class="wrap-break-word">
                       {{ integration.assignmentName }} (ID {{ integration.assignmentId }})
                     </div>
                     @if (selectedAssignment?.dueDate) {
@@ -906,7 +906,7 @@
                                   >
                                     <div class="min-w-0 sm:col-span-3">
                                       <div class="text-sm opacity-70">LMS group</div>
-                                      <div class="text-base break-words">
+                                      <div class="text-base wrap-break-word">
                                         {{ mapping.lmsGroupName }}
                                       </div>
                                     </div>
@@ -930,7 +930,7 @@
                                     <div class="text-sm opacity-70">
                                       Selected stream and tutorial
                                     </div>
-                                    <div class="mt-1 text-base break-words">
+                                    <div class="mt-1 text-base wrap-break-word">
                                       @if (tutorial) {
                                         {{ selectedTutorialStream(mapping) }} ·
                                         {{ tutorial.abbreviation }} · {{ tutorial.description }}

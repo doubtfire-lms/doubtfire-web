@@ -102,7 +102,7 @@
           <div></div>
           <div class="mt-3 text-gray-500 italic">Click the QR code to open the scanner..</div>
         }
-        <button class="scale-[2]" color="primary" mat-icon-button (click)="scanQrCode()">
+        <button class="scale-2" color="primary" mat-icon-button (click)="scanQrCode()">
           <mat-icon>qr_code_scanner</mat-icon>
         </button>
       </div>
@@ -111,7 +111,7 @@
         <div class="py-6 text-gray-400 italic">No tasks to discuss.</div>
       }
       <mat-selection-list
-        class="mx-2 h-min w-[calc(100%_-_1rem)] p-0 md:mx-0 md:w-full"
+        class="mx-2 h-min w-[calc(100%-1rem)] p-0 md:mx-0 md:w-full"
         hideSingleSelectionIndicator
         [multiple]="false"
         (selectionChange)="selectTask($event.options[0].value)"
@@ -146,8 +146,8 @@
                     [user]="$safeNavigationMigration(project?.student)"
                   >
                   </user-icon>
-                  <div class="mt-0 flex-1 break-words whitespace-normal" [hidden]="isNarrow">
-                    <h4 class="mt-[8px] mb-[2px] text-[15px]">{{ task.definition.name }}</h4>
+                  <div class="mt-0 flex-1 wrap-break-word whitespace-normal" [hidden]="isNarrow">
+                    <h4 class="mt-2 mb-[2px] text-[15px]">{{ task.definition.name }}</h4>
                     <span class="mb-0 inline text-[12px]">
                       {{ task.definition.abbreviation }} -
                       {{ getTargetTradeString(task.definition.targetGrade) }} Task

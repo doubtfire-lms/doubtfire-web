@@ -1,7 +1,7 @@
 <div class="flex w-full flex-col gap-4 p-6">
   <mat-list class="overflow-visible px-3 pt-5">
     @for (action of rule.actions; track action.id) {
-      <mat-list-item class="!h-auto items-start overflow-visible py-3">
+      <mat-list-item class="h-auto! items-start overflow-visible py-3">
         @if (editor.editingActionId[rule.id] === action.id) {
           <div class="flex w-full flex-col gap-3 pt-2">
             <mat-form-field appearance="outline" class="w-full max-w-80">

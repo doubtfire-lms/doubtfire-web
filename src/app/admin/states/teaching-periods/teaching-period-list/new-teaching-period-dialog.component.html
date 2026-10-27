@@ -102,7 +102,7 @@
   <h4 class="pt-5">Teaching Breaks for {{ newOrSelectedTeachingPeriod.name }}</h4>
   <mat-list>
     @for (break of teachingBreaks$ | async; track break) {
-      <mat-list-item class="!h-auto py-2">
+      <mat-list-item class="h-auto! py-2">
         @if (editingBreak?.id === break.id) {
           <form class="flex w-full items-center gap-3.5 pt-3">
             <mat-form-field appearance="outline">
