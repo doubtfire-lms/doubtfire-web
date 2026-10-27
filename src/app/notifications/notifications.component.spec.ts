@@ -72,6 +72,35 @@ describe('NotificationsComponent', () => {
     vi.useRealTimers();
   });
 
+  it('hides past units unless asked, selected or unread', () => {
+    const day = 86_400_000;
+    const unit = (id: number, code: string, endsInDays: number) => ({
+      id,
+      code,
+      name: code,
+      active: true,
+      startDate: new Date(Date.now() - 30 * day),
+      endDate: new Date(Date.now() + endsInDays * day),
+    });
+    projects.next([
+      {unit: unit(1, 'COS10009', 10)},
+      {unit: unit(2, 'COS20007', -10)},
+      {unit: unit(3, 'COS30045', -10)},
+    ] as unknown as Project[]);
+    fixture.detectChanges();
+
+    // COS30045 has unread notifications, so it stays visible.
+    expect(component.visibleUnits.map((u) => u.code)).toEqual(['COS10009', 'COS30045']);
+    expect(component.hasPastUnits).toBe(true);
+
+    component.showPastUnits = true;
+    expect(component.visibleUnits).toHaveLength(3);
+
+    component.showPastUnits = false;
+    component.unitChanged(2);
+    expect(component.visibleUnits.map((u) => u.code)).toContain('COS20007');
+  });
+
   it('delegates opening a notification row to the notification actions service', () => {
     const group = {notificationIds: [1, 2]} as NotificationGroup;
 

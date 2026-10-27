@@ -50,34 +50,46 @@
       </mat-button-toggle-group>
     </div>
 
-    <div class="flex max-w-full flex-col items-start gap-1">
+    <div class="flex w-full flex-col items-start gap-1">
       <span class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Units</span>
-      <mat-chip-listbox
-        aria-label="Filter notifications by unit"
-        class="max-w-full"
-        [value]="selectedUnitId"
-        (change)="unitChanged($event.value)"
-      >
-        <mat-chip-option value="all">All units</mat-chip-option>
-        @for (unit of units; track unit.id) {
-          <mat-chip-option
-            [attr.aria-label]="
-              unit.code + ', ' + unreadCountForUnit(unit.id) + ' unread notifications'
-            "
-            [matTooltip]="unit.name"
-            [value]="unit.id"
-          >
-            <span
-              matBadgeSize="small"
-              [matBadge]="unreadCountForUnit(unit.id)"
-              [matBadgeHidden]="unreadCountForUnit(unit.id) === 0"
-              [matBadgeOverlap]="false"
+      <div class="flex w-full items-center gap-2">
+        <mat-chip-listbox
+          aria-label="Filter notifications by unit"
+          class="min-w-0 flex-1"
+          [value]="selectedUnitId"
+          (change)="unitChanged($event.value)"
+        >
+          <mat-chip-option value="all">All units</mat-chip-option>
+          @for (unit of visibleUnits; track unit.id) {
+            <mat-chip-option
+              [attr.aria-label]="
+                unit.code + ', ' + unreadCountForUnit(unit.id) + ' unread notifications'
+              "
+              [matTooltip]="unit.name"
+              [value]="unit.id"
             >
-              {{ unit.code }}
-            </span>
-          </mat-chip-option>
+              <span
+                matBadgeSize="small"
+                [matBadge]="unreadCountForUnit(unit.id)"
+                [matBadgeHidden]="unreadCountForUnit(unit.id) === 0"
+                [matBadgeOverlap]="false"
+              >
+                {{ unit.code }}
+              </span>
+            </mat-chip-option>
+          }
+        </mat-chip-listbox>
+        @if (hasPastUnits) {
+          <button
+            class="shrink-0"
+            mat-button
+            type="button"
+            (click)="showPastUnits = !showPastUnits"
+          >
+            {{ showPastUnits ? 'Hide past units' : 'Show past units' }}
+          </button>
         }
-      </mat-chip-listbox>
+      </div>
     </div>
   </section>
 

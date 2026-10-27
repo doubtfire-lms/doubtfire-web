@@ -8,6 +8,7 @@ import {
   NotificationUnit,
 } from 'src/app/api/models/notification';
 import {Task} from 'src/app/api/models/task';
+import {isUnitRunning} from 'src/app/api/models/unit';
 import {NotificationService} from 'src/app/api/services/notification.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
@@ -21,7 +22,8 @@ import {NotificationActionsService} from './notification-actions.service';
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
   public groups: NotificationGroup[] = [];
-  public units: NotificationUnit[] = [];
+  public units: (NotificationUnit & {running: boolean})[] = [];
+  public showPastUnits = false;
   public loading = true;
   public loadFailed = false;
   public state: NotificationState = 'all';
@@ -93,13 +95,18 @@ export class NotificationsComponent implements OnInit, OnDestroy {
           ]),
         );
 
-        const units: Map<number, NotificationUnit> = new Map();
+        const units: Map<number, NotificationUnit & {running: boolean}> = new Map();
         for (const unit of [
           ...(unitRoles ?? []).map((unitRole) => unitRole.unit),
           ...(projects ?? []).map((project) => project.unit),
         ]) {
           if (unit) {
-            units.set(unit.id, {id: unit.id, code: unit.code, name: unit.name});
+            units.set(unit.id, {
+              id: unit.id,
+              code: unit.code,
+              name: unit.name,
+              running: isUnitRunning(unit),
+            });
           }
         }
 
@@ -160,6 +167,21 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   public unitChanged(unitId: number | 'all' | undefined): void {
     this.selectedUnitId = unitId ?? 'all';
     this.applyFilters();
+  }
+
+  /** Past units stay hidden unless asked for, selected, or still holding unread notifications. */
+  public get visibleUnits(): NotificationUnit[] {
+    if (this.showPastUnits) {
+      return this.units;
+    }
+    return this.units.filter(
+      (unit) =>
+        unit.running || unit.id === this.selectedUnitId || this.unreadCountForUnit(unit.id) > 0,
+    );
+  }
+
+  public get hasPastUnits(): boolean {
+    return this.units.some((unit) => !unit.running);
   }
 
   public unreadCountForUnit(unitId: number): number {

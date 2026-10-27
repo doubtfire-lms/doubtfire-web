@@ -953,3 +953,17 @@ export class Unit extends Entity {
     );
   }
 }
+
+/** Running units only: active, and today inside their dates. */
+export function isUnitRunning(unit: Unit | undefined): boolean {
+  if (!unit?.active) {
+    return false;
+  }
+
+  if (!unit.startDate || !unit.endDate) {
+    return unit.isActive;
+  }
+
+  const today = new Date();
+  return unit.startDate <= today && today <= unit.endDate;
+}

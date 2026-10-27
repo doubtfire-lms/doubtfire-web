@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/co
 import {Observable, Subscription, combineLatest, of, switchMap} from 'rxjs';
 import {NotificationFrequency} from 'src/app/api/models/notification';
 import {NotificationSettings} from 'src/app/api/models/notification-settings';
-import {Unit} from 'src/app/api/models/unit';
+import {Unit, isUnitRunning} from 'src/app/api/models/unit';
 import {User} from 'src/app/api/models/user/user';
 import {NotificationSettingsService} from 'src/app/api/services/notification-settings.service';
 import {UserService} from 'src/app/api/services/user.service';
@@ -211,25 +211,11 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     this.currentScope.muted = muted;
   }
 
-  /** Running units only: active, and today inside their dates. */
-  private isCurrent(unit: Unit): boolean {
-    if (!unit?.active) {
-      return false;
-    }
-
-    if (!unit.startDate || !unit.endDate) {
-      return unit.isActive;
-    }
-
-    const today = new Date();
-    return unit.startDate <= today && today <= unit.endDate;
-  }
-
   /** Reuses existing scopes so a cache refresh never discards the user's edits. */
   private syncScopes(units: Unit[]): void {
     const current: Map<number, Unit> = new Map();
     for (const unit of units) {
-      if (this.isCurrent(unit) && !current.has(unit.id)) {
+      if (isUnitRunning(unit) && !current.has(unit.id)) {
         current.set(unit.id, unit);
       }
     }
