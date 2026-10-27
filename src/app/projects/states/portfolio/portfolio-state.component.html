@@ -2,6 +2,7 @@
   <div class="w-full" id="portfolio-state">
     <mat-stepper
       class="portfolio-stepper mb-3"
+      [class.portfolio-stepper-locked]="isPortfolioLocked"
       [linear]="true"
       [selectedIndex]="selectedTabIndex"
       (selectedIndexChange)="onSelectedTabIndexChange($event)"

@@ -7,3 +7,7 @@
 :host ::ng-deep .portfolio-stepper .mat-horizontal-content-container {
   display: none;
 }
+
+:host ::ng-deep .portfolio-stepper-locked .mat-step-header {
+  pointer-events: none;
+}

@@ -1,6 +1,13 @@
-<mat-card appearance="outlined" class="mx-auto w-full max-w-[1100px]">
+<mat-card
+  appearance="outlined"
+  class="mx-auto max-w-[1100px]"
+  [class.w-fit]="portfolioIsCompiling || project?.portfolioAvailable"
+  [class.w-full]="!portfolioIsCompiling && !project?.portfolioAvailable"
+>
   <mat-card-header>
-    <mat-card-title>Review Portfolio</mat-card-title>
+    <mat-card-title>
+      {{ portfolioIsCompiling ? 'Processing Portfolio' : 'Review Portfolio' }}
+    </mat-card-title>
   </mat-card-header>
 
   <mat-card-content class="py-3">
@@ -41,17 +48,11 @@
     }
 
     @if (portfolioIsCompiling) {
-      <mat-card appearance="outlined" class="mx-auto max-w-5xl p-1">
-        <mat-card-header>
-          <mat-card-title>Portfolio Processing</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p class="py-2">
-            Your portfolio compilation is scheduled with {{ externalName }}. This process will take
-            some time, check back soon to see if your portfolio is available.
-          </p>
-        </mat-card-content>
-      </mat-card>
+      <p class="max-w-prose py-2">
+        Your portfolio compilation is scheduled with {{ externalName }}. This process will take some
+        time, check back soon to see if your portfolio is available.
+      </p>
+      <mat-progress-bar class="my-3" mode="indeterminate"></mat-progress-bar>
     }
 
     @if (canCompilePortfolio) {
@@ -125,29 +126,32 @@
     }
 
     @if (project?.portfolioAvailable) {
-      <p>
-        <strong>You're done!</strong> There's nothing left for you to do. Your portfolio has been
-        submitted.
-      </p>
-      <p>This is the <strong>exact same document</strong> your assessor will see.</p>
-      <p>
-        If you need to update any tasks or upload additional files, delete your portfolio and
-        compile it again before the submission deadline.
-      </p>
+      <div class="max-w-prose">
+        <p>
+          <strong>You're done!</strong> There's nothing left for you to do. Your portfolio has been
+          submitted.
+        </p>
+        <p>This is the <strong>exact same document</strong> your assessor will see.</p>
+        <p>
+          If you need to update any tasks or upload additional files, delete your portfolio and
+          compile it again before the submission deadline.
+        </p>
+      </div>
     }
   </mat-card-content>
 
-  <mat-card-footer class="flex w-full justify-between p-3">
-    <button mat-raised-button (click)="goBack()">Back</button>
-    @if (project?.portfolioAvailable) {
-      <div class="flex gap-2">
-        <button class="text-white" color="warn" mat-raised-button (click)="deletePortfolio()">
+  @if (!portfolioIsCompiling) {
+    <mat-card-footer class="flex w-full justify-between p-3">
+      @if (!project?.portfolioAvailable) {
+        <button mat-raised-button (click)="goBack()">Back</button>
+      } @else {
+        <button color="warn" mat-stroked-button (click)="deletePortfolio()">
           Delete Portfolio
         </button>
         <button color="primary" mat-raised-button (click)="downloadPortfolio()">
           Download Portfolio
         </button>
-      </div>
-    }
-  </mat-card-footer>
+      }
+    </mat-card-footer>
+  }
 </mat-card>

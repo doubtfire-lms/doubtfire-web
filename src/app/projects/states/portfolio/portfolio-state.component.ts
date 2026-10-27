@@ -65,6 +65,10 @@ export class PortfolioStateComponent implements OnInit, OnDestroy {
     return Math.max(0, (this.activeTab?.seq ?? 1) - 1);
   }
 
+  public get isPortfolioLocked(): boolean {
+    return Boolean(this.project?.portfolioAvailable || this.project?.compilePortfolio);
+  }
+
   public get hasSubmittedGrade(): boolean {
     return this.project?.submittedGrade !== null && this.project?.submittedGrade !== undefined;
   }
