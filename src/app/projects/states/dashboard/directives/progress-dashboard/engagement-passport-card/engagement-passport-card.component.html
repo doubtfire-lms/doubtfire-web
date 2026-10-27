@@ -30,7 +30,7 @@
             class="inline-flex size-6 shrink-0 items-center justify-center rounded-full border"
             [ngClass]="item.classes"
           >
-            <mat-icon aria-hidden="true" class="!size-[15px] !text-[15px]">
+            <mat-icon aria-hidden="true" class="size-[15px]! text-[15px]!">
               {{ item.icon }}
             </mat-icon>
           </span>
@@ -47,7 +47,7 @@
       <div class="overflow-x-auto pb-1">
         <div
           aria-label="Engagement stamps across the semester"
-          class="flex min-w-[812px] border-b border-gray-300"
+          class="flex min-w-203 border-b border-gray-300"
         >
           @for (week of weeks; track week.week) {
             <div
@@ -67,7 +67,7 @@
                         [ngClass]="stamp.classes"
                         (click)="openEngagement(stamp.engagement)"
                       >
-                        <mat-icon aria-hidden="true" class="!size-[18px] !text-[18px]">
+                        <mat-icon aria-hidden="true" class="size-[18px]! text-[18px]!">
                           {{ stamp.icon }}
                         </mat-icon>
                       </button>
@@ -77,7 +77,7 @@
               </div>
 
               <div
-                class="flex flex-col items-center border-t border-gray-300 px-0.5 py-[7px] text-[11px] leading-[1.15] text-gray-500"
+                class="leading-1.15 flex flex-col items-center border-t border-gray-300 px-0.5 py-[7px] text-[11px] text-gray-500"
                 [class.!text-blue-700]="week.week === currentWeek"
               >
                 <span>Week</span>

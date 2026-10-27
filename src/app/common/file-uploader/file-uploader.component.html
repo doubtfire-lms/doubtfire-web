@@ -44,7 +44,7 @@
                   }
                 } @else {
                   <span
-                    class="flex !w-full flex-col items-center justify-center text-base !text-red-500"
+                    class="flex w-full! flex-col items-center justify-center text-base text-red-500!"
                   >
                     <mat-icon>block</mat-icon>
                     <span>Invalid file provided</span>
@@ -119,7 +119,7 @@
 
     @if (showUploader && readyToUpload() && isUploading) {
       @if (!uploadingInfo?.complete) {
-        <div class="uploading flex min-h-[300px] w-full flex-col items-center justify-center gap-3">
+        <div class="uploading flex min-h-75 w-full flex-col items-center justify-center gap-3">
           <div class="flex items-center justify-center gap-1">
             @for (upload of uploadZones; track upload.name) {
               <mat-icon>{{ upload.display.icon }}</mat-icon>
@@ -137,7 +137,7 @@
       }
 
       @if (uploadingInfo?.complete) {
-        <div class="complete flex min-h-[300px] flex-col items-center justify-center gap-3">
+        <div class="complete flex min-h-75 flex-col items-center justify-center gap-3">
           <div class="flex w-full items-center justify-center gap-3">
             <mat-icon color="{{ uploadingInfo.success ? 'primary' : 'warn' }}">
               {{ uploadingInfo.success ? 'check_circle' : 'cancel' }}

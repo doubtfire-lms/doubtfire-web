@@ -1,4 +1,4 @@
-<div class="flex flex-grow flex-col gap-5 gap-y-0">
+<div class="flex grow flex-col gap-5 gap-y-0">
   <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
     <div>
       <h3>Task List</h3>
@@ -66,7 +66,7 @@
 
           @for (grade of gradeColumns; track grade.value) {
             <ng-container [matColumnDef]="gradeColumnId(grade)">
-              <th *matHeaderCellDef class="w-[160px] text-center" mat-header-cell>
+              <th *matHeaderCellDef class="w-40 text-center" mat-header-cell>
                 <div class="flex w-full justify-center">
                   <f-grade-icon [grade]="grade.value" [unit]="unit"></f-grade-icon>
                 </div>
@@ -337,7 +337,7 @@
           </div>
         </div>
 
-        <div class="h-[560px] overflow-auto md:h-auto md:flex-1">
+        <div class="h-140 overflow-auto md:h-auto md:flex-1">
           <mat-selection-list [multiple]="false">
             @if ((taskDefinitionSource?.filteredData ?? []).length === 0) {
               <div class="text-muted p-2 text-center">No task definitions to display</div>
@@ -346,9 +346,9 @@
               taskDefinition of taskDefinitionSource?.filteredData ?? [];
               track taskDefinition
             ) {
-              <mat-list-item class="clearfix h-[60px] p-0" [disableRipple]="true">
+              <mat-list-item class="clearfix h-15 p-0" [disableRipple]="true">
                 <div
-                  class="flex h-[60px] w-full cursor-pointer items-center rounded-[6px] hover:bg-gray-50"
+                  class="flex h-15 w-full cursor-pointer items-center rounded-[6px] hover:bg-gray-50"
                   matTooltipPosition="above"
                   [matTooltip]="taskDefinition.name"
                   [matTooltipDisabled]="!isTaskListCollapsed"
@@ -370,7 +370,7 @@
 
                       @if (!isTaskListCollapsed) {
                         <div class="ml-2.5 min-w-0 flex-1 flex-col">
-                          <h4 class="mt-[8px] mb-[-2px] line-clamp-1 text-[15px]">
+                          <h4 class="mt-2 mb-[-2px] line-clamp-1 text-[15px]">
                             {{ taskDefinition.name }}
                           </h4>
                           <div class="mb-0 text-[12px]">
@@ -419,7 +419,7 @@
           [unit]="unit"
         ></f-task-definition-editor>
       } @else {
-        <div class="flex min-h-[420px] flex-col items-center justify-center gap-4 p-10 text-center">
+        <div class="flex min-h-105 flex-col items-center justify-center gap-4 p-10 text-center">
           @if ((taskDefinitionSource?.data ?? []).length === 0) {
             <mat-icon
               aria-hidden="true"

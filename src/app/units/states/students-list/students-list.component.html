@@ -45,7 +45,7 @@
       </div>
 
       @for (row of [0, 1, 2, 3, 4, 5, 6, 7]; track row) {
-        <div class="flex h-[72px] items-center gap-6 border-b border-gray-300 px-4">
+        <div class="flex h-18 items-center gap-6 border-b border-gray-300 px-4">
           <ngx-skeleton-loader
             appearance="circle"
             [theme]="{width: '30px', height: '30px', margin: '0'}"
@@ -107,7 +107,7 @@
       <ng-container matColumnDef="stats">
         <th *matHeaderCellDef mat-header-cell mat-sort-header="stats">Stats</th>
         <td *matCellDef="let project" mat-cell>
-          <div class="flex h-[25px] w-[400px] overflow-hidden rounded">
+          <div class="flex h-[25px] w-100 overflow-hidden rounded">
             @for (bar of project.taskStats; track bar.key) {
               <div
                 class="flex h-[25px] items-center justify-center overflow-hidden"

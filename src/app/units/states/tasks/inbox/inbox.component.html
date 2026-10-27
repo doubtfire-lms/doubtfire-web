@@ -4,7 +4,7 @@
       [theme]="{height: '48px', 'border-radius': '16px', margin: '0 0 14px'}"
     ></ngx-skeleton-loader>
     @for (row of [0, 1, 2, 3, 4, 5, 6, 7]; track row) {
-      <div class="flex h-[60px] items-center gap-[10px] px-[6px]">
+      <div class="flex h-15 items-center gap-[10px] px-[6px]">
         <ngx-skeleton-loader
           appearance="circle"
           [theme]="{width: '8px', height: '8px', margin: '0'}"
@@ -38,7 +38,7 @@
 </ng-template>
 
 @if (!isMobileView) {
-  <div class="m-0 hidden size-full min-h-0 min-w-full flex-col px-3 min-[600px]:flex">
+  <div class="m-0 hidden size-full min-h-0 min-w-full flex-col px-3 fl-sm:flex">
     <div class="flex max-h-full min-h-0 flex-1 flex-row items-stretch justify-center">
       <div #inboxpanel class="staff-task-list inbox-panel overflow-hidden" id="inboxpanel">
         @if (loading) {
