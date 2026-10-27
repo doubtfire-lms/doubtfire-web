@@ -31,7 +31,7 @@
   }
 
   <mat-drawer-container class="min-h-[750px] border border-gray-300">
-    <mat-drawer class="w-[320px] border-r border-gray-300" mode="side" opened>
+    <mat-drawer class="w-80 border-r border-gray-300" mode="side" opened>
       <!-- <div
         class="w-full min-h-[50px] border-b border-gray-300 bg-gray-300 px-[20px] flex items-center"
       >
@@ -41,7 +41,7 @@
       @for (set of sets; track set.id) {
         <div class="border-b border-gray-200">
           <div
-            class="flex min-h-[56px] items-center gap-2 px-2"
+            class="flex min-h-14 items-center gap-2 px-2"
             [ngClass]="{'bg-[#e7e7ff]': selectedSetId === set.id}"
           >
             <button mat-icon-button (click)="toggleSet(set, $event)">
@@ -62,13 +62,13 @@
               @for (rule of set.rules; track rule.id) {
                 <div
                   cdkDrag
-                  class="min-h-[64px] border-b border-gray-200 px-4"
+                  class="min-h-16 border-b border-gray-200 px-4"
                   [ngClass]="isSelectedRule(rule) ? 'bg-gray-100' : 'bg-white'"
                 >
                   <div class="flex w-full items-center justify-between gap-3">
                     <mat-icon cdkDragHandle class="cursor-move">drag_indicator</mat-icon>
                     <button
-                      class="min-h-[64px] w-full min-w-0 flex-1 justify-start px-0"
+                      class="min-h-16 w-full min-w-0 flex-1 justify-start px-0"
                       mat-button
                       (click)="selectRuleNode(set, rule)"
                     >
@@ -76,7 +76,7 @@
                         <div class="flex items-center gap-1 truncate font-medium">
                           @if (rule.unresolved) {
                             <mat-icon
-                              class="!h-4 !w-4 !text-[16px] text-amber-700"
+                              class="h-4! !w-4 !text-[16px] text-amber-700 size-4 size-4 size-4 size-4 size-4 size-4 size-4 size-4 size-4"
                               matTooltip="This rule references records that do not exist in this unit"
                               >warning</mat-icon
                             >
@@ -116,8 +116,8 @@
 
     <mat-drawer-content>
       @if (selectedSet(); as set) {
-        <div class="flex min-h-[48rem] flex-col">
-          <div class="flex items-center justify-between px-[20px]">
+        <div class="flex min-h-192 flex-col">
+          <div class="flex items-center justify-between px-5">
             <div class="flex min-w-0 flex-1 items-center gap-2 py-5">
               @if (editingSetNameId === set.id) {
                 <mat-form-field appearance="outline" class="w-full max-w-[450px]">
@@ -136,7 +136,7 @@
                   <mat-icon>close</mat-icon>
                 </button>
               } @else {
-                <h3 class="mt-[16px] truncate">{{ set.name }}</h3>
+                <h3 class="mt-4 truncate">{{ set.name }}</h3>
                 <button class="scale-75 opacity-50" mat-icon-button (click)="beginEditSetName(set)">
                   <mat-icon>edit</mat-icon>
                 </button>
@@ -410,7 +410,7 @@
           </div>
         </div>
       } @else {
-        <div class="flex h-[48rem] items-center justify-center text-black/60">
+        <div class="flex h-192 items-center justify-center text-black/60">
           Create or select a communication set to begin.
         </div>
       }

@@ -1,11 +1,11 @@
 <div class="flex flex-row gap-5 md:px-16">
-  <div class="flex flex-grow flex-col gap-5 gap-y-0">
+  <div class="flex grow flex-col gap-5 gap-y-0">
     <div class="flex flex-col">
       <div>
         <h3>{{ title }}</h3>
       </div>
       <div>
-        <mat-form-field appearance="outline" class="w-full max-w-[720px] min-w-[160px]">
+        <mat-form-field appearance="outline" class="w-full max-w-180 min-w-40">
           <mat-label>Search</mat-label>
           <input matInput (keyup)="applyFilter($event)" />
           <mat-icon matPrefix> search </mat-icon>
@@ -13,7 +13,7 @@
       </div>
     </div>
     <table
-      class="f-table selectable flex-grow"
+      class="f-table selectable grow"
       mat-table
       matSort
       matSortActive="start_date"
@@ -121,7 +121,7 @@
     </table>
     <span class="flex items-center">
       <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
-      <span class="flex-grow"></span>
+      <span class="grow"></span>
       @if (mode === 'admin') {
         <button color="primary" mat-raised-button (click)="createUnit()">
           <mat-icon class="icon_display">add</mat-icon>
