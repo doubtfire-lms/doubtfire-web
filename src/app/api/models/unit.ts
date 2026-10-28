@@ -207,6 +207,7 @@ export class Unit extends Entity {
       },
       {
         cache: this.staffCache,
+        constructorParams: this,
       },
     );
   }
