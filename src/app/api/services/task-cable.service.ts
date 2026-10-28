@@ -6,7 +6,8 @@ import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 // 'reconnected' means events may have been missed while the connection was down
-export type TaskCableEvent = 'comment_created' | 'status_changed' | 'reconnected';
+export type TaskCableEvent =
+  'comment_created' | 'status_changed' | 'submission_processed' | 'reconnected';
 
 // Injected so specs can swap it; vi.mock misses packages the Angular test builder bundles
 export const CABLE_CONSUMER_FACTORY: InjectionToken<typeof createConsumer> = new InjectionToken(

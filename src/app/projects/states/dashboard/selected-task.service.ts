@@ -76,7 +76,7 @@ export class SelectedTaskService {
   private watchTaskEvents(task: Task): void {
     this.taskEventsSub?.unsubscribe();
     this.taskEventsSub = this.taskCableService.eventsFor(task).subscribe((event) => {
-      if (event !== 'status_changed' && event !== 'reconnected') {
+      if (event === 'comment_created') {
         return;
       }
       task.getSubmissionDetails().subscribe(() => {

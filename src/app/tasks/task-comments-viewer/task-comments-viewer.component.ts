@@ -136,7 +136,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
       if (event === 'comment_created' || event === 'reconnected') {
         this.fetchComments(task, false);
       }
-      if (event === 'status_changed' || event === 'reconnected') {
+      if (event !== 'comment_created') {
         task.getSubmissionDetails().subscribe();
       }
     });
