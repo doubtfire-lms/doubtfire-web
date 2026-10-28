@@ -2,5 +2,10 @@
   "/api": {
     "target": "http://doubtfire-api:3000",
     "secure": false
+  },
+  "/cable": {
+    "target": "ws://doubtfire-api:3000",
+    "secure": false,
+    "ws": true
   }
 }

@@ -10,6 +10,7 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+import {TaskCableService} from 'src/app/api/services/task-cable.service';
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
@@ -23,6 +24,9 @@ const taskStatusUpdated$: Subject<unknown> = new Subject();
 const taskServiceStub = {taskStatusUpdated$};
 const feedbackTemplateServiceStub = {
   query: vi.fn(() => of([])),
+};
+const taskCableServiceStub = {
+  eventsFor: vi.fn(() => EMPTY),
 };
 const emptyProvider = {};
 
@@ -41,6 +45,7 @@ describe('TaskCommentsViewerComponent', () => {
         {provide: DoubtfireConstants, useValue: emptyProvider},
         {provide: CommentsModalService, useValue: emptyProvider},
         {provide: AlertService, useValue: emptyProvider},
+        {provide: TaskCableService, useValue: taskCableServiceStub},
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })

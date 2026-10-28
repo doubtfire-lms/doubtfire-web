@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, Subject, Subscription} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
+import {TaskCableService} from 'src/app/api/services/task-cable.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {GlobalStateService} from '../index/global-state.service';
 
@@ -22,9 +23,11 @@ export class SelectedTaskService {
   constructor(
     private taskService: TaskService,
     private globalState: GlobalStateService,
+    private taskCableService: TaskCableService,
   ) {}
 
   private task$: BehaviorSubject<Task> = new BehaviorSubject(null);
+  private taskEventsSub: Subscription;
   public currentPdfUrl$: BehaviorSubject<string> = new BehaviorSubject(null);
 
   public currentView$: BehaviorSubject<DashboardViews> = new BehaviorSubject(
@@ -49,9 +52,9 @@ export class SelectedTaskService {
 
   public setSelectedTask(task: number | Task) {
     if (typeof task === 'number') {
-      this.taskService.get(task).subscribe(this.task$);
+      this.taskService.get(task).subscribe((selectedTask) => this.selectTask(selectedTask));
     } else {
-      this.task$.next(task);
+      this.selectTask(task);
 
       if (!task) {
         this.currentPdfUrl$.next(null);
@@ -59,11 +62,29 @@ export class SelectedTaskService {
         this.checkFooterHeight();
         return;
       }
-
-      task?.getSubmissionDetails().subscribe();
     }
     this.checkFooterHeight();
     this.showSubmission();
+  }
+
+  private selectTask(task: Task): void {
+    this.task$.next(task);
+    this.watchTaskEvents(task);
+    task?.getSubmissionDetails().subscribe();
+  }
+
+  private watchTaskEvents(task: Task): void {
+    this.taskEventsSub?.unsubscribe();
+    this.taskEventsSub = this.taskCableService.eventsFor(task).subscribe((event) => {
+      if (event === 'comment_created') {
+        return;
+      }
+      task.getSubmissionDetails().subscribe(() => {
+        if (this.task$.value === task && this.currentView$.value === DashboardViews.submission) {
+          this.showSubmission();
+        }
+      });
+    });
   }
 
   public showTaskSheet() {

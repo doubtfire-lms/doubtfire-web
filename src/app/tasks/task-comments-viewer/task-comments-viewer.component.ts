@@ -22,6 +22,7 @@ import {
 } from 'src/app/api/models/doubtfire-model';
 import {ExtensionComment} from 'src/app/api/models/task-comment/extension-comment';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+import {TaskCableService} from 'src/app/api/services/task-cable.service';
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
@@ -55,6 +56,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
 
   private taskStatusSub: Subscription;
   private commentAddedSub: Subscription;
+  private taskCableSub: Subscription;
 
   constructor(
     private taskCommentService: TaskCommentService,
@@ -64,6 +66,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     private constants: DoubtfireConstants,
     private commentsModalRef: CommentsModalService,
     private alerts: AlertService,
+    private taskCableService: TaskCableService,
   ) {
     this.commentAddedSub = this.taskCommentService.commentAdded$.subscribe((_tc: TaskComment) => {
       this.scrollDown();
@@ -85,6 +88,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this.taskStatusSub?.unsubscribe();
     this.commentAddedSub?.unsubscribe();
+    this.taskCableSub?.unsubscribe();
   }
 
   public asAssessmentComment(comment: TaskComment): TaskAssessmentComment | null {
@@ -114,6 +118,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
       // Must have project for task to be mapped
       if (changes.task.currentValue?.project != null) {
         this.project = changes.task.currentValue.project;
+        this.watchTaskEvents(this.task);
         this.fetchComments(this.task, true, true);
       } else {
         this.loading = false;
@@ -123,6 +128,18 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     if (changes.commentsVisible?.currentValue && !changes.commentsVisible.firstChange) {
       this.scrollDown();
     }
+  }
+
+  private watchTaskEvents(task: Task): void {
+    this.taskCableSub?.unsubscribe();
+    this.taskCableSub = this.taskCableService.eventsFor(task).subscribe((event) => {
+      if (event === 'comment_created' || event === 'reconnected') {
+        this.fetchComments(task, false);
+      }
+      if (event !== 'comment_created') {
+        task.getSubmissionDetails().subscribe();
+      }
+    });
   }
 
   fetchComments(task: Task, useCache: boolean = true, fetchAfterCache: boolean = false) {
