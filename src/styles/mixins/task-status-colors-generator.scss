@@ -1,4 +1,5 @@
-@import '../common/task-status-colors.scss';
+@use 'sass:map';
+@use 'styles/common/task-status-colors' as *;
 
 //
 // Mixins to use that helps color task statuses
@@ -7,16 +8,16 @@
 @function task-status-color($status, $variant: null) {
   // If variant isn't specified, we get the base by default
   @if $variant == null {
-    @return map-get(map-get($task-status-colors, $status), base);
+    @return map.get(map.get($task-status-colors, $status), base);
   } @else {
-    @return map-get(map-get($task-status-colors, $status), $variant);
+    @return map.get(map.get($task-status-colors, $status), $variant);
   }
 }
 
 @mixin task-status-color($status) {
-  color: task-status-color($status, fore);
+  color: task-status-color($status, fore) !important;
   $base-color: task-status-color($status);
-  background-color: $base-color;
+  background-color: $base-color !important;
   @if $status == 'complete' {
     $lighter-color: task-status-color($status, light);
     @include gradient-vertical($lighter-color, $base-color);
@@ -46,6 +47,9 @@
 }
 @mixin task-status-color-discuss {
   @include task-status-color('discuss');
+}
+@mixin task-status-color-rediscuss {
+  @include task-status-color('rediscuss');
 }
 @mixin task-status-color-demonstrate {
   @include task-status-color('demonstrate');

@@ -1,6 +1,9 @@
+import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
+import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import {animate, style, transition, trigger} from '@angular/animations';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DoCheck,
@@ -10,17 +13,13 @@ import {
   KeyValueDiffer,
   KeyValueDiffers,
   OnChanges,
-  OnInit,
   QueryList,
   SimpleChanges,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {EmojiSearch} from '@ctrl/ngx-emoji-mart';
-import {EmojiData} from '@ctrl/ngx-emoji-mart/ngx-emoji/';
 import {BehaviorSubject, Subscription} from 'rxjs';
-import {analyticsService} from 'src/app/ajs-upgraded-providers';
 import {
   FeedbackTemplate,
   Task,
@@ -44,6 +43,7 @@ interface ApiError {
  */
 
 export interface TaskCommentComposerData {
+  [key: string]: TaskComment;
   originalComment: TaskComment;
   editingComment: TaskComment;
 }
@@ -77,12 +77,14 @@ const ACCEPTED_FILE_TYPES = [
       transition('false => true', [style({width: 80}), animate('150ms 0ms ease-in-out')]),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
+export class TaskCommentComposerComponent implements AfterViewInit, DoCheck, OnChanges {
   @Input() task: Task;
   @Input() sharedData: TaskCommentComposerData;
 
-  public $userIsTyping = new BehaviorSubject<boolean>(false);
+  public $userIsTyping: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private draftSaveSubscription = new Subscription();
   private readonly DRAFT_KEY_PREFIX = 'task_comment_draft_';
   public isDraftLoaded = false;
@@ -90,6 +92,8 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
 
   public isSending: boolean = false;
   private draftBeforeEdit: string = '';
+  private lastCaretOffset: number | null = null;
+  private lastComposerRange: Range | null = null;
 
   comment = {
     text: '',
@@ -100,9 +104,10 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   @ViewChildren('cag') cag: QueryList<ElementRef>;
   @ViewChild('uploader') uploader: ElementRef;
 
-  differ: KeyValueDiffer<string, any>;
+  differ: KeyValueDiffer<string, TaskComment>;
   showEmojiPicker = false;
   emojiSearchMode = false;
+  // eslint-disable-next-line no-useless-escape
   emojiRegex: RegExp = /(?:\:)(.*?)(?=\:|$)/;
   emojiSearchResults: EmojiData[] = [];
   emojiMatch: string;
@@ -116,7 +121,6 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     private emojiSearch: EmojiSearch,
     private emojiService: EmojiService,
     private commentsViewer: TaskCommentsViewerComponent,
-    @Inject(analyticsService) private analytics,
     private alerts: AlertService,
     @Inject(TaskCommentService) private taskCommentService: TaskCommentService,
     private cdRef: ChangeDetectorRef,
@@ -132,8 +136,6 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       console.error('Error loading submitted tasks:', e);
     }
   }
-
-  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
     this.showFeedbackTemplatePicker = false;
@@ -184,7 +186,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
 
     const target = event.target as HTMLElement;
     const text = target.innerText;
-    const raw = target.innerText;
+    const _raw = target.innerText;
 
     // If user is typing something new after submission, reset the submitted status
     if (this.task) {
@@ -208,11 +210,17 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
         }
       }
 
-      const draftKey = this.getDraftKey(this.task);
+      const _draftKey = this.getDraftKey(this.task);
       // this.taskDraftContents.set(draftKey, raw);
     }
 
+    this.rememberCaretPosition();
     this.saveCurrentDraft();
+  }
+
+  onComposerBlur(): void {
+    this.rememberCaretPosition();
+    this.$userIsTyping.next(false);
   }
 
   private getDraftKey(task: Task): string {
@@ -234,7 +242,7 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   }
 
   // Update saveDraftForTask to use the taskDraftContents map
-  private saveDraftForTask(task: Task, rawFromDom?: string): void {
+  private saveDraftForTask(task: Task, _rawFromDom?: string): void {
     if (!task) {
       return;
     }
@@ -307,7 +315,9 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       };
 
       retryWithTimeout();
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   private clearInput() {
@@ -318,7 +328,9 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   }
 
   private saveCurrentDraft() {
-    if (!this.task) return;
+    if (!this.task) {
+      return;
+    }
     this.saveDraftForTask(this.task);
   }
 
@@ -438,29 +450,53 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
     this.emojiSearchMode = false;
   }
 
-  private caretOffset() {
+  private currentCaretOffset(): number | null {
     const element = this.input.first.nativeElement;
-    let caretOffset: number = 0;
-    const doc = element.ownerDocument || element.document;
-    const win = doc.defaultView || doc.parentWindow;
-    let sel;
-    if (typeof win.getSelection !== 'undefined') {
-      sel = win.getSelection();
-      if (sel.rangeCount > 0) {
-        const range = win.getSelection().getRangeAt(0);
-        const preCaretRange = range.cloneRange();
-        preCaretRange.selectNodeContents(element);
-        preCaretRange.setEnd(range.endContainer, range.endOffset);
-        caretOffset = preCaretRange.toString().length;
-      }
-    } else if (sel === doc.selection && sel.type !== 'Control') {
-      const textRange = sel.createRange();
-      const preCaretTextRange = doc.body.createTextRange();
-      preCaretTextRange.moveToElementText(element);
-      preCaretTextRange.setEndPoint('EndToEnd', textRange);
-      caretOffset = preCaretTextRange.text.length;
+    const range = this.currentComposerRange();
+    if (!range) {
+      return null;
     }
-    return caretOffset;
+
+    const preCaretRange = range.cloneRange();
+    preCaretRange.selectNodeContents(element);
+    preCaretRange.setEnd(range.endContainer, range.endOffset);
+    return preCaretRange.toString().length;
+  }
+
+  private caretOffset(): number {
+    return (
+      this.currentCaretOffset() ??
+      this.lastCaretOffset ??
+      this.input.first.nativeElement.innerText.length
+    );
+  }
+
+  rememberCaretPosition(): void {
+    const range = this.currentComposerRange();
+    if (range) {
+      this.lastComposerRange = range;
+    }
+
+    const offset = this.currentCaretOffset();
+    if (offset !== null) {
+      this.lastCaretOffset = offset;
+    }
+  }
+
+  private currentComposerRange(): Range | null {
+    const element = this.input.first.nativeElement;
+    const selection = element.ownerDocument.defaultView?.getSelection();
+
+    if (!selection || selection.rangeCount === 0) {
+      return null;
+    }
+
+    const range = selection.getRangeAt(0);
+    if (!element.contains(range.startContainer) || !element.contains(range.endContainer)) {
+      return null;
+    }
+
+    return range.cloneRange();
   }
 
   addEmoji(e): void {
@@ -481,14 +517,42 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
 
   addFeedback(template: FeedbackTemplate): void {
     const char = template.commentText;
-    const text = this.input.first.nativeElement.innerText;
-    const position = this.caretOffset();
-    this.input.first.nativeElement.innerText = [
-      text.slice(0, position),
-      char,
-      text.slice(position),
-    ].join('');
-    this.input.first.nativeElement.focus();
+    const element = this.input.first.nativeElement;
+    const doc = element.ownerDocument;
+    const selection = doc.defaultView?.getSelection();
+    let range = this.currentComposerRange() ?? this.lastComposerRange?.cloneRange();
+
+    if (!range || !element.contains(range.commonAncestorContainer)) {
+      range = doc.createRange();
+      range.selectNodeContents(element);
+      range.collapse(false);
+    }
+
+    element.focus();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+
+    // insertText participates in the browser's native contenteditable undo history,
+    // including when the feedback replaces a selected section of the comment.
+    let insertedWithUndo;
+    try {
+      insertedWithUndo = doc.execCommand('insertText', false, char);
+    } catch (_error) {
+      insertedWithUndo = false;
+    }
+
+    if (!insertedWithUndo) {
+      range.deleteContents();
+      const insertedText = doc.createTextNode(char);
+      range.insertNode(insertedText);
+      range.setStartAfter(insertedText);
+      range.collapse(true);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    }
+
+    this.rememberCaretPosition();
+
     setTimeout(() => {
       this.saveDraftForTask(this.task);
     });
@@ -572,20 +636,17 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
       },
       error: (error: ApiError) => {
         this.isSending = false;
-        this.alerts.error(
-          error.error || error.message || `Failed to edit comment: ${error}`,
-          6000,
-        );
+        this.alerts.error(error.error || error.message || `Failed to edit comment: ${error}`, 6000);
       },
     });
   }
 
   addCommentWithType(comment: string, type: string) {
     this.taskCommentService.addComment(this.task, comment, type).subscribe({
-      next: (success: TaskComment) => {
+      next: (_success: TaskComment) => {
         this.comment.text = '';
         this.commentsViewer.scrollDown();
-        console.log('implement - check map comments');
+        // TODO: Check whether task comments need to be remapped.
         //this.task.comments = this.ts.mapComments(this.task.comments);
       },
       error: (message: string) => this.alerts.error(message, 6000),
@@ -680,11 +741,11 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   // # Upload image files as comments to a given task
   postAttachmentComment(file) {
     this.taskCommentService.addComment(this.task, file, 'file', null).subscribe(
-      (tc: TaskComment) => {
+      (_tc: TaskComment) => {
         this.commentsViewer.scrollDown();
       },
-      (error: any) => {
-        this.alerts.error(error || error?.message, 2000);
+      (error: Error) => {
+        this.alerts.error(error.message, 2000);
       },
     );
   }
@@ -785,6 +846,8 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
 
     selection.removeAllRanges();
     selection.addRange(range);
+    this.lastComposerRange = range.cloneRange();
+    this.lastCaretOffset = element.innerText.length;
   }
 }
 
@@ -794,12 +857,12 @@ export class TaskCommentComposerComponent implements OnInit, AfterViewInit, DoCh
   selector: 'discussion-prompt-composer-dialog.html',
   templateUrl: 'discussion-prompt-composer-dialog.html',
   styleUrls: ['./discussion-prompt-composer/discussion-prompt-composer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class DiscussionComposerDialog implements OnInit {
+export class DiscussionComposerDialog {
   constructor(
     public dialogRef: MatDialogRef<DiscussionComposerDialog>,
     @Inject(MAT_DIALOG_DATA) public data: {task: Task},
   ) {}
-
-  ngOnInit() {}
 }

@@ -1,8 +1,9 @@
 import {Entity} from 'ngx-entity-service';
-import {Project, Unit, User, UserService} from './doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {StaffNoteService} from '../services/staff-note.service';
+import {Project, User, UserService} from './doubtfire-model';
 
 export class StaffNote extends Entity {
   id: number;
@@ -12,6 +13,8 @@ export class StaffNote extends Entity {
   note: string;
   replyTo?: StaffNote;
   replyToId: number;
+  hasAttachment: boolean;
+  attachmentType?: 'image' | 'pdf';
   createdAt: Date;
   updatedAt: Date;
 
@@ -36,18 +39,23 @@ export class StaffNote extends Entity {
     return this.user.id === userService.currentUser.id;
   }
 
+  public get attachmentUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${this.project.id}/staff_notes/${this.id}/attachment`;
+  }
+
   public delete() {
     const staffNoteService: StaffNoteService = AppInjector.get(StaffNoteService);
     staffNoteService
       .delete({projectId: this.project.id, id: this.id}, {cache: this.project.staffNoteCache})
       .subscribe({
-        next: (response: object) => {
+        next: () => {
           AppInjector.get(AlertService).error('Successfully deleted staff note', 4000);
           this.project.staffNoteCount--;
           staffNoteService.updateStaffNoteReplies(this.project.staffNoteCache.currentValues);
         },
-        error: (error: any) => {
-          AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+        error: (error: Error) => {
+          const message = error.message || 'Unknown error';
+          AppInjector.get(AlertService).error(message, 2000);
         },
       });
   }

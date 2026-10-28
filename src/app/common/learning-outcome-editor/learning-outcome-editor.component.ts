@@ -1,48 +1,50 @@
+import {LiveAnnouncer} from '@angular/cdk/a11y';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
-  computed,
-  inject,
-  Inject,
   Input,
-  model,
-  OnDestroy,
-  signal,
-  effect,
-  ViewChild,
   OnChanges,
+  OnDestroy,
   SimpleChanges,
+  ViewChild,
+  computed,
+  effect,
+  inject,
+  model,
+  signal,
 } from '@angular/core';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatChipInputEvent} from '@angular/material/chips';
 import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Subscription} from 'rxjs';
 import {
-  TaskDefinition,
-  Unit,
+  FeedbackTemplateService,
   LearningOutcome,
   LearningOutcomeService,
+  TaskDefinition,
   TaskService,
-  FeedbackTemplateService,
+  Unit,
 } from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {MatSort, Sort} from '@angular/material/sort';
-import {
-  confirmationModal,
-  csvResultModalService,
-  csvUploadModalService,
-} from 'src/app/ajs-upgraded-providers';
-import {Subscription} from 'rxjs';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {FileDownloaderService} from '../file-downloader/file-downloader.service';
-import {isEqual} from 'lodash';
-import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-csv-download-modal.service';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
+import {
+  CsvResult,
+  CsvResultModalService,
+} from '../modals/csv-result-modal/csv-result-modal.service';
+import {CsvUploadModalService} from '../modals/csv-upload-modal/csv-upload-modal.service';
+import {NestedCsvDownloadModalService} from './nested-csv-download-modal/nested-csv-download-modal.service';
 
 @Component({
   selector: 'f-learning-outcome-editor',
   templateUrl: 'learning-outcome-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() context?: TaskDefinition | Unit;
@@ -51,7 +53,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
   @ViewChild(MatSort, {static: false}) outcomeSort: MatSort;
   @ViewChild(MatPaginator, {static: false}) outcomePaginator: MatPaginator;
 
-  public outcomeSource: MatTableDataSource<LearningOutcome>;
+  public outcomeSource: MatTableDataSource<LearningOutcome> = new MatTableDataSource([]);
   public outcomeColumns: string[] = [
     'abbreviation',
     'shortDescription',
@@ -74,28 +76,56 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
     private nestedCsvDownloadModalService: NestedCsvDownloadModalService,
     private feedbackTemplateService: FeedbackTemplateService,
     private taskService: TaskService,
-    @Inject(csvResultModalService) private csvResultModalService: any,
-    @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(confirmationModal) private confirmationModal: any,
+    private csvResultModalService: CsvResultModalService,
+    private csvUploadModal: CsvUploadModalService,
+    private confirmationModal: ConfirmationModalService,
   ) {
+    this.outcomeSource.filterPredicate = (data: LearningOutcome, filter: string) => {
+      const filterValue = filter.trim().toLowerCase();
+      return (
+        data.abbreviation.toLowerCase().includes(filterValue) ||
+        data.shortDescription.toLowerCase().includes(filterValue) ||
+        data.fullOutcomeDescription.toLowerCase().includes(filterValue)
+      );
+    };
+
     effect(() => {
       const linkedOutcomes = this.selectedConnectedOutcomes().map((outcome) => outcome.id);
       if (
         this.selectedOutcome &&
-        !isEqual(linkedOutcomes.sort(), this.selectedOutcome.linkedOutcomeIds.sort())
-      )
+        !this.sameIds(linkedOutcomes, this.selectedOutcome.linkedOutcomeIds)
+      ) {
         this.selectedOutcome.linkedOutcomeIds = linkedOutcomes;
+      }
     });
   }
 
+  private sameIds(left: number[], right: number[]): boolean {
+    if (left.length !== right.length) {
+      return false;
+    }
+
+    const sortedLeft = [...left].sort((a, b) => a - b);
+    const sortedRight = [...right].sort((a, b) => a - b);
+    return sortedLeft.every((id, index) => id === sortedRight[index]);
+  }
+
   ngAfterViewInit(): void {
+    this.outcomeSource.paginator = this.outcomePaginator;
+    this.outcomeSource.sort = this.outcomeSort;
+  }
+
+  private subscribeToLearningOutcomes(): void {
+    this.unsubscribeFromLearningOutcomes();
+    this.outcomeSource.data = [];
+    this.allOutcomes = [];
     this.setAbbreviationPrefix();
 
     if (!this.context) {
       this.subscriptions.push(
         this.learningOutcomeService.cache.values.subscribe((outcomes) => {
           const glos = outcomes.filter((outcome) => outcome.contextType === null);
-          this.initialiseTable(glos);
+          this.outcomeSource.data = glos;
         }),
       );
       return;
@@ -103,7 +133,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
 
     this.subscriptions.push(
       this.context.learningOutcomesCache.values.subscribe((learningOutcomes) => {
-        this.initialiseTable(learningOutcomes);
+        this.outcomeSource.data = learningOutcomes;
       }),
     );
 
@@ -124,39 +154,30 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.setAbbreviationPrefix();
-
-    this.subscriptions.push(
-      this.context.learningOutcomesCache.values.subscribe((learningOutcomes) => {
-        this.initialiseTable(learningOutcomes);
-      }),
-    );
-
-    this.selectedOutcome = null;
+    if (changes.context) {
+      this.selectedOutcome = null;
+      this.selectedConnectedOutcomes.set([]);
+      this.subscribeToLearningOutcomes();
+    }
   }
 
   ngOnDestroy(): void {
+    this.unsubscribeFromLearningOutcomes();
+  }
+
+  private unsubscribeFromLearningOutcomes(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscriptions = [];
   }
 
   setAbbreviationPrefix(): void {
-    if (!this.context) this.abbreviationPrefix = 'GLO';
-    else if (this.context instanceof TaskDefinition) this.abbreviationPrefix = 'TLO';
-    else if (this.context instanceof Unit) this.abbreviationPrefix = 'ULO';
-  }
-
-  initialiseTable(learningOutcomes: LearningOutcome[]) {
-    this.outcomeSource = new MatTableDataSource<LearningOutcome>(learningOutcomes);
-    this.outcomeSource.paginator = this.outcomePaginator;
-    this.outcomeSource.sort = this.outcomeSort;
-    this.outcomeSource.filterPredicate = (data: LearningOutcome, filter: string) => {
-      const filterValue = filter.trim().toLowerCase();
-      return (
-        data.abbreviation.toLowerCase().includes(filterValue) ||
-        data.shortDescription.toLowerCase().includes(filterValue) ||
-        data.fullOutcomeDescription.toLowerCase().includes(filterValue)
-      );
-    };
+    if (!this.context) {
+      this.abbreviationPrefix = 'GLO';
+    } else if (this.context instanceof TaskDefinition) {
+      this.abbreviationPrefix = 'TLO';
+    } else if (this.context instanceof Unit) {
+      this.abbreviationPrefix = 'ULO';
+    }
   }
 
   public saveLearningOutcome(learningOutcome: LearningOutcome) {
@@ -185,7 +206,9 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
     } else {
       this.selectedOutcome = learningOutcome;
       this.selectedConnectedOutcomes.update(() => this.getLinkedOutcomes(learningOutcome));
-      if (!this.selectedOutcome.context) this.selectedOutcome.context = this.context;
+      if (!this.selectedOutcome.context) {
+        this.selectedOutcome.context = this.context;
+      }
 
       if (!this.selectedOutcome.hasOriginalSaveData) {
         this.selectedOutcome.setOriginalSaveData(this.learningOutcomeService.mapping);
@@ -239,8 +262,9 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
         learningOutcome.delete().subscribe({
           next: () => {
             this.alerts.success('Learning outcome deleted');
-            if (this.selectedOutcome === learningOutcome)
+            if (this.selectedOutcome === learningOutcome) {
               this.selectLearningOutcome(this.selectedOutcome);
+            }
           },
           error: () => this.alerts.error('Failed to delete learning outcome. Please try again.'),
         });
@@ -251,10 +275,14 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
   public uploadCsv(type: 'Learning Outcomes' | 'Feedback Templates') {
     let url: string;
 
-    if (type === 'Learning Outcomes') url = this.context.getOutcomeBatchUploadUrl();
-    else {
-      if (this.context) url = this.context.getFeedbackTemplateBatchUploadUrl();
-      else url = `${API_URL}/global/feedback_chips/csv`;
+    if (type === 'Learning Outcomes') {
+      url = this.context.getOutcomeBatchUploadUrl();
+    } else {
+      if (this.context) {
+        url = this.context.getFeedbackTemplateBatchUploadUrl();
+      } else {
+        url = `${API_URL}/global/feedback_chips/csv`;
+      }
     }
 
     this.csvUploadModal.show(
@@ -262,7 +290,7 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
       'Test message',
       {file: {name: `${type} CSV Data`, type: 'csv'}},
       url,
-      (response: any) => {
+      (response: CsvResult) => {
         this.csvResultModalService.show(`${type} CSV Upload Results`, response);
         if (response.success.length > 0) {
           let contextType: 'units' | 'task_definitions';
@@ -288,20 +316,29 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
   public downloadCsv(type: 'Learning Outcomes' | 'Feedback Templates') {
     let url: string;
 
-    if (type === 'Learning Outcomes') url = this.context.getOutcomeBatchUploadUrl();
-    else {
-      if (this.context) url = this.context.getFeedbackTemplateBatchUploadUrl();
-      else url = `${API_URL}/global/feedback_chips/csv`;
+    if (type === 'Learning Outcomes') {
+      url = this.context.getOutcomeBatchUploadUrl();
+    } else {
+      if (this.context) {
+        url = this.context.getFeedbackTemplateBatchUploadUrl();
+      } else {
+        url = `${API_URL}/global/feedback_chips/csv`;
+      }
     }
 
     let name = `${type}.csv`;
 
-    if (this.context instanceof TaskDefinition)
+    if (this.context instanceof TaskDefinition) {
       name = `${this.context.unit.code}-${this.context.abbreviation}-${name}`;
-    else if (this.context instanceof Unit) name = `${this.context.code}-${name}`;
+    } else if (this.context instanceof Unit) {
+      name = `${this.context.code}-${name}`;
+    }
 
-    if (this.context instanceof Unit) this.nestedCsvDownloadModalService.show(url, name, type);
-    else this.fileDownloaderService.downloadFile(url, name);
+    if (this.context instanceof Unit) {
+      this.nestedCsvDownloadModalService.show(url, name, type);
+    } else {
+      this.fileDownloaderService.downloadFile(url, name);
+    }
   }
 
   public createLearningOutcome() {
@@ -309,8 +346,11 @@ export class LearningOutcomeEditorComponent implements OnChanges, AfterViewInit,
 
     if (this.context) {
       learningOutcome.context = this.context;
-      if (this.context instanceof TaskDefinition) learningOutcome.contextType = 'TaskDefinition';
-      else if (this.context instanceof Unit) learningOutcome.contextType = 'Unit';
+      if (this.context instanceof TaskDefinition) {
+        learningOutcome.contextType = 'TaskDefinition';
+      } else if (this.context instanceof Unit) {
+        learningOutcome.contextType = 'Unit';
+      }
       learningOutcome.contextId = this.context.id;
     }
     learningOutcome.abbreviation = this.abbreviationPrefix + String(this.getNextOutcomeNumber());

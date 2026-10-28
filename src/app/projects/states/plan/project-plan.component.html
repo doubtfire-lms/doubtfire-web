@@ -1,34 +1,47 @@
-<div class="flex flex-col container">
-  <h2>Task Planner</h2>
-  <p>
-    @if (unit.allowFlexibleDates) {
-      View and adjust the due dates for your tasks. Remember to leave time to get and respond to
-      feedback.
-    } @else {
-      View the task deadlines for your project, so you can organise your work and ensure you meet
-      all submission requirements on time.
-    }
-  </p>
-  <p>
-    Click on a task in the timeline to see how it connects to other tasks. This will show you which
-    tasks must be completed before it, and which tasks depend on it being completed first.
-  </p>
-</div>
-
-<div class="w-full" [style.height.px]="(planner?.items.length + 2) * 43">
-  <div class="w-full flex justify-center">
-    <mat-form-field appearance="outline" class="w-full max-w-3xl">
-      <mat-label>Target Grade</mat-label>
-      <mat-select
-        [(ngModel)]="selectedTargetGrade"
-        class="w-full"
-        (selectionChange)="onTargetGradeChange($event)"
-      >
-        @for (grade of gradeValues; track grade) {
-          <mat-option [value]="grade">{{ gradeString(grade) }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+@if (project) {
+  <div class="mx-auto flex max-w-[90vw] flex-col">
+    <h2>
+      Task Planner
+      @if (viewingOtherStudentProject) {
+        for {{ project.student.name }}
+      }
+    </h2>
+    <p>
+      @if (unit.allowFlexibleDates) {
+        View and adjust the due dates for your tasks. Remember to leave time to get and respond to
+        feedback.
+      } @else {
+        View the task deadlines for your project, so you can organise your work and ensure you meet
+        all submission requirements on time.
+      }
+    </p>
+    <p>
+      Click on a task in the timeline to see how it connects to other tasks. This will show you
+      which tasks must be completed before it, and which tasks depend on it being completed first.
+    </p>
+    <div class="flex w-full justify-center">
+      <mat-form-field appearance="outline" class="w-full max-w-3xl">
+        <mat-label>Target Grade</mat-label>
+        <mat-select
+          class="w-full"
+          [(ngModel)]="selectedTargetGrade"
+          (selectionChange)="onTargetGradeChange($event)"
+        >
+          @for (grade of gradeValues; track grade) {
+            <mat-option [value]="grade">{{ gradeString(grade) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <p>
+      Subscribe to your unit calendar to be reminded about your due dates.
+      <button color="primary" mat-stroked-button type="button" (click)="openCalendar()">
+        Open calendar
+      </button>
+    </p>
   </div>
-  <f-task-planner [project]="project" [targetGrade]="selectedTargetGrade"></f-task-planner>
-</div>
+
+  <div class="mx-auto w-full max-w-[95vw]" [style.height.px]="(planner?.items.length + 2) * 43">
+    <f-task-planner [project]="project" [targetGrade]="selectedTargetGrade"></f-task-planner>
+  </div>
+}

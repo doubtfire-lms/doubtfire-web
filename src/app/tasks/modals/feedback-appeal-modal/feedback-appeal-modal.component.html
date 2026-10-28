@@ -17,14 +17,14 @@
     request will not be counted against your remaining total.
   </p>
 
-  <mat-form-field appearance="outline" class="w-full mt-4">
+  <mat-form-field appearance="outline" class="mt-2.5 w-full">
     <mat-label>Reason for review request</mat-label>
     <textarea
       matInput
-      rows="4"
       maxlength="1000"
-      [(ngModel)]="reviewComment"
       placeholder="Briefly explain why you believe this feedback should be reviewed. Refer to specific criteria if relevant."
+      rows="4"
+      [(ngModel)]="reviewComment"
     ></textarea>
     <div class="flex justify-end">
       <mat-hint> {{ reviewComment?.length || 0 }}/1000 </mat-hint>
@@ -35,10 +35,10 @@
   <mat-dialog-actions class="flex justify-between">
     <button mat-raised-button (click)="dismissModal()">Cancel</button>
     <button
-      mat-raised-button
       color="primary"
-      (click)="submit()"
+      mat-raised-button
       [disabled]="!reviewComment || submitting"
+      (click)="submit()"
     >
       Submit
     </button>

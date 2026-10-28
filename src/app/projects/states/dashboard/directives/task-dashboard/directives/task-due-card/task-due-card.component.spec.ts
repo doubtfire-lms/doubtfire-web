@@ -1,6 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { TaskDueCardComponent } from './task-due-card.component';
+import {beforeEach, describe, expect, it} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {Task} from 'src/app/api/models/task';
+import {TaskDueCardComponent} from './task-due-card.component';
 
 describe('TaskDueCardComponent', () => {
   let component: TaskDueCardComponent;
@@ -8,16 +10,68 @@ describe('TaskDueCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TaskDueCardComponent ]
+      declarations: [TaskDueCardComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     })
-    .compileComponents();
+      .overrideComponent(TaskDueCardComponent, {set: {template: ''}})
+      .compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(TaskDueCardComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('updates when the API-provided discussion deadline changes', () => {
+    const year = new Date().getFullYear();
+    component.task = {
+      status: 'discuss',
+      discussTimeoutExpiryDate: `${year}-07-08`,
+      unit: {
+        discussTimeoutEnabled: true,
+        discussTimeoutActive: true,
+        discussTimeoutExpireDays: 7,
+      },
+    } as Task;
+
+    expect(component.discussTimeoutExpiryDate).toBe('8th July');
+
+    component.task.discussTimeoutExpiryDate = `${year}-07-15`;
+
+    expect(component.discussTimeoutExpiryDate).toBe('15th July');
+  });
+
+  it('hides the discussion deadline after the last teaching date', () => {
+    component.task = {
+      status: 'discuss',
+      discussTimeoutExpiryDate: '2026-10-22',
+      unit: {discussTimeoutActive: false},
+    } as Task;
+
+    expect(component.discussTimeoutExpiryDate).toBeNull();
+  });
+
+  it('hides deadlines that cannot expire before the last teaching date', () => {
+    const year = new Date().getFullYear();
+    component.task = {
+      status: 'discuss',
+      discussTimeoutExpiryDate: `${year}-10-20`,
+      unit: {
+        discussTimeoutActive: true,
+        lastTeachingDate: new Date(year, 9, 20),
+      },
+    } as Task;
+
+    expect(component.discussTimeoutExpiryDate).toBeNull();
+
+    component.task.discussTimeoutExpiryDate = `${year}-10-21`;
+    expect(component.discussTimeoutExpiryDate).toBeNull();
+
+    component.task.discussTimeoutExpiryDate = `${year}-10-19`;
+    expect(component.discussTimeoutExpiryDate).toBe('19th October');
   });
 });

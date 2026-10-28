@@ -1,0 +1,150 @@
+@if (mode === 'edit') {
+  <div class="flex w-full min-w-130 flex-col gap-3">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Subject</mat-label>
+      <input #staffSubjectInput matInput [(ngModel)]="editor.actionFor(rule).subject" />
+      <button mat-icon-button matSuffix [matMenuTriggerFor]="staffSubjectVariableMenu">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-menu #staffSubjectVariableMenu="matMenu">
+      @for (variable of editor.emailVariables; track variable.token) {
+        <button
+          mat-menu-item
+          (click)="editor.insertActionVariable(rule, 'subject', variable.token, staffSubjectInput)"
+        >
+          {{ variable.label }}
+        </button>
+      }
+    </mat-menu>
+    @if (editor.actionFor(rule).subject) {
+      <div class="rounded border border-slate-200 bg-slate-50 p-3">
+        <div class="mb-2 font-medium">Subject Preview</div>
+        <div [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).subject, rule)"></div>
+      </div>
+    }
+    <div class="grid items-stretch gap-3 md:grid-cols-2">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Body</mat-label>
+        <textarea
+          #staffBodyInput
+          matInput
+          [cdkTextareaAutosize]="true"
+          [(ngModel)]="editor.actionFor(rule).body"
+        ></textarea>
+        <button mat-icon-button matSuffix [matMenuTriggerFor]="staffBodyVariableMenu">
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="flex h-full flex-col rounded border border-slate-200 bg-slate-50 p-3">
+        <div class="mb-2 font-medium">Body Preview</div>
+        <div class="flex-1">
+          @if (editor.actionFor(rule).body) {
+            <div
+              [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).body, rule)"
+            ></div>
+          } @else {
+            <div class="text-black/40">Preview will appear here.</div>
+          }
+        </div>
+      </div>
+    </div>
+    <mat-menu #staffBodyVariableMenu="matMenu">
+      @for (variable of editor.emailVariables; track variable.token) {
+        <button
+          mat-menu-item
+          (click)="editor.insertActionVariable(rule, 'body', variable.token, staffBodyInput)"
+        >
+          {{ variable.label }}
+        </button>
+      }
+    </mat-menu>
+    <div class="flex gap-4">
+      <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_tutors">Tutors</mat-checkbox>
+      <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_convenors">Convenors</mat-checkbox>
+    </div>
+    <mat-checkbox
+      matTooltip="Send only the text you enter, without the OnTrack notification layout or footer."
+      [(ngModel)]="editor.actionFor(rule).plain_text"
+      >Send as plain text</mat-checkbox
+    >
+    <div class="text-sm text-black/50">Sent from the main convenor.</div>
+  </div>
+} @else {
+  <div class="flex w-full min-w-130 flex-col gap-3">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Subject</mat-label>
+      <input #staffSubjectInputView matInput [(ngModel)]="editor.actionFor(rule).subject" />
+      <button mat-icon-button matSuffix [matMenuTriggerFor]="staffSubjectVariableMenu">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-menu #staffSubjectVariableMenu="matMenu">
+      @for (variable of editor.emailVariables; track variable.token) {
+        <button
+          mat-menu-item
+          (click)="
+            editor.insertActionVariable(rule, 'subject', variable.token, staffSubjectInputView)
+          "
+        >
+          {{ variable.label }}
+        </button>
+      }
+    </mat-menu>
+
+    @if (editor.actionFor(rule).subject) {
+      <div class="rounded border border-slate-200 bg-slate-50 p-3">
+        <div class="mb-2 font-medium">Subject Preview</div>
+        <div [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).subject, rule)"></div>
+      </div>
+    }
+
+    <div class="grid items-stretch gap-3 md:grid-cols-2">
+      <mat-form-field appearance="outline" class="size-full">
+        <mat-label>Body</mat-label>
+        <textarea
+          #staffBodyInputView
+          matInput
+          [cdkTextareaAutosize]="true"
+          [(ngModel)]="editor.actionFor(rule).body"
+        ></textarea>
+        <button mat-icon-button matSuffix [matMenuTriggerFor]="staffBodyVariableMenu">
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="flex size-full flex-col rounded border border-slate-200 bg-slate-50 p-3">
+        <div class="mb-2 font-medium">Body Preview</div>
+        <div class="flex-1">
+          @if (editor.actionFor(rule).body) {
+            <div
+              [innerHTML]="editor.renderTemplatePreview(editor.actionFor(rule).body, rule)"
+            ></div>
+          } @else {
+            <div class="text-black/40">Preview will appear here.</div>
+          }
+        </div>
+      </div>
+    </div>
+    <mat-menu #staffBodyVariableMenu="matMenu">
+      @for (variable of editor.emailVariables; track variable.token) {
+        <button
+          mat-menu-item
+          (click)="editor.insertActionVariable(rule, 'body', variable.token, staffBodyInputView)"
+        >
+          {{ variable.label }}
+        </button>
+      }
+    </mat-menu>
+
+    <div class="flex gap-4">
+      <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_tutors">Tutors</mat-checkbox>
+      <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_convenors">Convenors</mat-checkbox>
+    </div>
+    <mat-checkbox
+      matTooltip="Send only the text you enter, without the OnTrack notification layout or footer."
+      [(ngModel)]="editor.actionFor(rule).plain_text"
+      >Send as plain text</mat-checkbox
+    >
+    <div class="text-sm text-black/50">Sent from the main convenor.</div>
+  </div>
+}

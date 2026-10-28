@@ -1,4 +1,4 @@
-@import '../../../styles/mixins/scrollable.scss';
+@use 'styles/mixins/scrollable' as *;
 
 #pdfContainer {
   flex-direction: column;
@@ -17,12 +17,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-}
-
-object {
-  height: 100%;
-  min-width: 100%;
   width: 100%;
 }
 

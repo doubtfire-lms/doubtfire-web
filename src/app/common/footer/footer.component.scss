@@ -1,5 +1,8 @@
+@use 'styles/mixins/task-status-colors-generator' as *;
+
 .footer {
   min-height: 85px;
+  background-color: #f5f5f5;
 
   .spacer {
     flex: 1 1 auto;
@@ -124,8 +127,6 @@
   }
 }
 
-@import '../../../styles/mixins/task-status-colors-generator.scss';
-
 @mixin status-icon($status) {
   --status-chip-bg: #{task-status-color($status)};
   background-color: transparent;
@@ -166,6 +167,9 @@
     @include status-icon('discuss');
     color: #000;
   }
+  &.rediscuss {
+    @include status-icon('rediscuss');
+  }
   &.working-on-it {
     @include status-icon('working-on-it');
   }
@@ -191,7 +195,10 @@
   &.fix-and-resubmit.mdc-icon-button--disabled,
   &.discuss:disabled,
   &.discuss.mat-mdc-button-disabled,
-  &.discuss.mdc-icon-button--disabled {
+  &.discuss.mdc-icon-button--disabled,
+  &.rediscuss:disabled,
+  &.rediscuss.mat-mdc-button-disabled,
+  &.rediscuss.mdc-icon-button--disabled {
     color: rgba(0, 0, 0, 0.25);
   }
 }

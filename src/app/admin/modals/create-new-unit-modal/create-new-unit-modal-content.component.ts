@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { TeachingPeriod } from 'src/app/api/models/teaching-period';
-import { TeachingPeriodService } from 'src/app/api/services/teaching-period.service';
-import { UnitService } from 'src/app/api/services/unit.service';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {TeachingPeriod} from 'src/app/api/models/teaching-period';
+import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
+import {UnitService} from 'src/app/api/services/unit.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+
 @Component({
   selector: 'create-new-unit-modal-content',
   templateUrl: 'create-new-unit-modal-content.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class CreateNewUnitModalContentComponent implements OnInit {
   constructor(
@@ -18,6 +21,7 @@ export class CreateNewUnitModalContentComponent implements OnInit {
   showDates = false;
   startDate: Date;
   endDate: Date;
+  lastTeachingDate: Date;
   selectedTeachingPeriod: number = null;
   teachingPeriods: TeachingPeriod[];
 
@@ -27,7 +31,11 @@ export class CreateNewUnitModalContentComponent implements OnInit {
     });
   }
 
-  public createUnit(unit: { unitName: string; unitCode: string; selectedTeachingPeriod: number }): void {
+  public createUnit(unit: {
+    unitName: string;
+    unitCode: string;
+    selectedTeachingPeriod: number;
+  }): void {
     let newUnit;
 
     if (this.selectedTeachingPeriod === null) {
@@ -36,6 +44,7 @@ export class CreateNewUnitModalContentComponent implements OnInit {
         name: unit.unitName,
         start_date: this.startDate,
         end_date: this.endDate,
+        last_teaching_date: this.lastTeachingDate || this.endDate,
       };
     } else {
       newUnit = {
@@ -61,7 +70,6 @@ export class CreateNewUnitModalContentComponent implements OnInit {
   }
   public handleChangeTeachingPeriod(teachingPeriod: number | string): void {
     if (typeof teachingPeriod === 'string') {
-      teachingPeriod = null;
       this.showDates = true;
     } else {
       this.showDates = false;

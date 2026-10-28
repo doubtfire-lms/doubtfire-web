@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import * as Sentry from '@sentry/angular';
 import {
   HttpErrorResponse,
   HttpEvent,
@@ -37,55 +38,59 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // const retryTimes: number = 3;
-    // const delayDuration: number = 100;
-
-    // TODO: Check for access token / refresh token expiration before trying the initial request
-    // .. This way we can avoid spamming console with 409 errors
+    if (this.isAccessTokenExpired(request)) {
+      return this.refreshAccessTokenAndRetry(request, next);
+    }
 
     return next.handle(request).pipe(
-      // retryWhen(errors => errors
-      //   .pipe(
-      //     concatMap((error, count) => {
-      //       if (count < retryTimes && (error.status === 400 || error.status === 0)) {
-      //         return of(error.status);
-      //       }
-      //       return throwError(error);
-      //     }),
-      //     delay(delayDuration)
-      //   )
-      // ),
       catchError((error: HttpErrorResponse) => {
         if (this.isAuthError(error)) {
-          if (!this.refreshTokenInProgress) {
-            this.refreshTokenInProgress = true;
-            this.refreshTokenSubject.next(null);
-            return this.attemptRefresh$().pipe(
-              switchMap(() => {
-                this.refreshTokenSubject.next(this.userService.currentUser.authenticationToken);
-                return next.handle(this.injectToken(request));
-              }),
-              catchError((err: HttpErrorResponse) => {
-                this.refreshTokenInProgress = false;
-                if (this.isAuthError(err)) {
-                  this.authenticationService.timeoutAuthentication();
-                }
-                return throwError(() => this.extractErrorMessage(err));
-              }),
-              finalize(() => (this.refreshTokenInProgress = false)),
-            );
-          } else {
-            return this.refreshTokenSubject.pipe(
-              filter((result) => result !== null),
-              take(1),
-              switchMap((_res) => {
-                return next.handle(this.injectToken(request));
-              }),
-            );
+          if (this.isAccessTokenRequest(request)) {
+            return throwError(() => this.extractErrorMessage(error));
           }
+
+          // The server is authoritative about token validity. Refresh even when the
+          // client-side expiry indicated that the access token was still valid.
+          return this.refreshAccessTokenAndRetry(request, next);
         }
 
         return throwError(() => this.extractErrorMessage(error));
+      }),
+    );
+  }
+
+  private refreshAccessTokenAndRetry(
+    request: HttpRequest<any>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<any>> {
+    if (!this.refreshTokenInProgress) {
+      this.refreshTokenInProgress = true;
+      this.refreshTokenSubject.next(null);
+      return this.attemptRefresh$().pipe(
+        switchMap(() => {
+          this.refreshTokenSubject.next(this.userService.currentUser.authenticationToken);
+          return next.handle(this.injectToken(request));
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.refreshTokenInProgress = false;
+          if (this.isAuthError(err)) {
+            this.authenticationService.timeoutAuthentication();
+          }
+          if (!(err instanceof HttpErrorResponse)) {
+            return throwError(() => err);
+          }
+          return throwError(() => this.extractErrorMessage(err));
+        }),
+        finalize(() => (this.refreshTokenInProgress = false)),
+      );
+    }
+
+    return this.refreshTokenSubject.pipe(
+      filter((result) => result !== null),
+      take(1),
+      switchMap(() => next.handle(this.injectToken(request))),
+      catchError((err: HttpErrorResponse) => {
+        return throwError(() => this.extractErrorMessage(err));
       }),
     );
   }
@@ -94,25 +99,44 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return error.status === 419 || (error.status === 403 && this.userService.isAnonymousUser());
   }
 
+  private isAccessTokenExpired(request: HttpRequest<any>) {
+    const user = this.userService.currentUser;
+    const expiry = Date.parse(user.authenticationTokenExpiry);
+
+    return (
+      !this.isAccessTokenRequest(request) &&
+      !!user.authenticationToken &&
+      !Number.isNaN(expiry) &&
+      expiry <= Date.now()
+    );
+  }
+
+  private isAccessTokenRequest(request: HttpRequest<any>) {
+    return request.url.endsWith('/auth/access-token');
+  }
+
   private extractErrorMessage(error: HttpErrorResponse) {
-    let errorMessage: string = '';
+    let errorMessage: string;
     let logMessage: string = '';
+    const fallbackMessage = error.status === 500 ? 'Internal Server Error' : 'Unknown error';
     if (error.error instanceof ErrorEvent) {
       // client-side error
       errorMessage = error.error.message;
     } else if (error.error instanceof ProgressEvent) {
-      errorMessage = error.statusText;
+      errorMessage = fallbackMessage;
     } else {
       // server-side error
-      if (error.error.error) {
+      if (error.error?.error) {
         errorMessage = error.error.error;
       } else if (error.error instanceof Blob) {
-        errorMessage = error.statusText;
+        errorMessage = fallbackMessage;
       } else {
-        errorMessage = error.error;
+        errorMessage = error.error || fallbackMessage;
       }
       logMessage = `Error Code: ${error.status}`;
     }
+
+    this.throwError(`${logMessage}: ${errorMessage}`, error.status);
 
     console.error(`${logMessage}: ${errorMessage}`);
     return errorMessage;
@@ -125,5 +149,32 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         Username: this.userService.currentUser.username,
       },
     });
+  }
+
+  throwError(message: string, statusCode: number) {
+    Sentry.diagnoseSdkConnectivity().then(() => {
+      Sentry.startSpan(
+        {
+          name: `Error ${statusCode}`,
+          op: 'http.client_error',
+          attributes: {
+            'http.response.status_code': statusCode,
+          },
+        },
+        () => {
+          throw new HttpRequestError(message, statusCode);
+        },
+      );
+    });
+  }
+}
+
+class HttpRequestError extends Error {
+  constructor(
+    message: string | undefined,
+    public readonly statusCode: number,
+  ) {
+    super(message);
+    this.name = 'HttpRequestError';
   }
 }

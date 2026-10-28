@@ -51,8 +51,9 @@ export class DiscussionPrompt extends Entity {
         next: (_response: object) => {
           AppInjector.get(AlertService).success('Successfully deleted discussion note', 4000);
         },
-        error: (error: any) => {
-          AppInjector.get(AlertService).error(error?.message || error || 'Unknown error', 2000);
+        error: (error: Error) => {
+          const message = error.message || 'Unknown error';
+          AppInjector.get(AlertService).error(message, 2000);
         },
       });
   }

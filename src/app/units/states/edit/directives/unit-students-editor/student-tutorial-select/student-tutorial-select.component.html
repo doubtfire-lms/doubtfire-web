@@ -1,4 +1,4 @@
-<mat-form-field floatLabel="never" class="data-entry" appearance="outline">
+<mat-form-field appearance="outline" class="data-entry" floatLabel="auto">
   <mat-select multiple [compareWith]="compareSelection" [value]="student.tutorials">
     @if (tutorialsForStreamAndStudent(student).length > 0) {
       <mat-optgroup label="No stream">

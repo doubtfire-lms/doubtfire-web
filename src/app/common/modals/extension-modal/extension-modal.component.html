@@ -5,14 +5,14 @@
     request shortly.
   </p>
 
-  <mat-form-field style="width: 100%" appearance="outline">
+  <mat-form-field appearance="outline" style="width: 100%">
     <mat-label>Reason</mat-label>
     <textarea
-      type="text"
       matInput
-      [formControl]="extensionData.controls.extensionReason"
-      [errorStateMatcher]="matcher"
       placeholder="Reason"
+      type="text"
+      [errorStateMatcher]="matcher"
+      [formControl]="extensionData.controls.extensionReason"
     ></textarea>
     <mat-hint align="end"
       >{{ extensionData.controls.extensionReason.value.length }} / {{ reasonMaxLength }}</mat-hint
@@ -32,11 +32,11 @@
     <mat-label>Choose a date</mat-label>
     <input
       matInput
-      [min]="minDate"
-      [max]="maxDate"
-      [matDatepicker]="extensionDatePicker"
-      (dateInput)="addEvent('input', $event)"
       placeholder="Choose a date"
+      [matDatepicker]="extensionDatePicker"
+      [max]="maxDate"
+      [min]="minDate"
+      (dateInput)="addEvent('input', $event)"
     />
     <mat-datepicker-toggle matSuffix [for]="extensionDatePicker"></mat-datepicker-toggle>
     <mat-datepicker #extensionDatePicker></mat-datepicker>
@@ -44,13 +44,13 @@
 </div>
 
 <div mat-dialog-actions style="float: right">
-  <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
+  <button color="warn" mat-dialog-close mat-stroked-button>Cancel</button>
   <button
-    mat-dialog-close
-    style="margin-right: 10px"
-    mat-stroked-button
     color="primary"
     mat-button
+    mat-dialog-close
+    mat-stroked-button
+    style="margin-right: 10px"
     [disabled]="!extensionData.valid"
     (click)="submitApplication()"
   >
@@ -58,7 +58,7 @@
     {{
       extensionDate.toLocaleDateString(currentLocale, {
         month: 'long',
-        day: 'numeric'
+        day: 'numeric',
       })
     }}
   </button>

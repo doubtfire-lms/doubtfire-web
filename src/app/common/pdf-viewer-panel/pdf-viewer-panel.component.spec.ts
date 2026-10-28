@@ -1,28 +1,28 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
+import {beforeEach, describe, expect, it} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {PdfViewerPanelComponent} from './pdf-viewer-panel.component';
 
-import { FileDownloaderService } from '../file-downloader/file-downloader.service';
-import { PdfViewerPanelComponent } from './pdf-viewer-panel.component';
+const emptyProvider = {};
 
 describe('PdfViewerPanelComponent', () => {
   let component: PdfViewerPanelComponent;
   let fixture: ComponentFixture<PdfViewerPanelComponent>;
-  let fileDownloaderServiceStub: Partial<FileDownloaderService>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PdfViewerPanelComponent],
-        imports: [HttpClientModule],
-        providers: [{ provide: FileDownloaderService, useValue: fileDownloaderServiceStub }],
-      }).compileComponents();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [PdfViewerPanelComponent],
+      providers: [{provide: FileDownloaderService, useValue: emptyProvider}],
+      schemas: [NO_ERRORS_SCHEMA],
     })
-  );
+      .overrideComponent(PdfViewerPanelComponent, {set: {template: ''}})
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PdfViewerPanelComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

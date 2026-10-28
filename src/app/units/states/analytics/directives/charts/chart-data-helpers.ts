@@ -1,0 +1,270 @@
+import {
+  CampusStats,
+  TaskCodeStats,
+  TaskCompletionSnapshot,
+  TaskStatusEnum,
+  TutorialStats,
+} from 'src/app/api/models/doubtfire-model';
+import {Unit} from 'src/app/api/models/unit';
+
+// Snapshots can predate the teaching period; fold those into week 0 rather than showing 'Week -2'.
+export function displayWeekNumber(unit: Unit, date: Date | string): number | null {
+  const weekNumber = unit.weekNumber(date);
+  return weekNumber === null ? null : Math.max(weekNumber, 0);
+}
+
+export function formatSnapshotLabel(unit: Unit, snapshotDate?: string, format?: string): string {
+  if (!snapshotDate) {
+    return '';
+  }
+
+  const date = new Date(snapshotDate);
+  if (Number.isNaN(date.valueOf())) {
+    return snapshotDate;
+  }
+
+  const weekNumber = displayWeekNumber(unit, date);
+  const dayName = new Intl.DateTimeFormat(undefined, {weekday: 'short'}).format(date);
+
+  if (!format) {
+    return `${dayName} ${date.toLocaleDateString(undefined, {
+      month: 'numeric',
+      day: 'numeric',
+    })}`;
+  } else if (format === 'short') {
+    return `Week ${weekNumber}`;
+  } else if (format === 'long') {
+    return `${date.toLocaleDateString(undefined, {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })} | Week ${weekNumber}`;
+  }
+}
+
+export function getLastSnapshotByWeek(
+  unit: Unit,
+  snapshots: TaskCompletionSnapshot[],
+): Map<string, TaskCompletionSnapshot> {
+  const lastSnapshotByWeek: Map<string, TaskCompletionSnapshot> = new Map();
+
+  snapshots.forEach((snapshot) => {
+    const week = formatSnapshotLabel(unit, snapshot.snapshot_date, 'short');
+    if (week) {
+      lastSnapshotByWeek.set(week, snapshot);
+    }
+  });
+
+  return lastSnapshotByWeek;
+}
+
+// Order determines the order of the chart legend and series.
+export const statusMapping: TaskStatusEnum[] = [
+  'complete',
+  'assess_in_portfolio',
+  'discuss',
+  'demonstrate',
+  'redo',
+  'fix_and_resubmit',
+  'ready_for_feedback',
+  'working_on_it',
+  'need_help',
+  'attention_required',
+  'time_exceeded',
+  'feedback_exceeded',
+  'fail',
+  'not_started',
+];
+
+export function countStudentsFromSnapshot(snapshotData: CampusStats): number {
+  return Object.values(snapshotData).reduce((acc, campusData) => {
+    const campusStudentCount = Object.values(campusData).reduce((campusAcc, tutorialData) => {
+      const firstTaskStats = Object.values(tutorialData)[0];
+      const tutorialStudentCount = firstTaskStats
+        ? Object.values(firstTaskStats).reduce((acc, count) => acc + count, 0)
+        : 0;
+      return campusAcc + tutorialStudentCount;
+    }, 0);
+    return acc + campusStudentCount;
+  }, 0);
+}
+
+export function mergeTaskCounts(target: TaskCodeStats, source: TaskCodeStats): void {
+  Object.entries(source).forEach(([taskDef, counts]) => {
+    target[taskDef] = target[taskDef] || {};
+    Object.entries(counts).forEach(([status, value]) => {
+      target[taskDef][status] = (target[taskDef][status] || 0) + value;
+    });
+  });
+}
+
+export function aggregateCampusData(campusData: TutorialStats): TaskCodeStats {
+  return Object.values(campusData).reduce((acc, tutorialData) => {
+    mergeTaskCounts(acc, tutorialData);
+    return acc;
+  }, {} as TaskCodeStats);
+}
+
+export function aggregateAllCampuses(
+  snapshotStats: TaskCompletionSnapshot['stats'],
+): TaskCodeStats {
+  return Object.values(snapshotStats).reduce((acc, campusData) => {
+    mergeTaskCounts(acc, aggregateCampusData(campusData));
+    return acc;
+  }, {} as TaskCodeStats);
+}
+
+export function getTaskStats(
+  snapshot: TaskCompletionSnapshot,
+  campusFilter: string = 'all',
+  tutorialFilter: string = 'all',
+  taskGradeFilter: number[] = [],
+  studentTargetGradeFilter: number[] = [],
+  unit?: Unit,
+): TaskCodeStats {
+  const snapshotStats =
+    studentTargetGradeFilter.length === 0
+      ? snapshot.stats
+      : studentTargetGradeFilter.reduce((stats, targetGrade) => {
+          const targetGradeStats = snapshot.target_grade_stats?.[targetGrade.toString()];
+          if (!targetGradeStats) {
+            return stats;
+          }
+
+          Object.entries(targetGradeStats).forEach(([campus, tutorials]) => {
+            stats[campus] = stats[campus] || {};
+            Object.entries(tutorials).forEach(([tutorial, taskStats]) => {
+              stats[campus][tutorial] = stats[campus][tutorial] || {};
+              mergeTaskCounts(stats[campus][tutorial], taskStats);
+            });
+          });
+          return stats;
+        }, {} as CampusStats);
+
+  const campusStats =
+    campusFilter === 'all' ? snapshotStats : {[campusFilter]: snapshotStats[campusFilter] ?? {}};
+
+  const filteredStats = Object.values(campusStats).reduce((acc, tutorials) => {
+    const selectedTutorials =
+      tutorialFilter === 'all' ? tutorials : {[tutorialFilter]: tutorials[tutorialFilter]};
+
+    Object.values(selectedTutorials).forEach((taskStats) => {
+      if (taskStats) {
+        mergeTaskCounts(acc, taskStats);
+      }
+    });
+    return acc;
+  }, {} as TaskCodeStats);
+
+  if (taskGradeFilter.length === 0) {
+    return filteredStats;
+  }
+
+  const taskGradeByCode = new Map(
+    (unit?.taskDefinitions ?? []).map((taskDefinition) => [
+      taskDefinition.abbreviation,
+      taskDefinition.targetGrade,
+    ]),
+  );
+
+  return Object.fromEntries(
+    Object.entries(filteredStats).filter(([taskCode]) =>
+      taskGradeFilter.includes(taskGradeByCode.get(taskCode)),
+    ),
+  );
+}
+
+export function getTaskPopulationStats(
+  snapshot: TaskCompletionSnapshot,
+  campusFilter: string,
+  tutorialFilter: string,
+  taskGradeFilter: number[],
+  studentTargetGradeFilter: number[],
+  unit: Unit,
+): TaskCodeStats {
+  const populationStats = snapshot.status_population_stats;
+  if (!populationStats) {
+    return getTaskStats(
+      snapshot,
+      campusFilter,
+      tutorialFilter,
+      taskGradeFilter,
+      studentTargetGradeFilter,
+      unit,
+    );
+  }
+
+  const gradeStats = studentTargetGradeFilter.length
+    ? studentTargetGradeFilter.map((grade) => populationStats.target_grades[grade.toString()] ?? {})
+    : [populationStats.all];
+  const result: TaskCodeStats = {};
+
+  gradeStats.forEach((stats) => {
+    const campuses = campusFilter === 'all' ? Object.values(stats) : [stats[campusFilter] ?? {}];
+    campuses.forEach((tutorials) => {
+      mergeTaskCounts(
+        result,
+        tutorials[tutorialFilter === 'all' ? '__all__' : tutorialFilter] ?? {},
+      );
+    });
+  });
+
+  if (taskGradeFilter.length === 0) {
+    return result;
+  }
+
+  const taskGradeByCode = new Map(
+    unit.taskDefinitions.map((taskDefinition) => [
+      taskDefinition.abbreviation,
+      taskDefinition.targetGrade,
+    ]),
+  );
+
+  return Object.fromEntries(
+    Object.entries(result).filter(([taskCode]) =>
+      taskGradeFilter.includes(taskGradeByCode.get(taskCode)),
+    ),
+  );
+}
+
+export function isPreWeekZeroSnapshot(unit: Unit, snapshot: TaskCompletionSnapshot): boolean {
+  const snapshotDate = new Date(snapshot.snapshot_date);
+  if (Number.isNaN(snapshotDate.valueOf())) {
+    return false;
+  }
+
+  return (unit.weekNumber(snapshotDate) ?? 0) < 0;
+}
+
+export function hasOnlyNotStartedStatuses(snapshot: TaskCompletionSnapshot): boolean {
+  const aggregatedTaskStats = aggregateAllCampuses(snapshot.stats);
+  const taskStatusEntries = Object.values(aggregatedTaskStats);
+
+  if (taskStatusEntries.length === 0) {
+    return false;
+  }
+
+  return taskStatusEntries.every((taskStatusCounts) =>
+    Object.entries(taskStatusCounts).every(
+      ([status, value]) => status === 'not_started' || Number(value) === 0,
+    ),
+  );
+}
+
+export function shouldIncludeSnapshot(unit: Unit, snapshot: TaskCompletionSnapshot): boolean {
+  return !(isPreWeekZeroSnapshot(unit, snapshot) && hasOnlyNotStartedStatuses(snapshot));
+}
+
+export function isEmptySnapshot(snapshot: TaskCompletionSnapshot): boolean {
+  return Object.values(aggregateAllCampuses(snapshot.stats)).every((taskStatusCounts) =>
+    Object.values(taskStatusCounts).every((value) => Number(value) === 0),
+  );
+}
+
+export function dropLeadingEmptySnapshots(
+  snapshots: TaskCompletionSnapshot[],
+): TaskCompletionSnapshot[] {
+  const firstPopulated = snapshots.findIndex((snapshot) => !isEmptySnapshot(snapshot));
+  return firstPopulated <= 0 ? snapshots : snapshots.slice(firstPopulated);
+}

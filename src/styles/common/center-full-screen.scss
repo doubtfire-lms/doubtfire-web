@@ -1,9 +1,0 @@
-//
-// Ensures an element takes up the full screen and centered
-//
-.center-full-screen {
-  @include flex-center;
-  @media (min-width: $screen-sm) {
-    height: 100vh;
-  }
-}

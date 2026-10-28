@@ -1,10 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { Project, Tutorial, TutorialStream, Unit } from 'src/app/api/models/doubtfire-model';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {Project, Tutorial, TutorialStream, Unit} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'student-tutorial-select',
   templateUrl: 'student-tutorial-select.component.html',
   styleUrls: ['student-tutorial-select.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class StudentTutorialSelectComponent {
   @Input() unit: Unit;
@@ -26,8 +28,12 @@ export class StudentTutorialSelectComponent {
   public tutorialsForStreamAndStudent(student: Project, stream?: TutorialStream) {
     return this.unit.tutorials.filter((tutorial) => {
       const result: boolean =
-        student.campus == null || tutorial.campus == null || student.campus.id === tutorial.campus.id;
-      if (!result) return result;
+        student.campus == null ||
+        tutorial.campus == null ||
+        student.campus.id === tutorial.campus.id;
+      if (!result) {
+        return result;
+      }
       if (tutorial.tutorialStream && stream) {
         return tutorial.tutorialStream.abbreviation === stream.abbreviation;
       } else if (!tutorial.tutorialStream && !stream) {

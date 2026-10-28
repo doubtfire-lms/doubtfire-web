@@ -1,6 +1,8 @@
+import {PDFDocumentProxy, PdfViewerComponent} from 'ng2-pdf-viewer';
 import {HttpResponse} from '@angular/common/http';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   Inject,
   Input,
@@ -9,7 +11,6 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {PDFDocumentProxy, PdfViewerComponent} from 'ng2-pdf-viewer';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
 
@@ -17,6 +18,8 @@ import {AlertService} from '../services/alert.service';
   selector: 'f-pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit {
   private readonly ZOOM_MIN = 0.5;

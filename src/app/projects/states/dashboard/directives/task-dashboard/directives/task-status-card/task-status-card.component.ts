@@ -1,47 +1,63 @@
-import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {UIRouter} from '@uirouter/core';
-import * as _ from 'lodash';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
+import {Subscription} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum, TaskStatusUiData} from 'src/app/api/models/task-status';
+import {UnitRole} from 'src/app/api/models/unit-role';
 import {TaskService} from 'src/app/api/services/task.service';
+import {UserService} from 'src/app/api/services/user.service';
 import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
 import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {ExistingSubmissionChoiceModalService} from 'src/app/tasks/modals/existing-submission-choice-modal/existing-submission-choice-modal.service';
+import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
 
-import {Project} from 'src/app/api/models/project';
-import {UserService} from 'src/app/api/services/user.service';
-import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 @Component({
   selector: 'f-task-status-card',
   templateUrl: './task-status-card.component.html',
   styleUrls: ['./task-status-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
+export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDestroy {
   triggers: TaskStatusUiData[];
   textCss: string;
+  private taskStatusSub: Subscription;
+
   constructor(
     private extensions: ExtensionModalService,
     private taskService: TaskService,
-    private router: UIRouter,
     private qrModalService: QrModalService,
     private doubtfireConstants: DoubtfireConstants,
     private submissionTypeModalService: SubmissionTypeModalService,
     private userService: UserService,
     private feedbackAppealService: FeedbackAppealModalService,
-  ) {}
+    private existingSubmissionChoiceModal: ExistingSubmissionChoiceModalService,
+  ) {
+    this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
+      if (this.isCurrentTask(task)) {
+        this.reapplyTriggers();
+      }
+    });
+  }
 
   @Input() task: Task;
   taskStatusColor: string;
-
-  private project?: Project;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.task) {
       this.task = changes.task.currentValue;
       this.reapplyTriggers();
       this.taskStatusColor = this.taskService.statusColors.get(this.task.statusClass());
-      this.project = this.task.project;
       this.textCss = `::ng-deep f-task-status-card .mat-mdc-text-field-wrapper.mdc-text-field {
         background-color: #${this.taskStatusColor} !important;
       }`;
@@ -52,21 +68,24 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     document.getElementsByTagName('style')[0].append(this.textCss);
   }
 
-  reapplyTriggers(): void {
-    // if tutor is in queryParam
-    if (this.router.globals.params.tutor != null) {
-      this.triggers = this.taskService.statusKeys
-        .map((k) => this.taskService.statusData(k))
-        .filter((trigger) => {
-          if (trigger.status !== 'complete') {
-            return true;
-          }
+  ngOnDestroy(): void {
+    this.taskStatusSub?.unsubscribe();
+  }
 
-          return this.task.canMarkComplete || this.task.status === 'complete';
-        });
+  private isCurrentTask(task: Task): boolean {
+    return (
+      task &&
+      this.task &&
+      task.project?.id === this.task.project?.id &&
+      task.definition?.id === this.task.definition?.id
+    );
+  }
+
+  reapplyTriggers(): void {
+    if (this.isTutor) {
+      this.triggers = this.taskService.statusKeys.map((k) => this.taskService.statusData(k));
     } else {
-      const studentTriggers = _.map(
-        this.taskService.switchableStates.student as TaskStatusEnum[],
+      const studentTriggers = (this.taskService.switchableStates.student as TaskStatusEnum[]).map(
         (k) => this.taskService.statusData(k),
       );
       const filteredStudentTriggers = this.task.filterFutureStates(studentTriggers);
@@ -76,7 +95,6 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
         this.triggers.push(this.taskService.statusData(this.task.status));
       }
     }
-    this.taskService.statusKeys;
   }
 
   public isReadyForFeedback(): boolean {
@@ -87,19 +105,44 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     return this.task.status === 'assess_in_portfolio';
   }
 
-  triggerTransition(trigger: TaskStatusEnum): void {
+  triggerTransition(change: MatSelectChange<TaskStatusEnum>): void {
+    const trigger = change.value;
+
+    // Undo the pick; [value] moves the select once the server actually changes task.status
+    change.source.value = this.task.status;
+
     if (trigger === 'complete' && !this.task.canMarkComplete) {
       return;
     }
 
     if (trigger === 'ready_for_feedback') {
-      this.uploadSubmission();
+      this.selectReadyForFeedback();
     } else {
       this.task.triggerTransition(trigger);
     }
   }
 
+  private selectReadyForFeedback(): void {
+    if (
+      this.isTutor &&
+      this.task.status !== 'ready_for_feedback' &&
+      this.task.requiresFileUpload() &&
+      this.task.hasPdf &&
+      this.task.submissionDate
+    ) {
+      this.existingSubmissionChoiceModal.show(this.task);
+      return;
+    }
+
+    this.uploadSubmission();
+  }
+
   uploadSubmission(): void {
+    if (this.isTutor && this.task.requiresFileUpload()) {
+      this.task.presentTaskSubmissionModal('ready_for_feedback');
+      return;
+    }
+
     if (this.task.definition.assessInPortfolioOnly) {
       this.submissionTypeModalService.show(this.task);
     } else {
@@ -128,5 +171,22 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
 
   openFeedbackAppealModal(): void {
     this.feedbackAppealService.show(this.task);
+  }
+
+  public get currentUnitRole(): UnitRole | undefined {
+    const currentUser = this.userService.currentUser;
+    return this.task?.project?.unit?.staff?.find((ur) => ur.user?.id === currentUser?.id);
+  }
+
+  public get isTutor(): boolean {
+    return (
+      this.currentUnitRole?.role === 'Convenor' ||
+      this.currentUnitRole?.role === 'Tutor' ||
+      this.userService.currentUser?.systemRole === 'Admin'
+    );
+  }
+
+  public get canManageStaffTask(): boolean {
+    return this.currentUnitRole?.role === 'Convenor' || this.currentUnitRole?.role === 'Tutor';
   }
 }

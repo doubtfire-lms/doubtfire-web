@@ -1,11 +1,10 @@
-import {UnitRole, UnitService, User} from 'src/app/api/models/doubtfire-model';
-import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
-import {Injectable} from '@angular/core';
+import {CachedEntityService} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiUrl';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {UnitRole, UnitService, User} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
-import {AuthenticationService} from './authentication.service';
-import {Observable, tap} from 'rxjs';
+import API_URL from 'src/app/config/constants/apiUrl';
 
 @Injectable()
 export class UserService extends CachedEntityService<User> {

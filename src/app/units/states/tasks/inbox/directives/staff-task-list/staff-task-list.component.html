@@ -1,71 +1,69 @@
 <!-- The search bar template -->
-<ng-template #OmnisearchTemplate let-collapsable="collapsable" let-mobile="mobile">
-  <div
-    class="omnisearch rounded-t-2xl md:rounded-2xl"
-    [ngClass]="{expanded: showSearchOptions, mobile: mobile}"
-  >
+<ng-template #OmnisearchTemplate let-mobile="mobile">
+  <div class="omnisearch rounded-t-2xl md:rounded-2xl" [ngClass]="{mobile: mobile}">
     <div class="flex items-center">
-      <button mat-icon-button aria-label="Search Icon" disabled class="flex-none flex items-center">
-        <mat-icon class="flex items-center" disabled>search</mat-icon>
-      </button>
+      <mat-icon class="mr-1 ml-2 flex flex-none items-center text-gray-500">search</mat-icon>
 
       <div class="grow">
         <input
-          class="search w-full"
           autocomplete="off"
+          class="search w-full"
+          placeholder="Search Inbox"
           spellcheck="false"
           type="text"
-          placeholder="Search Inbox"
           [(ngModel)]="filters.studentName"
           (ngModelChange)="applyFilters()"
         />
       </div>
-      @if (collapsable) {
-        <button
-          class="flex-none flex items-center"
-          matTooltip="Filter options"
-          matTooltipPosition="below"
-          matTooltipShowDelay="400"
-          mat-icon-button
-          aria-label="Inbox search dropdown"
-          (click)="showSearchOptions = !showSearchOptions"
+      <button
+        aria-label="Inbox sort and filter options"
+        class="flex flex-none items-center"
+        mat-icon-button
+        matTooltip="Sort and filter tasks"
+        matTooltipPosition="below"
+        matTooltipShowDelay="400"
+        (click)="filtersExpanded = !filtersExpanded"
+      >
+        <mat-icon
+          class="text-gray-500"
+          matBadgeColor="accent"
+          matBadgeSize="small"
+          [matBadge]="activeViewPreferenceCount || null"
+          >tune</mat-icon
         >
-          <mat-icon>{{ showSearchOptions ? 'arrow_drop_up' : 'arrow_drop_down' }}</mat-icon>
-        </button>
-      }
+      </button>
       @if (!isTaskDefMode) {
         <button
-          class="flex-none flex items-center"
-          matTooltip="Refresh the task inbox"
+          aria-label="Refresh tasks"
+          class="flex flex-none items-center"
+          mat-icon-button
+          matTooltip="Refresh the task list"
           matTooltipPosition="below"
           matTooltipShowDelay="400"
-          matTooltip
-          mat-icon-button
-          aria-label="Refresh Inbox"
           (click)="refreshTasks()"
         >
-          <mat-icon>refresh</mat-icon>
+          <mat-icon class="text-gray-500">refresh</mat-icon>
         </button>
       }
       @if (isTaskDefMode) {
         <button
+          aria-label="Menu to download submission files"
           class="flex items-center"
           mat-icon-button
           matTooltip="More options"
           matTooltipPosition="below"
           matTooltipShowDelay="400"
           [matMenuTriggerFor]="menu"
-          aria-label="Menu to download submission files"
         >
           <mat-icon>more_vert</mat-icon>
         </button>
       }
       <mat-menu #menu="matMenu">
         <button
+          aria-label="Refresh tasks"
           mat-menu-item
-          matTooltip="Refresh the task inbox"
+          matTooltip="Refresh the task list"
           matTooltipPosition="above"
-          aria-label="Refresh Inbox"
           (click)="refreshTasks()"
         >
           <mat-icon>refresh</mat-icon>
@@ -87,8 +85,8 @@
         }
         <button
           mat-menu-item
-          (click)="downloadJPLAGReport()"
           [disabled]="!this.filters?.taskDefinition?.hasJplagReport"
+          (click)="downloadJPLAGReport()"
         >
           <mat-icon>download</mat-icon>
           <span>Download JPLAG Report</span>
@@ -97,94 +95,184 @@
     </div>
     <mat-accordion>
       <mat-expansion-panel
-        class="search-settings-panel mat-elevation-z0"
+        class="filters-panel mat-elevation-z0"
         disabled
         hideToggle
-        [expanded]="!collapsable || showSearchOptions"
+        [expanded]="filtersExpanded"
+        (afterCollapse)="viewport?.checkViewportSize()"
+        (afterExpand)="viewport?.checkViewportSize()"
       >
-        <form class="search-options">
-          <div class="task-definition">
-            <div class="flex flex-row justify-between items-center">
-              <mat-form-field class="flex-1">
-                <mat-label>Task</mat-label>
-                <mat-select
-                  [(ngModel)]="filters.taskDefinitionIdSelected"
-                  name="taskDefID"
-                  (selectionChange)="taskDefinitionIdChanged()"
-                >
-                  <mat-option value="" [hidden]="taskData.taskDefMode"
-                    >All Task Definitions</mat-option
-                  >
-                  @for (td of unit.taskDefinitionCache.values | async; track td) {
-                    <mat-option [value]="td.id">
-                      <span class="truncate">{{ td.abbreviation + ' - ' + td.name }}</span>
-                    </mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-              <button
-                [disabled]="
-                  filters.taskDefinitionIdSelected || !filters.taskDefinitionIdSelected === ''
-                "
-                mat-icon-button
-                aria-label="Sort by task definition icon"
-                (click)="toggleTaskDefSort()"
-              >
-                <mat-icon>{{ states[taskDefSort].icon }}</mat-icon>
-              </button>
-            </div>
-          </div>
-          <!--/task-definition-->
-          <div class="flex flex-row justify-between items-center">
-            <mat-form-field class="flex-1">
-              <mat-label>Students</mat-label>
+        <div class="my-2 text-xs font-bold tracking-normal text-gray-500 uppercase">Show</div>
+        <div class="mb-3 flex flex-col gap-3">
+          @if (canViewInboxAs) {
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>View inbox as</mat-label>
               <mat-select
-                [(ngModel)]="filters.tutorialIdSelected"
-                name="tutorial"
-                (selectionChange)="tutorialIdChanged()"
+                name="viewAs"
+                [(ngModel)]="viewAsUnitRoleId"
+                (selectionChange)="viewAsChanged()"
               >
-                @for (t of studentFilter; track t) {
-                  <mat-option [value]="t.id">
-                    <span class="truncate">{{ t.inboxDescription }}</span>
+                @for (option of viewAsOptions; track option.id) {
+                  <mat-option [value]="option.id">
+                    <span class="truncate">{{ option.name }}</span>
                   </mat-option>
                 }
               </mat-select>
             </mat-form-field>
-            <button
-              disabled
-              mat-icon-button
-              aria-label="Sort by tutorial icon"
-              (click)="toggleTutorialSort()"
+          }
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Task</mat-label>
+            <mat-select
+              name="taskDefID"
+              [(ngModel)]="filters.taskDefinitionIdSelected"
+              (selectionChange)="taskDefinitionIdChanged()"
             >
-              <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
-            </button>
-          </div>
-          <div class="flex flex-row justify-between items-center">
-            <mat-form-field class="flex-1">
-              <mat-label>Tutors</mat-label>
-              <mat-select
-                [disabled]="filters.tutorialIdSelected !== 'all'"
-                [(ngModel)]="filters.unitRoleIdSelected"
-                name="tutor"
-                (selectionChange)="unitRoleIdChanged()"
-              >
-                @for (g of tutorGroups; track g.label) {
-                  <mat-optgroup [label]="g.label">
-                    @for (t of g.options; track t.id) {
-                      <mat-option [value]="t.id">
-                        <span class="truncate">{{ t.inboxDescription }}</span>
-                      </mat-option>
-                    }
-                  </mat-optgroup>
+              <mat-option value="" [hidden]="taskData.taskDefMode">All Task Definitions</mat-option>
+              @for (td of unit.taskDefinitionCache.values | async; track td) {
+                <mat-option [value]="td.id">
+                  <span class="truncate">{{ td.abbreviation + ' - ' + td.name }}</span>
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Students</mat-label>
+            <mat-select
+              name="tutorial"
+              [disabled]="isViewingAsOther"
+              [(ngModel)]="filters.tutorialIdSelected"
+              (selectionChange)="tutorialIdChanged(true, $event.value)"
+            >
+              @for (t of studentFilter; track t) {
+                <mat-option [value]="t.id">
+                  <span class="truncate">{{ t.inboxDescription }}</span>
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-label>Tutors</mat-label>
+            <mat-select
+              name="tutor"
+              [disabled]="isViewingAsOther || filters.tutorialIdSelected !== 'all'"
+              [(ngModel)]="filters.unitRoleIdSelected"
+              (selectionChange)="unitRoleIdChanged()"
+            >
+              @for (g of tutorGroups; track g.label) {
+                <mat-optgroup [label]="g.label">
+                  @for (t of g.options; track t.id) {
+                    <mat-option [value]="t.id">
+                      <span class="truncate">{{ t.inboxDescription }}</span>
+                    </mat-option>
+                  }
+                </mat-optgroup>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="mb-1 text-xs font-bold tracking-normal text-gray-500 uppercase">Sort tasks</div>
+        <div class="mb-2">
+          @for (option of sortOptions; track option.value) {
+            <button
+              class="flex h-10 w-full items-center gap-2 px-2 text-left text-sm hover:bg-gray-50"
+              type="button"
+              [ngClass]="{
+                'bg-blue-50 text-formatif-blue': viewPreferences.sortBy === option.value,
+                'text-gray-700': viewPreferences.sortBy !== option.value,
+              }"
+              (click)="setSortBy(option.value)"
+            >
+              <mat-icon class="inbox-menu-icon shrink-0">{{ option.icon }}</mat-icon>
+              <span class="min-w-0 flex-1 truncate">{{ sortLabelFor(option) }}</span>
+              @if (isSortSelected(option)) {
+                @if (sortDirectionLabelFor(option); as directionLabel) {
+                  <span class="shrink-0 text-xs font-medium">{{ directionLabel }}</span>
+                } @else {
+                  <mat-icon class="inbox-menu-icon shrink-0">check</mat-icon>
                 }
-              </mat-select>
-            </mat-form-field>
-            <button disabled mat-icon-button aria-label="Sort by tutor icon">
-              <mat-icon>{{ states[tutorialSort].icon }}</mat-icon>
+              }
+            </button>
+          }
+        </div>
+
+        <div class="mb-1 text-xs font-bold tracking-normal text-gray-500 uppercase">Filters</div>
+        <div class="flex flex-col gap-1">
+          @for (option of filterOptions; track option.key) {
+            <mat-checkbox
+              color="primary"
+              matTooltipPosition="right"
+              matTooltipShowDelay="400"
+              [matTooltip]="option.tooltip"
+              [ngModel]="isFilterActive(option.key)"
+              (ngModelChange)="toggleFilter(option.key, $event)"
+            >
+              {{ option.label }}
+            </mat-checkbox>
+          }
+          @if (viewType === 'explorer') {
+            <mat-checkbox
+              color="primary"
+              [ngModel]="isFilterActive('showWithdrawnStudents')"
+              (ngModelChange)="toggleFilter('showWithdrawnStudents', $event)"
+            >
+              Show tasks from withdrawn students
+            </mat-checkbox>
+          }
+        </div>
+
+        @if (showStatusFilter) {
+          <div class="mt-3 mb-1 flex items-center justify-between gap-2">
+            <span class="text-xs font-bold tracking-normal text-gray-500 uppercase">Status</span>
+            <button
+              class="text-xs text-formatif-blue disabled:text-gray-400"
+              type="button"
+              [disabled]="!viewPreferences.statuses.length"
+              (click)="clearStatusFilter()"
+            >
+              Clear
             </button>
           </div>
-          <!--/students-->
-        </form>
+          <div class="flex flex-wrap gap-1">
+            @for (option of statusOptions; track option.status) {
+              <button
+                class="flex items-center gap-1.5 rounded-full border px-2 py-1 text-xs"
+                type="button"
+                [ngClass]="{
+                  'border-formatif-blue bg-blue-50 text-formatif-blue': isStatusSelected(
+                    option.status
+                  ),
+                  'border-gray-200 text-gray-700 hover:bg-gray-50': !isStatusSelected(
+                    option.status
+                  ),
+                }"
+                (click)="toggleStatus(option.status)"
+              >
+                <span
+                  class="size-2 shrink-0 rounded-full"
+                  [style.background-color]="option.color"
+                ></span>
+                <span class="truncate">{{ option.label }}</span>
+                <span class="text-gray-400">{{ option.count }}</span>
+              </button>
+            }
+          </div>
+        }
+
+        <div class="mt-2 flex flex-col items-center text-xs text-gray-500">
+          <button
+            class="text-formatif-blue disabled:text-gray-400"
+            mat-button
+            type="button"
+            [disabled]="!hasModifiedViewPreferences"
+            (click)="resetViewPreferences()"
+          >
+            Reset
+          </button>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
   </div>
@@ -192,10 +280,8 @@
 
 <!-- Narrow width search dialog template-->
 <ng-template #searchDialog>
-  <ng-container
-    *ngTemplateOutlet="OmnisearchTemplate; context: {collapsable: false, mobile: true}"
-  ></ng-container>
-  <div mat-dialog-actions align="end">
+  <ng-container *ngTemplateOutlet="OmnisearchTemplate; context: {mobile: true}"></ng-container>
+  <div align="end" mat-dialog-actions>
     <button mat-button [mat-dialog-close]>OK</button>
   </div>
 </ng-template>
@@ -206,37 +292,76 @@
   [ngClass]="isNarrow ? 'narrow-width' : 'full-width'"
 >
   <div class="openSearchDialog" [hidden]="!isNarrow">
-    <button mat-icon-button (click)="openDialog()" aria-label="Seach Button">
+    <button aria-label="Seach Button" mat-icon-button (click)="openDialog()">
       <mat-icon>search</mat-icon>
     </button>
   </div>
 
   @if (!isNarrow) {
     <div>
-      <ng-container
-        *ngTemplateOutlet="OmnisearchTemplate; context: {collapsable: true, mobile: false}"
-      ></ng-container>
+      <ng-container *ngTemplateOutlet="OmnisearchTemplate; context: {mobile: false}"></ng-container>
     </div>
   }
 
-  <div class="center-task-list" [hidden]="!loading || isNarrow">
-    <mat-icon>hourglass_bottom</mat-icon>
-  </div>
+  @if (loading) {
+    <div class="min-h-0 flex-1 overflow-hidden" [ngClass]="isNarrow ? 'pt-0' : 'pt-[10px]'">
+      @for (row of skeletonRows; track row) {
+        <div
+          class="flex h-15 items-center"
+          [ngClass]="isNarrow ? 'justify-center gap-0 px-[5px]' : 'gap-[10px] pr-[8px] pl-[6px]'"
+        >
+          <ngx-skeleton-loader
+            appearance="circle"
+            class="flex-none"
+            [class.hidden]="isNarrow"
+            [theme]="{width: '8px', height: '8px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <ngx-skeleton-loader
+            appearance="circle"
+            [theme]="{width: '30px', height: '30px', margin: '0'}"
+          ></ngx-skeleton-loader>
+          <div class="min-w-0 flex-1" [hidden]="isNarrow">
+            <ngx-skeleton-loader
+              [theme]="{
+                height: '10px',
+                width: '78%',
+                'border-radius': '999px',
+                margin: '6px 0',
+              }"
+            ></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{
+                height: '10px',
+                width: '56%',
+                'border-radius': '999px',
+                margin: '6px 0',
+              }"
+            ></ngx-skeleton-loader>
+          </div>
+          <ngx-skeleton-loader
+            appearance="circle"
+            [hidden]="isNarrow"
+            [theme]="{width: '32px', height: '32px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        </div>
+      }
+    </div>
+  }
 
   <div class="center-task-list" [hidden]="loading || filteredTasks?.length !== 0 || isNarrow">
     <mat-icon>done_all</mat-icon>
   </div>
 
   <!--/search-options-->
-  @if (filteredTasks) {
+  @if (filteredTasks && !loading) {
     <cdk-virtual-scroll-viewport class="tasks-viewport scrollable" itemSize="60">
       @if (filteredTasks.length) {
-        <div class="w-full text-gray-400 text-center mt-4">{{ filteredTasks.length }} Tasks</div>
+        <div class="mt-2.5 w-full text-center text-gray-400">{{ filteredTasks.length }} Tasks</div>
       }
       <mat-list class="m-0 p-0">
         <mat-list-item
-          class="clearfix"
           *cdkVirtualFor="let task of filteredTasks; templateCacheSize: 0"
+          class="clearfix"
           style="padding: 0; height: 60px"
         >
           @if (task) {
@@ -245,55 +370,58 @@
               id="{{ task.taskKeyToIdString() }}"
               [ngClass]="{
                 selected: isSelectedTask(task),
-                'item-content': task.statusClass()
+                'item-content': task.statusClass(),
               }"
             >
               <div
-                (click)="setSelectedTask(task)"
                 class="inbox-entry flex items-center"
                 [ngClass]="{hover: task.hover}"
-                (mouseover)="task.hover = allowHover"
+                (click)="setSelectedTask(task)"
                 (mouseout)="task.hover = task.optionsOpened"
+                (mouseover)="task.hover = allowHover"
               >
                 <span
                   class="notification"
                   [ngClass]="{
                     active: task.numNewComments > 0 || task.similaritiesDetected,
-                    similarities: task.similaritiesDetected
+                    similarities: task.similaritiesDetected,
                   }"
                 ></span>
-                <user-icon class="self-center" [user]="task.project.student" [size]="30">
+                <user-icon class="self-center" [size]="30" [user]="task.project.student">
                 </user-icon>
-                <div class="task-list-data truncate flex-1" [hidden]="isNarrow">
-                  <h4 class="student-name flex min-w-0 items-center gap-1">
+                <div class="task-list-data flex-1 truncate" [hidden]="isNarrow">
+                  <h4 class="student-name flex min-w-0 items-center gap-0.5">
                     @if (task.moderationType === 'escalation') {
                       <mat-icon
-                        matTooltip="This task has been escalated by the student"
                         class="shrink-0 text-amber-500"
+                        matTooltip="This task has been escalated by the student"
                         >gavel</mat-icon
                       >
                     }
                     @if (getWarningIcon(task) === 'warning') {
                       <mat-icon
-                        matTooltip="Feedback due soon — please review before it escalates."
                         class="shrink-0 text-amber-500"
+                        matTooltip="Feedback due soon — please review before it escalates."
                       >
                         warning
                       </mat-icon>
                     } @else if (getWarningIcon(task) === 'overflow') {
                       <mat-icon
+                        class="shrink-0 text-red-500"
                         [matTooltip]="
                           'Feedback overdue by ' +
                           task.daysSinceSubmission() +
                           ' days — this task has been escalated for urgent review.'
                         "
-                        class="shrink-0 text-red-500"
                       >
                         watch_later
                       </mat-icon>
                     }
 
                     <span class="truncate">{{ task.project.student.name }}</span>
+                    @if (viewType === 'explorer' && !task.project.enrolled) {
+                      <span class="shrink-0 text-xs text-gray-500">(Withdrawn)</span>
+                    }
                   </h4>
                   <div class="task-details truncate">
                     {{ task.definition.abbreviation }} -
@@ -317,15 +445,15 @@
                   </div>
                 }
                 <status-icon
-                  [hidden]="isNarrow"
+                  class="ml-2"
                   matBadge="{{ task.qualityPts }}/{{ task.definition.maxQualityPts }}"
-                  [matBadgeHidden]="!task.hasQualityPoints() || !task.qualityPts"
                   matBadgePosition="before"
+                  [hidden]="isNarrow"
+                  [matBadgeHidden]="!task.hasQualityPoints()"
                   [status]="task.status"
-                  class="ml-3"
                 ></status-icon>
                 <div class="overflow" [hidden]="isNarrow">
-                  <button [hidden]="task.hover" mat-icon-button aria-label="task-overflow">
+                  <button aria-label="task-overflow" mat-icon-button [hidden]="task.hover">
                     <!-- <mat-icon class="warn-icon" *ngIf="task.similaritiesDetected">remove_red_eye</mat-icon> -->
 
                     @if (task.pinned) {
@@ -335,24 +463,24 @@
                     }
                   </button>
                   <button
-                    [hidden]="!task.hover"
-                    mat-icon-button
                     aria-label="task overflow"
-                    [matMenuTriggerFor]="overflowMenu"
-                    (menuOpened)="setSelectedTask(task); task.optionsOpened = true"
-                    (menuClosed)="task.hover = false; task.optionsOpened = false"
+                    mat-icon-button
                     matTooltip="Submission options"
                     matTooltipPosition="right"
                     matTooltipShowDelay="400"
+                    [hidden]="!task.hover"
+                    [matMenuTriggerFor]="overflowMenu"
+                    (menuClosed)="task.hover = false; task.optionsOpened = false"
+                    (menuOpened)="setSelectedTask(task); task.optionsOpened = true"
                   >
                     <mat-icon>more_horiz</mat-icon>
                   </button>
                   <mat-menu #overflowMenu="matMenu" yPosition="below">
-                    <button mat-menu-item (click)="togglePin(task)" class="flex items-center">
+                    <button class="flex items-center" mat-menu-item (click)="togglePin(task)">
                       <mat-icon class="mr-0">
                         {{ task.pinned ? 'remove_circle' : 'add_alert' }}
                       </mat-icon>
-                      <span class="ml-5"
+                      <span class="ml-3"
                         >{{ task.pinned ? 'Unpin from inbox' : 'Pin to inbox' }}
                       </span>
                     </button>

@@ -1,4 +1,5 @@
-import { DragDropDirective } from './drag-drop.directive';
+import {describe, expect, it} from 'vitest';
+import {DragDropDirective} from './drag-drop.directive';
 
 describe('DragDropDirective', () => {
   it('should create an instance', () => {

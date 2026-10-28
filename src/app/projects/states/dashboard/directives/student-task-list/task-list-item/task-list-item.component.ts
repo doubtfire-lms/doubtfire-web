@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
 import {GradeService} from 'src/app/common/services/grade.service';
 
@@ -6,13 +6,15 @@ import {GradeService} from 'src/app/common/services/grade.service';
   selector: 'task-list-item',
   templateUrl: 'task-list-item.component.html',
   styleUrls: ['task-list-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskListItemComponent implements OnInit {
   @Input() task: Task;
-  @Input() setSelectedTask: any;
-  @Input() isSelectedTask: any;
+  @Input() setSelectedTask: (task: Task) => void;
+  @Input() isSelectedTask: (task: Task) => boolean;
 
-  public gradeNames: {};
+  public gradeNames: GradeService['grades'];
 
   constructor(private gs: GradeService) {}
 

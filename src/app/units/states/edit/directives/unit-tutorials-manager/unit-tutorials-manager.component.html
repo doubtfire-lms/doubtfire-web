@@ -1,20 +1,20 @@
 <div>
   <!-- <df-unit-tutorials-list [unit]="unit"></df-unit-tutorials-list> -->
   @for (stream of unit.tutorialStreams; track stream) {
-    <df-unit-tutorials-list [unit]="unit" [stream]="stream"></df-unit-tutorials-list>
+    <df-unit-tutorials-list [stream]="stream" [unit]="unit"></df-unit-tutorials-list>
   } @empty {
-    <div class="no-tutorials container">
-      <div class="flex flex-col justify-center items-center max-w-4xl mx-auto">
+    <div class="no-tutorials container mx-auto">
+      <div class="mx-auto flex max-w-4xl flex-col items-center justify-center">
         <mat-icon>groups</mat-icon>
         <h1>No Tutorials</h1>
-        <p class="p-2 text-gray-500 text-center">
+        <p class="p-1 text-center text-gray-500">
           There are no tutorials yet. Create a tutorial stream to begin adding tutorials.
         </p>
       </div>
     </div>
   }
-  <div class="w-full flex justify-center mt-5">
-    <button mat-raised-button class="mx-auto" color="primary" [matMenuTriggerFor]="activities">
+  <div class="mt-3 flex w-full justify-center">
+    <button class="mx-auto" color="primary" mat-raised-button [matMenuTriggerFor]="activities">
       <mat-icon>add</mat-icon>
       New Tutorial Stream
     </button>

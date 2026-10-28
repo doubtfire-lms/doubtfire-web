@@ -1,0 +1,108 @@
+@use '@angular/material' as mat;
+
+@use 'theme' as *;
+@use 'styles/mixins/scrollable' as *;
+
+$my-palette: mat.m2-define-palette($md-formatif);
+
+:host {
+  --background-gray: rgba(0, 0, 0, 0.04);
+  padding-right: 8px;
+}
+
+:host(.collapsed) {
+  padding-right: 0;
+
+  .mat-mdc-list-item {
+    overflow: visible;
+  }
+
+  ::ng-deep .mdc-list-item__content {
+    overflow: visible;
+  }
+}
+
+::ng-deep .cdk-virtual-scroll-content-wrapper {
+  width: 100%;
+}
+
+.task-list {
+  height: 100%;
+}
+
+.scrollable {
+  height: 100%;
+  @include scrollable();
+}
+
+.omnisearch {
+  font-size: 15px;
+  padding-right: 10px;
+  text-align: left;
+
+  &.expanded {
+    height: 100%;
+  }
+
+  .search {
+    background-color: transparent;
+    border: hidden;
+    outline: none;
+  }
+
+  .mdc-icon-button {
+    display: flex;
+  }
+}
+
+.task-list-menu-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+::ng-deep .task-list-filters-menu.mat-mdc-menu-panel {
+  margin-left: 50px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.task-list-data {
+  margin-top: 0px;
+  padding-left: 6px;
+
+  .task-title {
+    font-size: 15px;
+    margin-bottom: -2px;
+    margin-top: 8px;
+  }
+
+  .task-details {
+    margin-bottom: 0px;
+    font-size: 12px;
+  }
+}
+
+.mat-mdc-list-item .item-content {
+  height: 60px;
+  border-radius: 6px;
+}
+
+.mat-mdc-list-item .item-content:hover {
+  cursor: pointer;
+}
+
+.mat-mdc-list-item.selected {
+  background-color: var(--background-gray);
+}
+
+.task-inbox.narrow-width .mat-mdc-list-item .item-content.selected {
+  margin-right: 12px;
+}
+
+.tasks-viewport {
+  height: 100%;
+}

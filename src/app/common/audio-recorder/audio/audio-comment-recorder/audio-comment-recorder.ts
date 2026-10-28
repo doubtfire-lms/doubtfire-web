@@ -1,18 +1,24 @@
-import { Inject, Input, Component } from '@angular/core';
-import { BaseAudioRecorderComponent } from '../base-audio-recorder';
-import { audioRecorderService } from 'src/app/ajs-upgraded-providers';
-import { TaskComment, TaskCommentService, Task } from 'src/app/api/models/doubtfire-model';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {Task, TaskComment, TaskCommentService} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {MediaRecorderService} from 'src/app/common/services/recorder-service';
+import {BaseAudioRecorderComponent} from '../base-audio-recorder';
 
-@Component({ selector: 'audio-comment-recorder', templateUrl: './audio-comment-recorder.html' })
-export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
+@Component({
+  selector: 'audio-comment-recorder',
+  templateUrl: './audio-comment-recorder.html',
+  providers: [MediaRecorderService],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
+})
+export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent implements OnInit {
   @Input() task: Task;
   canvas: HTMLCanvasElement;
   canvasCtx: CanvasRenderingContext2D;
-  isSending: boolean;
+  isSending: boolean = false;
 
   constructor(
-    @Inject(audioRecorderService) mediaRecorderService: any,
+    private mediaRecorderService: MediaRecorderService,
     private alerts: AlertService,
     private ts: TaskCommentService,
   ) {
@@ -35,14 +41,16 @@ export class AudioCommentRecorderComponent extends BaseAudioRecorderComponent {
     this.isSending = true;
     if (this.blob && this.blob.size > 0) {
       this.ts.addComment(this.task, this.blob, 'audio').subscribe({
-        next: (comment: TaskComment) => {
+        next: (_comment: TaskComment) => {
           this.isSending = false;
           this.scrollCommentsDown();
         },
-        error: (failure: { data: { error: any } }) => {
-          this.alerts.error(`Failed to post audio. ${failure.data != null ? failure.data.error : undefined}`);
+        error: (failure: {data: {error: string}}) => {
+          this.alerts.error(
+            `Failed to post audio. ${failure.data != null ? failure.data.error : undefined}`,
+          );
           this.isSending = false;
-        }
+        },
       });
 
       this.blob = {} as Blob;

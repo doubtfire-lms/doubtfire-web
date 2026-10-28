@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
@@ -12,12 +13,13 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import {Subscription} from 'rxjs';
+import {Subscription, of, switchMap} from 'rxjs';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {TaskDefinitionOverseerComponent} from './task-definition-overseer/task-definition-overseer.component';
 
 type TaskDefinitionSectionId =
   | 'task-details'
@@ -41,30 +43,34 @@ interface TaskDefinitionSection {
   selector: 'f-task-definition-editor',
   templateUrl: 'task-definition-editor.component.html',
   styleUrls: ['task-definition-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() taskDefinition: TaskDefinition;
   @Input() unit: Unit;
   @ViewChild('sectionScrollContainer') sectionScrollContainer: ElementRef<HTMLElement>;
+  @ViewChild(TaskDefinitionOverseerComponent)
+  overseerEditor?: TaskDefinitionOverseerComponent;
   @ViewChildren('sectionElement') sectionElements: QueryList<ElementRef<HTMLElement>>;
 
   public overseerEnabled: boolean = false;
   public activeSectionId: TaskDefinitionSectionId = 'task-details';
   public readonly sectionList: TaskDefinitionSection[] = [
     {id: 'task-details', label: 'Task Details'},
-    {id: 'task-learning-outcomes', label: 'Task Learning Outcomes'},
+    {id: 'task-learning-outcomes', label: 'Learning Outcomes'},
     {id: 'inbox', label: 'Inbox'},
     {id: 'due-dates', label: 'Due Dates'},
     {id: 'upload-requirements', label: 'Upload Requirements'},
     {id: 'task-resources', label: 'Task Resources'},
     {id: 'prerequisite-tasks', label: 'Prerequisite Tasks'},
     {id: 'discussion-prompts', label: 'Discussion Prompts'},
-    {id: 'task-assessment-automation', label: 'Task Assessment Automation'},
+    {id: 'task-assessment-automation', label: 'Overseer'},
     {id: 'scorm-test', label: 'SCORM Test'},
     {id: 'optional-settings', label: 'Optional Settings'},
   ];
 
-  private sectionElementMap = new Map<TaskDefinitionSectionId, HTMLElement>();
+  private sectionElementMap: Map<TaskDefinitionSectionId, HTMLElement> = new Map();
   private sectionChangesSubscription?: Subscription;
   private overseerEnabledSubscription?: Subscription;
   private readonly scrollTopOffsetPx: number = 112;
@@ -116,7 +122,9 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
     const container = this.sectionScrollContainer?.nativeElement;
     const target = this.sectionElementMap.get(sectionId);
 
-    if (!container || !target) return;
+    if (!container || !target) {
+      return;
+    }
 
     if (this.isContainerScrollable(container)) {
       const targetTop = this.getSectionTopInContainer(container, target);
@@ -135,7 +143,9 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
 
   public syncActiveSectionOnScroll() {
     const container = this.sectionScrollContainer?.nativeElement;
-    if (!container) return;
+    if (!container) {
+      return;
+    }
 
     if (!this.isContainerScrollable(container)) {
       this.syncActiveSectionOnWindowScroll();
@@ -167,7 +177,10 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
   }
 
   public save() {
-    this.taskDefinition.save().subscribe({
+    const taskDefinition = this.taskDefinition;
+    const saveOverseerSteps = this.overseerEditor?.saveOverseerSteps() ?? of([]);
+
+    saveOverseerSteps.pipe(switchMap(() => taskDefinition.save())).subscribe({
       next: (response) => {
         this.alerts.success('Task Saved');
         response.setOriginalSaveData(this.taskDefinitionService.mapping);

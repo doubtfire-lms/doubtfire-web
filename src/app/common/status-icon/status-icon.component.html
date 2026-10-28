@@ -1,10 +1,14 @@
 <div
-  [ngClass]="statusClass(status)"
-  matTooltip="{{ statusLabel(status) }}"
+  class="status-chip mx-0.5 flex h-7 min-h-[30px] cursor-pointer items-center justify-center rounded-full"
+  matTooltip="{{ statusLabel }}"
   matTooltipPosition="above"
+  style="font-size: 14px"
   [matTooltipDisabled]="!showTooltip"
-  class="status-chip rounded-full cursor-pointer pl-6 pr-6 min-h-12 h-12 ml-1 mr-1 flex justify-center items-center"
-  style="font-size: 14px; min-width: 50px"
+  [ngClass]="[statusClass, compact ? 'max-w-[30px] min-w-[30px]' : 'min-w-[50px] px-3']"
 >
-  <span class="text-md self-center justify-self-center"><i class="fa {{ statusIcon(status) }}"></i> </span>
+  <mat-icon
+    class="m-0 scale-75 place-self-center"
+    [ngClass]="{'font-black': resolvedStatus === 'complete'}"
+    >{{ statusIcon }}</mat-icon
+  >
 </div>

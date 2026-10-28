@@ -1,47 +1,38 @@
-<div class="flex h-full min-h-0 min-w-0 w-full max-w-full flex-col">
+<div class="flex size-full min-h-0 max-w-full min-w-0 flex-col">
   @if (isLoading) {
-    <div
-      class="flex min-h-[20rem] flex-1 flex-col items-center justify-center gap-3 text-slate-600"
-    >
+    <div class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600">
       <mat-spinner diameter="40" strokeWidth="3"></mat-spinner>
       <span>Loading archive...</span>
     </div>
   } @else if (errorMessage) {
-    <div class="flex min-h-[20rem] flex-1 flex-col items-center justify-center gap-3 text-red-700">
-      <mat-icon class="h-8 w-8">error_outline</mat-icon>
+    <div class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-red-700">
+      <mat-icon class="size-5">error_outline</mat-icon>
       <span>{{ errorMessage }}</span>
     </div>
   } @else if (!archiveFile) {
-    <div
-      class="flex min-h-[20rem] flex-1 flex-col items-center justify-center gap-3 text-slate-600"
-    >
-      <mat-icon class="h-8 w-8">folder_zip</mat-icon>
+    <div class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600">
+      <mat-icon class="size-5">folder_zip</mat-icon>
       <span>Select an archive to preview.</span>
     </div>
   } @else if (!hasFiles) {
-    <div
-      class="flex min-h-[20rem] flex-1 flex-col items-center justify-center gap-3 text-slate-600"
-    >
-      <mat-icon class="h-8 w-8">folder_off</mat-icon>
+    <div class="flex min-h-80 flex-1 flex-col items-center justify-center gap-2 text-slate-600">
+      <mat-icon class="size-5">folder_off</mat-icon>
       <span>No files to display.</span>
     </div>
   } @else {
     @if (!readOnly && saveEndpoint) {
-      <div class="flex justify-end px-3 pt-3 items-center">
+      <div class="flex items-center justify-end px-2 pt-2">
         <button
-          mat-flat-button
+          class="flex items-center gap-1"
           color="primary"
-          (click)="saveArchive()"
+          mat-flat-button
           [disabled]="!canSave"
-          class="flex items-center gap-2"
+          (click)="saveArchive()"
         >
           @if (isSaving) {
             <mat-icon class="animate-spin">sync</mat-icon>
-            Saving...
-          } @else {
-            <!-- <mat-icon>save</mat-icon> -->
-            Save Archive
           }
+          {{ isSaving ? 'Saving...' : 'Save Archive' }}
         </button>
       </div>
     }
@@ -49,31 +40,31 @@
     @if (navigationMode === 'tree') {
       <div class="flex min-h-0 w-full flex-1 border-t border-slate-200">
         <aside
-          class="w-72 max-w-[45%] min-w-[13rem] shrink-0 overflow-y-auto border-r border-slate-200 bg-slate-50/60 py-2"
+          class="w-44 max-w-[45%] min-w-52 shrink-0 overflow-y-auto border-r border-slate-200 bg-slate-50/60 py-1"
         >
           <ng-container
             [ngTemplateOutlet]="treeNodesTemplate"
             [ngTemplateOutletContext]="{$implicit: fileTreeNodes, depth: 0}"
           ></ng-container>
         </aside>
-        <div class="min-w-0 flex flex-1 flex-col">
+        <div class="flex min-w-0 flex-1 flex-col">
           <ng-container [ngTemplateOutlet]="selectedFilePane"></ng-container>
         </div>
       </div>
     } @else {
       <div
-        class="sticky top-0 z-10 w-full max-w-full shrink-0 overflow-x-auto overflow-y-hidden bg-white px-1 pb-1 min-w-0"
+        class="sticky top-0 z-10 w-full max-w-full min-w-0 shrink-0 overflow-x-auto overflow-y-hidden bg-white px-0.5 pb-0.5"
       >
         <div class="inline-block min-w-full">
           <mat-button-toggle-group
-            [value]="selectedTab"
-            (change)="selectTab($event.value)"
             class="inline-flex whitespace-nowrap"
             style="display: inline-flex; width: max-content"
+            [value]="selectedTab"
+            (change)="selectTab($event.value)"
           >
             @for (file of files; track trackByPath($index, file); let i = $index) {
-              <mat-button-toggle [value]="i" [title]="file.path" class="flex-none">
-                <span class="inline-block max-w-56 truncate align-bottom">{{ file.tabLabel }}</span>
+              <mat-button-toggle class="flex-none" [title]="file.path" [value]="i">
+                <span class="inline-block max-w-36 truncate align-bottom">{{ file.tabLabel }}</span>
               </mat-button-toggle>
             }
           </mat-button-toggle-group>
@@ -90,7 +81,7 @@
       @if (showPreview) {
         @if (file.isLoading || !file.isLoaded) {
           <div
-            class="flex min-h-[350px] w-full flex-1 items-center justify-center gap-3 text-slate-600"
+            class="flex min-h-[350px] w-full flex-1 items-center justify-center gap-2 text-slate-600"
           >
             <mat-spinner [diameter]="42"></mat-spinner>
             <span>Loading {{ file.name }}...</span>
@@ -102,9 +93,9 @@
               [ngTemplateOutletContext]="{$implicit: file.path}"
             ></ng-container>
             <ngx-monaco-editor
-              class="archive-monaco block h-full w-full flex-1"
-              [options]="editorOptionsForSelectedFile"
+              class="archive-monaco block size-full flex-1"
               [ngModel]="file.textContent"
+              [options]="editorOptionsForSelectedFile"
               (ngModelChange)="onEditorChange($event)"
             ></ngx-monaco-editor>
           </div>
@@ -114,11 +105,11 @@
               [ngTemplateOutlet]="filePathLabel"
               [ngTemplateOutletContext]="{$implicit: file.path}"
             ></ng-container>
-            <div class="flex min-h-[350px] w-full flex-1 items-center justify-center p-4">
+            <div class="flex min-h-[350px] w-full flex-1 items-center justify-center p-2.5">
               <img
                 class="max-h-full max-w-full object-contain"
-                [src]="file.blobUrl"
                 [alt]="file.name"
+                [src]="file.blobUrl"
               />
             </div>
           </div>
@@ -128,16 +119,16 @@
               [ngTemplateOutlet]="filePathLabel"
               [ngTemplateOutletContext]="{$implicit: file.path}"
             ></ng-container>
-            <f-pdf-viewer class="block h-full w-full flex-1" [pdfUrl]="file.blobUrl"></f-pdf-viewer>
+            <f-pdf-viewer class="block size-full flex-1" [pdfUrl]="file.blobUrl"></f-pdf-viewer>
           </div>
         } @else {
           <div
-            class="flex min-h-[350px] flex-1 items-center justify-center gap-4 px-4 text-slate-600"
+            class="flex min-h-[350px] flex-1 items-center justify-center gap-2.5 px-2.5 text-slate-600"
           >
-            <mat-icon class="h-9 w-9">insert_drive_file</mat-icon>
+            <mat-icon class="size-6">insert_drive_file</mat-icon>
             <div>
-              <p class="mb-3">This file type cannot be previewed.</p>
-              <button mat-stroked-button color="primary" (click)="downloadSelectedFile()">
+              <p class="mb-2">This file type cannot be previewed.</p>
+              <button color="primary" mat-stroked-button (click)="downloadSelectedFile()">
                 <mat-icon>download</mat-icon>
                 Download {{ file.name }}
               </button>
@@ -149,11 +140,11 @@
   }
 </ng-template>
 
-<ng-template #treeNodesTemplate let-nodes let-depth="depth">
+<ng-template #treeNodesTemplate let-depth="depth" let-nodes>
   @for (node of nodes; track trackTreeNode($index, node)) {
     @if (node.isDirectory) {
       <div
-        class="flex items-center gap-1 py-1 pr-2 text-slate-600"
+        class="flex items-center gap-0.5 py-0.5 pr-1 text-slate-600"
         [style.paddingLeft.px]="8 + depth * 14"
         [title]="node.path"
       >
@@ -166,13 +157,13 @@
       ></ng-container>
     } @else {
       <button
+        class="flex w-full items-center gap-0.5 py-0.5 pr-1 text-left hover:bg-slate-200/70"
         type="button"
-        class="flex w-full items-center gap-1 py-1 pr-2 text-left hover:bg-slate-200/70"
-        [style.paddingLeft.px]="8 + depth * 14"
         [ngClass]="{
           'bg-slate-200/80 text-slate-900': selectedTab === node.fileIndex,
-          'text-slate-700': selectedTab !== node.fileIndex
+          'text-slate-700': selectedTab !== node.fileIndex,
         }"
+        [style.paddingLeft.px]="8 + depth * 14"
         [title]="node.path"
         (click)="selectTreeNode(node)"
       >
@@ -185,7 +176,7 @@
 
 <ng-template #filePathLabel let-path>
   <div
-    class="shrink-0 overflow-hidden px-4 py-2 text-slate-700 whitespace-nowrap truncate"
+    class="shrink-0 truncate overflow-hidden px-2.5 py-1 whitespace-nowrap text-slate-700"
     [title]="path"
   >
     {{ path }}

@@ -1,5 +1,5 @@
-import * as monaco from 'monaco-editor';
 import JSZip from 'jszip';
+import * as monaco from 'monaco-editor';
 
 export type ArchiveFileKind = 'code' | 'image' | 'pdf' | 'text' | 'binary';
 
@@ -77,12 +77,16 @@ export function isArchivePathHidden(path: string): boolean {
   return segments.some((segment) => segment.startsWith('.') || segment === '__MACOSX');
 }
 
+function toArrayBuffer(data: Uint8Array): ArrayBuffer {
+  return new Uint8Array(data).buffer;
+}
+
 export function createArchiveFileEntry(
   existing: ArchiveFileEntry,
   classification: ArchiveFileClassification,
   data: Uint8Array,
 ): ArchiveFileEntry {
-  const blob = new Blob([data], {type: classification.mimeType});
+  const blob = new Blob([toArrayBuffer(data)], {type: classification.mimeType});
   const shouldCreateBlobUrl =
     classification.kind === 'image' ||
     classification.kind === 'pdf' ||

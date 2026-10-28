@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 import {Project} from 'src/app/api/models/project';
@@ -15,13 +15,15 @@ export interface TaskPlannerPrerequisitesModalData {
   selector: 'f-task-planner-prerequisites-modal',
   templateUrl: './task-planner-prerequisites-modal.component.html',
   styleUrl: './task-planner-prerequisites-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskPlannerPrerequisitesModalComponent implements OnInit {
   @Input() taskDefinition: TaskDefinition;
   @Input() project: Project;
   @Input() dependents: TaskPrerequisite[];
 
-  public dataSource = new MatTableDataSource<TaskPrerequisite>();
+  public dataSource: MatTableDataSource<TaskPrerequisite> = new MatTableDataSource();
   public displayedColumns: string[] = ['task-definition', 'current-status', 'required-status'];
 
   public get task() {

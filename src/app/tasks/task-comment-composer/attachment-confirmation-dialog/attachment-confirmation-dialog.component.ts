@@ -1,17 +1,21 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 export interface AttachmentConfirmationDialogData {
   file: File;
+  destination?: string;
 }
 
 @Component({
   selector: 'f-attachment-confirmation-dialog',
   templateUrl: './attachment-confirmation-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class AttachmentConfirmationDialogComponent implements OnInit, OnDestroy {
   public file: File;
   public previewUrl: string | null = null;
+  public destination: string;
 
   constructor(
     public dialogRef: MatDialogRef<AttachmentConfirmationDialogComponent>,
@@ -20,6 +24,7 @@ export class AttachmentConfirmationDialogComponent implements OnInit, OnDestroy 
 
   ngOnInit() {
     this.file = this.data.file;
+    this.destination = this.data.destination || 'task comment';
     this.previewUrl = URL.createObjectURL(this.file);
   }
 

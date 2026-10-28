@@ -1,12 +1,21 @@
-<div class="task-data" (click)="switchToPortfolioCreation()">
-  <h4 style="margin-bottom: 0" class="list-group-item-heading">Create Portfolio</h4>
-  <p style="margin-bottom: 0" class="list-group-item-text">
-    <i class="fa fa-user" aria-hidden="true"></i> Create and submit your portfolio
-  </p>
-</div>
-<!--/task-data-->
-<div class="task-badges">
-  <status-icon [status]="status()"></status-icon>
-</div>
-<!--/badges-->
-<!--/task-->
+<a
+  class="mr-2 flex w-full items-center text-inherit no-underline"
+  [routerLink]="['/projects', project.id, 'portfolio']"
+>
+  <div class="flex min-w-0 flex-1 items-center gap-3">
+    <div class="flex min-w-0 items-center gap-3 truncate text-ellipsis">
+      <div class="flex flex-col justify-start truncate text-ellipsis">
+        <div class="truncate text-ellipsis">Create Portfolio</div>
+
+        <div class="flex min-w-0 items-center gap-0.5">
+          <mat-icon class="size-6 flex-none scale-75 text-gray-600">person</mat-icon>
+          <div class="min-w-0 truncate text-[14px] text-gray-500">
+            Create and submit your portfolio
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <status-icon class="ml-[1.5ex] flex-none" [status]="status()"></status-icon>
+</a>

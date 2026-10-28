@@ -1,6 +1,13 @@
-import {HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {MatAccordion} from '@angular/material/expansion';
+import {finalize} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskSimilarity} from 'src/app/api/models/task-similarity';
 import {TaskSimilarityService} from 'src/app/api/services/task-similarity.service';
@@ -13,6 +20,8 @@ import {SelectedTaskService} from '../../../../selected-task.service';
   selector: 'f-task-similarity-view',
   templateUrl: './task-similarity-view.component.html',
   styleUrls: ['./task-similarity-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskSimilarityViewComponent implements OnChanges {
   @Input() task: Task;
@@ -20,6 +29,8 @@ export class TaskSimilarityViewComponent implements OnChanges {
   @ViewChild('jplagViewer') jplagViewer!: JplagReportViewerComponent;
   panelOpenState = false;
   jplagOpenState = false;
+  loadingSimilarities = false;
+  loadingJplagReportFor: TaskSimilarity | null = null;
 
   constructor(
     private taskSimilarityService: TaskSimilarityService,
@@ -31,10 +42,11 @@ export class TaskSimilarityViewComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue && this.task?.id) {
       this.jplagOpenState = false;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this.task?.fetchSimilarities().subscribe((_) => {
-        console.log('similarities fetched');
-      });
+      this.loadingSimilarities = true;
+      this.task
+        ?.fetchSimilarities()
+        .pipe(finalize(() => (this.loadingSimilarities = false)))
+        .subscribe();
     }
   }
 
@@ -70,24 +82,27 @@ export class TaskSimilarityViewComponent implements OnChanges {
   viewJplagReport(similarity: TaskSimilarity) {
     // Students are identified by their username in JPlag reports (configured by API)
     // In most cases, usernames are a combination of their first and last names
+    this.loadingJplagReportFor = similarity;
     this.fileDownloaderService.downloadBlob(
       this.task.definition.getJplagReportUrl(),
-      (_, response: HttpResponse<Blob>) => {
-        // Open JPlag report viewer in embedded iframe
-        setTimeout(() => {
-          this.jplagViewer.uploadReport(response.body);
-          setTimeout(() => {
-            // Open comparison between the two students
+      (url: string) => {
+        // Reports over 10 MB arrive in ranged parts; only the stitched url holds them all
+        fetch(url)
+          .then((response) => response.blob())
+          .then((report) => {
+            this.fileDownloaderService.releaseBlob(url);
             this.jplagViewer.openComparison(
+              report,
               similarity.task.project.student.username,
               similarity.otherStudent.username,
             );
             this.jplagOpenState = true;
-          }, 100);
-        }, 100);
+            this.loadingJplagReportFor = null;
+          });
       },
       (error) => {
         console.error(error);
+        this.loadingJplagReportFor = null;
       },
     );
   }

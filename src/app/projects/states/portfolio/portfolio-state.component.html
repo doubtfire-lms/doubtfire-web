@@ -1,0 +1,51 @@
+@if (project) {
+  <div class="w-full" id="portfolio-state">
+    <mat-stepper
+      class="portfolio-stepper mb-3"
+      [class.portfolio-stepper-locked]="isPortfolioLocked"
+      [linear]="true"
+      [selectedIndex]="selectedTabIndex"
+      (selectedIndexChange)="onSelectedTabIndexChange($event)"
+    >
+      @for (tab of orderedTabs; track tab.seq) {
+        <mat-step
+          [completed]="isStepCompleted(tab)"
+          [editable]="!isTabDisabled(tab)"
+          [label]="tab.title"
+        ></mat-step>
+      }
+    </mat-stepper>
+    @if (activeTab === tabs.welcomeStep) {
+      <f-portfolio-welcome-step
+        [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
+      ></f-portfolio-welcome-step>
+    }
+    @if (activeTab === tabs.gradeStep) {
+      <f-portfolio-grade-select-step
+        [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
+        [project]="project"
+        [unit]="project.unit"
+      ></f-portfolio-grade-select-step>
+    }
+    @if (activeTab === tabs.summaryStep) {
+      <f-portfolio-learning-summary-report-step
+        [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
+        [project]="project"
+        [unit]="project.unit"
+      ></f-portfolio-learning-summary-report-step>
+    }
+    @if (activeTab === tabs.otherFilesStep) {
+      <f-portfolio-add-extra-files-step
+        [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
+        [project]="project"
+      ></f-portfolio-add-extra-files-step>
+    }
+    @if (activeTab === tabs.reviewStep) {
+      <f-portfolio-review-step
+        [onAdvanceActiveTab]="advanceActiveTab.bind(this)"
+        [project]="project"
+        [unit]="project.unit"
+      ></f-portfolio-review-step>
+    }
+  </div>
+}

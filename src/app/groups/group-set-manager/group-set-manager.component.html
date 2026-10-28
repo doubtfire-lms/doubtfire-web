@@ -1,0 +1,76 @@
+<div class="flex w-full gap-3">
+  <f-group-selector
+    class="w-full"
+    [onSelect]="groupSelectHandler"
+    [project]="project"
+    [selectedGroup]="selectedGroup"
+    [selectedGroupSet]="selectedGroupSet"
+    [unit]="unit"
+    [unitRole]="unitRole"
+  >
+  </f-group-selector>
+
+  @if (selectedGroup) {
+    <mat-card appearance="outlined" class="flex w-full flex-col self-stretch">
+      <mat-card-header class="flex items-center justify-between">
+        <mat-card-title class="flex items-center"
+          >Members of
+          @if (!editingGroupName) {
+            {{ selectedGroup?.name }}
+            @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
+              <button class="p-1" mat-icon-button (click)="startEditingGroupName()">
+                <mat-icon>edit</mat-icon>
+              </button>
+            }
+          } @else {
+            @if (unitRole || selectedGroup.groupSet?.allowStudentsToManageGroups) {
+              <mat-form-field appearance="outline" class="mt-[22px] ml-1">
+                <input matInput required [(ngModel)]="selectedGroup.name" />
+              </mat-form-field>
+              <button class="p-1" mat-icon-button (click)="updateGroup()">
+                <mat-icon>save</mat-icon>
+              </button>
+              <button class="p-1" mat-icon-button (click)="stopEditinGroupName()">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          }
+        </mat-card-title>
+        @if (selectedGroup.locked) {
+          <mat-icon>lock</mat-icon>
+        }
+      </mat-card-header>
+
+      <f-group-member-list
+        class="flex-1"
+        [project]="project"
+        [selectedGroup]="selectedGroup"
+        [unit]="unit"
+        [unitRole]="unitRole"
+      >
+      </f-group-member-list>
+      @if (unitRole) {
+        <mat-card-footer class="mt-auto">
+          <mat-form-field appearance="outline" class="mt-3 w-full px-3">
+            <input
+              matInput
+              placeholder="Enter student name or username..."
+              type="text"
+              [formControl]="control"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              [displayWith]="displayFn"
+              (optionSelected)="addMember($event.option.value)"
+            >
+              @for (project of filteredProjects | async; track project) {
+                <mat-option [value]="project"> {{ project.student.name }} </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-card-footer>
+      }
+    </mat-card>
+  }
+</div>

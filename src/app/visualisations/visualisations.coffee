@@ -1,17 +1,14 @@
+# Component is no longer used and is unlinked from the app
+# This file is left for reference, as these need to be migrated to be used in the Unit Analytics section
+
 angular.module('doubtfire.visualisations', [
   'doubtfire.visualisations.summary-task-status-scatter'
-  'doubtfire.visualisations.progress-burndown-chart'
-  'doubtfire.visualisations.alignment-bar-chart'
-  'doubtfire.visualisations.alignment-bullet-chart'
-  'doubtfire.visualisations.student-task-status-pie-chart'
   'doubtfire.visualisations.task-status-pie-chart'
   'doubtfire.visualisations.target-grade-pie-chart'
   'doubtfire.visualisations.task-completion-box-plot'
-  'doubtfire.visualisations.achievement-box-plot'
-  'doubtfire.visualisations.achievement-custom-bar-chart'
 ])
 
-.factory('Visualisation', ($interval, analyticsService) ->
+.factory('Visualisation', ($interval) ->
   Visualisation = (type, visualisationName, opts, conf, titleOpts, subtitleOpts) ->
     DEFAULT_OPTS =
       objectequality: yes
@@ -53,9 +50,6 @@ angular.module('doubtfire.visualisations', [
     dirtyOpts.type = type
 
     dirtyConf = angular.extend {}, DEFAULT_CONF, conf
-
-    # Google tracking
-    analyticsService.event 'Visualisations', 'Created Visualisation', visualisationName
 
     [ { chart: dirtyOpts, title: titleOpts, subtitle: subtitleOpts },  dirtyConf ]
 

@@ -1,9 +1,20 @@
+import * as monaco from 'monaco-editor';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
 import {
-  OverseerAssessment,
+  ChangeDetectionStrategy,
+  Component,
+  DoCheck,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
+import {Observable, Subscription, finalize, forkJoin, of, shareReplay, tap} from 'rxjs';
+import {
   OverseerImage,
   OverseerImageService,
   Task,
@@ -18,18 +29,20 @@ import {Unit} from 'src/app/api/models/unit';
 import {OverseerStepService} from 'src/app/api/services/overseer-step.service';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {OverseerScriptEditorModalService} from './overseer-script-editor-modal/overseer-script-editor-modal.service';
-import * as monaco from 'monaco-editor';
-import {MatSelectChange} from '@angular/material/select';
+
 @Component({
   selector: 'f-task-definition-overseer',
   templateUrl: 'task-definition-overseer.component.html',
   styleUrls: ['task-definition-overseer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
+export class TaskDefinitionOverseerComponent implements DoCheck, OnChanges, OnDestroy, OnInit {
   @Input() taskDefinition: TaskDefinition;
 
   @ViewChild('editor') editorComponent;
@@ -39,6 +52,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   editorOptions = {
     theme: 'vs',
     language: 'shell',
+    automaticLayout: true,
     renderMinimap: false,
 
     minimap: {
@@ -49,8 +63,20 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   public stepType: 'status_check' | 'output_diff' = 'status_check';
   public visibility = 'public';
   public showOverseerResourcesEditor = false;
+
+  /**
+   * Whether the task definition has edits that have not been saved yet. Steps
+   * are stored against the saved task definition, so editing them is held off
+   * until those edits are persisted.
+   */
+  public taskDefinitionDirty = false;
+
+  /** Whether any overseer step has edits that have not been saved yet. */
+  public overseerStepsDirty = false;
   public isLoadingOverseerResourcesArchive = false;
   public overseerResourcesArchive: Blob | File | null = null;
+  public images: Observable<OverseerImage[]>;
+
   constructor(
     private http: HttpClient,
     private alerts: AlertService,
@@ -63,6 +89,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     private overseerScriptEditorModal: OverseerScriptEditorModalService,
     private overseerStepService: OverseerStepService,
     private taskService: TaskService,
+    private confirmationModal: ConfirmationModalService,
   ) {}
 
   public get statusKeys() {
@@ -77,6 +104,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   public newOverseerStep: OverseerStep = null;
 
   public overseerSteps: OverseerStep[] = [];
+  private overseerStepsSubscription?: Subscription;
+  private readonly stepSaveRequests: Map<OverseerStep, Observable<OverseerStep>> = new Map();
 
   onRunCommandChange(step: OverseerStep, value: string) {
     step.runCommand = `b64:${this.base64UrlEncode(value)}`;
@@ -98,6 +127,10 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   addStep() {
+    if (this.taskDefinitionDirty) {
+      return;
+    }
+
     this.newOverseerStep = new OverseerStep(this.taskDefinition);
     this.newOverseerStep.stepType = 'status_check';
     this.newOverseerStep.timeout = 30;
@@ -106,8 +139,8 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     this.newOverseerStep.statusOnFailure = 'no_change';
     this.newOverseerStep.statusOnSuccess = 'no_change';
     this.newOverseerStep.commandLanguage = 'shell';
-    this.newOverseerStep.decodedRunCommand = '#!/bin/bash\n\n';
-    this.newOverseerStep.runCommand = '#!/bin/bash\n\n';
+    this.newOverseerStep.decodedRunCommand = '#!/usr/bin/env bash\n\n';
+    this.newOverseerStep.runCommand = '#!/usr/bin/env bash\n\n';
     this.newOverseerStep.showExpectedOutput = true;
 
     this.newOverseerStep.sortOrder = this.taskDefinition.overseerStepsCache.currentValues.length;
@@ -126,9 +159,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
-    this.taskDefinition.overseerStepsCache.values.subscribe((steps) => {
-      this.overseerSteps = [...steps];
-    });
+    this.images = this.overseerImageService.query();
   }
 
   public get getLanguages() {
@@ -178,65 +209,75 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     }
   }
 
-  deleteStep() {
-    if (this.selectedOverseerStep && this.selectedOverseerStep === this.newOverseerStep) {
+  public deleteStepFromRow(step: OverseerStep, event: MouseEvent): void {
+    event.stopPropagation();
+
+    // The new step only exists in the browser, so there is nothing to confirm.
+    if (step === this.newOverseerStep) {
+      this.clearSelectionOf(step);
       this.newOverseerStep = null;
-      this.selectedOverseerStep = null;
       return;
     }
-    this.selectedOverseerStep?.delete();
-    this.selectedOverseerStep = null;
+
+    this.confirmationModal.show(
+      'Delete Overseer Step',
+      `Are you sure you want to delete "${step.name || 'Untitled Step'}"? This action is final and will delete the step's script along with it.`,
+      () => {
+        this.clearSelectionOf(step);
+        step.delete();
+      },
+    );
+  }
+
+  private clearSelectionOf(step: OverseerStep): void {
+    if (step === this.selectedOverseerStep) {
+      this.selectedOverseerStep = null;
+    }
   }
 
   saveStep() {
-    if (!this.selectedOverseerStep.id) {
-      // this.newOverseerStep.runCommand = this.model.value;
-      this.overseerStepService
-        .create(
-          {
-            unitId: this.unit.id,
-            taskDefId: this.taskDefinition.id,
-          },
-          {
-            entity: this.newOverseerStep,
-          },
-        )
-        .subscribe({
-          next: (result) => {
-            this.alerts.success('Added overseer step', 3000);
-            result.taskDefinition = this.taskDefinition;
-            this.taskDefinition.overseerStepsCache.add(result);
-            this.selectStep(result);
-            this.newOverseerStep = null;
-          },
-          error: (error) => {
-            console.error(error);
-            this.alerts.error(error, 3000);
-          },
-        });
-    } else {
-      this.overseerStepService
-        .update(
-          {
-            id: this.selectedOverseerStep.id,
-            unitId: this.unit.id,
-            taskDefId: this.taskDefinition.id,
-          },
-          {
-            entity: this.selectedOverseerStep,
-            cache: this.taskDefinition.overseerStepsCache,
-          },
-        )
-        .subscribe({
-          next: (result) => {
-            this.alerts.success('Saved overseer step', 3000);
-          },
-          error: (error) => {
-            console.error(error);
-            this.alerts.error(error, 3000);
-          },
-        });
+    this.saveStepWithFeedback(this.selectedOverseerStep);
+  }
+
+  public saveStepFromRow(step: OverseerStep, event: MouseEvent): void {
+    event.stopPropagation();
+    this.saveStepWithFeedback(step);
+  }
+
+  public overseerStepHasUnsavedChanges(step: OverseerStep): boolean {
+    if (step === this.newOverseerStep) {
+      return true;
     }
+
+    return (
+      Object.keys(
+        (
+          step.toJson(this.overseerStepService.mapping) as {
+            overseer_step: object;
+          }
+        ).overseer_step,
+      ).length > 0
+    );
+  }
+
+  public isSavingStep(step: OverseerStep): boolean {
+    return this.stepSaveRequests.has(step);
+  }
+
+  public saveOverseerSteps(): Observable<OverseerStep[]> {
+    const stepsToSave = this.taskDefinition.overseerStepsCache.currentValues.filter((step) =>
+      this.overseerStepHasUnsavedChanges(step),
+    );
+
+    if (this.newOverseerStep) {
+      stepsToSave.push(this.newOverseerStep);
+    }
+
+    if (stepsToSave.length === 0) {
+      return of([]);
+    }
+
+    return forkJoin(stepsToSave.map((step) => this.saveStepRequest(step)));
   }
 
   public get overseerEnabled(): boolean {
@@ -245,10 +286,6 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
 
   public get unit(): Unit {
     return this.taskDefinition?.unit;
-  }
-
-  public get images(): Observable<OverseerImage[]> {
-    return this.overseerImageService.query();
   }
 
   get currentUser(): User {
@@ -260,19 +297,32 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
+    if (changes['taskDefinition']) {
+      this.selectedOverseerStep = null;
+      this.newOverseerStep = null;
+      this.subscribeToOverseerSteps();
+      this.showOverseerResourcesEditor = false;
+      this.isLoadingOverseerResourcesArchive = false;
+      this.overseerResourcesArchive = null;
+    }
+
+    this.currentUserTask = null;
     const proj = this.unit.findProjectForUsername(this.currentUser.username);
     if (proj) {
       this.currentUserTask = proj.findTaskForDefinition(this.taskDefinition.id);
       this.hasAnySubmissions();
     }
-    if (changes['taskDefinition']) {
-      this.taskDefinition.overseerStepsCache.values.subscribe((steps) => {
-        this.overseerSteps = [...steps];
-      });
-      this.showOverseerResourcesEditor = false;
-      this.isLoadingOverseerResourcesArchive = false;
-      this.overseerResourcesArchive = null;
-    }
+  }
+
+  public ngDoCheck(): void {
+    this.taskDefinitionDirty = this.taskDefinitionHasChanges();
+    this.overseerStepsDirty =
+      !!this.newOverseerStep ||
+      this.overseerSteps.some((step) => this.overseerStepHasUnsavedChanges(step));
+  }
+
+  public ngOnDestroy(): void {
+    this.overseerStepsSubscription?.unsubscribe();
   }
 
   testSubmission() {
@@ -297,10 +347,11 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
   }
 
   private hasAnySubmissions() {
-    if (!this.currentUserTask) return;
+    if (!this.currentUserTask) {
+      return;
+    }
 
     this.submissions.getLatestSubmissionsTimestamps(this.currentUserTask).subscribe({
-      next: (result: OverseerAssessment[]) => {},
       error: (error) => {
         this.alerts.error('Error: ' + error, 6000);
       },
@@ -325,7 +376,7 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
     );
   }
 
-  public uploadOverseerResources(files: FileList) {
+  public uploadOverseerResources(files: ArrayLike<File>) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
       (f) => f.type === 'application/zip' || f.type === 'application/x-zip-compressed',
     );
@@ -381,5 +432,97 @@ export class TaskDefinitionOverseerComponent implements OnChanges, OnInit {
         this.isLoadingOverseerResourcesArchive = false;
       },
     });
+  }
+
+  private persistStep(step: OverseerStep): Observable<OverseerStep> {
+    const taskDefinition = step.taskDefinition ?? this.taskDefinition;
+    const unit = taskDefinition.unit;
+
+    if (step.id) {
+      return this.overseerStepService.update(
+        {
+          id: step.id,
+          unitId: unit.id,
+          taskDefId: taskDefinition.id,
+        },
+        {
+          entity: step,
+          cache: taskDefinition.overseerStepsCache,
+        },
+      );
+    }
+
+    return this.overseerStepService
+      .create(
+        {
+          unitId: unit.id,
+          taskDefId: taskDefinition.id,
+        },
+        {
+          entity: step,
+        },
+      )
+      .pipe(
+        tap((result) => {
+          result.taskDefinition = taskDefinition;
+          taskDefinition.overseerStepsCache.add(result);
+
+          if (this.selectedOverseerStep === step) {
+            this.selectStep(result);
+          }
+
+          if (this.newOverseerStep === step) {
+            this.newOverseerStep = null;
+          }
+        }),
+      );
+  }
+
+  private saveStepRequest(step: OverseerStep): Observable<OverseerStep> {
+    const existingRequest = this.stepSaveRequests.get(step);
+    if (existingRequest) {
+      return existingRequest;
+    }
+
+    const request = this.persistStep(step).pipe(
+      finalize(() => this.stepSaveRequests.delete(step)),
+      shareReplay({bufferSize: 1, refCount: false}),
+    );
+    this.stepSaveRequests.set(step, request);
+    return request;
+  }
+
+  private saveStepWithFeedback(step: OverseerStep): void {
+    if (!step) {
+      return;
+    }
+
+    const isNewStep = !step.id;
+
+    this.saveStepRequest(step).subscribe({
+      next: () => {
+        this.alerts.success(isNewStep ? 'Added overseer step' : 'Saved overseer step', 3000);
+      },
+      error: (error) => {
+        console.error(error);
+        this.alerts.error(error, 3000);
+      },
+    });
+  }
+
+  private subscribeToOverseerSteps(): void {
+    this.overseerStepsSubscription?.unsubscribe();
+    this.overseerStepsSubscription = this.taskDefinition.overseerStepsCache.values.subscribe(
+      (steps) => {
+        this.overseerSteps = [...steps];
+
+        if (this.selectedOverseerStep?.id) {
+          const refreshedSelection = steps.find((step) => step.id === this.selectedOverseerStep.id);
+          if (refreshedSelection) {
+            this.selectedOverseerStep = refreshedSelection;
+          }
+        }
+      },
+    );
   }
 }

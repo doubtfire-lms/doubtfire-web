@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {Task} from 'src/app/api/models/task';
 import {
   SubmissionTypeModalComponent,
   SubmissionTypeModalData,
 } from './submission-type-modal.component';
-import {Task} from 'src/app/api/models/task';
 
 @Injectable({
   providedIn: 'root',

@@ -1,12 +1,14 @@
-import {Component, Input, type OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 
 @Component({
   selector: 'f-task-badge',
   templateUrl: './task-badge.component.html',
   styleUrl: './task-badge.component.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class FTaskBadgeComponent implements OnInit {
+export class FTaskBadgeComponent {
   @Input() taskDef: TaskDefinition;
   @Input() size = 100;
   @Input() highlight = false;
@@ -15,10 +17,8 @@ export class FTaskBadgeComponent implements OnInit {
 
   get abbreviation(): string {
     // return the first 3 characters of the task abbreviation
-    return this.taskDef.abbreviation.substring(0, 4);
+    return this.taskDef?.abbreviation.substring(0, 4);
   }
-
-  ngOnInit(): void {}
 
   calculateFontSize(length: number): string {
     const baseFontSize = 1.5; // Base font size in rem

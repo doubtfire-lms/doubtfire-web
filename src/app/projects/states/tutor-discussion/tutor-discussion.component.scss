@@ -2,11 +2,11 @@
 @use '@angular/material' as mat;
 
 // $my-palette: mat.define-palette(mat.$indigo-palette);
-@import '../../../../theme.scss';
-@import '../../../../styles/mixins/task-list.scss';
-@import '../../../../styles/mixins/scrollable.scss';
+@use 'theme' as *;
+@use 'styles/mixins/task-list' as *;
+@use 'styles/mixins/scrollable' as *;
 
-$my-palette: mat.define-palette($md-formatif);
+// $my-palette: mat.define-palette($md-formatif);
 
 :host {
   --background-gray: rgba(0, 0, 0, 0.04);
@@ -14,6 +14,155 @@ $my-palette: mat.define-palette($md-formatif);
   border-right-color: rgba(0, 0, 0, 0.1);
   border-right-style: solid;
   border-right-width: 1px;
+}
+
+html.tutor-discussion-page-locked,
+html.tutor-discussion-page-locked body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+f-tutor-discussion {
+  .discussion-layout {
+    height: calc(100vh - 105px);
+    height: calc(100dvh - 105px);
+
+    &.discussion-layout--fullscreen {
+      height: 100vh;
+      height: 100dvh;
+    }
+  }
+
+  .discussion-controls {
+    flex: 0 1 auto;
+    min-height: 64px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+
+    .mat-mdc-tooltip-trigger {
+      touch-action: pan-y pinch-zoom !important;
+    }
+  }
+
+  .discussion-layout--fullscreen {
+    &.discussion-layout--task-selected .discussion-controls {
+      min-height: min(240px, max(180px, 35dvh));
+    }
+
+    &.discussion-layout--task-selected .discussion-actions {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      padding-block: 12px;
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.08);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+
+    &.discussion-layout--task-selected .discussion-controls-scroll {
+      padding-bottom: 120px;
+      scroll-padding-bottom: 120px;
+    }
+
+    .task-comment-panel,
+    f-staff-notes,
+    f-discussion-prompts {
+      min-height: clamp(0px, calc(100dvh - 300px), 350px);
+    }
+
+    .task-comment-panel {
+      .comments-scroll-content,
+      .comments-scroll-content > span,
+      .anchor,
+      .comment {
+        width: 100%;
+      }
+
+      .comments-scroll-content > span {
+        display: block;
+      }
+
+      .comment-container {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+    }
+
+    .discussion-controls {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discussion-controls-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .discussion-actions {
+      flex: none;
+      margin-top: 0;
+      background: white;
+    }
+
+    .discussion-action {
+      .medium-icon-button {
+        width: 68px !important;
+        height: 68px !important;
+      }
+    }
+  }
+
+  .task-comment-panel {
+    min-height: 350px;
+
+    // Keep long-press tooltips from blocking scrolling or pinch zoom on iOS.
+    .mat-mdc-tooltip-trigger {
+      touch-action: pan-y pinch-zoom !important;
+    }
+
+    task-comments-viewer {
+      display: block;
+      height: 100%;
+    }
+
+    .comments-panel,
+    .comments-body {
+      min-height: 0;
+    }
+
+    .comments-body {
+      height: auto;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .comments-footer .composer-container #textField[placeholder]:empty::before {
+      content: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    // The route uses a 0.8 viewport scale, so 20px renders at 16px on phones.
+    .task-comment-panel .comments-footer .composer-container #textField {
+      font-size: 20px;
+    }
+
+    f-staff-notes .mat-mdc-form-field textarea.mat-mdc-input-element {
+      font-size: 20px;
+    }
+  }
 }
 
 :host ::ng-deep div.mat-expansion-panel-body {
@@ -26,6 +175,15 @@ user-icon {
 
 .mat-mdc-list-item {
   border: none;
+  border-radius: 6px;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.mat-mdc-list-option.selected-task {
+  background-color: #eff6ff;
+  box-shadow: inset 3px 0 0 #3b82f6;
 }
 
 .mat-mdc-list-item .notification {
@@ -39,7 +197,8 @@ user-icon {
   background-color: transparent;
 
   &.active {
-    background-color: mat.get-color-from-palette($my-palette, 500);
+    // background-color: mat.get-color-from-palette($my-palette, 500);
+    background-color: #3939ff;
   }
 
   &.active.similarities {
@@ -67,46 +226,14 @@ user-icon {
 //   }
 // }
 
-.mdc-list-item__start.mat-mdc-list-option-checkbox-before {
-  margin-right: 0 !important;
-  padding: 0 !important;
-}
-
 .medium-icon-button {
   width: 75px !important;
   height: 75px !important;
 }
 
-// Hide auto-injected QR scanner elements that are not needed in the UI
-// We only hide this if we found a "back camera" on user's device
-.qr-reader-hide-bloat #qr-reader__header_message,
-.qr-reader-hide-bloat #qr-reader__dashboard_section,
-.qr-reader-hide-bloat #qr-reader__dashboard_section_csr,
-.qr-reader-hide-bloat #qr-reader > div:not([id]):not([class]),
-.qr-reader-hide-bloat #qr-reader__scan_region > div:not([id]):not([class]),
-.qr-reader-hide-bloat #html5-qrcode-button-camera-stop,
-.qr-reader-hide-bloat #html5-qrcode-button-camera-start {
+// The scanner renders its own viewfinder into #qr-reader
+#qr-reader img {
   display: none !important;
-}
-
-#qr-reader img,
-#html5-qrcode-anchor-scan-type-change {
-  display: none !important;
-}
-
-#html5-qrcode-button-camera-stop,
-#html5-qrcode-button-camera-start {
-  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow w-full uppercase;
-  max-width: 1000px;
-  height: 45px;
-  margin-top: 15px;
-}
-
-#html5-qrcode-button-camera-permission {
-  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow w-full uppercase;
-  width: 100%;
-  max-width: 250px;
-  height: 60px;
 }
 
 .comment-user-icon-wrapper.ng-star-inserted {

@@ -1,10 +1,24 @@
-import { Component, Inject, Injectable, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
-import { Unit, TeachingPeriod, User, UserService, UnitService } from 'src/app/api/models/doubtfire-model';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
-import { Observable, map, startWith } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Injectable,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Observable, map, startWith} from 'rxjs';
+import {
+  TeachingPeriod,
+  Unit,
+  UnitService,
+  User,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 
 export interface TeachingPeriodUnitImportData {
   teachingPeriod: TeachingPeriod;
@@ -15,7 +29,7 @@ interface UnitImportData {
   unitName?: string;
   sourceUnit: Unit;
   convenor: User;
-  relatedUnits?: { value: Unit; text: string }[];
+  relatedUnits?: {value: Unit; text: string}[];
   done?: boolean;
   convenorFormControl: FormControl<User>;
   filteredStaff: Observable<User[]>;
@@ -26,12 +40,8 @@ export class TeachingPeriodUnitImportService {
   constructor(public dialog: MatDialog) {}
 
   openImportUnitsDialog(teachingPeriod: TeachingPeriod): void {
-    const dialogRef = this.dialog.open(TeachingPeriodUnitImportDialogComponent, {
-      data: { teachingPeriod: teachingPeriod },
-    });
-
-    dialogRef.afterClosed().subscribe(() => {
-      console.log('The dialog was closed');
+    this.dialog.open(TeachingPeriodUnitImportDialogComponent, {
+      data: {teachingPeriod: teachingPeriod},
     });
   }
 }
@@ -44,9 +54,11 @@ export class TeachingPeriodUnitImportService {
   selector: 'f-teaching-period-unit-import',
   templateUrl: 'teaching-period-unit-import.dialog.html',
   styleUrls: ['teaching-period-unit-import.dialog.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TeachingPeriodUnitImportDialogComponent implements OnInit {
-  @ViewChild(MatTable, { static: true }) table: MatTable<UnitImportData>;
+  @ViewChild(MatTable, {static: true}) table: MatTable<UnitImportData>;
 
   /**
    * The list of unit related data for the import.
@@ -65,13 +77,25 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
    */
   public codesToAdd: string = '';
 
-  public displayedColumns: string[] = ['unitCode', 'sourceUnit', 'unitName', 'convenor', 'status', 'actions'];
+  public displayedColumns: string[] = [
+    'unitCode',
+    'sourceUnit',
+    'unitName',
+    'convenor',
+    'status',
+    'actions',
+  ];
+
+  public filteredStaffFor(unitToImport: UnitImportData): Observable<User[]> {
+    return unitToImport.filteredStaff;
+  }
 
   constructor(
     public dialogRef: MatDialogRef<TeachingPeriodUnitImportData>,
     private userService: UserService,
     private unitService: UnitService,
     private globalStateService: GlobalStateService,
+    private alertService: AlertService,
     @Inject(MAT_DIALOG_DATA) public data: TeachingPeriodUnitImportData,
   ) {}
 
@@ -104,13 +128,10 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
   private loadAllUnits() {
     // Load all units
-    this.unitService.query(undefined, { params: { include_in_active: true } }).subscribe({
-      next: (success) => {
-        return;
-      },
+    this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
       error: (failure) => {
-        //TODO: Add alert
-        console.log(failure);
+        console.error('Failed to load units for import', failure);
+        this.alertService.error('Failed to load units for import.', 6000);
       },
     });
   }
@@ -133,12 +154,12 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
     value.sourceUnit = value.relatedUnits.length > 0 ? value.relatedUnits[0].value : null;
   }
 
-  public relatedUnits(code: string): { value: Unit; text: string }[] {
+  public relatedUnits(code: string): {value: Unit; text: string}[] {
     return this.allUnits
       .filter((u) => u.code.includes(code) || code.includes(u.code))
       .sort((a, b) => b.startDate.valueOf() - a.startDate.valueOf())
       .map((u) => {
-        return { value: u, text: u.codeAndPeriod };
+        return {value: u, text: u.codeAndPeriod};
       });
   }
 
@@ -147,10 +168,18 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   }
 
   public statusForUnit(value: UnitImportData): string {
-    if (value.done) return 'Done!';
-    if (value.done !== undefined && !value.done) return 'Error! - check log';
-    if (!value.sourceUnit) return 'Create new unit';
-    if (this.teachigPeriod.hasUnitLike(value.sourceUnit)) return 'Skip - Already in teaching period';
+    if (value.done) {
+      return 'Done!';
+    }
+    if (value.done !== undefined && !value.done) {
+      return 'Error! - check log';
+    }
+    if (!value.sourceUnit) {
+      return 'Create new unit';
+    }
+    if (this.teachigPeriod.hasUnitLike(value.sourceUnit)) {
+      return 'Skip - Already in teaching period';
+    }
     if (this.unitsToImport.filter((u) => u.unitCode === value.sourceUnit.code).length > 1) {
       return 'Duplicate - Source unit appears twice';
     }
@@ -173,12 +202,18 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
   public addUnitsByCode() {
     const codes = this.codesToAdd.split(',').map((code) => code.trim());
     for (const code of codes) {
-      if (code.length == 0) continue;
-      if (this.unitsToImport.find((u) => u.unitCode === code)) continue;
+      if (code.length == 0) {
+        continue;
+      }
+      if (this.unitsToImport.find((u) => u.unitCode === code)) {
+        continue;
+      }
 
       const relatedUnits = this.relatedUnits(code);
       const sourceUnit = relatedUnits.length > 0 ? relatedUnits[0].value : null;
-      const formControl = new FormControl<User>(sourceUnit?.mainConvenor?.user || sourceUnit?.mainConvenorUser);
+      const formControl: FormControl<User> = new FormControl(
+        sourceUnit?.mainConvenor?.user || sourceUnit?.mainConvenorUser,
+      );
 
       this.unitsToImport.push({
         unitCode: code,
@@ -213,27 +248,27 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
           if (unitToImport.convenor && unitToImport.convenor !== newUnit.mainConvenorUser) {
             newUnit.addStaff(unitToImport.convenor, 'Convenor').subscribe({
               next: (newRole) => {
-                console.log(`Employed ${unitToImport.convenor.name} in ${newUnit.code}`);
                 newUnit.changeMainConvenor(newRole).subscribe({
-                  next: () => {
-                    console.log(
-                      `Set ${unitToImport.convenor.name} as main convenor in ${newUnit.code}`,
-                    );
-                  },
                   error: (failure) => {
-                    console.log(failure);
+                    console.error('Failed to set main convenor', failure);
+                    this.alertService.error(
+                      `Failed to set the main convenor for ${newUnit.code}.`,
+                      6000,
+                    );
                   },
                 });
               },
               error: (failure) => {
-                console.log(failure);
+                console.error('Failed to add convenor', failure);
+                this.alertService.error(`Failed to add the convenor to ${newUnit.code}.`, 6000);
               },
             });
           }
           this.importUnit(idx + 1);
         },
         error: (failure) => {
-          console.log(failure);
+          console.error('Failed to roll over unit', failure);
+          this.alertService.error(`Failed to roll over ${unitToImport.unitCode}.`, 6000);
           unitToImport.done = false;
           this.importUnit(idx + 1);
         },
@@ -251,13 +286,14 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
         },
       })
       .subscribe({
-        next: (newUnit: Unit) => {
+        next: () => {
           unitToImport.done = true;
           this.importUnit(idx + 1);
         },
         error: (failure) => {
           unitToImport.done = false;
-          console.log(failure);
+          console.error('Failed to create unit', failure);
+          this.alertService.error(`Failed to create ${unitToImport.unitCode}.`, 6000);
           this.importUnit(idx + 1);
         },
       });
@@ -265,7 +301,9 @@ export class TeachingPeriodUnitImportDialogComponent implements OnInit {
 
   private importUnit(idx: number) {
     // Stop when past last unit to import
-    if (idx >= this.unitsToImport.length) return;
+    if (idx >= this.unitsToImport.length) {
+      return;
+    }
     const unitToImport = this.unitsToImport[idx];
 
     const code = unitToImport.sourceUnit ? unitToImport.sourceUnit.code : unitToImport.unitCode;

@@ -1,7 +1,6 @@
-import { Entity, EntityMapping } from 'ngx-entity-service';
-import { AppInjector } from '../../../app-injector';
-import { User, Campus, UserService, CampusService, TutorialStream } from 'src/app/api/models/doubtfire-model';
-import { Unit } from '../unit';
+import {Entity, EntityMapping} from 'ngx-entity-service';
+import {Campus, TutorialStream, User} from 'src/app/api/models/doubtfire-model';
+import {Unit} from '../unit';
 
 export class Tutorial extends Entity {
   unit: Unit; // TODO: Convert to a unit object once this exists
@@ -12,6 +11,7 @@ export class Tutorial extends Entity {
   abbreviation: string;
   campus: Campus;
   capacity: number;
+  durationMinutes: number;
   numStudents: number;
   tutor: User;
   tutorialStream: TutorialStream;
@@ -65,8 +65,11 @@ export class Tutorial extends Entity {
   }
 
   public get tutorName(): string {
-    if (this.tutor) return this.tutor.name;
-    else return '';
+    if (this.tutor) {
+      return this.tutor.name;
+    } else {
+      return '';
+    }
   }
 
   public hasCapacity(): boolean {

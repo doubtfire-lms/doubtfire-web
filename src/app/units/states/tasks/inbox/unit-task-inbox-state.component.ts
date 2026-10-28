@@ -1,0 +1,364 @@
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {
+  Observable,
+  Subject,
+  catchError,
+  distinctUntilChanged,
+  filter,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
+import {
+  Project,
+  ProjectService,
+  TaskDefinition,
+  Tutorial,
+  Unit,
+  UnitRole,
+  UnitService,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
+import {Task} from 'src/app/api/models/task';
+import {TaskService} from 'src/app/api/services/task.service';
+import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
+
+export type UnitTaskViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
+export type UnitTaskRouteMode = 'inbox' | 'definition' | 'moderation' | 'overflow';
+
+export interface TaskKey {
+  studentId: string | number;
+  taskDefAbbr: string;
+}
+
+export interface TaskFilters {
+  taskDefinition: TaskDefinition | null;
+  tutorials: Tutorial[] | null;
+  forceStream: boolean;
+  studentName: string | null;
+  tutorialIdSelected: string | number;
+  unitRoleIdSelected: string | number;
+  taskDefinitionIdSelected: number | TaskDefinition | null;
+}
+
+type TaskSource = (
+  unit: Unit,
+  taskDef?: TaskDefinition | number,
+  fetchMyStudentsOnly?: boolean,
+  viewAsUnitRoleId?: number,
+  includeWithdrawn?: boolean,
+) => Observable<Task[]>;
+
+@Component({
+  selector: 'f-unit-task-inbox-state',
+  templateUrl: './unit-task-inbox-state.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
+})
+export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
+  private static readonly UNIT_REFRESH_INTERVAL_MS = 60_000;
+  private static readonly lastUnitFetchAt: Map<number, number> = new Map();
+  private readonly destroy$: Subject<void> = new Subject();
+
+  @Input() public unit$: Observable<Unit>;
+  @Input() public routeMode: UnitTaskRouteMode = 'inbox';
+
+  public viewType: UnitTaskViewType = 'inbox';
+
+  public unit: Unit;
+  public unitRole: UnitRole;
+  public studentsLoaded = false;
+  public filters: Partial<TaskFilters> = {};
+
+  public get inboxLoading(): boolean {
+    return !(this.unit && this.unitRole && this.studentsLoaded);
+  }
+
+  public taskData: {
+    taskKey: TaskKey | null;
+    source: TaskSource;
+    selectedTask: Task | null;
+    onSelectedTaskChange: (task: Task | null) => void;
+    taskDefMode: boolean;
+  } = {
+    taskKey: null,
+    source: null,
+    selectedTask: null,
+    onSelectedTaskChange: (task: Task | null) => {
+      this.taskData.selectedTask = task;
+      this.taskData.taskKey = task?.taskKey() ?? null;
+      this.setTaskKeyAsUrlParams(task);
+    },
+    taskDefMode: false,
+  };
+
+  constructor(
+    private taskService: TaskService,
+    private globalStateService: GlobalStateService,
+    private userService: UserService,
+    private unitService: UnitService,
+    private projectService: ProjectService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private selectedTaskService: SelectedTaskService,
+  ) {}
+
+  ngOnInit(): void {
+    this.globalStateService.setInboxState();
+    this.clearSelectedTask();
+
+    this.routeMode = this.route.snapshot.data.routeMode ?? this.routeMode;
+    this.configureRouteMode();
+    this.setTaskKeyFromRoute();
+
+    const routeUnit$ =
+      this.unit$ ??
+      this.route.parent?.parent?.data.pipe(
+        map((data) => data.unit as Unit),
+        filter((unit): unit is Unit => !!unit),
+      );
+
+    routeUnit$
+      ?.pipe(
+        distinctUntilChanged((previous, current) => previous.id === current.id),
+        tap(() => this.prepareForUnitChange()),
+        switchMap((routeUnit) => this.loadUnit(routeUnit.id)),
+        switchMap((unit) => this.loadInboxData(unit)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        this.studentsLoaded = true;
+      });
+
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.setTaskKeyFromRoute();
+    });
+
+    this.route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.setTaskKeyFromRoute();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.globalStateService.setNotInboxState();
+    this.clearSelectedTask();
+  }
+
+  private clearSelectedTask(): void {
+    this.taskData.selectedTask = null;
+    this.taskData.taskKey = null;
+    this.selectedTaskService.setSelectedTask(null);
+  }
+
+  private loadUnit(unitId: number): Observable<Unit> {
+    const shouldRefresh = this.shouldRefreshUnit(unitId);
+    return this.unitService
+      .loadDetails(unitId, shouldRefresh)
+      .pipe(tap(() => UnitTaskInboxStateComponent.lastUnitFetchAt.set(unitId, Date.now())));
+  }
+
+  private shouldRefreshUnit(unitId: number): boolean {
+    const lastFetchedAt = UnitTaskInboxStateComponent.lastUnitFetchAt.get(unitId);
+
+    return (
+      !lastFetchedAt ||
+      Date.now() - lastFetchedAt > UnitTaskInboxStateComponent.UNIT_REFRESH_INTERVAL_MS
+    );
+  }
+
+  private getTaskSource(): TaskSource {
+    switch (this.routeMode) {
+      case 'definition':
+        return (
+          unit,
+          taskDef,
+          _fetchMyStudentsOnly,
+          _viewAsUnitRoleId,
+          includeWithdrawn = false,
+        ) => {
+          const tasks$ = this.taskService.queryTasksForTaskExplorer(
+            unit,
+            taskDef,
+            includeWithdrawn,
+          );
+          return includeWithdrawn
+            ? this.projectService.loadStudents(unit, true, true).pipe(switchMap(() => tasks$))
+            : tasks$;
+        };
+      case 'moderation':
+        return this.taskService.queryTasksForMentorModeration.bind(this.taskService);
+      case 'overflow':
+        return this.taskService.queryTasksForOverflow.bind(this.taskService);
+      case 'inbox':
+      default:
+        return this.taskService.queryTasksForTaskInbox.bind(this.taskService);
+    }
+  }
+
+  private configureRouteMode(): void {
+    this.taskData.source = this.getTaskSource();
+
+    switch (this.routeMode) {
+      case 'definition':
+        this.viewType = 'explorer';
+        this.taskData.taskDefMode = true;
+        break;
+      case 'moderation':
+        this.viewType = 'moderation';
+        this.taskData.taskDefMode = false;
+        break;
+      case 'overflow':
+        this.viewType = 'overflow';
+        this.taskData.taskDefMode = false;
+        break;
+      case 'inbox':
+      default:
+        this.viewType = 'inbox';
+        this.taskData.taskDefMode = false;
+        break;
+    }
+  }
+
+  private prepareForUnitChange(): void {
+    this.clearSelectedTask();
+    this.unit = null;
+    this.unitRole = null;
+    this.studentsLoaded = false;
+    this.filters = {};
+  }
+
+  private loadInboxData(unit: Unit): Observable<Project[]> {
+    this.unit = unit;
+    this.unitRole = this.findUnitRole(unit.id);
+    if (this.unitRole) {
+      this.unitRole.unit = unit;
+      this.globalStateService.setView(ViewType.UNIT, this.unitRole);
+    } else {
+      this.globalStateService.setView(ViewType.UNIT, unit);
+    }
+
+    this.filters = {
+      ...this.filters,
+      ...this.getFilterOverrides(unit),
+    };
+
+    return this.projectService.loadStudents(unit).pipe(catchError(() => of([])));
+  }
+
+  private getFilterOverrides(unit: Unit): Partial<TaskFilters> {
+    const selectedStudents = this.route.snapshot.queryParamMap.get('students');
+
+    switch (this.routeMode) {
+      case 'definition':
+        return {
+          tutorialIdSelected: selectedStudents ?? 'all',
+          taskDefinitionIdSelected: unit.taskDefinitions?.[0]?.id ?? null,
+        };
+      case 'moderation':
+      case 'overflow':
+        return {
+          tutorialIdSelected: selectedStudents ?? 'all',
+          taskDefinition: null,
+          taskDefinitionIdSelected: null,
+        };
+      case 'inbox':
+      default:
+        return selectedStudents ? {tutorialIdSelected: selectedStudents} : {};
+    }
+  }
+
+  private findUnitRole(unitId: number): UnitRole {
+    const currentView = this.globalStateService.currentViewAndEntitySubject$.value;
+
+    if (currentView?.viewType === ViewType.UNIT) {
+      const currentUnitRole = currentView.entity as UnitRole;
+      if (currentUnitRole?.unit?.id === unitId) {
+        return currentUnitRole;
+      }
+    }
+
+    let unitRole = this.globalStateService.loadedUnitRoles.currentValues.find(
+      (role) => role.unit.id === unitId,
+    );
+
+    if (
+      !unitRole &&
+      (this.userService.currentUser.role === 'Admin' ||
+        this.userService.currentUser.role === 'Auditor')
+    ) {
+      unitRole = this.userService.adminOrAuditorRoleFor(
+        this.userService.currentUser.role,
+        unitId,
+        this.userService.currentUser,
+      );
+    }
+
+    return unitRole;
+  }
+
+  private setTaskKeyAsUrlParams(task: Task | null): void {
+    const nextTaskKey = task?.taskKeyToUrlString() ?? null;
+    const currentTaskKey = this.currentTaskKeyFromRoute();
+
+    if (currentTaskKey === nextTaskKey) {
+      return;
+    }
+
+    if (this.route.parent?.parent?.snapshot.data.unit) {
+      const [studentId, taskDefAbbr] = nextTaskKey?.split('/') ?? [null, null];
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        replaceUrl: true,
+        queryParams: {
+          students: this.filters.tutorialIdSelected ?? null,
+          studentId,
+          taskDefAbbr,
+        },
+        queryParamsHandling: 'merge',
+      });
+      return;
+    }
+  }
+
+  private setTaskKeyFromUrlParams(taskKeyString?: string): void {
+    this.taskData.taskKey = this.taskService.taskKeyFromString(taskKeyString);
+  }
+
+  private setTaskKeyFromRoute(): void {
+    const studentId =
+      this.route.snapshot.queryParamMap.get('studentId') ??
+      this.route.snapshot.paramMap.get('studentId');
+    const taskDefAbbr =
+      this.route.snapshot.queryParamMap.get('taskDefAbbr') ??
+      this.route.snapshot.paramMap.get('taskDefAbbr');
+
+    if (studentId && taskDefAbbr) {
+      this.taskData.taskKey = {studentId, taskDefAbbr};
+      return;
+    }
+
+    this.setTaskKeyFromUrlParams();
+  }
+
+  private currentTaskKeyFromRoute(): string | null {
+    const studentId =
+      this.route.snapshot.queryParamMap.get('studentId') ??
+      this.route.snapshot.paramMap.get('studentId');
+    const taskDefAbbr =
+      this.route.snapshot.queryParamMap.get('taskDefAbbr') ??
+      this.route.snapshot.paramMap.get('taskDefAbbr');
+
+    if (!studentId || !taskDefAbbr) {
+      return null;
+    }
+
+    return `${studentId}/${taskDefAbbr}`;
+  }
+}

@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {Task} from 'src/app/api/models/doubtfire-model';
@@ -8,6 +8,8 @@ import {TaskAssessmentModalData} from './task-assessment-modal.service';
   selector: 'task-assessment-modal',
   templateUrl: './task-assessment-modal.component.html',
   styleUrls: ['./task-assessment-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskAssessmentModalComponent implements OnInit {
   @Input() task: Task;

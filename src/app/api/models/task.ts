@@ -1,35 +1,35 @@
 import {Entity, EntityCache, RequestOptions} from 'ngx-entity-service';
-import {AppInjector} from 'src/app/app-injector';
 import {formatDate} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {LOCALE_ID} from '@angular/core';
+import {Observable, firstValueFrom, map} from 'rxjs';
+import {AppInjector} from 'src/app/app-injector';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {GradeTaskModalService} from 'src/app/tasks/modals/grade-task-modal/grade-task-modal.service';
+import {UploadSubmissionModalService} from 'src/app/tasks/modals/upload-submission-modal/upload-submission-modal.service';
+import {MappingFunctions} from '../services/mapping-fn';
+import {TutorNoteService} from '../services/tutor-note.service';
 import {
-  TaskDefinition,
-  Project,
-  Unit,
-  TaskComment,
-  TaskStatusEnum,
-  TaskStatus,
-  TaskStatusUiData,
-  TaskService,
   Group,
+  Project,
+  ScormComment,
+  TaskComment,
   TaskCommentService,
+  TaskDefinition,
+  TaskService,
   TaskSimilarity,
   TaskSimilarityService,
+  TaskStatus,
+  TaskStatusEnum,
+  TaskStatusUiData,
   TestAttempt,
   TestAttemptService,
-  ScormComment,
-  UnitRoleService,
+  Unit,
   UnitRole,
+  UnitRoleService,
   UserService,
 } from './doubtfire-model';
-import {TutorNoteService} from '../services/tutor-note.service';
-import {Grade} from './grade';
-import {LOCALE_ID} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable, firstValueFrom, map} from 'rxjs';
-import {gradeTaskModal, uploadSubmissionModal} from 'src/app/ajs-upgraded-providers';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {MappingFunctions} from '../services/mapping-fn';
 import {TaskPrerequisite} from './task-prerequisite';
 
 export const FeedbackModerationAction = {
@@ -53,6 +53,9 @@ export class Task extends Entity {
   extensions: number;
   scormExtensions: number;
   submissionDate: Date;
+  // When the inbox started waiting on this task: the submission, or the oldest
+  // unread comment for tasks listed only because of comments
+  waitingSince: Date;
   completionDate: Date;
   timesAssessed: number;
   grade?: number;
@@ -66,6 +69,7 @@ export class Task extends Entity {
 
   project: Project;
   definition: TaskDefinition;
+  tutorialId: number;
 
   //TODO: map task submission details
   hasPdf: boolean = false;
@@ -75,9 +79,14 @@ export class Task extends Entity {
   loadingSubmissionDetails: boolean = false;
 
   pinned: boolean = false;
+  hover?: boolean;
+  optionsOpened?: boolean;
 
   targetStartDate: Date;
   targetDueDate: Date;
+  movedToDiscussAt: Date;
+  discussTimeoutExpiryAt: Date;
+  discussTimeoutExpiryDate: string;
 
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
@@ -146,9 +155,9 @@ export class Task extends Entity {
     AppInjector.get(TaskCommentService)
       .addComment(this, textString, 'text')
       .subscribe({
-        next: (tc) => {},
         error: (error) => {
-          console.log(error);
+          const alerts: AlertService = AppInjector.get(AlertService);
+          alerts.error(`Failed to add comment: ${error}`);
         },
       });
   }
@@ -166,20 +175,22 @@ export class Task extends Entity {
   }
 
   public get unit(): Unit {
-    if (this._unit) return this._unit;
+    if (this._unit) {
+      return this._unit;
+    }
     return this.project.unit;
   }
 
   private getBreakOverlapMilliseconds(
     startTime: number,
     endTime: number,
-    breaks: readonly {startDate: Date; numberOfWeeks: number}[],
+    breaks: readonly {startDate: Date; numberOfDays: number}[],
   ): number {
     const millisecondsPerDay = 1000 * 60 * 60 * 24;
 
     return breaks.reduce((overlap, teachingBreak) => {
       const breakStart = new Date(teachingBreak.startDate).getTime();
-      const breakDuration = (teachingBreak.numberOfWeeks ?? 0) * 7 * millisecondsPerDay;
+      const breakDuration = (teachingBreak.numberOfDays ?? 0) * millisecondsPerDay;
       const breakEnd = breakStart + breakDuration;
 
       if (!Number.isFinite(breakStart) || breakDuration <= 0) {
@@ -201,7 +212,7 @@ export class Task extends Entity {
       return 0;
     }
 
-    const teachingBreaks = this.unit.teachingPeriod?.breaks ?? [];
+    const teachingBreaks = this.unit.teachingPeriod?.breaksFor(this.project?.campus?.id) ?? [];
     const pausedMilliseconds = this.getBreakOverlapMilliseconds(
       submissionTime,
       nowTime,
@@ -221,7 +232,7 @@ export class Task extends Entity {
    */
   public matches(matchText: string): boolean {
     return (
-      TaskStatus.STATUS_LABELS.get(this.status)?.toLowerCase().indexOf(matchText) >= 0 ||
+      TaskStatus.matchesSearch(this.status, matchText) ||
       this.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
       this.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
       (this.hasExtensions && 'extension'.indexOf(matchText) == 0) ||
@@ -230,8 +241,16 @@ export class Task extends Entity {
     );
   }
 
-  public hasTaskKey(key: {studentId: number; taskDefAbbr: string}): boolean {
-    return this.taskKey() === key;
+  public hasTaskKey(key: {studentId: number | string; taskDefAbbr: string}): boolean {
+    if (!key) {
+      return false;
+    }
+
+    const taskKey = this.taskKey();
+    return (
+      taskKey?.studentId?.toString() === key.studentId?.toString() &&
+      taskKey?.taskDefAbbr === key.taskDefAbbr
+    );
   }
 
   public taskKeyToUrlString(): string {
@@ -240,14 +259,15 @@ export class Task extends Entity {
   }
 
   public get gradeWord(): string {
-    if (this.grade) return Grade.GRADES[this.grade];
-    else {
+    if (this.grade !== undefined && this.grade !== null) {
+      return this.unit.gradeLabel(this.grade);
+    } else {
       return 'Not Graded';
     }
   }
 
   public gradeDesc(): string {
-    return Grade.GRADE_ACRONYMS.get(this.grade);
+    return this.unit.gradeAbbreviation(this.grade);
   }
 
   public hasGrade(): boolean {
@@ -259,7 +279,11 @@ export class Task extends Entity {
   }
 
   public hasQualityPoints(): boolean {
-    return this.definition.maxQualityPts > 0 && TaskStatus.GRADEABLE_STATUSES.includes(this.status);
+    return (
+      this.definition.maxQualityPts > 0 &&
+      this.qualityPts >= 0 &&
+      TaskStatus.GRADEABLE_STATUSES.includes(this.status)
+    );
   }
 
   public hasBeenGraded(): boolean {
@@ -270,7 +294,7 @@ export class Task extends Entity {
   }
 
   public hasBeenGivenQualityPoints(): boolean {
-    return this.qualityPts > 0 || TaskStatus.GRADEABLE_STATUSES.includes(this.status);
+    return this.definition.maxQualityPts > 0 && this.qualityPts >= 0;
   }
 
   public localDueDate(): Date {
@@ -280,15 +304,9 @@ export class Task extends Entity {
         return this.targetDueDate;
       }
 
-      // Unit target dates per grade guidelines
-      if (this.project.targetGrade === 1 && this.definition.cTargetDate) {
-        return this.definition.cTargetDate;
-      }
-      if (this.project.targetGrade === 2 && this.definition.dTargetDate) {
-        return this.definition.dTargetDate;
-      }
-      if (this.project.targetGrade === 3 && this.definition.hdTargetDate) {
-        return this.definition.hdTargetDate;
+      const gradeTargetDate = this.definition.gradeTargetDate(this.project.targetGrade);
+      if (gradeTargetDate) {
+        return gradeTargetDate;
       }
     }
 
@@ -446,15 +464,9 @@ export class Task extends Entity {
         return this.targetStartDate;
       }
 
-      // Unit start dates per grade guidelines
-      if (this.project.targetGrade === 1 && this.definition.cStartDate) {
-        return this.definition.cStartDate;
-      }
-      if (this.project.targetGrade === 2 && this.definition.dStartDate) {
-        return this.definition.dStartDate;
-      }
-      if (this.project.targetGrade === 3 && this.definition.hdStartDate) {
-        return this.definition.hdStartDate;
+      const gradeStartDate = this.definition.gradeStartDate(this.project.targetGrade);
+      if (gradeStartDate) {
+        return gradeStartDate;
       }
     }
 
@@ -515,10 +527,10 @@ export class Task extends Entity {
 
   public timeToDue(): string {
     const days = this.daysUntilDueDate();
-    if (days < 0) {
-      return '!';
+    if (days <= 0) {
+      return 'Past Due Date';
     } else if (days < 11) {
-      return `${days}d`;
+      return `Due in ${this.timeUntilDueDateDescription()}`;
     } else {
       return `${Math.floor(days / 7)}w`;
     }
@@ -573,7 +585,9 @@ export class Task extends Entity {
 
   public refreshCommentData(): void {
     const comments: readonly TaskComment[] = this.comments;
-    if (comments.length === 0) return;
+    if (comments.length === 0) {
+      return;
+    }
 
     comments[0].shouldShowTimestamp = true;
 
@@ -616,12 +630,13 @@ export class Task extends Entity {
         comments[i].firstInSeries = i === 0 || comments[i - 1].commentType !== 'scorm';
         (comments[i] as ScormComment).lastInScormSeries =
           i + 1 === comments.length || comments[i + 1]?.commentType !== 'scorm';
-        if (!comments[i].firstInSeries) comments[i].shouldShowTimestamp = false;
+        if (!comments[i].firstInSeries) {
+          comments[i].shouldShowTimestamp = false;
+        }
       }
     }
 
     comments[comments.length - 1].shouldShowAvatar = true;
-    comments;
   }
 
   public taskKey(): {studentId: number; taskDefAbbr: string} {
@@ -640,14 +655,14 @@ export class Task extends Entity {
     return this.similarityFlag;
   }
 
-  public getSimilarityData(match: number): Observable<unknown> {
+  public getSimilarityData(match: number): Observable<object> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.get(
       `${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`,
     );
   }
 
-  public updateSimilarity(match: number, other: any, dismissed: boolean): Observable<any> {
+  public updateSimilarity(match: number, other: object, dismissed: boolean): Observable<object> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.put(
       `${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/similarity/${match}`,
@@ -695,7 +710,7 @@ export class Task extends Entity {
   }
 
   public statusIcon(): string {
-    return TaskStatus.STATUS_ICONS.get(this.status);
+    return TaskStatus.STATUS_MATERIAL_ICONS.get(this.status);
   }
 
   public statusClass(): string {
@@ -814,7 +829,7 @@ export class Task extends Entity {
    * Launch the SCORM player for this task in a new window.
    */
   public launchScormPlayer(): void {
-    const url = `#/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
+    const url = `/projects/${this.project.id}/task_def_id/${this.taskDefId}/scorm-player/normal`;
     window.open(url, '_blank');
   }
 
@@ -869,9 +884,9 @@ export class Task extends Entity {
     if (!isTestSubmission) {
       this.status = status;
     }
-    const uploadModal: any = AppInjector.get(uploadSubmissionModal);
+    const uploadModal: UploadSubmissionModalService = AppInjector.get(UploadSubmissionModalService);
 
-    const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission);
+    const modal = uploadModal.show(this, reuploadEvidence, isTestSubmission, oldStatus);
     // Modal failed to present
     if (!modal) {
       if (!isTestSubmission) {
@@ -882,13 +897,15 @@ export class Task extends Entity {
 
     modal.result.then(
       // Grade was selected (modal closed with result)
-      (response) => {},
+      (_response) => {
+        /* empty */
+      },
       // Grade was not selected (modal was dismissed)
       (_dismissed) => {
         if (!isTestSubmission) {
           this.status = oldStatus;
         }
-        const alerts: any = AppInjector.get(AlertService);
+        const alerts: AlertService = AppInjector.get(AlertService);
         alerts.message('Submission cancelled. Status was reverted.', 6000);
       },
     );
@@ -907,9 +924,16 @@ export class Task extends Entity {
     } else {
       alerts.success(`Status changed to ${this.statusLabel()}.`);
     }
+    this.getSubmissionDetails().subscribe();
+    const taskService: TaskService = AppInjector.get(TaskService);
+    taskService.notifyStatusChange(this);
   }
 
-  public async markAsDiscussed(reasonText?: string) {
+  public async markAsDiscussed(
+    reasonText?: string,
+    onSuccess?: () => void,
+    onFailure?: () => void,
+  ) {
     const alerts: AlertService = AppInjector.get(AlertService);
     const taskService: TaskService = AppInjector.get(TaskService);
 
@@ -934,9 +958,11 @@ export class Task extends Entity {
           next: (_response) => {
             taskService.notifyStatusChange(this);
             alerts.success('Task successfully marked as discussed in class.', 4000);
+            onSuccess?.();
           },
           error: (error) => {
             alerts.error(error, 6000);
+            onFailure?.();
           },
         });
     };
@@ -957,6 +983,7 @@ export class Task extends Entity {
           'Unable to find your staff role, so the tutor note could not be recorded.',
           6000,
         );
+        onFailure?.();
         return;
       }
 
@@ -968,6 +995,7 @@ export class Task extends Entity {
           },
           error: (error) => {
             alerts.error(`Unable to save the required tutor note: ${error}`, 6000);
+            onFailure?.();
           },
         });
       return;
@@ -980,38 +1008,29 @@ export class Task extends Entity {
     status: TaskStatusEnum,
     markAsDiscussed?: boolean,
     triggerRecursiveFix?: boolean,
+    onSuccess?: () => void,
+    onFailure?: () => void,
   ) {
     const oldStatus = this.status;
+    const oldGrade = this.grade;
+    const oldQualityPts = this.qualityPts;
     const alerts: AlertService = AppInjector.get(AlertService);
 
-    if (status === 'complete' && !this.canMarkComplete) {
+    if (status === 'complete' && !this.canMarkComplete && markAsDiscussed !== true) {
       alerts.error('This task must be discussed in class before it can marked complete.', 6000);
+      onFailure?.();
       return;
     }
 
-    if (status === 'complete' || status === 'fix_and_resubmit' || status === 'redo') {
-      if (!this.commentsSinceLatestReadyForFeedback().some((comment) => comment.isManualFeedback)) {
-        alerts.error(
-          status === 'complete'
-            ? 'Feedback must be given before moving this task to Complete'
-            : status === 'fix_and_resubmit'
-              ? 'Feedback must be given before moving this task to Fix and Resubmit'
-              : 'Feedback must be given before moving this task to Redo',
-          6000,
-        );
-        return;
-      }
-    }
-
-    const updateFunc = () => {
+    const updateFunc = (grade = this.grade, qualityPts = this.qualityPts) => {
       const taskService: TaskService = AppInjector.get(TaskService);
       const options: RequestOptions<Task> = {
         entity: this,
         cache: this.project.taskCache,
         body: {
           trigger: status,
-          grade: this.grade,
-          quality_pts: this.qualityPts,
+          grade: grade,
+          quality_pts: qualityPts,
         },
       };
 
@@ -1034,50 +1053,58 @@ export class Task extends Entity {
           options,
         )
         .subscribe({
-          next: (response) => {
+          next: (_response) => {
+            this.grade = grade;
+            this.qualityPts = qualityPts;
             if (!hasId && this.id > 0) {
               this.project.taskCache.delete(this.definition.abbreviation);
               this.project.taskCache.add(this);
             }
             this.processTaskStatusChange(status, alerts);
-            taskService.notifyStatusChange(this);
+            if (this.status === status) {
+              onSuccess?.();
+            } else {
+              onFailure?.();
+            }
           },
           error: (error) => {
             this.status = oldStatus;
+            this.grade = oldGrade;
+            this.qualityPts = oldQualityPts;
             alerts.error(error, 6000);
+            onFailure?.();
           },
         });
     }; // end update function
 
-    // Must provide grade if graded and in a final complete state
+    // Must provide grade if graded and in a final complete state - so use callback to run update function
     if (
       (this.definition.isGraded || this.definition.maxQualityPts > 0) &&
       TaskStatus.GRADEABLE_STATUSES.includes(status)
     ) {
-      const gradeModal: any = AppInjector.get(gradeTaskModal);
-      const modal = gradeModal.show(this);
-      if (modal) {
-        modal.result.then(
-          // Grade was selected (modal closed with result)
-          (response) => {
-            this.grade = response.selectedGrade;
-            this.qualityPts = response.qualityPts;
-            updateFunc();
-          },
-          // Grade was not selected (modal was dismissed)
-          () => {
-            this.status = oldStatus;
-            alerts.message('Status reverted, as no grade was specified', 6000);
-          },
-        );
-      }
+      const gradeModal: GradeTaskModalService = AppInjector.get(GradeTaskModalService);
+      gradeModal.show(
+        this,
+        // Grade was selected (modal closed with result)
+        (response) => {
+          updateFunc(response.grade, response.qualityPts);
+        },
+        // Grade was not selected (modal was dismissed)
+        () => {
+          this.status = oldStatus;
+          alerts.message('Status reverted, as no grade was specified', 6000);
+          onFailure?.();
+        },
+      );
     } else {
       updateFunc();
     }
   }
 
   public async triggerTransition(status: TaskStatusEnum): Promise<void> {
-    if (this.status === status) return;
+    if (this.status === status) {
+      return;
+    }
     const alerts: AlertService = AppInjector.get(AlertService);
 
     const requiresFileUpload =
@@ -1115,7 +1142,7 @@ export class Task extends Entity {
     const http = AppInjector.get(HttpClient);
 
     http.post(`${AppInjector.get(DoubtfireConstants).API_URL}/tasks/${this.id}/pin`, {}).subscribe({
-      next: (data) => {
+      next: (_data) => {
         this.pinned = true;
         onSuccess?.();
       },

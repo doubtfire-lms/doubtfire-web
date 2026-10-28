@@ -15,7 +15,7 @@
 
     <ol>
       <li class="flex flex-row items-center">
-        <button mat-icon-button color="primary" (click)="openD2l()">
+        <button color="primary" mat-icon-button (click)="openD2l()">
           <mat-icon>open_in_new</mat-icon>
         </button>
         <div>
@@ -27,7 +27,7 @@
         </div>
       </li>
       <li class="flex flex-row items-center">
-        <button mat-icon-button color="primary" (click)="startTransfer()">
+        <button color="primary" mat-icon-button (click)="startTransfer()">
           <mat-icon>start</mat-icon>
         </button>
         <div>
@@ -36,7 +36,7 @@
         </div>
       </li>
       <li class="flex flex-row items-center" [hidden]="!hasWeight()">
-        <button mat-icon-button color="primary" (click)="openWeightPage()">
+        <button color="primary" mat-icon-button (click)="openWeightPage()">
           <mat-icon>open_in_new</mat-icon>
         </button>
         <div>
@@ -49,7 +49,7 @@
         </div>
       </li>
       <li class="flex flex-row items-center">
-        <button mat-icon-button color="primary">
+        <button color="primary" mat-icon-button>
           <mat-icon>hourglass_empty</mat-icon>
         </button>
         <div>
@@ -61,7 +61,7 @@
         </div>
       </li>
       <li class="flex flex-row items-center">
-        <button mat-icon-button color="primary" (click)="downloadRecord()">
+        <button color="primary" mat-icon-button (click)="downloadRecord()">
           <mat-icon>download</mat-icon>
         </button>
         <div>
@@ -79,5 +79,5 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-stroked-button mat-dialog-close>Close</button>
+  <button mat-dialog-close mat-stroked-button>Close</button>
 </mat-dialog-actions>

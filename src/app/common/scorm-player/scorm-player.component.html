@@ -1,1 +1,3 @@
-<iframe [src]="iframeSrc" *ngIf="iframeSrc"></iframe>
+@if (iframeSrc) {
+  <iframe [src]="iframeSrc"></iframe>
+}

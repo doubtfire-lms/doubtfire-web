@@ -1,27 +1,40 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {Observable} from 'rxjs';
+import {Campus} from 'src/app/api/models/campus/campus';
 import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
+import {CampusService} from 'src/app/api/services/campus.service';
 import {TeachingPeriodBreakService} from 'src/app/api/services/teaching-period-break.service';
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
-import {TeachingPeriodUnitImportService} from '../teaching-period-unit-import/teaching-period-unit-import.dialog';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {TeachingPeriodUnitImportService} from '../teaching-period-unit-import/teaching-period-unit-import.dialog';
 
 @Component({
   selector: 'f-teaching-period-list',
   templateUrl: './teaching-period-list.component.html',
   styleUrls: ['./teaching-period-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TeachingPeriodListComponent implements OnInit {
   @ViewChild(MatSort) sort = new MatSort();
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public dataSource = new MatTableDataSource<TeachingPeriod>();
+  public dataSource: MatTableDataSource<TeachingPeriod> = new MatTableDataSource();
 
-  displayedColumns: string[] = ['active', 'name', 'startDate', 'endDate', 'activeUntil', 'actions'];
+  displayedColumns: string[] = [
+    'active',
+    'name',
+    'startDate',
+    'lastTeachingDate',
+    'endDate',
+    'activeUntil',
+    'actions',
+  ];
 
   constructor(
     private teachingPeriodsService: TeachingPeriodService,
@@ -31,7 +44,7 @@ export class TeachingPeriodListComponent implements OnInit {
 
   ngOnInit(): void {
     // update the Teaching Periods
-    this.teachingPeriodsService.query().subscribe((_) => {});
+    this.teachingPeriodsService.query().subscribe();
 
     // Bind to the Teaching Periods
     this.teachingPeriodsService.cache.values.subscribe((teachingPeriods) => {
@@ -67,7 +80,15 @@ export class TeachingPeriodListComponent implements OnInit {
    * @returns truthy comparison between aValue and bValue.
    */
   protected sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    if (aValue === bValue) {
+      return 0;
+    }
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  private sortDateValue(value: Date | string): number {
+    const time = new Date(value).getTime();
+    return Number.isFinite(time) ? time : 0;
   }
 
   // Sorting function to sort data when sort
@@ -76,44 +97,90 @@ export class TeachingPeriodListComponent implements OnInit {
     if (!sort.active || sort.direction === '') {
       return;
     }
-    switch (sort.active) {
-      case 'active':
-      case 'name':
-      case 'startDate':
-      case 'endDate':
-      case 'activeUntil':
-        this.dataSource.data = this.dataSource.data.sort((a, b) => {
-          const isAsc = sort.direction === 'asc';
-          return this.sortCompare(a[sort.active], b[sort.active], isAsc);
-        });
-        return;
-    }
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'active':
+          return this.sortCompare(Number(a.active), Number(b.active), isAsc);
+        case 'name':
+          return this.sortCompare(a.name, b.name, isAsc);
+        case 'startDate':
+          return this.sortCompare(
+            this.sortDateValue(a.startDate),
+            this.sortDateValue(b.startDate),
+            isAsc,
+          );
+        case 'endDate':
+          return this.sortCompare(
+            this.sortDateValue(a.endDate),
+            this.sortDateValue(b.endDate),
+            isAsc,
+          );
+        case 'lastTeachingDate':
+          return this.sortCompare(
+            this.sortDateValue(a.lastTeachingDate),
+            this.sortDateValue(b.lastTeachingDate),
+            isAsc,
+          );
+        case 'activeUntil':
+          return this.sortCompare(
+            this.sortDateValue(a.activeUntil),
+            this.sortDateValue(b.activeUntil),
+            isAsc,
+          );
+        default:
+          return 0;
+      }
+    });
   }
 }
 
 @Component({
   selector: 'f-new-teaching-period-dialog',
   templateUrl: 'new-teaching-period-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class NewTeachingPeriodDialogComponent {
+export class NewTeachingPeriodDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     private dialogRef: MatDialogRef<NewTeachingPeriodDialogComponent>,
     public teachingPeriodService: TeachingPeriodService,
     public teachingPeriodBreakService: TeachingPeriodBreakService,
+    public campusService: CampusService,
     public alertService: AlertService,
   ) {}
-  public newOrSelectedTeachingPeriod = this.data.teachingPeriod || new TeachingPeriod();
+  public newOrSelectedTeachingPeriod: TeachingPeriod =
+    this.data.teachingPeriod || new TeachingPeriod();
+  public teachingBreaks$: Observable<TeachingPeriodBreak[]> = this.newOrSelectedTeachingPeriod
+    .breaksCache.values as Observable<TeachingPeriodBreak[]>;
 
   public tempBreak = new TeachingPeriodBreak();
+  public editingBreak: TeachingPeriodBreak;
+  public campuses: Campus[] = [];
+
+  ngOnInit(): void {
+    this.campusService.query().subscribe((campuses) => (this.campuses = campuses));
+  }
+
+  defaultLastTeachingDate(endDate: Date): void {
+    if (!this.newOrSelectedTeachingPeriod.lastTeachingDate) {
+      this.newOrSelectedTeachingPeriod.lastTeachingDate = endDate;
+    }
+  }
 
   addTeachingBreak() {
     this.newOrSelectedTeachingPeriod
-      .addBreak(this.tempBreak.startDate, this.tempBreak.numberOfWeeks)
+      .addBreak(
+        this.tempBreak.startDate,
+        this.tempBreak.numberOfDays,
+        this.tempBreak.campusIds,
+        this.tempBreak.label,
+        this.tempBreak.pauseWeekCount,
+      )
       .subscribe({
-        next: (teachingPeriodBreak) => {
+        next: () => {
           this.alertService.success('Break added');
-          console.log(teachingPeriodBreak);
         },
         error: (response) => {
           this.alertService.error(`Error adding break. ${response}`);
@@ -123,13 +190,63 @@ export class NewTeachingPeriodDialogComponent {
 
   deleteBreak(teachingPeriod: TeachingPeriod, teachingBreak: TeachingPeriodBreak): void {
     teachingPeriod.removeBreak(teachingBreak.id).subscribe({
-      next: (teachingPeriodBreak) => {
-        console.log(teachingPeriodBreak);
-      },
       error: (response) => {
         this.alertService.error(`Error deleting break. ${response}`);
       },
     });
+  }
+
+  editTeachingBreak(teachingBreak: TeachingPeriodBreak): void {
+    this.editingBreak = Object.assign(new TeachingPeriodBreak(), teachingBreak, {
+      campusIds: [...teachingBreak.campusIds],
+    });
+  }
+
+  cancelEditingBreak(): void {
+    this.editingBreak = undefined;
+  }
+
+  saveTeachingBreak(teachingBreak: TeachingPeriodBreak): void {
+    this.teachingPeriodBreakService
+      .update(
+        {
+          teaching_period_id: this.newOrSelectedTeachingPeriod.id,
+          id: teachingBreak.id,
+        },
+        {entity: this.editingBreak},
+      )
+      .subscribe({
+        next: (updatedBreak) => {
+          Object.assign(teachingBreak, updatedBreak);
+          this.editingBreak = undefined;
+          this.alertService.success('Break updated');
+        },
+        error: (response) => {
+          this.alertService.error(`Error updating break. ${response}`);
+        },
+      });
+  }
+
+  /**
+   * The week count can only be paused by breaks that span whole teaching weeks,
+   * so clear the flag whenever the duration is no longer a multiple of 7 days.
+   */
+  breakDurationChanged(teachingBreak: TeachingPeriodBreak): void {
+    if (!teachingBreak.canPauseWeekCount) {
+      teachingBreak.pauseWeekCount = false;
+    }
+  }
+
+  campusName(campusId: number): string {
+    return this.campuses.find((campus) => campus.id === campusId)?.name ?? `Campus ${campusId}`;
+  }
+
+  campusNames(campusIds: number[]): string {
+    return campusIds.map((campusId) => this.campusName(campusId)).join(', ');
+  }
+
+  campusSummary(campusIds: number[]): string {
+    return campusIds.length ? `Campuses: ${this.campusNames(campusIds)}` : 'All campuses';
   }
 
   submitTeachingPeriod() {
@@ -142,6 +259,7 @@ export class NewTeachingPeriodDialogComponent {
     observer.subscribe({
       next: (teachingPeriod) => {
         this.alertService.success(`${teachingPeriod.name} saved`);
+        this.dialogRef.close(teachingPeriod);
       },
       error: (response) => {
         this.alertService.error(`Error saving teaching period. ${response}`);

@@ -1,32 +1,99 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {CalendarEvent} from 'angular-calendar';
-import {Observable} from 'rxjs';
+import {formatDate} from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  LOCALE_ID,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, Subscription, first, of} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {Unit} from 'src/app/api/models/unit';
 import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {TabManagementBase} from 'src/app/common/tabs/tab-management';
+
+type AnalyticsTabKey =
+  | 'task-completion'
+  | 'target-grades'
+  | 'tasks-awaiting-feedback'
+  | 'resubmissions'
+  | 'tutor-times'
+  | 'download-data';
+
+interface AnalyticsTab {
+  label: string;
+  routeSegment: AnalyticsTabKey;
+}
 
 @Component({
   selector: 'f-unit-analytics',
   templateUrl: 'unit-analytics-route.component.html',
   styleUrls: ['unit-analytics-route.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class UnitAnalyticsComponent {
-  @Input() unit: Unit;
+export class UnitAnalyticsComponent
+  extends TabManagementBase<AnalyticsTab>
+  implements OnInit, OnDestroy
+{
+  @Input() public unit$: Observable<Unit>;
+
+  public unit: Unit;
+
+  public readonly tabs: AnalyticsTab[] = [
+    {label: 'Task Completion', routeSegment: 'task-completion'},
+    {label: 'Target Grades', routeSegment: 'target-grades'},
+    // {label: 'Tasks Awaiting Feedback', routeSegment: 'tasks-awaiting-feedback'},
+    // {label: 'Resubmissions', routeSegment: 'resubmissions'},
+    {label: 'Tutor Times', routeSegment: 'tutor-times'},
+    {label: 'Download Data', routeSegment: 'download-data'},
+  ];
+
+  public currentTab: AnalyticsTab = this.tabs[0];
+
+  protected readonly routeSegment = 'analytics';
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private sidekiqProgressModalService: SidekiqProgressModalService,
     private alertsService: AlertService,
     private fileDownloaderService: FileDownloaderService,
     private userService: UserService,
-    private alertService: AlertService,
-  ) {}
+    router: Router,
+    route: ActivatedRoute,
+    @Inject(LOCALE_ID) private locale: string,
+  ) {
+    super(route, router);
+  }
+
+  ngOnInit(): void {
+    this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'));
+    this.unit$ = this.unit$ ?? of(this.route.parent.snapshot.data.unit);
+    this.unit$?.pipe(first()).subscribe((unit) => {
+      this.unit = unit;
+    });
+    this.subscriptions.push(
+      this.route.paramMap.subscribe((params) => this.updateCurrentTabFromState(params.get('tab'))),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
 
   get role() {
-    return this.unit.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
+    return this.unit?.staff.find((s) => s.user.id === this.userService.currentUser.id)?.role;
+  }
+
+  get isAdmin() {
+    return this.userService.currentUser?.systemRole === 'Admin';
   }
 
   public getTaskCompletionCsv() {
@@ -61,6 +128,16 @@ export class UnitAnalyticsComponent {
     );
   }
 
+  public getOverflowTaskClaimsCsv() {
+    const timestamp = formatDate(new Date(), 'd-MMMM-y-HHmm', this.locale).toLowerCase();
+
+    this.downloadCsv(
+      this.unit.downloadOverflowTaskClaimsCsv(),
+      'Overflow Task Claims CSV',
+      `${this.unit.code}-overflow-task-claims-${timestamp}.csv`,
+    );
+  }
+
   public downloadCsv(newJob: Observable<SidekiqJob>, title: string, filename: string) {
     newJob.subscribe({
       next: (job) => {
@@ -74,8 +151,8 @@ export class UnitAnalyticsComponent {
           this.fileDownloaderService.downloadBlobToFile(url, filename);
         });
       },
-      error: (_error) => {
-        this.alertsService.error(`Could not download ${title}`, 6000);
+      error: (error) => {
+        this.alertsService.error(`Could not download ${title}: ${error}`, 6000);
       },
     });
   }

@@ -4,25 +4,28 @@
     This task won't be marked as complete by your tutor. It will be assessed as part of your final
     portfolio.
   </p>
-  <p>
-    You can submit it for feedback before the deadline, but you'll need to resubmit it later for
-    portfolio assessment.
-  </p>
-  <div class="p-5 flex justify-center gap-5">
+  @if (!isPastFeedbackDeadline) {
+    <p>
+      You can submit it for feedback before the deadline, but you'll need to resubmit it later for
+      portfolio assessment.
+    </p>
+  }
+  <div class="flex justify-center gap-3 p-3">
     <button
-      matTooltip="Receive feedback from your tutor"
+      class="text-align flex size-[175px] flex-col items-center gap-2 p-1"
       mat-raised-button
-      class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
+      matTooltip="Receive feedback from your tutor"
       [color]="selectedTransition === 'ready_for_feedback' ? 'primary' : 'default'"
+      [disabled]="isPastFeedbackDeadline"
       (click)="selectRff()"
     >
       <mat-icon class="icon-size">grading</mat-icon>
       <div class="text-center">I would like feedback</div>
     </button>
     <button
-      matTooltip="Submit directly for portfolio assessment"
+      class="text-align flex size-[175px] flex-col items-center gap-2 p-1"
       mat-raised-button
-      class="h-[175px] w-[175px] flex flex-col text-align p-2 items-center gap-3"
+      matTooltip="Submit directly for portfolio assessment"
       [color]="selectedTransition === 'assess_in_portfolio' ? 'primary' : 'default'"
       (click)="selectAip()"
     >
@@ -31,7 +34,20 @@
       <div class="text-center">I'm done!</div>
     </button>
   </div>
-  @if (selectedTransition === 'ready_for_feedback') {
+  @if (isPastFeedbackDeadline) {
+    <div
+      class="flex items-start gap-3 rounded-md border border-l-4 border-red-300 bg-red-50 p-4 text-red-900"
+      role="alert"
+    >
+      <mat-icon class="shrink-0 text-red-600">warning</mat-icon>
+      <div>
+        <p class="m-0 font-semibold">Feedback deadline passed</p>
+        <p class="mt-1 mb-0">
+          This task can now only be submitted for assessment in your portfolio.
+        </p>
+      </div>
+    </div>
+  } @else if (selectedTransition === 'ready_for_feedback') {
     <p>
       You've made progress on this task and would like feedback, clarification, or to discuss
       questions with your tutor.
@@ -55,8 +71,8 @@
 <mat-dialog-actions class="flex justify-between">
   <button mat-raised-button [mat-dialog-close]>Cancel</button>
   <button
-    mat-raised-button
     color="primary"
+    mat-raised-button
     [disabled]="selectedTransition === null"
     (click)="submit()"
   >

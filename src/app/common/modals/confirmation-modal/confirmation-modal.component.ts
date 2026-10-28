@@ -1,6 +1,6 @@
-import {Component, OnInit, Input, Inject} from '@angular/core';
-import {AlertService} from '../../services/alert.service';
+import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {AlertService} from '../../services/alert.service';
 
 export interface ConfirmationModalData {
   title: string;
@@ -15,6 +15,8 @@ export interface ConfirmationModalData {
   selector: 'confirmation-modal',
   templateUrl: './confirmation-modal.component.html',
   styleUrls: ['./confirmation-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class ConfirmationModalComponent implements OnInit {
   @Input() title: string;

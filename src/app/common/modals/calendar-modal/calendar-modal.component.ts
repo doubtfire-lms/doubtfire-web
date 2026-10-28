@@ -1,14 +1,24 @@
-import {Component, OnInit, Inject, ViewChild, AfterViewInit} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {Project, ProjectService, Webcal, WebcalService} from 'src/app/api/models/doubtfire-model';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {AlertService} from '../../services/alert.service';
+import {ConfirmationModalService} from '../confirmation-modal/confirmation-modal.service';
 
 @Component({
   selector: 'calendar-modal',
   templateUrl: './calendar-modal.component.html',
   styleUrls: ['./calendar-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class CalendarModalComponent implements OnInit, AfterViewInit {
   @ViewChild('webcalToggle') webcalToggle: MatSlideToggle;
@@ -16,6 +26,7 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
   webcal: Webcal | null;
   working: boolean = true;
   copying: boolean = false;
+  selectedCalendarProviderIndex: number = 0;
   projects: Project[] = [];
 
   // Used to store user interaction with the reminder option. These values aren't bound directly to `this.webcal`
@@ -29,7 +40,8 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
     private constants: DoubtfireConstants,
     private alerts: AlertService,
     private projectService: ProjectService,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: object,
+    private confirmationModal: ConfirmationModalService,
   ) {}
 
   ngOnInit() {
@@ -65,8 +77,21 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    * Invoked when the user toggles the webcal.
    */
   onWebcalToggle() {
+    if (this.webcal.enabled) {
+      this.confirmationModal.show(
+        'Disable web calendar',
+        'Disabling your web calendar will expire the current subscription URL. Any calendar apps using this URL will stop updating, and a new URL will be generated if you enable the calendar again.',
+        () => this.updateWebcalEnabled(false),
+      );
+      return;
+    }
+
+    this.updateWebcalEnabled(true);
+  }
+
+  private updateWebcalEnabled(enabled: boolean) {
     this.working = true;
-    this.webcal.enabled = !this.webcal.enabled;
+    this.webcal.enabled = enabled;
 
     this.webcalService.update(this.webcal).subscribe((webcal) => {
       this.loadWebcal(webcal);
@@ -92,12 +117,18 @@ export class CalendarModalComponent implements OnInit, AfterViewInit {
    * Invoked when the user requests their webcal URL to be changed.
    */
   onChangeWebcalUrl() {
-    this.working = true;
-    this.webcal.shouldChangeGuid = true;
-    this.webcalService.update(this.webcal).subscribe((webcal) => {
-      this.loadWebcal(webcal);
-      this.working = false;
-    });
+    this.confirmationModal.show(
+      'Regenerate URL',
+      'Regenerating your calendar URL will disable the current subscription link. Any calendar apps using the old URL will stop updating until you subscribe again with the new one.',
+      () => {
+        this.working = true;
+        this.webcal.shouldChangeGuid = true;
+        this.webcalService.update(this.webcal).subscribe((webcal) => {
+          this.loadWebcal(webcal);
+          this.working = false;
+        });
+      },
+    );
   }
 
   /**

@@ -1,20 +1,20 @@
-@if (loading) {
-  <div class="w-full flex flex-col gap-5 justify-center items-center min-h-[150px]">
+@if (loadingIncludedTasks) {
+  <div class="flex min-h-[150px] w-full flex-col items-center justify-center gap-3">
     <div>Loading tasks...</div>
     <mat-progress-spinner mode="indeterminate"> </mat-progress-spinner>
   </div>
 } @else {
   @if (tasksInPortfolio.length === 0) {
-    <div class="w-full p-4 flex flex-col justify-center items-center h-full text-gray-400">
+    <div class="flex size-full flex-col items-center justify-center p-2.5 text-gray-400">
       <mat-icon class="scale-125">assignment_late</mat-icon>
-      <p class="p-4">No tasks found</p>
+      <p class="p-2.5">No tasks found</p>
     </div>
   } @else {
     <ol>
       @for (task of tasksInPortfolio; track task) {
-        <li class="my-2">
+        <li class="my-1">
           <div class="flex justify-between">
-            <div class="flex gap-2 items-center">
+            <div class="flex items-center gap-1">
               <div>{{ task.definition.abbreviation }} &mdash; {{ task.definition.name }}</div>
             </div>
             <status-icon [status]="task.status"></status-icon>
@@ -22,5 +22,34 @@
         </li>
       }
     </ol>
+  }
+  @if (tasksStillProcessing.length > 0) {
+    <div class="my-4 rounded-md border border-amber-200 bg-amber-50 p-4">
+      <div class="mb-3 flex items-start gap-3">
+        <mat-icon class="text-amber-600">hourglass_top</mat-icon>
+        <div>
+          <p class="font-medium text-amber-900">Tasks still processing</p>
+          <p class="mt-1 text-sm text-amber-800">
+            Please wait until these tasks have finished processing before creating your portfolio to
+            ensure they are included.
+          </p>
+        </div>
+      </div>
+      <ol class="border-t border-amber-200">
+        @for (task of tasksStillProcessing; track task) {
+          <li class="flex items-center justify-between gap-3 py-3">
+            <div class="text-sm text-amber-950">
+              {{ task.definition.abbreviation }} &mdash; {{ task.definition.name }}
+            </div>
+            <div class="shrink-0">
+              <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+            </div>
+          </li>
+        }
+      </ol>
+      <p class="mt-4 px-4 py-3 text-center text-sm text-amber-800">
+        This list will automatically refresh as tasks finish processing.
+      </p>
+    </div>
   }
 }

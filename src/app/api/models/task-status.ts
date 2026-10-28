@@ -14,16 +14,17 @@ export type TaskStatusEnum =
   | 'fail'
   | 'time_exceeded'
   | 'assess_in_portfolio'
-  | 'attention_required';
+  | 'attention_required'
+  | 'rediscuss';
 
-export type TaskStatusUiData = {
+export interface TaskStatusUiData {
   status: TaskStatusEnum;
   icon: string;
   materialIcon: string;
   label: string;
   class: string;
   help: {detail: string; reason: string; action: string};
-};
+}
 
 export class TaskStatus {
   public static readonly STATUS_KEYS: TaskStatusEnum[] = [
@@ -41,6 +42,7 @@ export class TaskStatus {
     'time_exceeded',
     'assess_in_portfolio',
     'attention_required',
+    'rediscuss',
   ];
 
   public static readonly VALID_TOP_TASKS: TaskStatusEnum[] = [
@@ -53,6 +55,7 @@ export class TaskStatus {
     'discuss',
     'attention_required',
     'demonstrate',
+    'rediscuss',
   ];
 
   public static readonly SUBMITTED_STATUSES: TaskStatusEnum[] = [
@@ -65,6 +68,7 @@ export class TaskStatus {
     'time_exceeded',
     'assess_in_portfolio',
     'attention_required',
+    'rediscuss',
   ];
 
   public static readonly FINAL_STATUSES: TaskStatusEnum[] = [
@@ -78,6 +82,7 @@ export class TaskStatus {
   public static readonly GRADEABLE_STATUSES: TaskStatusEnum[] = [
     'fail',
     'discuss',
+    'rediscuss',
     'demonstrate',
     'complete',
   ];
@@ -93,6 +98,7 @@ export class TaskStatus {
     'discuss',
     'attention_required',
     'demonstrate',
+    'rediscuss',
   ];
 
   public static readonly STATE_THAT_ALLOWS_EXTENSION: TaskStatusEnum[] = [
@@ -109,6 +115,7 @@ export class TaskStatus {
     'demonstrate',
     'ready_for_feedback',
     'discuss',
+    'rediscuss',
     'complete',
     'time_exceeded',
     'fail',
@@ -129,6 +136,7 @@ export class TaskStatus {
     'fix_and_resubmit',
     'feedback_exceeded',
     'discuss',
+    'rediscuss',
     'demonstrate',
     'complete',
     'attention_required',
@@ -137,6 +145,7 @@ export class TaskStatus {
   public static readonly FEEDBACK_TEMPLATE_STATUSES: TaskStatusEnum[] = [
     'complete',
     'discuss',
+    'rediscuss',
     'fix_and_resubmit',
     'redo',
     'feedback_exceeded',
@@ -156,6 +165,7 @@ export class TaskStatus {
     ['fix_and_resubmit', 0.3],
     ['ready_for_feedback', 0.5],
     ['discuss', 0.8],
+    ['rediscuss', 0.8],
     ['demonstrate', 0.8],
     ['complete', 1.0],
     ['time_exceeded', 0.3],
@@ -175,6 +185,7 @@ export class TaskStatus {
     ['feedback_exceeded', 'DNR'],
     ['fix_and_resubmit', 'FIX'],
     ['discuss', 'DIS'],
+    ['rediscuss', 'RDS'],
     ['demonstrate', 'DEM'],
     ['complete', 'COM'],
     ['fail', 'FAL'],
@@ -194,6 +205,7 @@ export class TaskStatus {
     ['ready_for_feedback', []],
     ['complete', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
     ['discuss', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
+    ['rediscuss', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
     ['demonstrate', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
     ['fix_and_resubmit', []],
     ['redo', []],
@@ -204,7 +216,7 @@ export class TaskStatus {
     ['attention_required', ['ready_for_feedback', 'not_started', 'working_on_it', 'need_help']],
   ]);
 
-  public static readonly STATUS_LABELS = new Map<TaskStatusEnum, string>([
+  public static readonly STATUS_LABELS: Map<TaskStatusEnum, string> = new Map([
     ['ready_for_feedback', 'Ready for Feedback'],
     ['not_started', 'Not Started'],
     ['working_on_it', 'Working On It'],
@@ -213,6 +225,7 @@ export class TaskStatus {
     ['feedback_exceeded', 'Feedback Exceeded'],
     ['fix_and_resubmit', 'Resubmit'],
     ['discuss', 'Discuss'],
+    ['rediscuss', 'Rediscuss'],
     ['demonstrate', 'Demonstrate'],
     ['complete', 'Complete'],
     ['fail', 'Fail'],
@@ -221,25 +234,24 @@ export class TaskStatus {
     ['attention_required', 'Attention Required'],
   ]);
 
-  public static readonly STATUS_ICONS = new Map<TaskStatusEnum, string>([
-    ['ready_for_feedback', 'fa fa-thumbs-o-up'],
-    ['not_started', 'fa fa-pause'],
-    ['working_on_it', 'fa fa-bolt'],
-    ['need_help', 'fa fa-question-circle'],
-    ['redo', 'fa fa-refresh'],
-    ['feedback_exceeded', 'fa fa-low-vision'],
-    ['fix_and_resubmit', 'fa fa-wrench'],
-    ['discuss', 'fa fa-commenting'],
-    ['demonstrate', 'fa fa-commenting'],
-    ['complete', 'fa fa-check'],
-    ['fail', 'fa fa-times'],
-    ['time_exceeded', 'fa fa-clock-o'],
-    ['assess_in_portfolio', 'fa fa-folder-open'],
-    ['attention_required', 'fa fa-commenting'],
+  public static readonly STATUS_NAME_TO_KEY: Map<string, TaskStatusEnum> = new Map([
+    ['Ready for Feedback', 'ready_for_feedback'],
+    ['Not Started', 'not_started'],
+    ['Working On It', 'working_on_it'],
+    ['Need Help', 'need_help'],
+    ['Redo', 'redo'],
+    ['Feedback Exceeded', 'feedback_exceeded'],
+    ['Resubmit', 'fix_and_resubmit'],
+    ['Discuss', 'discuss'],
+    ['Rediscuss', 'rediscuss'],
+    ['Re-discuss', 'rediscuss'],
+    ['Demonstrate', 'demonstrate'],
+    ['Complete', 'complete'],
+    ['Fail', 'fail'],
+    ['Time Exceeded', 'time_exceeded'],
   ]);
 
-  // Material icons used by newer UI elements.
-  public static readonly STATUS_MATERIAL_ICONS = new Map<TaskStatusEnum, string>([
+  public static readonly STATUS_ICONS: Map<TaskStatusEnum, string> = new Map([
     ['ready_for_feedback', 'thumb_up'],
     ['not_started', 'pause'],
     ['working_on_it', 'bolt'],
@@ -248,16 +260,36 @@ export class TaskStatus {
     ['feedback_exceeded', 'visibility_off'],
     ['fix_and_resubmit', 'construction'],
     ['discuss', 'question_answer'],
+    ['rediscuss', 'feedback'],
     ['demonstrate', 'record_voice_over'],
-    ['complete', 'done'],
+    ['complete', 'done_all'],
     ['fail', 'close'],
     ['time_exceeded', 'schedule'],
     ['assess_in_portfolio', 'folder_open'],
     ['attention_required', 'sms_failed'],
   ]);
 
+  // Material icons used by newer UI elements.
+  public static readonly STATUS_MATERIAL_ICONS: Map<TaskStatusEnum, string> = new Map([
+    ['ready_for_feedback', 'thumb_up_off_alt'],
+    ['not_started', 'pause'],
+    ['working_on_it', 'bolt'],
+    ['need_help', 'help'],
+    ['redo', 'undo'],
+    ['feedback_exceeded', 'visibility_off'],
+    ['fix_and_resubmit', 'construction'],
+    ['discuss', 'question_answer'],
+    ['rediscuss', 'feedback'],
+    ['demonstrate', 'record_voice_over'],
+    ['complete', 'done'],
+    ['fail', 'close'],
+    ['time_exceeded', 'schedule'],
+    ['assess_in_portfolio', 'rate_review'],
+    ['attention_required', 'sms_failed'],
+  ]);
+
   // Please make sure this matches task-status-colors.less
-  public static readonly STATUS_COLORS = new Map<TaskStatusEnum, string>([
+  public static readonly STATUS_COLORS: Map<TaskStatusEnum, string> = new Map([
     ['ready_for_feedback', '#0079D8'],
     ['not_started', '#CCCCCC'],
     ['working_on_it', '#EB8F06'],
@@ -266,6 +298,7 @@ export class TaskStatus {
     ['feedback_exceeded', '#d46b54'],
     ['redo', '#804000'],
     ['discuss', '#31b0d5'],
+    ['rediscuss', '#126352'],
     ['demonstrate', '#428bca'],
     ['complete', '#5BB75B'],
     ['fail', '#d93713'],
@@ -274,7 +307,7 @@ export class TaskStatus {
     ['attention_required', '#f1814d'],
   ]);
 
-  public static readonly STATUS_SEQ = new Map<TaskStatusEnum, number>([
+  public static readonly STATUS_SEQ: Map<TaskStatusEnum, number> = new Map([
     ['not_started', 1],
     ['fail', 2],
     ['feedback_exceeded', 3],
@@ -289,6 +322,7 @@ export class TaskStatus {
     ['complete', 12],
     ['assess_in_portfolio', 13],
     ['attention_required', 14],
+    ['rediscuss', 15],
   ]);
 
   public static readonly SWITCHABLE_STATES = {
@@ -296,6 +330,7 @@ export class TaskStatus {
     tutor: [
       'complete',
       'discuss',
+      'rediscuss',
       'attention_required',
       'demonstrate',
       'fix_and_resubmit',
@@ -309,10 +344,10 @@ export class TaskStatus {
   // detail = in a brief context to the student
   // reason = reason for this status
   // action = action student can take
-  public static readonly HELP_DESCRIPTIONS = new Map<
+  public static readonly HELP_DESCRIPTIONS: Map<
     TaskStatusEnum,
     {detail: string; reason: string; action: string}
-  >([
+  > = new Map([
     [
       'ready_for_feedback',
       {
@@ -384,6 +419,16 @@ export class TaskStatus {
         detail: 'Your work needs to be discussed further.',
         reason: 'Your work looks good and your tutor believes it is on track.',
         action: 'For this to be marked as complete, attend class and discuss it with your tutor.',
+      },
+    ],
+    [
+      'rediscuss',
+      {
+        detail: 'Your work needs another discussion.',
+        reason:
+          'You attempted to discuss this task, but the discussion was not adequate to sign it off.',
+        action:
+          'Brush up your knowledge and return for another discussion with your tutor to get the task signed off.',
       },
     ],
     [
@@ -465,7 +510,20 @@ export class TaskStatus {
     };
   }
 
+  public static matchesSearch(status: TaskStatusEnum | undefined, matchText: string): boolean {
+    if (!status) {
+      return false;
+    }
+
+    const searchText = matchText.toLowerCase();
+
+    return (
+      (TaskStatus.STATUS_LABELS.get(status)?.toLowerCase().indexOf(searchText) ?? -1) >= 0 ||
+      status.replace(new RegExp('_', 'g'), ' ').indexOf(searchText) >= 0
+    );
+  }
+
   public static statusClass(status: TaskStatusEnum | undefined): string {
-    return status?.replace(new RegExp('_', 'g'), '-');
+    return status?.replace(new RegExp('_', 'g'), '-') ?? 'not-started';
   }
 }

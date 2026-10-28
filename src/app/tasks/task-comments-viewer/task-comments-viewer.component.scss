@@ -1,17 +1,17 @@
-@import '../../../styles/mixins/scrollable.scss';
+@use 'sass:color';
+@use 'styles/mixins/scrollable' as *;
 
 :host {
   min-width: 230px;
 }
 
-::ng-deep .text-bubble .comment-text .markdown-to-html p {
-  margin: 0 0 0 0px !important;
-}
-
 $comment-bubble-color: #3939ff;
-$comment-bubble-color-darker: darken($comment-bubble-color, 10%);
+$comment-bubble-color-darker: color.adjust($comment-bubble-color, $lightness: -10%);
 $comment-bubble-color-other-user: rgb(241, 240, 240);
-$comment-bubble-color-other-user-darker: darken($comment-bubble-color-other-user, 10%);
+$comment-bubble-color-other-user-darker: color.adjust(
+  $comment-bubble-color-other-user,
+  $lightness: -10%
+);
 $comment-author-bubble-size: 38px;
 $comment-text-padding: 12px;
 
@@ -78,7 +78,7 @@ $comment-inner-border-radius: 4px;
     // padding-left: 40px;
 
     // &.own {
-      // display: none;
+    // display: none;
     // }
   }
 
@@ -140,11 +140,13 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  .comment-container .comment-extension, .comment-container .comment-scorm-extension {
+  .comment-container .comment-extension,
+  .comment-container .comment-scorm-extension {
     width: 100%;
   }
 
-  .comment-container .comment-assessment, .comment-container .comment-scorm {
+  .comment-container .comment-assessment,
+  .comment-container .comment-scorm {
     width: 100%;
   }
 
@@ -222,7 +224,7 @@ $comment-inner-border-radius: 4px;
       .reply-text {
         margin: 0 0.4em 1em 0;
         max-lines: 2;
-        max-height: 30px;
+        max-height: 35px;
         line-clamp: 2;
         line-height: 15.36px;
         margin-left: 0.8em;
@@ -250,7 +252,11 @@ $comment-inner-border-radius: 4px;
   .comment.comment-by-other-user user-icon .user-icon-initials {
     box-shadow: 0 0 0 1px $comment-bubble-color-other-user-darker;
     background: $comment-bubble-color-other-user;
-    background: linear-gradient(to left, $comment-bubble-color-other-user, $comment-bubble-color-other-user-darker);
+    background: linear-gradient(
+      to left,
+      $comment-bubble-color-other-user,
+      $comment-bubble-color-other-user-darker
+    );
     // color: $text-color;
     color: black;
   }
@@ -331,18 +337,12 @@ $comment-inner-border-radius: 4px;
     background: $comment-bubble-color;
 
     .comment-text,
-    .comment-pdf,
-    .comment-discussion,
-    .markdown-to-html p {
+    .comment-pdf {
       padding-right: 6px;
       padding-left: 4px;
       word-break: break-word;
       -webkit-font-smoothing: antialiased;
       margin-bottom: 0 !important;
-    }
-
-    .comment-text .markdown-to-html p {
-      margin: 0 0 0 0 !important;
     }
 
     .comment-audio {
@@ -354,7 +354,8 @@ $comment-inner-border-radius: 4px;
     }
   }
 
-  .comment .extension-bubble, .comment .scorm_extension-bubble {
+  .comment .extension-bubble,
+  .comment .scorm_extension-bubble {
     width: 100%;
     background-color: transparent;
   }
@@ -363,6 +364,8 @@ $comment-inner-border-radius: 4px;
   .comment .text-bubble,
   .comment .pdf-bubble {
     @include base-bubble;
+    --markdown-link-color: #bae6fd;
+    --pdf-link-color: #bae6fd;
     display: inline-block;
     padding-left: $comment-text-padding;
     padding-right: $comment-text-padding;
@@ -371,18 +374,6 @@ $comment-inner-border-radius: 4px;
     a {
       color: white;
       margin-bottom: 0px;
-    }
-
-    ::ng-deep .text-bubble .comment-text .markdown-to-html p {
-      margin: 0 0 0 0px !important;
-    }
-
-    .markdown-to-html p > *:last-child {
-      margin-bottom: 0px;
-    }
-
-    .markdown-to-html p > pre:last-child {
-      margin-bottom: 0em;
     }
   }
 
@@ -405,10 +396,6 @@ $comment-inner-border-radius: 4px;
       margin-right: 0;
       padding-right: 0;
     }
-
-    .markdown-to-html > *:last-child {
-      margin-bottom: 0px;
-    }
   }
 
   // Image comments
@@ -418,7 +405,7 @@ $comment-inner-border-radius: 4px;
   }
 
   // Disucssion comments
-  .comment .discussion-bubble {
+  /* .comment .discussion-bubble {
     @include base-bubble;
     max-width: 300px;
 
@@ -427,15 +414,17 @@ $comment-inner-border-radius: 4px;
     }
 
     background: $discussion-comment-bubble-color;
-  }
+  } */
 
   .comment.comment-by-other-user .text-bubble {
+    --markdown-link-color: #{$comment-bubble-color};
     background: $comment-bubble-color-other-user;
     color: black;
     margin-left: 0;
   }
 
   .comment.comment-by-other-user .pdf-bubble {
+    --pdf-link-color: #{$comment-bubble-color};
     background: $comment-bubble-color-other-user;
     color: black;
     color: black;

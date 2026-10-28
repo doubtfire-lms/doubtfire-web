@@ -1,32 +1,51 @@
 <mat-dialog-content class="mat-typography">
-  <div class="modal-header">
-    <i class="logo"></i>
-    <h1 class="full logo">
+  <div class="flex w-full items-center justify-center gap-5 text-center">
+    <img class="mb-3 h-24 w-24" src="/assets/images/logo.svg" alt="OnTrack logo" />
+    <h1 class="logo text-5xl sm:text-6xl">
       {{data.externalName}}
-      <small [hidden]="data.externalName == 'Doubtfire'"> Powered By formatif </small>
-      <small [hidden]="data.externalName != 'Doubtfire'"> Version 6 </small>
+      <small
+        class="block text-right text-2xl leading-loose"
+        [hidden]="data.externalName != 'Doubtfire'"
+      >
+        Version 6
+      </small>
     </h1>
   </div>
-  <div class="modal-body">
-    <h2>Lead Contributors</h2>
-    <ul>
+  <mat-divider class="my-6"></mat-divider>
+  <div>
+    <h2 class="text-center text-xl font-bold text-gray-800 uppercase">Lead Contributors</h2>
+    <ul
+      class="mx-auto flex w-11/12 list-none flex-wrap justify-center gap-y-8 p-0 sm:w-5/6 sm:gap-x-10 sm:py-12"
+    >
       @for (person of data.mainContributors; track person) {
-      <li>
-        <a target="_blank" [href]="person.html_url">
-          <img [src]="person.avatar_url" />
-          <div class="name">{{person.name}}</div>
-          <div class="handler">&#64;{{person.login}}</div>
+      <li class="mx-auto w-4/5 sm:mx-0 sm:w-1/5">
+        <a
+          class="block w-full text-center text-lg text-gray-700 no-underline hover:underline"
+          target="_blank"
+          [href]="person.html_url"
+        >
+          <img class="mx-auto mb-4 w-full rounded-full" [src]="person.avatar_url" />
+          <div class="text-center leading-none font-bold">{{person.name}}</div>
+          <div class="mt-1 block text-lg">&#64;{{person.login}}</div>
         </a>
       </li>
       }
     </ul>
-    <h2>Contributors</h2>
-    <table mat-table [dataSource]="data.allContributors" matSort (matSortChange)="sortData($event)">
+    <h2 class="text-center text-xl font-bold text-gray-800 uppercase">Contributors</h2>
+    <table
+      class="mb-4 w-full"
+      mat-table
+      [dataSource]="data.allContributors"
+      matSort
+      (matSortChange)="sortData($event)"
+    >
       <!-- Login Column -->
       <ng-container matColumnDef="contributor">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Contributor</th>
         <td mat-cell *matCellDef="let element">
-          <a target="_blank" [href]="element.htmlUrl"><img [src]="element.avatarUrl" />&#64;{{element.login}}</a>
+          <a class="inline-flex items-center" target="_blank" [href]="element.htmlUrl">
+            <img class="m-4 w-12 rounded-full" [src]="element.avatarUrl" />&#64;{{element.login}}
+          </a>
         </td>
       </ng-container>
       <!-- Contributions Column -->
@@ -59,10 +78,16 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     <p class="text-muted text-center">&copy; 2012&ndash;2023. Made in Melbourne.</p>
-    <p class="text-muted text-center logo-smallprint">
-      Doubtfire is an <a href="http://github.com/doubtfire-lms">Open Source</a> project licensed under
-      <strong>GNU Affero General Public License (AGPL) v3.0</strong>. Star us on
-      <a href="http://github.com/doubtfire-lms/doubtfire-web">GitHub</a>!
+    <p class="text-muted text-center text-sm">
+      OnTrack is an
+      <a class="text-gray-900" href="http://github.com/doubtfire-lms" target="_blank"
+        >Open Source</a
+      >
+      project licensed under <strong>GNU Affero General Public License (AGPL) v3.0</strong>. Star us
+      on
+      <a class="text-gray-900" href="http://github.com/doubtfire-lms/doubtfire-web" target="_blank"
+        >GitHub</a
+      >!
     </p>
   </div>
 </mat-dialog-content>

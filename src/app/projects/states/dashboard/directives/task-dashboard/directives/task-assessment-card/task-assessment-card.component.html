@@ -1,16 +1,19 @@
-<mat-card appearance="outlined" [hidden]="!(task.definition.isGraded || task.definition.maxQualityPts > 0)">
+<mat-card
+  appearance="outlined"
+  [hidden]="!(task.definition.isGraded || task.definition.maxQualityPts > 0)"
+>
   <mat-card-header>
     <mat-card-title>Assessment Information</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <div [hidden]="!task.definition.isGraded">
-      <div [hidden]="task.hasBeenGraded()" class="callout callout-info">
+      <div class="callout callout-info" [hidden]="task.hasBeenGraded()">
         <p>
           This task will be graded against a grade standard. Your work will be assessed and assigned
-          a grade according to a Pass, Credit, Distinction or High Distinction standard.
+          a grade according to the {{ gradeStandardLabels }} standards configured for this unit.
         </p>
       </div>
-      <div [hidden]="!task.hasBeenGraded()" class="callout callout-success">
+      <div class="callout callout-success" [hidden]="!task.hasBeenGraded()">
         <b>This task has been assigned a grade.</b>
         <p>
           Your tutor has marked you on this task to a
@@ -21,13 +24,13 @@
     <!--/graded-task-is-graded-->
     <!--/graded-task-->
     <div [hidden]="!(task.definition.maxQualityPts > 0)">
-      <p [hidden]="task.hasBeenGivenQualityPoints()" class="callout callout-info">
+      <p class="callout callout-info" [hidden]="task.hasBeenGivenQualityPoints()">
         This task will be graded against a quality scale from
         <strong>0 to {{ task.definition.maxQualityPts }}</strong
         >. Your work will assessed and assigned a star rating based on the quality of your
         submission.
       </p>
-      <div [hidden]="!task.hasBeenGivenQualityPoints()" class="callout callout-success">
+      <div class="callout callout-success" [hidden]="!task.hasBeenGivenQualityPoints()">
         <b>This task has been assessed for quality.</b>
         <p>
           You have been awarded

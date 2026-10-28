@@ -1,12 +1,14 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import QRCode from 'qrcode';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {QrModalData} from './qr-modal.service';
 
 @Component({
   selector: 'f-qr-modal',
   templateUrl: './qr-modal.component.html',
   styleUrls: ['./qr-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class QrModalComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: QrModalData) {}

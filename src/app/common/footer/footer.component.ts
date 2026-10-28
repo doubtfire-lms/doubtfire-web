@@ -1,21 +1,32 @@
-import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
-import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
-import {TaskService} from 'src/app/api/services/task.service';
-import {FileDownloaderService} from '../file-downloader/file-downloader.service';
-import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
+import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import {UnitRole} from 'src/app/api/models/unit-role';
-import {UserService} from 'src/app/api/services/user.service';
 import {ProjectService} from 'src/app/api/services/project.service';
+import {TaskService} from 'src/app/api/services/task.service';
+import {UserService} from 'src/app/api/services/user.service';
+import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {ConfirmationModalService} from '../modals/confirmation-modal/confirmation-modal.service';
 import {DiscussedInClassReasonModalService} from '../modals/discussed-in-class-reason-modal/discussed-in-class-reason-modal.service';
+import {TaskAssessmentModalService} from '../modals/task-assessment-modal/task-assessment-modal.service';
 import {AlertService} from '../services/alert.service';
 
 @Component({
   selector: 'f-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class FooterComponent implements OnInit {
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;
@@ -46,13 +57,15 @@ export class FooterComponent implements OnInit {
   public warningTextLeftOffset: number;
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(_event) {
     // After window resizes, calc the location of the elements again
     this.findSimilaritiesButton();
   }
 
   findSimilaritiesButton() {
-    if (!this.selectedTask?.similaritiesDetected) return;
+    if (!this.selectedTask?.similaritiesDetected) {
+      return;
+    }
 
     const w = this.similaritiesButton?.nativeElement.getBoundingClientRect().width;
     this.leftOffset = this.similaritiesButton?.nativeElement.offsetLeft + w / 2;
@@ -192,6 +205,22 @@ export class FooterComponent implements OnInit {
 
   public get completeButtonEnabled(): boolean {
     return this.actionButtonEnabled && !!this.selectedTask?.canMarkComplete;
+  }
+
+  public get discussActionStatus(): TaskStatusEnum {
+    return this.selectedTask?.status === 'discuss' ? 'rediscuss' : 'discuss';
+  }
+
+  public get discussActionLabel(): string {
+    return this.taskService.statusData(this.discussActionStatus).label;
+  }
+
+  public get discussActionIcon(): string {
+    return this.taskService.statusData(this.discussActionStatus).materialIcon;
+  }
+
+  public get discussActionClass(): string {
+    return this.taskService.statusData(this.discussActionStatus).class;
   }
 
   public get hideMainActionButtonsForModeration(): boolean {

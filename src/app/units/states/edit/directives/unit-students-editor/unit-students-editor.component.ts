@@ -1,28 +1,40 @@
-import {
-  csvUploadModalService,
-  csvResultModalService,
-  unitStudentEnrolmentModal,
-} from './../../../../../ajs-upgraded-providers';
-import {ViewChild, Component, Input, Inject, AfterViewInit, OnDestroy} from '@angular/core';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
 import {HttpClient} from '@angular/common/http';
-import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {Router} from '@angular/router';
+import {Subscription, finalize, timer} from 'rxjs';
+import {switchMap, tap} from 'rxjs/operators';
 import {Project, ProjectService, Unit} from 'src/app/api/models/doubtfire-model';
-import {UIRouter} from '@uirouter/angular';
-import {Subscription} from 'rxjs';
-import {AlertService} from 'src/app/common/services/alert.service';
-import {SpecConModalService} from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
-import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {
+  CsvResult,
+  CsvResultModalService,
+} from 'src/app/common/modals/csv-result-modal/csv-result-modal.service';
+import {CsvUploadModalService} from 'src/app/common/modals/csv-upload-modal/csv-upload-modal.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
+import {SpecConModalService} from 'src/app/common/modals/spec-con-modal/spec-con-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {UnitStudentEnrolmentModalService} from 'src/app/units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.service';
 
 @Component({
   selector: 'unit-students-editor',
   templateUrl: 'unit-students-editor.component.html',
   styleUrls: ['unit-students-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
+export class UnitStudentsEditorComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatTable, {static: false}) table: MatTable<Project>;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -41,39 +53,42 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     'enrolled',
     'goto',
   ];
-  dataSource: MatTableDataSource<Project>;
+  dataSource: MatTableDataSource<Project> = new MatTableDataSource([]);
+  loadingStudents = true;
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
   constructor(
     private httpClient: HttpClient,
-    @Inject(unitStudentEnrolmentModal) private enrolModal: any,
+    private enrolModal: UnitStudentEnrolmentModalService,
     private alerts: AlertService,
-    @Inject(csvUploadModalService) private csvUploadModal: any,
-    @Inject(csvResultModalService) private csvResultModal: any,
+    private csvUploadModal: CsvUploadModalService,
+    private csvResultModal: CsvResultModalService,
     private fileDownloader: FileDownloaderService,
-    private router: UIRouter,
+    private router: Router,
     private projectService: ProjectService,
     private specConModalService: SpecConModalService,
     private sidekiqProgressModalService: SidekiqProgressModalService,
   ) {}
 
-  // The paginator is inside the table
+  ngOnInit(): void {
+    this.dataSource.filterPredicate = (data: Project, filter: string) => data.matches(filter);
+
+    // Reveal cached students right away
+    this.loadingStudents = this.unit.studentCache.currentValues.length === 0;
+
+    this.refreshStudentsAfterRender();
+  }
+
+  // Data must not reach the table before the paginator does - unpaginated, it renders a row per
+  // student and blocks the main thread on a large unit.
   ngAfterViewInit() {
-    this.dataSource = new MatTableDataSource(this.unit.studentCache.currentValuesClone());
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.dataSource.filterPredicate = (data: any, filter: string) => data.matches(filter);
 
     this.subscriptions.push(
       this.unit.studentCache.values.subscribe((students) => {
         this.dataSource.data = students;
-      }),
-    );
-
-    this.subscriptions.push(
-      this.projectService.loadStudents(this.unit, true).subscribe(() => {
-        // projects included in unit...
       }),
     );
   }
@@ -90,7 +105,30 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  private refreshStudentsAfterRender(): void {
+    this.subscriptions.push(
+      timer(0)
+        .pipe(
+          switchMap(() => this.projectService.loadStudents(this.unit, false, true)),
+          // Withdrawn students fold in behind the table rather than holding the skeleton up.
+          tap(() => {
+            this.loadingStudents = false;
+          }),
+          switchMap(() => this.projectService.loadStudents(this.unit, true, true)),
+          finalize(() => {
+            this.loadingStudents = false;
+          }),
+        )
+        .subscribe(() => {
+          // projects included in unit...
+        }),
+    );
+  }
+
   private sortCompare(aValue: number | string, bValue: number | string, isAsc: boolean) {
+    if (aValue === bValue) {
+      return 0;
+    }
     return (aValue < bValue ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
@@ -100,17 +138,28 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     if (!sort.active || sort.direction === '') {
       return;
     }
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'username':
+          return this.sortCompare(a.student.username, b.student.username, isAsc);
         case 'firstName':
+          return this.sortCompare(a.student.firstName, b.student.firstName, isAsc);
         case 'lastName':
+          return this.sortCompare(a.student.lastName, b.student.lastName, isAsc);
         case 'email':
+          return this.sortCompare(a.student.email, b.student.email, isAsc);
         case 'enrolled':
-          return this.sortCompare(a[sort.active], b[sort.active], isAsc);
+          return this.sortCompare(Number(a.enrolled), Number(b.enrolled), isAsc);
         case 'campus':
           return this.sortCompare(a.campus?.abbreviation, b.campus?.abbreviation, isAsc);
+        case 'tutorial':
+          return this.sortCompare(
+            a.shortTutorialDescription(),
+            b.shortTutorialDescription(),
+            isAsc,
+          );
         default:
           return 0;
       }
@@ -118,11 +167,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
   }
 
   public gotoStudent(student: Project) {
-    this.router.stateService.go('projects/dashboard', {
-      projectId: student.id,
-      tutor: true,
-      taskAbbr: '',
-    });
+    this.router.navigate(['/projects', student.id, 'dashboard']);
   }
 
   enrolStudent() {
@@ -132,7 +177,7 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
   uploadEnrolments() {
     this.csvUploadModal.show(
       'Upload Students to Enrol',
-      'Test message',
+      'Upload a CSV to enrol students.',
       {file: {name: 'Enrol CSV Data', type: 'csv'}},
       this.unit.enrolStudentsCSVUrl,
       (response: SidekiqJob) => {
@@ -158,13 +203,37 @@ export class UnitStudentsEditorComponent implements AfterViewInit, OnDestroy {
     );
   }
 
+  uploadStaffNotes() {
+    this.csvUploadModal.show(
+      'Upload Staff Notes',
+      'Upload a CSV with a comment and either a username or login_id column.',
+      {file: {name: 'Staff Notes CSV Data', type: 'csv'}},
+      this.unit.staffNotesCsvUploadUrl,
+      (response: SidekiqJob) => {
+        if (!response || !response.id) {
+          return this.alerts.error('Failed to start staff notes import job', 6000);
+        }
+        this.sidekiqProgressModalService
+          .show(`Importing Staff Notes: ${this.unit.code}`, response.id)
+          .subscribe({
+            next: (job) => {
+              this.csvResultModal.show('Staff Notes CSV Results', JSON.parse(job.result));
+            },
+            error: (error) => {
+              console.error(error);
+            },
+          });
+      },
+    );
+  }
+
   uploadWithdrawals() {
     this.csvUploadModal.show(
       'Upload Students to Withdraw',
-      'Test message',
+      'Upload a CSV to withdraw students.',
       {file: {name: 'Withdraw CSV Data', type: 'csv'}},
       this.unit.withdrawStudentsCSVUrl,
-      (response: any) => {
+      (response: CsvResult) => {
         // at least one student?
         this.csvResultModal.show('Withdraw Student CSV Results', response);
         if (response.success.length > 0) {

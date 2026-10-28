@@ -1,8 +1,8 @@
-import {Inject, Injectable, OnDestroy} from '@angular/core';
-import {MediaObserver} from 'ng-flex-layout';
-import {UIRouter} from '@uirouter/angular';
 import {EntityCache} from 'ngx-entity-service';
-import {BehaviorSubject, Observable, Subject, skip, take} from 'rxjs';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {Injectable, OnDestroy} from '@angular/core';
+import {Router} from '@angular/router';
+import {BehaviorSubject, Observable, Subject, find} from 'rxjs';
 import {
   CampusService,
   LearningOutcomeService,
@@ -16,8 +16,8 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 /**
  * The different types of views that can be shown. Used by the header to determine details to show.
@@ -71,6 +71,7 @@ export class GlobalStateService implements OnDestroy {
   public currentUserProjects: EntityCache<Project>;
 
   private _showFooter = false;
+  private _isInboxState = false;
   private _showFooterWarning = false;
 
   /**
@@ -110,9 +111,9 @@ export class GlobalStateService implements OnDestroy {
     private teachingPeriodService: TeachingPeriodService,
     private learningOutcomeService: LearningOutcomeService,
     private feedbackTemplateService: FeedbackTemplateService,
-    @Inject(UIRouter) private router: UIRouter,
+    private router: Router,
     private alerts: AlertService,
-    private mediaObserver: MediaObserver,
+    private breakpointObserver: BreakpointObserver,
   ) {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
@@ -120,17 +121,38 @@ export class GlobalStateService implements OnDestroy {
 
     // Use timeout to ensure everything is loaded before we try to login
     setTimeout(() => {
+      // LTI launch errors are shown to users who have no OnTrack session
+      const isLtiLaunchError =
+        window.location.pathname === '/lti' &&
+        new URLSearchParams(window.location.search).has('launchError');
+      if (isLtiLaunchError) {
+        this.isLoadingSubject.next(false);
+        return;
+      }
+
       // Try to login using the refresh token
       this.authenticationService.attemptLoginUsingRefreshToken((result: boolean) => {
         if (result) {
-          this.loadGlobals();
+          const ltiLaunch =
+            sessionStorage.getItem('ltiLaunch') === 'true' ||
+            window.location.pathname === '/lti' ||
+            (window.location.pathname === '/sign_in' &&
+              new URLSearchParams(window.location.search).get('isLtiLogin')?.toLowerCase() ===
+                'true');
+          if (
+            this.userService.currentUser.hasRunFirstTimeSetup === false &&
+            window.location.pathname !== '/welcome' &&
+            !ltiLaunch
+          ) {
+            this.router.navigateByUrl('/welcome');
+          }
         } else {
           // Loading is finshed...
           this.isLoadingSubject.next(false);
 
           // and if we are not going to the sign in page, then redirect to it
-          if (this.router.globals.current.name !== 'sign_in') {
-            this.router.stateService.go('sign_in');
+          if (window.location.pathname !== '/sign_in') {
+            this.router.navigateByUrl('/sign_in');
           }
         }
       });
@@ -148,7 +170,9 @@ export class GlobalStateService implements OnDestroy {
     setTimeout(() => {
       const vh = window.innerHeight * 0.01;
 
-      if (!this.mediaObserver.isActive('gt-sm') || !this._showFooter) {
+      if (this._isInboxState) {
+        document.body.style.setProperty('--vh', `${vh}px`);
+      } else if (!this.breakpointObserver.isMatched('(min-width: 960px)') || !this._showFooter) {
         document.body.style.setProperty('--vh', `${vh - 0.2}px`);
       } else {
         if (this._showFooter && !this._showFooterWarning) {
@@ -161,13 +185,14 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public get isInboxState(): boolean {
-    return this._showFooter;
+    return this._isInboxState;
   }
 
   public setInboxState() {
-    this._showFooter = true;
-    // set background color to white
+    this._isInboxState = true;
+    // set background color to inbox grey
     document.body.style.setProperty('background-color', '#f5f5f5');
+    this.resetHeight();
   }
 
   public goHome() {
@@ -176,9 +201,10 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public setNotInboxState() {
-    this._showFooter = false;
+    this._isInboxState = false;
     // set background color to white
     document.body.style.setProperty('background-color', '#fff');
+    this.resetHeight();
   }
 
   public showFooter(): void {
@@ -194,14 +220,18 @@ export class GlobalStateService implements OnDestroy {
   // called when we need to set the footer to be a bit taller
   // to account for the alert div
   public showFooterWarning(): void {
-    if (!this._showFooter) return;
+    if (!this._showFooter) {
+      return;
+    }
     this._showFooterWarning = true;
     this.resetHeight();
   }
 
   // called when we need to set the footer to be normal sized
   public hideFooterWarning(): void {
-    if (!this._showFooter) return;
+    if (!this._showFooter) {
+      return;
+    }
     this._showFooterWarning = false;
     this.resetHeight();
   }
@@ -222,6 +252,7 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public loadGlobals(): void {
+    let loaded = 0;
     // Indicate we are loading data...
     this.isLoadingSubject.next(true);
 
@@ -230,7 +261,7 @@ export class GlobalStateService implements OnDestroy {
       // Loading campuses
       this.campusService.query().subscribe({
         next: (_response) => {
-          subscriber.next(true);
+          subscriber.next(++loaded);
         },
         error: (_response) => {
           this.alerts.error('Unable to access service. Failed loading campuses.', 6000);
@@ -242,7 +273,7 @@ export class GlobalStateService implements OnDestroy {
           .query({}, {endpointFormat: LearningOutcomeService.globalEndpoint})
           .subscribe({
             next: (_response) => {
-              subscriber.next(true);
+              subscriber.next(null);
             },
             error: (_response) => {
               this.alerts.error('Unable to access service. Failed loading GLOs.', 6000);
@@ -253,7 +284,7 @@ export class GlobalStateService implements OnDestroy {
           .query({}, {endpointFormat: FeedbackTemplateService.globalEndpoint})
           .subscribe({
             next: (_response) => {
-              subscriber.next(true);
+              subscriber.next(null);
             },
             error: (_response) => {
               this.alerts.error(
@@ -267,7 +298,7 @@ export class GlobalStateService implements OnDestroy {
       // Loading teaching periods
       this.teachingPeriodService.query().subscribe({
         next: (_response) => {
-          subscriber.next(true);
+          subscriber.next(++loaded);
         },
         error: (_response) => {
           this.alerts.error('Unable to access service. Failed loading teaching periods.', 6000);
@@ -276,7 +307,7 @@ export class GlobalStateService implements OnDestroy {
     });
 
     // Watch for load of campuses and teaching periods, then trigger loading of unit roles and projects
-    loadingObserver.pipe(skip(1), take(1)).subscribe({
+    loadingObserver.pipe(find((loaded) => loaded === 2)).subscribe({
       next: () => {
         // trigger loading of units and projects - this will end the loading when complete
         this.loadUnitsAndProjects();

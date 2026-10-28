@@ -1,11 +1,9 @@
-import { Entity, EntityCache, EntityMapping } from 'ngx-entity-service';
-import { AppInjector } from 'src/app/app-injector';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { Group, Unit, User } from '../doubtfire-model';
-
+import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {AppInjector} from 'src/app/app-injector';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Group, Unit} from '../doubtfire-model';
 
 export class GroupSet extends Entity {
-
   public id: number;
   public name: string;
   public allowStudentsToCreateGroups: boolean = true;
@@ -34,7 +32,7 @@ export class GroupSet extends Entity {
   }
 
   public findGroupById(id: number): Group {
-    return this.groups.find(grp => grp.id === id);
+    return this.groups.find((grp) => grp.id === id);
   }
 
   public groupCSVUploadUrl(): string {

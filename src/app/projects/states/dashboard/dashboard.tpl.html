@@ -7,14 +7,14 @@
     style="padding: 0 8px 0 8px"
     ><!--/panel-1-->
   </student-task-list>
-  <progress-dashboard
-    project="project"
-    on-update-target-grade="targetGradeUpdated"
+  <f-progress-dashboard
+    [project]="project"
+    (doUpdateTargetGrade)="targetGradeUpdated()"
     class="col-xs-12 col-md-9"
     ng-if="!taskData.selectedTask"
     style="padding: 0 8px 0 8px"
   >
-  </progress-dashboard
+  </f-progress-dashboard
   ><!--/panel-2-->
   <task-dashboard
     task="taskData.selectedTask"

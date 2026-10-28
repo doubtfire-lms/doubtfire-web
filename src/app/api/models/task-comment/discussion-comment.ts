@@ -1,6 +1,6 @@
-import { AppInjector } from 'src/app/app-injector';
-import { DoubtfireConstants } from 'src/app/config/constants/doubtfire-constants';
-import { Task, TaskComment } from '../doubtfire-model'
+import {AppInjector} from 'src/app/app-injector';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Task, TaskComment} from '../doubtfire-model';
 
 /**
  * Create a Discussion Comment, extending the base TaskComment class

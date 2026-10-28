@@ -1,8 +1,8 @@
 import {Entity} from 'ngx-entity-service';
-import {AppInjector} from 'src/app/app-injector';
-import {Task, TaskSimilarityService, User} from './doubtfire-model';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {Observable} from 'rxjs';
+import {AppInjector} from 'src/app/app-injector';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Task, TaskSimilarityService, User} from './doubtfire-model';
 
 export enum TaskSimilarityType {
   Jplag = 'JplagTaskSimilarity',
@@ -27,6 +27,7 @@ export class TaskSimilarityPart {
   idx: number;
   format: TaskSimilarityPartFormat;
   description: string;
+  panelOpenState?: boolean;
 }
 
 /**

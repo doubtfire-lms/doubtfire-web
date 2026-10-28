@@ -1,7 +1,7 @@
-import { Sanitizer } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { SafePipe } from './safe.pipe';
+import {describe, it} from 'vitest';
 
 describe('SafePipe', () => {
-  it('create an instance', () => {});
+  it('create an instance', () => {
+    /* empty */
+  });
 });

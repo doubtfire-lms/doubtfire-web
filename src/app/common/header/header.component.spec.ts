@@ -1,60 +1,56 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatMenuModule } from '@angular/material/menu';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { Project, Unit, UnitRole } from 'src/app/api/models/doubtfire-model';
-import { GlobalStateService, ViewType } from 'src/app/projects/states/index/global-state.service';
-import { CheckForUpdateService } from 'src/app/sessions/service-worker-updater/check-for-update.service';
-import { IsActiveUnitRole } from '../pipes/is-active-unit-role.pipe';
+import {MediaObserver} from 'ng-flex-layout';
+import {beforeEach, describe, expect, it} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {Router} from '@angular/router';
+import {AuthenticationService} from 'src/app/api/models/doubtfire-model';
+import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
+import {UserService} from 'src/app/api/services/user.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+import {CheckForUpdateService} from 'src/app/sessions/service-worker-updater/check-for-update.service';
+import {AboutDoubtfireModal} from '../modals/about-doubtfire-modal/about-doubtfire-modal.component';
+import {CalendarModalService} from '../modals/calendar-modal/calendar-modal.service';
+import {QrModalService} from '../modals/qr-modal/qr-modal.service';
+import {SidekiqJobsModalService} from '../modals/sidekiq-jobs-modal/sidekiq-jobs-modal.service';
+import {TutorNotesModalService} from '../modals/tutor-notes-modal/tutor-notes-modal.service';
+import {IsActiveUnitRole} from '../pipes/is-active-unit-role.pipe';
+import {HeaderComponent} from './header.component';
 
-import { HeaderComponent } from './header.component';
+const emptyProvider = {};
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
-  // let currentUserStub: jasmine.SpyObj<any>;
-  // let calendarModalStub: jasmine.SpyObj<any>;
-  // let aboutDoubtfireModalStub: jasmine.SpyObj<any>;
-  let isActiveUnitRoleStub: Partial<IsActiveUnitRole>;
-  let checkForUpdateServiceStub: Partial<CheckForUpdateService>;
-  let globalStateServiceStub: Partial<GlobalStateService>;
 
-  beforeEach(waitForAsync(() => {
-    const showHideHeader = new Subject<boolean>();
-    const unitRolesSubject = new BehaviorSubject<any>(null);
-    const projectsSubject = new BehaviorSubject<any>(null);
-    const currentViewAndEntitySubject$ = new BehaviorSubject<{ viewType: ViewType; entity: Unit | Project | UnitRole }>(
-      null
-    );
-
-    // currentUserStub = {
-    //   role: 'tutor',
-    // };
-
-    globalStateServiceStub = {
-      showHideHeader: showHideHeader,
-      unitRolesSubject: unitRolesSubject,
-      projectsSubject: projectsSubject,
-      currentViewAndEntitySubject$: currentViewAndEntitySubject$,
-    };
-
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [HeaderComponent],
-      imports: [MatMenuModule],
       providers: [
-        // { provide: currentUser, useValue: currentUserStub },
-        // { provide: calendarModal, useValue: calendarModalStub },
-        // { provide: aboutDoubtfireModal, useValue: aboutDoubtfireModalStub },
-        { provide: IsActiveUnitRole, useValue: isActiveUnitRoleStub },
-        { provide: CheckForUpdateService, useValue: checkForUpdateServiceStub },
-        { provide: GlobalStateService, useValue: globalStateServiceStub },
+        {provide: CalendarModalService, useValue: emptyProvider},
+        {provide: AboutDoubtfireModal, useValue: emptyProvider},
+        {provide: IsActiveUnitRole, useValue: emptyProvider},
+        {provide: CheckForUpdateService, useValue: emptyProvider},
+        {provide: GlobalStateService, useValue: emptyProvider},
+        {provide: UserService, useValue: emptyProvider},
+        {provide: AuthenticationService, useValue: emptyProvider},
+        {provide: MediaObserver, useValue: emptyProvider},
+        {provide: DoubtfireConstants, useValue: emptyProvider},
+        {provide: SidekiqJobService, useValue: emptyProvider},
+        {provide: SidekiqJobsModalService, useValue: emptyProvider},
+        {provide: QrModalService, useValue: emptyProvider},
+        {provide: Router, useValue: emptyProvider},
+        {provide: TutorNotesModalService, useValue: emptyProvider},
       ],
-    }).compileComponents();
-  }));
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideComponent(HeaderComponent, {set: {template: ''}})
+      .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

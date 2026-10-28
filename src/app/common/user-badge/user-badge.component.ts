@@ -1,14 +1,14 @@
-import {Component, Input} from '@angular/core';
-import {UIRouter} from '@uirouter/angular';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Task} from 'src/app/api/models/doubtfire-model';
 
 @Component({
   selector: 'f-user-badge',
   templateUrl: './user-badge.component.html',
   styleUrls: ['./user-badge.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class UserBadgeComponent {
-  constructor(private router: UIRouter) {}
   @Input() selectedTask: Task;
 
   get unselected(): boolean {
@@ -19,43 +19,18 @@ export class UserBadgeComponent {
     return this.selectedTask == null;
   }
 
-  get studentRouteParams(): {projectId: number; tutor: boolean; taskAbbr: string} | undefined {
-    if (this.unselected) {
-      return undefined;
-    }
-
-    return {
-      projectId: this.selectedTask.project.id,
-      tutor: true,
-      taskAbbr: '',
-    };
+  get studentDashboardRoute(): unknown[] | null {
+    return this.unselected ? null : ['/projects', this.selectedTask.project.id, 'dashboard'];
   }
 
-  get studentTaskRouteParams(): {projectId: number; tutor: boolean; taskAbbr: string} | undefined {
-    if (this.unselected) {
-      return undefined;
-    }
-
-    return {
-      projectId: this.selectedTask.project.id,
-      taskAbbr: this.selectedTask.definition.abbreviation,
-      tutor: true,
-    };
-  }
-
-  goToStudent(): void {
-    this.router.stateService.go('projects/dashboard', {
-      projectId: this.selectedTask.project.id,
-      tutor: true,
-      taskAbbr: '',
-    });
-  }
-
-  goToStudentTask(): void {
-    this.router.stateService.go('projects/dashboard', {
-      projectId: this.selectedTask.project.id,
-      taskAbbr: this.selectedTask.definition.abbreviation,
-      tutor: true,
-    });
+  get studentTaskRoute(): unknown[] | null {
+    return this.unselected
+      ? null
+      : [
+          '/projects',
+          this.selectedTask.project.id,
+          'dashboard',
+          this.selectedTask.definition.abbreviation,
+        ];
   }
 }

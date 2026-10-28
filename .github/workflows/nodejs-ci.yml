@@ -13,16 +13,13 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20]
+        node-version: [22]
     steps:
-      - uses: actions/checkout@v4
-      - uses: browser-actions/setup-chrome@latest
+      - uses: actions/checkout@v6
+      - uses: browser-actions/setup-chrome@v2
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install -g @angular/cli
       - run: npm ci
-      # - run: npm run lint
-      # - run: npm run test:ci
       - run: npm run build --if-present

@@ -1,8 +1,8 @@
 <h2 mat-dialog-title>Upload Batch Feedback Zip &mdash; {{ taskLabel }}</h2>
 
-<mat-dialog-content class="flex flex-col gap-4">
-  <div class="flex items-start gap-3">
-    <mat-icon class="mt-0.5">fact_check</mat-icon>
+<mat-dialog-content class="flex flex-col gap-2.5">
+  <div class="flex items-start gap-2">
+    <mat-icon class="mt-px">fact_check</mat-icon>
     <div>
       <p class="m-0">
         Prepare a batch feedback zip for <span>{{ taskLabel }}</span
@@ -29,7 +29,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-flat-button color="primary" type="button" (click)="continueToUpload()">
+  <button color="primary" mat-flat-button type="button" (click)="continueToUpload()">
     Upload Zip
   </button>
   <button mat-button type="button" (click)="close()">Close</button>

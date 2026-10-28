@@ -1,4 +1,11 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {Task, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import {TutorNote} from 'src/app/api/models/tutor-note';
 import {TutorNoteService} from 'src/app/api/services/tutor-note.service';
@@ -9,6 +16,8 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-tutor-notes',
   templateUrl: './tutor-notes.component.html',
   styleUrl: './tutor-notes.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TutorNotesComponent implements OnInit {
   @ViewChild('tutorNotesContainer') tutorNotesContainer!: ElementRef;
@@ -40,7 +49,7 @@ export class TutorNotesComponent implements OnInit {
     }
 
     this.loadingTutorNotes = true;
-    this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((notes) => {
+    this.tutorNoteService.loadTutorNotes(this.unitRole).subscribe((_notes) => {
       this.loadingTutorNotes = false;
       this.tutorNoteService.updateTutorNoteReplies(this.unitRole?.tutorNotesCache.currentValues);
       this.scrollDown();
@@ -160,7 +169,6 @@ export class TutorNotesComponent implements OnInit {
   public autoResizeTutorNoteEditor() {
     const el = this.tutorNoteEditor.nativeElement;
     el.style.height = 'auto';
-    el.offsetHeight;
     el.style.height = el.scrollHeight + 'px';
   }
 
@@ -183,7 +191,9 @@ export class TutorNotesComponent implements OnInit {
       this.unitRole?.tutorNotesCache?.currentValues?.filter((note) => {
         const abbr = note.taskDefinition?.abbreviation;
         // if (!abbr) return false; // skip notes without taskDefinition
-        if (allSelected) return true;
+        if (allSelected) {
+          return true;
+        }
         return selected.get(abbr);
       }) ?? []
     );
@@ -210,7 +220,7 @@ export class TutorNotesComponent implements OnInit {
   openProject(event: Event, note: TutorNote) {
     event.stopPropagation();
     const link = document.createElement('a');
-    link.href = `/projects/${note.project.id}/dashboard/${note.taskDefinition.abbreviation}?tutor=true`;
+    link.href = `/projects/${note.project.id}/dashboard/${note.taskDefinition.abbreviation}`;
     link.target = '_blank';
     link.click();
   }

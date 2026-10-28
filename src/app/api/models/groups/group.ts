@@ -1,10 +1,17 @@
-import {HttpClient} from '@angular/common/http';
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {Unit, GroupSet, Project, Tutorial, ProjectService} from '../doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {GroupSet, Project, ProjectService, Tutorial, Unit} from '../doubtfire-model';
+
+export interface MemberContribution {
+  project: Project;
+  rating: number;
+  percent: number;
+  overStar?: number | null;
+}
 
 export class Group extends Entity {
   public id: number;
@@ -79,7 +86,7 @@ export class Group extends Entity {
     httpClient
       .post(`${AppInjector.get(DoubtfireConstants).API_URL}/${this.memberUri(member)}`, {})
       .subscribe({
-        next: (success) => {
+        next: () => {
           // Get old group..
           const grp = member.groupForGroupSet(this.groupSet);
           if (grp) {
@@ -95,7 +102,9 @@ export class Group extends Entity {
           // Has members so add this member
           this.projectsCache.add(member);
           alerts.success(`${member.student.name} was added to '${this.name}'`, 3000);
-          if (onSuccess) onSuccess();
+          if (onSuccess) {
+            onSuccess();
+          }
         },
         error: (message) => alerts.error(message || 'Unknown Error', 6000),
       });
@@ -112,7 +121,7 @@ export class Group extends Entity {
     httpClient
       .delete(`${AppInjector.get(DoubtfireConstants).API_URL}/${this.memberUri(member)}`, {})
       .subscribe({
-        next: (success) => {
+        next: () => {
           // Get old group..
           this.projectsCache.delete(member);
           member.groupCache.delete(this);
@@ -145,30 +154,20 @@ export class Group extends Entity {
   }
 
   public hasSpace(): boolean {
-    if (!this.groupSet.capacity) {
-      return false;
+    if (this.groupSet.capacity == null) {
+      return true;
     } else {
       return this.memberCount < this.groupSet.capacity + this.capacityAdjustment;
     }
   }
 
-  public contributionSum(
-    contrib: {project: Project; rating: number; confRating: number; percent: number}[],
-    member?: Project,
-    value?: number,
-  ): number {
-    return contrib.reduce<number>(
-      (
-        prevValue: number,
-        current: {project: Project; rating: number; confRating: number; percent: number},
-      ) => {
-        if (current.project === member) {
-          return prevValue + value;
-        } else {
-          return prevValue + current.rating;
-        }
-      },
-      0,
-    );
+  public contributionSum(contrib: MemberContribution[], member?: Project, value?: number): number {
+    return contrib.reduce<number>((prevValue: number, current) => {
+      if (current.project === member) {
+        return prevValue + value;
+      } else {
+        return prevValue + current.rating;
+      }
+    }, 0);
   }
 }

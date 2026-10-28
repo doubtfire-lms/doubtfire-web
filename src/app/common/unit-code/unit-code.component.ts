@@ -1,5 +1,5 @@
-import {trigger, state, style, animate, transition} from '@angular/animations';
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {UnitCodeService} from './unit-code.service';
 
@@ -20,6 +20,8 @@ import {UnitCodeService} from './unit-code.service';
       ]),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class UnitCodeComponent implements OnInit, OnDestroy {
   @Input() unit_code: string;
@@ -34,12 +36,20 @@ export class UnitCodeComponent implements OnInit, OnDestroy {
   constructor(private unitCodeService: UnitCodeService) {}
 
   get isDualBadge() {
-    return this.unit_code?.includes('/');
+    return this.unit_code?.includes('/') || this.unit_code?.includes('-');
   }
 
   get unitCodeParts() {
     if (this.shiftBetweenBadges) {
-      return this.isDualBadge ? this.unit_code.split('/') : [this.unit_code];
+      if (this.isDualBadge) {
+        if (this.unit_code.includes('/')) {
+          return this.unit_code.split('/');
+        } else {
+          return this.unit_code.split('-');
+        }
+      } else {
+        return [this.unit_code];
+      }
     }
     return this.unit_code;
   }

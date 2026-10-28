@@ -1,16 +1,15 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { Project } from 'src/app/api/models/project';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'f-project-progress-bar',
   templateUrl: './project-progress-bar.component.html',
   styleUrls: ['./project-progress-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class ProjectProgressBarComponent {
-  @Input() progress: any[];
+export class ProjectProgressBarComponent implements OnChanges {
+  @Input() progress: {value: number}[];
   public percentProgress: number = 0;
-
-  constructor() {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.progress) {

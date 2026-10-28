@@ -1,0 +1,10 @@
+@if (unit || (unit$ | async)) {
+  <router-outlet></router-outlet>
+} @else {
+  <div
+    class="mt-9 flex min-h-64 flex-col items-center justify-center gap-3 text-center text-slate-800"
+  >
+    <mat-spinner diameter="75"></mat-spinner>
+    <p class="text-[24px]">Loading unit details...</p>
+  </div>
+}

@@ -1,0 +1,71 @@
+@if (editor.setPreviewLoading) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+
+<div class="border-b border-gray-200 px-6 py-5">
+  <div class="mb-4 flex items-center justify-between gap-4">
+    <div>
+      <div class="font-medium">Schedules</div>
+      <div class="text-black/60">Build one-off or recurring schedules for this set.</div>
+    </div>
+    <!-- <button mat-flat-button color="primary" (click)="addSchedule(set)">
+                  <mat-icon>add</mat-icon>
+                  New schedule
+                </button> -->
+  </div>
+
+  @if ((set.schedules || []).length) {
+    <div class="grid gap-3">
+      @for (schedule of set.schedules || []; track editor.scheduleTrackId(schedule)) {
+        <div class="rounded border border-gray-200 bg-gray-50 p-4">
+          <div class="mb-3 flex items-start justify-between gap-4">
+            <div>
+              <div class="font-medium">{{ schedule.name || 'Untitled schedule' }}</div>
+              <div class="text-black/60">{{ editor.scheduleSummary(schedule) }}</div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span
+                class="rounded-full px-3 py-1 font-medium"
+                [ngClass]="
+                  schedule.active ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700'
+                "
+              >
+                {{ schedule.active ? 'Active' : 'Inactive' }}
+              </span>
+              <button mat-icon-button (click)="editor.editSchedule(set, schedule)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button color="warn" mat-icon-button (click)="editor.deleteSchedule(set, schedule)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid gap-3 md:grid-cols-4">
+            <div>
+              <div class="tracking-wide text-black/40 uppercase">Anchor</div>
+              <div class="">{{ editor.scheduleAnchorSummary(schedule) }}</div>
+            </div>
+            <div>
+              <div class="tracking-wide text-black/40 uppercase">Time</div>
+              <div class="">{{ editor.scheduleTimeSummary(schedule) }}</div>
+            </div>
+            <div>
+              <div class="tracking-wide text-black/40 uppercase">Next Run</div>
+              <div class="">{{ editor.scheduleNextRunSummary(schedule) }}</div>
+            </div>
+            <div>
+              <div class="tracking-wide text-black/40 uppercase">Last Run</div>
+              <div class="">{{ editor.scheduleLastRunSummary(schedule) }}</div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="rounded border border-dashed border-gray-300 bg-white px-4 py-6 text-black/60">
+      No schedules yet. Add one to run this set on a fixed date or on a repeating cadence.
+    </div>
+  }
+</div>

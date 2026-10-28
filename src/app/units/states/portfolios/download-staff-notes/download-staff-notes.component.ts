@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {Unit} from 'src/app/api/models/unit';
 import {AlertService} from 'src/app/common/services/alert.service';
 
@@ -6,6 +6,8 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-download-staff-notes',
   templateUrl: 'download-staff-notes.component.html',
   styleUrl: 'download-staff-notes.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class DownloadStaffNotesComponent implements OnInit {
   @Input() unit: Unit;

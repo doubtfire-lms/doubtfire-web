@@ -1,6 +1,6 @@
-import { Entity } from 'ngx-entity-service';
-import { Project, Unit, TaskDefinition, Task } from './doubtfire-model';
-import { LearningOutcome } from './learning-outcome';
+import {Entity} from 'ngx-entity-service';
+import {Project, Task, TaskDefinition, Unit} from './doubtfire-model';
+import {LearningOutcome} from './learning-outcome';
 
 export class TaskOutcomeAlignment extends Entity {
   public within: Unit | Project;
@@ -18,7 +18,7 @@ export class TaskOutcomeAlignment extends Entity {
   }
 
   public get unit(): Unit {
-    if ( this.within instanceof Unit) {
+    if (this.within instanceof Unit) {
       return this.within;
     } else {
       return this.within.unit;
@@ -26,7 +26,7 @@ export class TaskOutcomeAlignment extends Entity {
   }
 
   public get project(): Project {
-    if ( this.within instanceof Project) {
+    if (this.within instanceof Project) {
       return this.within;
     }
 

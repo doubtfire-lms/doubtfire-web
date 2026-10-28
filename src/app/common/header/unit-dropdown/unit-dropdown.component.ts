@@ -1,20 +1,24 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Project, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
-import {MediaObserver} from 'ng-flex-layout';
 
 @Component({
   selector: 'unit-dropdown',
   templateUrl: './unit-dropdown.component.html',
   styleUrls: ['./unit-dropdown.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class UnitDropdownComponent implements OnInit {
+export class UnitDropdownComponent {
   @Input() unitRoles: UnitRole[];
   @Input() projects: Project[];
   @Input() unit: Unit;
 
   unitTitle: string;
 
-  constructor(public media: MediaObserver) {}
+  get isExtraSmall(): boolean {
+    return this.breakpointObserver.isMatched('(max-width: 599.98px)');
+  }
 
-  ngOnInit(): void {}
+  constructor(private breakpointObserver: BreakpointObserver) {}
 }

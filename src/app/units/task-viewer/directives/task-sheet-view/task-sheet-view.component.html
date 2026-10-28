@@ -1,0 +1,24 @@
+<div class="h-screen w-full overflow-auto">
+  @switch (taskDef) {
+    @case (taskDef) {
+      @if (taskDef?.hasContentLink) {
+        <f-unit-content-viewer
+          class="block size-full"
+          [contentRoute]="taskDef.contentLink.route"
+          [contentSiteId]="taskDef.contentLink.unitContentSiteId"
+          [unit]="taskDef.unit"
+        ></f-unit-content-viewer>
+      } @else if (taskDef?.hasTaskSheet) {
+        <f-pdf-viewer [pdfUrl]="taskDef.getTaskPDFUrl()"></f-pdf-viewer>
+      } @else {
+        <div class="flex size-full flex-col items-center justify-center">
+          <mat-icon>subtitles_off</mat-icon> No Task Sheet
+        </div>
+      }
+    }
+  }
+
+  <!-- The PDF Viewer -->
+
+  <!-- Render if no PDF URL is available for the current view -->
+</div>

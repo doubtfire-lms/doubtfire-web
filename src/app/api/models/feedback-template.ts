@@ -10,7 +10,8 @@ export class FeedbackTemplate extends Entity {
   description: string;
   commentText: string;
   summaryText: string;
-  taskStatus: 'fix_and_resubmit' | 'discuss' | 'redo' | 'complete' | 'feedback_exceeded';
+  taskStatus:
+    'fix_and_resubmit' | 'discuss' | 'rediscuss' | 'redo' | 'complete' | 'feedback_exceeded';
   parentChipId: number;
   learningOutcomeId: number;
 
@@ -61,7 +62,7 @@ export class FeedbackTemplate extends Entity {
     return !this.id;
   }
 
-  public delete(): Observable<unknown> {
+  public delete(): Observable<void> {
     const svc = AppInjector.get(FeedbackTemplateService);
 
     return svc.delete(

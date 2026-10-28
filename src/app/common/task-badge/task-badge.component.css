@@ -8,7 +8,7 @@
 }
 
 .task-badge.task-badge-highlight {
-  background-color: var(--mdc-theme-primary, #3939ff) !important;
+  background-color: var(--mat-theme-primary, #3939ff) !important;
   color: #ffffff;
 }
 

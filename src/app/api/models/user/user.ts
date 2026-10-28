@@ -1,9 +1,8 @@
-import {HttpClient} from '@angular/common/http';
 import {Entity, EntityMapping} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
 import {Observable, map} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {AuthenticationService} from '../doubtfire-model';
 
 export type Tutor = User;
 
@@ -22,11 +21,9 @@ export class User extends Entity {
   public receiveFeedbackNotifications: boolean;
   public hasRunFirstTimeSetup: boolean;
   public authenticationToken: string;
+  public authenticationTokenExpiry: string;
   public pronouns: string | null;
   public acceptedTiiEula: boolean;
-
-  // LTI Token
-  public ltik: string;
 
   public override toJson<T extends Entity>(
     mappingData: EntityMapping<T>,
@@ -46,31 +43,37 @@ export class User extends Entity {
   }
 
   public get name(): string {
-    const fn = this.firstName.slice(0, 11).trim();
-    const sn = this.lastName.slice(0, 11).trim();
+    const fn = (this.firstName ?? '').slice(0, 11).trim();
+    const sn = (this.lastName ?? '').slice(0, 11).trim();
     const nn =
       this.nickname && this.nickname.trim() ? ` (${this.nickname.trim().slice(0, 11).trim()})` : '';
-    return `${fn} ${sn}${nn}`;
+    return `${fn} ${sn}${nn}`.trim();
   }
 
   public get preferredName(): string {
     const nickname = this.nickname?.trim();
-    const firstName = this.firstName.trim();
+    const firstName = this.firstName?.trim() ?? '';
     if (nickname) {
       return nickname;
     }
     return firstName;
   }
 
+  /**
+   * Does any of the user's details contain the passed in text?
+   *
+   * @param text the search text, in lower case
+   */
   public matches(text: string): boolean {
-    return (
-      this.studentId?.toLowerCase().indexOf(text) >= 0 ||
-      this.name.toLowerCase().indexOf(text) >= 0 ||
-      this.firstName.toLowerCase().indexOf(text) >= 0 ||
-      this.lastName.toLowerCase().indexOf(text) >= 0 ||
-      this.email.toLowerCase().indexOf(text) >= 0 ||
-      this.nickname?.toLowerCase().indexOf(text) >= 0
-    );
+    return [
+      this.studentId,
+      this.name,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.nickname,
+      this.username,
+    ].some((value) => value?.toLowerCase().includes(text));
   }
 
   public acceptTiiEula(): Observable<boolean> {

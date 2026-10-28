@@ -1,3 +1,7 @@
+import {CachedEntityService, EntityCache, RequestOptions} from 'ngx-entity-service';
+import {HttpClient} from '@angular/common/http';
+import {EventEmitter, Injectable} from '@angular/core';
+import {Observable, map, tap} from 'rxjs';
 import {
   Project,
   Task,
@@ -7,12 +11,9 @@ import {
   TaskStatusUiData,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import {EventEmitter, Injectable} from '@angular/core';
-import {CachedEntityService, EntityCache, RequestOptions} from 'ngx-entity-service';
-import {HttpClient} from '@angular/common/http';
+import {AlertService} from 'src/app/common/services/alert.service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {MappingFunctions} from './mapping-fn';
-import {Observable, map, tap} from 'rxjs';
 
 @Injectable()
 export class TaskService extends CachedEntityService<Task> {
@@ -26,24 +27,28 @@ export class TaskService extends CachedEntityService<Task> {
   private readonly taskOverflowEndpoint = '/units/:id:/tasks/overflow';
   private readonly refreshTaskEndpoint = 'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
 
-  constructor(httpClient: HttpClient) {
+  constructor(
+    httpClient: HttpClient,
+    private alertService: AlertService,
+  ) {
     super(httpClient, API_URL);
 
     this.mapping.addKeys(
       'id',
       {
         keys: 'projectId',
-        toEntityOp: (data: object, jsonKey: string, task: Task, _params?: any) => {
+        toEntityOp: (data: object, jsonKey: string, task: Task) => {
           // Is fetching task outside of project...
           task.project = task.unit.findStudent(data[jsonKey]);
         },
       },
       {
         keys: 'taskDefinitionId',
-        toEntityOp: (data: object, key: string, entity: Task, _params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Task) => {
           entity.definition = entity.project.unit.taskDef(data['task_definition_id']);
         },
       },
+      'tutorialId',
       'status',
       {
         keys: 'dueDate',
@@ -57,10 +62,23 @@ export class TaskService extends CachedEntityService<Task> {
         keys: 'targetDueDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,
       },
+      {
+        keys: 'movedToDiscussAt',
+        toEntityFn: MappingFunctions.mapDate,
+      },
+      {
+        keys: 'discussTimeoutExpiryAt',
+        toEntityFn: MappingFunctions.mapDate,
+      },
+      'discussTimeoutExpiryDate',
       'extensions',
       'scormExtensions',
       {
         keys: 'submissionDate',
+        toEntityFn: MappingFunctions.mapDate,
+      },
+      {
+        keys: 'waitingSince',
         toEntityFn: MappingFunctions.mapDate,
       },
       {
@@ -78,13 +96,13 @@ export class TaskService extends CachedEntityService<Task> {
       'pinned',
       {
         keys: 'new_stat',
-        toEntityOp: (data: object, key: string, entity: Task, params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Task) => {
           entity.project.taskStats = data['new_stat'];
         },
       },
       {
         keys: 'otherProjects',
-        toEntityOp: (data: object, key: string, entity: Task, params?: any) => {
+        toEntityOp: (data: object, key: string, entity: Task) => {
           data['other_projects'].forEach((details) => {
             const proj = entity.unit.findStudent(details.id);
             if (proj) {
@@ -105,14 +123,15 @@ export class TaskService extends CachedEntityService<Task> {
     this.mapping.addJsonKey('qualityPts', 'grade', 'includeInPortfolio', 'trigger');
   }
 
-  public createInstanceFrom(json: object, other?: any): Task {
-    return new Task(other as Project);
+  public createInstanceFrom(_json: object, other?: Project): Task {
+    return new Task(other);
   }
 
   public queryTasksForTaskInbox(
     unit: Unit,
     taskDef?: TaskDefinition | number,
     fetchMyStudentsOnly?: boolean,
+    viewAsUnitRoleId?: number,
   ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
 
@@ -126,6 +145,7 @@ export class TaskService extends CachedEntityService<Task> {
         constructorParams: unit,
         params: {
           my_students_only: fetchMyStudentsOnly,
+          ...(viewAsUnitRoleId ? {view_as_unit_role_id: viewAsUnitRoleId} : {}),
         },
       },
     ).pipe(
@@ -138,6 +158,7 @@ export class TaskService extends CachedEntityService<Task> {
   public queryTasksForTaskExplorer(
     unit: Unit,
     taskDef?: TaskDefinition | number,
+    includeWithdrawn: boolean = false,
   ): Observable<Task[]> {
     const cache: EntityCache<Task> = new EntityCache<Task>();
     return this.query(
@@ -153,7 +174,7 @@ export class TaskService extends CachedEntityService<Task> {
     ).pipe(
       map((tasks: Task[]) => {
         unit.incorporateTasks(tasks);
-        return unit.fillWithUnStartedTasks(tasks, taskDef);
+        return unit.fillWithUnStartedTasks(tasks, taskDef, includeWithdrawn);
       }),
     );
   }
@@ -208,9 +229,9 @@ export class TaskService extends CachedEntityService<Task> {
     };
 
     this.get(pathIds, options).subscribe({
-      next: (value: Task) => {},
       error: (message) => {
-        console.log(`Failed to refresh tasks ${message}`);
+        console.error('Failed to refresh task details', message);
+        this.alertService.error('Failed to refresh task details.', 6000);
       },
     });
   }
@@ -231,7 +252,8 @@ export class TaskService extends CachedEntityService<Task> {
   public readonly statusSeq = TaskStatus.STATUS_SEQ;
   public readonly helpDescriptions = TaskStatus.HELP_DESCRIPTIONS;
   public readonly statusIcons: Map<TaskStatusEnum, string> = TaskStatus.STATUS_ICONS;
-  public readonly statusMaterialIcons: Map<TaskStatusEnum, string> = TaskStatus.STATUS_MATERIAL_ICONS;
+  public readonly statusMaterialIcons: Map<TaskStatusEnum, string> =
+    TaskStatus.STATUS_MATERIAL_ICONS;
   public readonly rejectFutureStates = TaskStatus.REJECT_FUTURE_STATES;
 
   public statusClass(status: TaskStatusEnum): string {

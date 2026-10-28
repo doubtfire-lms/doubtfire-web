@@ -2,17 +2,21 @@
 <div mat-dialog-content>
   <table mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="unitCode">
-      <th mat-header-cell *matHeaderCellDef>Unit Code</th>
-      <td mat-cell *matCellDef="let unitToImport">
+      <th *matHeaderCellDef mat-header-cell>Unit Code</th>
+      <td *matCellDef="let unitToImport" mat-cell>
         <mat-form-field appearance="outline">
-          <input matInput [(ngModel)]="unitToImport.unitCode" (input)="codeChange($event.target.value, unitToImport)" />
+          <input
+            matInput
+            [(ngModel)]="unitToImport.unitCode"
+            (input)="codeChange($event.target.value, unitToImport)"
+          />
         </mat-form-field>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="sourceUnit">
-      <th mat-header-cell *matHeaderCellDef>Source Unit</th>
-      <td mat-cell *matCellDef="let unitToImport">
+      <th *matHeaderCellDef mat-header-cell>Source Unit</th>
+      <td *matCellDef="let unitToImport" mat-cell>
         <object-select
           placeholder="New Unit"
           [source]="unitToImport.relatedUnits"
@@ -23,8 +27,8 @@
     </ng-container>
 
     <ng-container matColumnDef="unitName">
-      <th mat-header-cell *matHeaderCellDef>Unit Name</th>
-      <td mat-cell *matCellDef="let unitToImport">
+      <th *matHeaderCellDef mat-header-cell>Unit Name</th>
+      <td *matCellDef="let unitToImport" mat-cell>
         @if (unitToImport.sourceUnit) {
         <span>{{ unitToImport.sourceUnit.name }}</span>
         } @if (!unitToImport.sourceUnit) {
@@ -37,18 +41,18 @@
     </ng-container>
 
     <ng-container matColumnDef="convenor">
-      <th mat-header-cell *matHeaderCellDef>Main Convenor</th>
-      <td mat-cell *matCellDef="let unitToImport">
+      <th *matHeaderCellDef mat-header-cell>Main Convenor</th>
+      <td *matCellDef="let unitToImport" mat-cell>
         <mat-form-field appearance="outline">
           <input
-            type="text"
             matInput
+            type="text"
             [formControl]="unitToImport.convenorFormControl"
             [matAutocomplete]="auto"
             [(ngModel)]="unitToImport.convenor"
           />
           <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-            @for (staff of unitToImport.filteredStaff | async; track staff) {
+            @for (staff of filteredStaffFor(unitToImport) | async; track staff) {
             <mat-option [value]="staff"> {{staff.name}} </mat-option>
             }
           </mat-autocomplete>
@@ -57,32 +61,32 @@
     </ng-container>
 
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let unitToImport">
+      <th *matHeaderCellDef mat-header-cell>Status</th>
+      <td *matCellDef="let unitToImport" mat-cell>
         <span>{{ statusForUnit(unitToImport) }}</span>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let unitToImport">
+      <th *matHeaderCellDef mat-header-cell></th>
+      <td *matCellDef="let unitToImport" mat-cell>
         <button mat-button (click)="removeUnitToAdd(unitToImport)">Remove</button>
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
 </div>
-<div mat-dialog-actions class="flex flex-column">
+<div class="flex-column flex" mat-dialog-actions>
   <div class="flex flex-row">
     <mat-form-field appearance="outline">
       <mat-label>Unit Code(s)</mat-label>
       <input matInput [(ngModel)]="codesToAdd" />
     </mat-form-field>
-    <button mat-button color="secondary" (click)="addUnitsByCode()">Add</button>
+    <button color="secondary" mat-button (click)="addUnitsByCode()">Add</button>
     <span class="flex-grow"></span>
-    <button mat-button color="primary" (click)="doImport()">Import</button>
+    <button color="primary" mat-button (click)="doImport()">Import</button>
     <button mat-button (click)="onCloseClick()">Close</button>
   </div>
 </div>

@@ -1,8 +1,8 @@
 import {Entity, EntityMapping} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
-import {LearningOutcomeService, TaskDefinition, Unit} from './doubtfire-model';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {LearningOutcomeService, TaskDefinition, Unit} from './doubtfire-model';
 
 export class LearningOutcome extends Entity {
   id: number;
@@ -121,7 +121,7 @@ export class LearningOutcome extends Entity {
     return !this.id;
   }
 
-  public delete(): Observable<unknown> {
+  public delete(): Observable<void> {
     const svc = AppInjector.get(LearningOutcomeService);
 
     if (this.context) {

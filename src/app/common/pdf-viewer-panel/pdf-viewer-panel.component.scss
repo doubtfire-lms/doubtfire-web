@@ -1,4 +1,4 @@
-@import '../../../styles/common/doubtfire-panel.scss';
+@use 'styles/common/doubtfire-panel' as *;
 
 .pdf-viewer-panel {
   .pdf-viewer-body {

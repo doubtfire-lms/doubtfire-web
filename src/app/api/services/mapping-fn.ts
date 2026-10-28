@@ -116,4 +116,15 @@ export class MappingFunctions {
     const diff = this.daysBetween(date1, date2);
     return Math.ceil(diff / 7);
   }
+
+  /**
+   * Calculate the date that is a number of days after a given date
+   *
+   * @param date start date
+   * @param days number of days to add
+   * @returns the date that is that many days after the start date
+   */
+  public static daysAfter(date: Date, days: number): Date {
+    return new Date(date.getTime() + this.dayMs(days));
+  }
 }

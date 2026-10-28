@@ -1,4 +1,4 @@
-@import '../../../../theme.scss';
+@use 'theme' as *;
 
 ::ng-deep .unit-dropdown-menu.mat-mdc-menu-panel {
   max-width: 400px !important;
@@ -29,5 +29,5 @@ mat-chip-option.f-chip {
   color: white;
   font-style: bold;
   opacity: 1;
-  --mdc-chip-disabled-label-text-color: white;
+  --mat-chip-disabled-label-text-color: white;
 }

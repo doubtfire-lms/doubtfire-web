@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatSelectChange } from '@angular/material/select';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
 
 /**
  * Object select component used to overcome limitations with the angularjs version used.
@@ -9,14 +9,15 @@ import { MatSelectChange } from '@angular/material/select';
 @Component({
   selector: 'object-select',
   templateUrl: 'object-select.component.html',
-  // styleUrls: ['object-select.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class ObjectSelectComponent<T> {
-  @Input() source: { value: T; text: string }[];
+  @Input() source: {value: T; text: string}[];
   @Input() target: T;
   @Input() label: string;
   @Input() placeholder: string = null;
-  @Output() targetChange = new EventEmitter<T>();
+  @Output() targetChange: EventEmitter<T> = new EventEmitter();
 
   selectionChange($event: MatSelectChange) {
     this.target = $event.value;

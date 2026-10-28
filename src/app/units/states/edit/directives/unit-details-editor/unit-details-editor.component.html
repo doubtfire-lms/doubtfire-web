@@ -1,9 +1,9 @@
-<div class="w-full max-w-[1280px] mx-auto flex flex-col gap-5">
+<div class="mx-auto flex w-full flex-col gap-3">
   <div class="header">
     <h3>Unit Details</h3>
     <p>Edit and configure all details and settings for this unit.</p>
   </div>
-  <mat-card appearance="outlined" class="p-[16px] gap-2">
+  <mat-card appearance="outlined" class="gap-1 p-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Code</mat-label>
       <input matInput required [(ngModel)]="unit.code" />
@@ -20,10 +20,10 @@
     </mat-form-field>
   </mat-card>
 
-  <mat-card appearance="outlined" class="p-[16px] gap-2">
+  <mat-card appearance="outlined" class="gap-1 p-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Teaching Period</mat-label>
-      <mat-select [(ngModel)]="unit.teachingPeriod" placeholder="Select Teaching Period">
+      <mat-select placeholder="Select Teaching Period" [(ngModel)]="unit.teachingPeriod">
         <mat-option [value]="undefined">None</mat-option>
         @for (period of teachingPeriods; track period) {
           <mat-option [value]="period">{{ period.name }}</mat-option>
@@ -31,7 +31,7 @@
       </mat-select>
     </mat-form-field>
 
-    <div class="flex w-full gap-5">
+    <div class="flex w-full gap-3">
       @if (!unit.teachingPeriod) {
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Start Date</mat-label>
@@ -45,14 +45,46 @@
           <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
           <mat-datepicker #enddatepicker></mat-datepicker>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Last Teaching Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="lastTeachingDatePicker"
+            [(ngModel)]="unit.lastTeachingDate"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="lastTeachingDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #lastTeachingDatePicker></mat-datepicker>
+        </mat-form-field>
       } @else {
         <mat-form-field appearance="outline" class="w-full" disabled>
           <mat-label>{{ unit.teachingPeriod.name }} Start Date</mat-label>
-          <input matInput [value]="unit.teachingPeriod?.startDate | date" disabled readonly />
+          <input
+            disabled
+            matInput
+            readonly
+            [value]="$safeNavigationMigration(unit.teachingPeriod?.startDate) | date"
+          />
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-full" disabled>
           <mat-label>{{ unit.teachingPeriod.name }} End Date</mat-label>
-          <input matInput [value]="unit.teachingPeriod?.endDate | date" disabled readonly />
+          <input
+            disabled
+            matInput
+            readonly
+            [value]="$safeNavigationMigration(unit.teachingPeriod?.endDate) | date"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full" disabled>
+          <mat-label>{{ unit.teachingPeriod.name }} Last Teaching Date</mat-label>
+          <input
+            disabled
+            matInput
+            readonly
+            [value]="$safeNavigationMigration(unit.teachingPeriod?.lastTeachingDate) | date"
+          />
         </mat-form-field>
       }
     </div>
@@ -70,7 +102,7 @@
 
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Draft Learning Summary</mat-label>
-      <mat-select [(ngModel)]="unit.draftTaskDefinition" placeholder="Select Learning Summary Task">
+      <mat-select placeholder="Select Learning Summary Task" [(ngModel)]="unit.draftTaskDefinition">
         <mat-option [value]="undefined">None</mat-option>
         @for (td of taskDefinitions; track td) {
           <mat-option [value]="td">{{ td.abbreviation }} - {{ td.name }}</mat-option>
@@ -91,14 +123,14 @@
       </mat-hint>
     </mat-form-field>
 
-    <div class="flex w-full gap-5">
+    <div class="flex w-full gap-3">
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Feedback warning after (days)</mat-label>
         <input
           matInput
-          type="number"
           min="0"
           required
+          type="number"
           [(ngModel)]="unit.feedbackWarningThresholdDays"
         />
         <mat-hint>
@@ -111,9 +143,9 @@
         <mat-label>Show task in overflow queue after (days)</mat-label>
         <input
           matInput
-          type="number"
           min="0"
           required
+          type="number"
           [(ngModel)]="unit.feedbackOverflowThresholdDays"
         />
         <mat-hint>
@@ -123,104 +155,285 @@
     </div>
   </mat-card>
 
-  <mat-card appearance="outlined" class="flex flex-col gap-5 p-[16px]">
+  <mat-card appearance="outlined" class="flex flex-col gap-3 p-4">
     <div>
-      <mat-slide-toggle [(ngModel)]="unit.allowFlexibleDates"
-        >Allow flexible dates</mat-slide-toggle
-      >
-      <p>Allows students to set planned due dates, without using extensions.</p>
-    </div>
-
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.allowStudentExtensionRequests"
-        >Allow student extensions</mat-slide-toggle
-      >
-      <p>When false only staff can request extensions on behalf of students.</p>
-    </div>
-
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.autoApplyExtensionBeforeDeadline"
-        >Auto apply extensions</mat-slide-toggle
-      >
-      <p>
-        When true, extensions will be automatically applied when they result in a date that is
-        between the task's due date and deadline.
+      <h4 class="mb-1">Grade definitions</h4>
+      <p class="text-sm text-gray-600">
+        Index -1 is used when work fails assessment. Target grades start at index 0, and higher
+        indexes include tasks from every lower level.
+      </p>
+      <p class="text-sm text-gray-600">
+        Grades already used by tasks, students, or communications can be renamed, but cannot be
+        removed or moved to another index.
       </p>
     </div>
 
     <div>
-      <mat-slide-toggle
-        (change)="onToggleAssessInPortfolio($event)"
-        [(ngModel)]="unit.markLateSubmissionsAsAssessInPortfolio"
-        >Has tasks assessed in portfolio</mat-slide-toggle
-      >
-      <p>
-        When enabled, late submissions will not be automatically marked as "Time Exceeded" or
-        "Feedback Exceeded", and will instead appear as "Assess in Portfolio". Tutors can still sign
-        off tasks as complete unless the task definition has the "Assess in Portfolio Only" option
-        enabled.
-      </p>
+      <table mat-table [dataSource]="gradeDefinitions">
+        <ng-container matColumnDef="index">
+          <th *matHeaderCellDef mat-header-cell>Index</th>
+          <td *matCellDef="let grade" mat-cell>{{ grade.value }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="label">
+          <th *matHeaderCellDef mat-header-cell>Label</th>
+          <td *matCellDef="let grade; let index = index" mat-cell>
+            @if (editingGradeId === grade.id) {
+              <mat-form-field appearance="outline" class="mt-4" subscriptSizing="dynamic">
+                <mat-label>Label</mat-label>
+                <input
+                  matInput
+                  maxlength="50"
+                  required
+                  [ngModel]="grade.label"
+                  (keydown.space)="$event.stopPropagation()"
+                  (ngModelChange)="updateGrade(index, 'label', $event)"
+                />
+              </mat-form-field>
+            } @else {
+              {{ grade.label }}
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="abbreviation">
+          <th *matHeaderCellDef mat-header-cell>Abbreviation</th>
+          <td *matCellDef="let grade; let index = index" mat-cell>
+            @if (editingGradeId === grade.id) {
+              <mat-form-field appearance="outline" class="mt-4" subscriptSizing="dynamic">
+                <mat-label>Abbreviation</mat-label>
+                <input
+                  matInput
+                  maxlength="10"
+                  required
+                  [ngModel]="grade.abbreviation"
+                  (keydown.space)="$event.stopPropagation()"
+                  (ngModelChange)="updateGrade(index, 'abbreviation', $event)"
+                />
+              </mat-form-field>
+            } @else {
+              {{ grade.abbreviation }}
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="order">
+          <th *matHeaderCellDef mat-header-cell>Order</th>
+          <td *matCellDef="let grade; let index = index" mat-cell>
+            <div class="flex">
+              @if (index > 0) {
+                <button
+                  aria-label="Move grade down"
+                  mat-icon-button
+                  matTooltip="Move down"
+                  type="button"
+                  [disabled]="isAddingGrade() || index === gradeDefinitions.length - 1"
+                  (click)="moveGrade(index, 1)"
+                >
+                  <mat-icon>arrow_downward</mat-icon>
+                </button>
+                <button
+                  aria-label="Move grade up"
+                  mat-icon-button
+                  matTooltip="Move up"
+                  type="button"
+                  [disabled]="isAddingGrade() || index === 1"
+                  (click)="moveGrade(index, -1)"
+                >
+                  <mat-icon>arrow_upward</mat-icon>
+                </button>
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef mat-header-cell>Actions</th>
+          <td *matCellDef="let grade; let index = index" mat-cell>
+            <div class="flex">
+              @if (editingGradeId === grade.id) {
+                <button
+                  aria-label="Save grade"
+                  mat-icon-button
+                  matTooltip="Save"
+                  type="button"
+                  (click)="saveGrade()"
+                >
+                  <mat-icon>save</mat-icon>
+                </button>
+              } @else {
+                <button
+                  aria-label="Edit grade"
+                  mat-icon-button
+                  matTooltip="Edit"
+                  type="button"
+                  [disabled]="isAddingGrade()"
+                  (click)="editGrade(grade)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+              }
+
+              @if (index > 0) {
+                <button
+                  aria-label="Remove grade"
+                  mat-icon-button
+                  matTooltip="Delete"
+                  type="button"
+                  [disabled]="
+                    gradeDefinitions.length === 2 ||
+                    (isAddingGrade() && editingGradeId !== grade.id)
+                  "
+                  (click)="removeGrade(index)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </div>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="gradeDefinitionColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: gradeDefinitionColumns" mat-row></tr>
+      </table>
     </div>
 
     <div>
-      <mat-slide-toggle [(ngModel)]="unit.allowStudentChangeTutorial"
-        >Allow students to change tutorial</mat-slide-toggle
-      >
-      <p>When false only staff can change student tutorials.</p>
-    </div>
-
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.enforceFeedbackBeforeDiscussedInClass"
-        >Require feedback before discussed in class</mat-slide-toggle
-      >
-      <p>
-        When true, tutors must record feedback before they can mark discussion tasks as discussed in
-        class.
-      </p>
-    </div>
-
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.sendNotifications"
-        >Send notification emails</mat-slide-toggle
-      >
-      <p>
-        When true, emails will be set to students each week to indicate progress and suggest future
-        tasks for them to work on.
-      </p>
-    </div>
-
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.enableSyncEnrolments"
-        >Synchronise enrolments</mat-slide-toggle
-      >
-      <p>
-        When true student enrolments will be synchronised with other systems where this is possible.
-      </p>
-    </div>
-
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.enableSyncTimetable"
-        >Synchronise timetable</mat-slide-toggle
-      >
-      <p>
-        When true timetable data will be synchronised with other systems where this is possible.
-      </p>
-    </div>
-
-    <div>
-      <mat-slide-toggle [(ngModel)]="unit.active">Active</mat-slide-toggle>
-      <p>Set to false to hide unit from students and tutors.</p>
+      <button mat-stroked-button type="button" [disabled]="isAddingGrade()" (click)="addGrade()">
+        <mat-icon>add</mat-icon>
+        Add grade
+      </button>
     </div>
   </mat-card>
 
-  @if (overseerEnabled.value) {
-    <mat-card class="p-[16px] gap-2">
-      <div>
-        <mat-slide-toggle [(ngModel)]="unit.assessmentEnabled"
-          >Overseer assessment</mat-slide-toggle
-        >
-        <p>If true, unit tasks will be able to make use of Overseer automated checking.</p>
+  <mat-card appearance="outlined" class="flex flex-col p-2">
+    <f-setting-toggle label="Allow flexible dates" [(checked)]="unit.allowFlexibleDates">
+      Allows students to set planned due dates, without using extensions.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Allow student extensions"
+      [(checked)]="unit.allowStudentExtensionRequests"
+    >
+      When false only staff can request extensions on behalf of students.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Auto apply extensions"
+      [(checked)]="unit.autoApplyExtensionBeforeDeadline"
+    >
+      When true, extensions will be automatically applied when they result in a date that is between
+      the task's due date and deadline.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Has tasks assessed in portfolio"
+      [(checked)]="unit.markLateSubmissionsAsAssessInPortfolio"
+      (changed)="onToggleAssessInPortfolio($event)"
+    >
+      When enabled, late submissions will not be automatically marked as "Time Exceeded" or
+      "Feedback Exceeded", and will instead appear as "Assess in Portfolio". Tutors can still sign
+      off tasks as complete unless the task definition has the "Assess in Portfolio Only" option
+      enabled.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Allow students to change tutorial"
+      [(checked)]="unit.allowStudentChangeTutorial"
+    >
+      When false only staff can change student tutorials. When true, students may switch between
+      tutors who provide feedback on their work.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Require feedback before discussed in class"
+      [(checked)]="unit.enforceFeedbackBeforeDiscussedInClass"
+    >
+      When true, tutors must record feedback before they can mark discussion tasks as discussed in
+      class.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Discuss timeout"
+      [(checked)]="unit.discussTimeoutEnabled"
+    >
+      When enabled, students are warned when tasks stay in Discuss too long, then overdue tasks are
+      moved to Fix and Resubmit.
+    </f-setting-toggle>
+
+    @if (unit.discussTimeoutEnabled) {
+      <div class="flex w-full gap-3 px-2 pb-3">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Warn after (days)</mat-label>
+          <input
+            matInput
+            min="0"
+            required
+            type="number"
+            [(ngModel)]="unit.discussTimeoutWarningDays"
+          />
+          <mat-hint>Creates a warning comment when the task is still in Discuss.</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Expire after (days)</mat-label>
+          <input
+            matInput
+            min="1"
+            required
+            type="number"
+            [(ngModel)]="unit.discussTimeoutExpireDays"
+          />
+          <mat-hint>Moves the task to Fix and Resubmit when it is still in Discuss.</mat-hint>
+        </mat-form-field>
       </div>
+    }
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Send notification emails"
+      [(checked)]="unit.sendNotifications"
+    >
+      When true, emails will be set to students each week to indicate progress and suggest future
+      tasks for them to work on.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Synchronise enrolments"
+      [(checked)]="unit.enableSyncEnrolments"
+    >
+      When true student enrolments will be synchronised with other systems where this is possible.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Synchronise timetable"
+      [(checked)]="unit.enableSyncTimetable"
+    >
+      When true timetable data will be synchronised with other systems where this is possible.
+    </f-setting-toggle>
+
+    <f-setting-toggle class="border-t border-gray-200" label="Active" [(checked)]="unit.active">
+      Set to false to hide unit from students and tutors.
+    </f-setting-toggle>
+  </mat-card>
+
+  @if (overseerEnabled.value) {
+    <mat-card class="gap-1 p-4">
+      <f-setting-toggle
+        class="-mx-2 mb-2"
+        label="Overseer assessment"
+        [(checked)]="unit.assessmentEnabled"
+      >
+        If true, unit tasks will be able to make use of Overseer automated checking.
+      </f-setting-toggle>
 
       <mat-form-field appearance="outline">
         <mat-label>Overseer Docker Image</mat-label>
@@ -236,18 +449,24 @@
     </mat-card>
   }
 
-  <div class="flex justify-end w-full gap-5">
-    <button mat-raised-button (click)="addD2lData()" [hidden]="!d2lEnabled.value">
+  <div class="flex w-full justify-end gap-3">
+    <button mat-raised-button [hidden]="!d2lEnabled.value" (click)="addD2lData()">
       D2L Details
     </button>
     <button
       mat-raised-button
       matTooltip="Rollover the unit into a new teaching period"
       matTooltipShowDelay="1000"
-      uiSref="units/rollover"
+      [routerLink]="['/units', unit.id, 'rollover']"
     >
       Copy
     </button>
-    <button mat-raised-button color="primary" (click)="saveUnit()">Update</button>
+  </div>
+</div>
+<div class="fixed right-[50px] bottom-[50px] z-50">
+  <div>
+    <button color="primary" mat-fab (click)="saveUnit()">
+      <mat-icon>save</mat-icon>
+    </button>
   </div>
 </div>

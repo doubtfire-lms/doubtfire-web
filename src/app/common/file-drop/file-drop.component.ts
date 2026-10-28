@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Subscription, throwError } from 'rxjs';
-import { AlertService } from '../services/alert.service';
+import {HttpClient, HttpErrorResponse, HttpEventType, HttpResponse} from '@angular/common/http';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {Subscription, throwError} from 'rxjs';
+import {AlertService} from '../services/alert.service';
 
 /**
  * Allow files to be dropped for upload
@@ -10,9 +10,11 @@ import { AlertService } from '../services/alert.service';
   selector: 'f-file-drop',
   templateUrl: 'file-drop.component.html',
   styleUrls: ['file-drop.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class FileDropComponent {
-  @Input({ required: true }) mode: 'endpoint' | 'event';
+  @Input({required: true}) mode: 'endpoint' | 'event';
 
   /** The name of the file(s) you are asking the user to upload */
   @Input() desiredFileName: string;
@@ -26,8 +28,8 @@ export class FileDropComponent {
   /** The URL of the endpoint to POST the file to if mode is endpoint*/
   @Input() endpoint: string;
   @Input() body: object;
-  @Output() fileChange = new EventEmitter<File>();
-  @Output() uploadSuccess = new EventEmitter<HttpResponse<object>>();
+  @Output() fileChange: EventEmitter<File> = new EventEmitter();
+  @Output() uploadSuccess: EventEmitter<HttpResponse<object>> = new EventEmitter();
 
   protected uploadProgress: number;
   protected uploadSub: Subscription;
@@ -38,7 +40,7 @@ export class FileDropComponent {
   /**
    * Report all files dropped if mode is event
    */
-  @Output() filesDropped = new EventEmitter<File[]>();
+  @Output() filesDropped: EventEmitter<File[]> = new EventEmitter();
 
   constructor(
     private http: HttpClient,
@@ -79,21 +81,23 @@ export class FileDropComponent {
         const formData = new FormData();
 
         formData.append('file', this.file);
-        this.http.post(this.endpoint, formData, { reportProgress: true, observe: 'events' }).subscribe(
-          (data) => {
-            if (data.type == HttpEventType.UploadProgress) {
-              this.uploadProgress = Math.round(100 * (data.loaded / data.total));
-            }
-            if (data.type == HttpEventType.Response) {
-              if (data.ok) {
-                this.alert.success(`File uploaded successfully`);
-                this.uploadSuccess.emit(data as HttpResponse<Object>);
+        this.http
+          .post(this.endpoint, formData, {reportProgress: true, observe: 'events'})
+          .subscribe(
+            (data) => {
+              if (data.type == HttpEventType.UploadProgress) {
+                this.uploadProgress = Math.round(100 * (data.loaded / data.total));
               }
-            }
-          },
-          (error) => this.handleError(error),
-          () => this.reset(),
-        );
+              if (data.type == HttpEventType.Response) {
+                if (data.ok) {
+                  this.alert.success(`File uploaded successfully`);
+                  this.uploadSuccess.emit(data as HttpResponse<object>);
+                }
+              }
+            },
+            (error) => this.handleError(error),
+            () => this.reset(),
+          );
       }
     } else {
       this.filesDropped.emit([this.file]);

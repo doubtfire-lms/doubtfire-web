@@ -7,31 +7,33 @@
     <mat-form-field appearance="outline">
       <input
         matInput
-        type="text"
-        placeholder="Org Unit Id"
-        [(ngModel)]="d2lDataMapping.orgUnitId"
         name="orgUnitId"
+        placeholder="Org Unit Id"
         required
+        type="text"
+        [(ngModel)]="d2lDataMapping.orgUnitId"
       />
     </mat-form-field>
     <mat-form-field appearance="outline">
       <input
         matInput
-        type="text"
-        placeholder="Grade Object Id"
-        [(ngModel)]="d2lDataMapping.gradeObjectId"
         name="orgUnitId"
+        placeholder="Grade Object Id"
+        type="text"
+        [(ngModel)]="d2lDataMapping.gradeObjectId"
       />
       <mat-hint align="start">Created during grades transfer if not set</mat-hint>
     </mat-form-field>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-stroked-button color="warn" (click)="delete()" *ngIf="d2lDataMapping.id">
-    Delete
-  </button>
-  <button mat-stroked-button (click)="saveAndClose()" class="pull-right">
-    <span *ngIf="d2lDataMapping.hasChanges(d2lAssessmentMappingService.mapping)">Save and </span
-    >Close
+  @if (d2lDataMapping.id) {
+    <button color="warn" mat-stroked-button (click)="delete()">Delete</button>
+  }
+  <button class="pull-right" mat-stroked-button (click)="saveAndClose()">
+    @if (d2lDataMapping.hasChanges(d2lAssessmentMappingService.mapping)) {
+      <span>Save and </span>
+    }
+    Close
   </button>
 </mat-dialog-actions>
