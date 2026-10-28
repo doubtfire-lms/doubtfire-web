@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-4](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-3...v11.1.0-4) (2026-10-28)
+
+
+### Bug Fixes
+
+* improve tutor discussion mobile layout ([81dd5a6](https://github.com/b0ink/doubtfire-deploy/commit/81dd5a66e408617ae98b1dc545f05cc9555faf97))
+* set icons to same scale ([4874081](https://github.com/b0ink/doubtfire-deploy/commit/4874081579fe315e37eb3bfbe364160f76706c8b))
+
 ## [11.1.0-3](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-2...v11.1.0-3) (2026-10-28)
 
 
