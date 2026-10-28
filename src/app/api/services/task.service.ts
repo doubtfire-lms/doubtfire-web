@@ -236,6 +236,14 @@ export class TaskService extends CachedEntityService<Task> {
     });
   }
 
+  // Maps into the task in place; a throwaway cache leaves the project's task cache keys untouched
+  public refreshTask(task: Task): Observable<Task> {
+    return this.fetch(
+      {projectId: task.project.id, taskDefinitionId: task.definition.id},
+      {endpointFormat: this.refreshTaskEndpoint, entity: task, cache: new EntityCache<Task>()},
+    );
+  }
+
   public readonly statusKeys = TaskStatus.STATUS_KEYS;
   public readonly toBeWorkedOn = TaskStatus.TO_BE_WORKED_ON;
   public readonly discussionStatuses = TaskStatus.DISCUSSION_STATES;

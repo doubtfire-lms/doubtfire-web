@@ -1,13 +1,19 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {TestBed} from '@angular/core/testing';
+import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {CABLE_CONSUMER_FACTORY, TaskCableEvent, TaskCableService} from './task-cable.service';
+import {
+  CABLE_CONSUMER_FACTORY,
+  ProjectCableEvent,
+  TaskCableEvent,
+  TaskCableService,
+} from './task-cable.service';
 
 interface Mixin {
   connected: (arg: {reconnected: boolean}) => void;
-  received: (data: {event: TaskCableEvent}) => void;
+  received: (data: {event: TaskCableEvent; task_definition_id?: number}) => void;
 }
 
 describe('TaskCableService', () => {
@@ -72,6 +78,27 @@ describe('TaskCableService', () => {
 
     const url = createConsumer.mock.calls[0][0] as () => string;
     expect(url()).toBe('http://localhost/cable?username=student&auth_token=token');
+  });
+
+  it('emits project events with their task definition and skips reconnect resync', () => {
+    const events: ProjectCableEvent[] = [];
+    service.projectEventsFor({id: 1} as Project).subscribe((event) => events.push(event));
+
+    expect(create).toHaveBeenCalledWith(
+      {channel: 'ProjectChannel', project_id: 1},
+      expect.any(Object),
+    );
+    mixins[0].received({event: 'status_changed', task_definition_id: 2});
+    mixins[0].connected({reconnected: true});
+
+    expect(events).toEqual([{event: 'status_changed', taskDefinitionId: 2}]);
+  });
+
+  it('keeps task and project subscriptions separate', () => {
+    service.eventsFor(task).subscribe();
+    service.projectEventsFor({id: 1} as Project).subscribe();
+
+    expect(create).toHaveBeenCalledTimes(2);
   });
 
   it('ignores tasks without a project', () => {

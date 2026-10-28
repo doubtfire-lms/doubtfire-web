@@ -11,12 +11,15 @@ import {
   Output,
 } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {BehaviorSubject, Observable, Subject, first, of, takeUntil} from 'rxjs';
+import {BehaviorSubject, Observable, Subject, Subscription, first, of, takeUntil} from 'rxjs';
 import {Project, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {ProjectService} from 'src/app/api/services/project.service';
+import {TaskCableService} from 'src/app/api/services/task-cable.service';
+import {TaskService} from 'src/app/api/services/task.service';
 import {UnitService} from 'src/app/api/services/unit.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {GlobalStateService, ViewType} from '../../index/global-state.service';
+import {SelectedTaskService} from '../selected-task.service';
 
 @Component({
   selector: 'f-project-dashboard',
@@ -51,6 +54,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   private readonly destroy$: Subject<void> = new Subject();
   private projectReady = false;
+  private projectEventsSub: Subscription;
 
   projectTasks = [];
 
@@ -61,6 +65,9 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     private globalStateService: GlobalStateService,
     private route: ActivatedRoute,
     private breakpointObserver: BreakpointObserver,
+    private taskCableService: TaskCableService,
+    private taskService: TaskService,
+    private selectedTaskService: SelectedTaskService,
   ) {}
 
   public readonly taskListCollapsedWidth = 75;
@@ -168,6 +175,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     document.body.classList.remove('split-pane-resizing');
+    this.projectEventsSub?.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -216,5 +224,24 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     this.projectReady = true;
     this.globalStateService.setView(ViewType.PROJECT, project);
     this.projectSubject.next(project);
+    this.watchProjectEvents(project);
+  }
+
+  // Keeps each task's status and unread count in the list current
+  private watchProjectEvents(project: Project): void {
+    this.projectEventsSub?.unsubscribe();
+    this.projectEventsSub = this.taskCableService
+      .projectEventsFor(project)
+      .subscribe(({event, taskDefinitionId}) => {
+        const task = project.findTaskForDefinition(taskDefinitionId);
+        const selected = this.selectedTaskService.selectedTask;
+        const isSelected =
+          selected?.project?.id === project.id && selected?.definition?.id === taskDefinitionId;
+        // The open comments viewer marks new comments read; refreshing too could race it back to unread
+        if (!task || (event === 'comment_created' && isSelected)) {
+          return;
+        }
+        this.taskService.refreshTask(task).subscribe();
+      });
   }
 }
