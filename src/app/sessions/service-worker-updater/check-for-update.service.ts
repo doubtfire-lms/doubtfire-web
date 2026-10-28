@@ -1,8 +1,9 @@
-import {ApplicationRef, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {MatSnackBar, MatSnackBarRef} from '@angular/material/snack-bar';
 import {SwUpdate} from '@angular/service-worker';
 import {UpdateAvailableComponent} from './update-available.component';
 
+const UPDATE_POLL_INTERVAL = 4 * 60 * 60 * 1000; // 4 Hours
 const UPDATE_REMINDER_DELAY = 10 * 60 * 1000; // 10 Minutes
 
 @Injectable()
@@ -11,20 +12,11 @@ export class CheckForUpdateService {
   private updateReminder?: ReturnType<typeof setTimeout>;
 
   constructor(
-    appRef: ApplicationRef,
     private updates: SwUpdate,
     private _snackBar: MatSnackBar,
   ) {
-    // Allow the app to stabilize first, before starting polling for updates with `interval()`.
-    // const appIsStable$ = appRef.isStable.pipe(delay(10000));
+    setInterval(() => this.checkForUpdate(), UPDATE_POLL_INTERVAL);
 
-    // Checks every 4 hours
-    // const updateInterval$ = interval(4 * 60 * 60 * 1000);
-    // const updateIntervalOnceAppIsStable$ = concat(appIsStable$, updateInterval$);
-
-    // updateIntervalOnceAppIsStable$.subscribe((() => {
-    //   this.checkForUpdate();
-    // }).bind(this));
     this.updates.versionUpdates.subscribe((updateEvent) => {
       if (updateEvent.type === 'VERSION_READY' && !this.updatePrompt) {
         this.promptForUpdate();
@@ -38,7 +30,8 @@ export class CheckForUpdateService {
 
   public checkForUpdate() {
     if (this.updates.isEnabled) {
-      this.updates.checkForUpdate();
+      // Failed checks (e.g. offline) are retried on the next poll
+      this.updates.checkForUpdate().catch(() => undefined);
     }
   }
 
