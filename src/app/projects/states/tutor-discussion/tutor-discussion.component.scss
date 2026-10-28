@@ -16,6 +16,13 @@
   border-right-width: 1px;
 }
 
+html.tutor-discussion-page-locked,
+html.tutor-discussion-page-locked body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 f-tutor-discussion {
   .discussion-layout {
     height: calc(100vh - 105px);
@@ -37,6 +44,65 @@ f-tutor-discussion {
 
     .mat-mdc-tooltip-trigger {
       touch-action: pan-y pinch-zoom !important;
+    }
+  }
+
+  .discussion-layout--fullscreen {
+    &.discussion-layout--task-selected .discussion-controls {
+      min-height: min(240px, max(180px, 35dvh));
+    }
+
+    &.discussion-layout--task-selected .discussion-actions {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      padding-block: 12px;
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.08);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+
+    &.discussion-layout--task-selected .discussion-controls-scroll {
+      padding-bottom: 120px;
+      scroll-padding-bottom: 120px;
+    }
+
+    .task-comment-panel,
+    f-staff-notes,
+    f-discussion-prompts {
+      min-height: clamp(0px, calc(100dvh - 300px), 350px);
+    }
+
+    .discussion-controls {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discussion-controls-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .discussion-actions {
+      flex: none;
+      margin-top: 0;
+      background: white;
+    }
+
+    .discussion-action {
+      .medium-icon-button {
+        width: 68px !important;
+        height: 68px !important;
+      }
     }
   }
 

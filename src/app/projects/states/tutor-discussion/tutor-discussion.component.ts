@@ -48,6 +48,7 @@ enum TutorDiscussionTabView {
   standalone: false,
 })
 export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
+  private readonly pageScrollLockClass = 'tutor-discussion-page-locked';
   private readonly discussedInClassNotePrefix = `I'm manually marking this discussed in class because...`;
   private readonly mobileDiscussionViewportContent =
     'width=device-width, initial-scale=0.8, maximum-scale=5';
@@ -113,6 +114,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   ) {}
 
   public ngOnDestroy(): void {
+    this.document.documentElement.classList.remove(this.pageScrollLockClass);
     this.stopQrScanner();
     this.restoreViewportZoom();
   }
@@ -140,6 +142,11 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit(): void {
+    if (this.isTutorDiscussionRoute) {
+      this.document.defaultView?.scrollTo(0, 0);
+      this.document.documentElement.classList.add(this.pageScrollLockClass);
+    }
+
     this.unitId =
       this.unitId ??
       Number(
@@ -716,6 +723,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
           ];
         }
 
+        this.showComments();
         this.selectedTask = null;
         this.project = project;
         this.scanningQr = false;
