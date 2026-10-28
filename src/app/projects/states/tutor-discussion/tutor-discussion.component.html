@@ -79,6 +79,7 @@
         @if (project && project?.student) {
           <button
             aria-label="Add engagement stamp"
+            class="scale-150"
             color="primary"
             mat-icon-button
             matTooltip="Add engagement"
@@ -102,7 +103,7 @@
           <div></div>
           <div class="mt-3 text-gray-500 italic">Click the QR code to open the scanner..</div>
         }
-        <button class="scale-200" color="primary" mat-icon-button (click)="scanQrCode()">
+        <button class="scale-150" color="primary" mat-icon-button (click)="scanQrCode()">
           <mat-icon>qr_code_scanner</mat-icon>
         </button>
       </div>
