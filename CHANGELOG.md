@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-5](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-4...v11.1.0-5) (2026-10-28)
+
+
+### Bug Fixes
+
+* comment full width span ([5f6873a](https://github.com/b0ink/doubtfire-deploy/commit/5f6873aa94aa028705c6cac45893baabe47ac723))
+* link unit staff roles to their parent unit ([6fefd80](https://github.com/b0ink/doubtfire-deploy/commit/6fefd807e764bf73a88529ae15354c152c3fbb6a))
+
 ## [11.1.0-4](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-3...v11.1.0-4) (2026-10-28)
 
 
