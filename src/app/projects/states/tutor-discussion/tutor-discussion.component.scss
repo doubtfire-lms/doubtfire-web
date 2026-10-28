@@ -76,6 +76,24 @@ f-tutor-discussion {
       min-height: clamp(0px, calc(100dvh - 300px), 350px);
     }
 
+    .task-comment-panel {
+      .comments-scroll-content,
+      .comments-scroll-content > span,
+      .anchor,
+      .comment {
+        width: 100%;
+      }
+
+      .comments-scroll-content > span {
+        display: block;
+      }
+
+      .comment-container {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+    }
+
     .discussion-controls {
       display: flex;
       flex-direction: column;
