@@ -77,7 +77,9 @@ export class UnitRoleService extends CachedEntityService<UnitRole> {
     );
   }
 
-  public createInstanceFrom(_json: object): UnitRole {
-    return new UnitRole();
+  public createInstanceFrom(_json: object, unit?: Unit): UnitRole {
+    const unitRole = new UnitRole();
+    unitRole.unit = unit;
+    return unitRole;
   }
 }
