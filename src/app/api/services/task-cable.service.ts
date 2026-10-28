@@ -1,5 +1,5 @@
 import {Consumer, createConsumer} from '@rails/actioncable';
-import {Injectable, NgZone} from '@angular/core';
+import {Inject, Injectable, InjectionToken, NgZone} from '@angular/core';
 import {EMPTY, Observable, share} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {UserService} from 'src/app/api/services/user.service';
@@ -7,6 +7,12 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 // 'reconnected' means events may have been missed while the connection was down
 export type TaskCableEvent = 'comment_created' | 'status_changed' | 'reconnected';
+
+// Injected so specs can swap it; vi.mock misses packages the Angular test builder bundles
+export const CABLE_CONSUMER_FACTORY: InjectionToken<typeof createConsumer> = new InjectionToken(
+  'CABLE_CONSUMER_FACTORY',
+  {providedIn: 'root', factory: () => createConsumer},
+);
 
 @Injectable({providedIn: 'root'})
 export class TaskCableService {
@@ -17,6 +23,7 @@ export class TaskCableService {
     private constants: DoubtfireConstants,
     private userService: UserService,
     private zone: NgZone,
+    @Inject(CABLE_CONSUMER_FACTORY) private consumerFactory: typeof createConsumer,
   ) {}
 
   // One server subscription per task, shared by all observers and closed when the last one unsubscribes
@@ -70,7 +77,7 @@ export class TaskCableService {
 
   private getConsumer(): Consumer {
     // The URL is rebuilt on each reconnect so it picks up a refreshed token
-    this.consumer ??= createConsumer(() => this.cableUrl());
+    this.consumer ??= this.consumerFactory(() => this.cableUrl());
     return this.consumer;
   }
 

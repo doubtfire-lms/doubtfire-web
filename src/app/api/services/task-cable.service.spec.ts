@@ -1,12 +1,9 @@
-import {createConsumer} from '@rails/actioncable';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {TestBed} from '@angular/core/testing';
 import {Task} from 'src/app/api/models/task';
 import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {TaskCableEvent, TaskCableService} from './task-cable.service';
-
-vi.mock('@rails/actioncable', () => ({createConsumer: vi.fn()}));
+import {CABLE_CONSUMER_FACTORY, TaskCableEvent, TaskCableService} from './task-cable.service';
 
 interface Mixin {
   connected: (arg: {reconnected: boolean}) => void;
@@ -19,6 +16,7 @@ describe('TaskCableService', () => {
   let mixins: Mixin[];
   let create: ReturnType<typeof vi.fn>;
   let unsubscribe: ReturnType<typeof vi.fn>;
+  let createConsumer: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     mixins = [];
@@ -27,14 +25,11 @@ describe('TaskCableService', () => {
       mixins.push(mixin);
       return {unsubscribe};
     });
-    vi.mocked(createConsumer).mockReset();
-    vi.mocked(createConsumer).mockReturnValue({
-      subscriptions: {create},
-      disconnect: vi.fn(),
-    } as never);
+    createConsumer = vi.fn(() => ({subscriptions: {create}, disconnect: vi.fn()}));
 
     TestBed.configureTestingModule({
       providers: [
+        {provide: CABLE_CONSUMER_FACTORY, useValue: createConsumer},
         {provide: DoubtfireConstants, useValue: {HOST_URL: 'http://localhost'}},
         {
           provide: UserService,
@@ -75,7 +70,7 @@ describe('TaskCableService', () => {
   it('connects with the current user token', () => {
     service.eventsFor(task).subscribe();
 
-    const url = vi.mocked(createConsumer).mock.calls[0][0] as () => string;
+    const url = createConsumer.mock.calls[0][0] as () => string;
     expect(url()).toBe('http://localhost/cable?username=student&auth_token=token');
   });
 
