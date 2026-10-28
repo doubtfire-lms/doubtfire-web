@@ -1,24 +1,17 @@
+import {Consumer, createConsumer} from '@rails/actioncable';
 import {Injectable, NgZone} from '@angular/core';
-import {Subject} from 'rxjs';
+import {EMPTY, Observable, share} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {UserService} from 'src/app/api/services/user.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
-export type TaskCableEventType = 'comment_created' | 'status_changed';
-
-export interface TaskCableEvent {
-  event: TaskCableEventType;
-  projectId: number;
-  taskDefinitionId: number;
-}
+// 'reconnected' means events may have been missed while the connection was down
+export type TaskCableEvent = 'comment_created' | 'status_changed' | 'reconnected';
 
 @Injectable({providedIn: 'root'})
 export class TaskCableService {
-  public readonly events$: Subject<TaskCableEvent> = new Subject();
-
-  private socket: WebSocket;
-  private identifier: string;
-  private subscribedTaskKey: string;
+  private consumer: Consumer;
+  private readonly taskEvents: Map<string, Observable<TaskCableEvent>> = new Map();
 
   constructor(
     private constants: DoubtfireConstants,
@@ -26,84 +19,68 @@ export class TaskCableService {
     private zone: NgZone,
   ) {}
 
-  public subscribeToTask(task: Task): void {
-    if (!task?.project?.id || !task?.definition?.id) {
-      this.unsubscribe();
-      return;
+  // One server subscription per task, shared by all observers and closed when the last one unsubscribes
+  public eventsFor(task: Task): Observable<TaskCableEvent> {
+    const projectId = task?.project?.id;
+    const taskDefinitionId = task?.definition?.id;
+    if (!projectId || !taskDefinitionId) {
+      return EMPTY;
     }
 
-    const taskKey = `${task.project.id}:${task.definition.id}`;
-    if (this.subscribedTaskKey === taskKey && this.socket?.readyState === WebSocket.OPEN) {
-      return;
+    const key = `${projectId}:${taskDefinitionId}`;
+    const existing = this.taskEvents.get(key);
+    if (existing) {
+      return existing;
     }
 
-    this.unsubscribe();
-    this.subscribedTaskKey = taskKey;
-    this.identifier = JSON.stringify({
-      channel: 'TaskChannel',
-      project_id: task.project.id,
-      task_definition_id: task.definition.id,
-    });
+    const events$ = new Observable<TaskCableEvent>((subscriber) => {
+      const emit = (event: TaskCableEvent) => this.zone.run(() => subscriber.next(event));
+      // Outside the zone so Action Cable's pings and reconnect timers skip change detection
+      const subscription = this.zone.runOutsideAngular(() =>
+        this.getConsumer().subscriptions.create(
+          {channel: 'TaskChannel', project_id: projectId, task_definition_id: taskDefinitionId},
+          {
+            connected: ({reconnected}) => {
+              if (reconnected) {
+                emit('reconnected');
+              }
+            },
+            received: (data: {event: TaskCableEvent}) => emit(data.event),
+          },
+        ),
+      );
 
-    const currentUser = this.userService.currentUser;
-    if (!currentUser?.username || !currentUser?.authenticationToken) {
-      return;
-    }
+      return () => {
+        subscription.unsubscribe();
+        if (this.taskEvents.get(key) === events$) {
+          this.taskEvents.delete(key);
+        }
+      };
+    }).pipe(share());
 
-    const socket = new WebSocket(
-      this.cableUrl(currentUser.username, currentUser.authenticationToken),
-    );
-    this.socket = socket;
-    socket.onopen = () => this.send({command: 'subscribe', identifier: this.identifier});
-    socket.onmessage = (message) => this.receiveMessage(message, task, taskKey);
-    socket.onclose = () => {
-      if (this.socket === socket) {
-        this.socket = null;
-      }
-    };
+    this.taskEvents.set(key, events$);
+    return events$;
   }
 
-  public unsubscribe(): void {
-    if (this.socket && this.identifier && this.socket.readyState === WebSocket.OPEN) {
-      this.send({command: 'unsubscribe', identifier: this.identifier});
-    }
-    this.socket?.close();
-    this.socket = null;
-    this.identifier = null;
-    this.subscribedTaskKey = null;
+  public disconnect(): void {
+    this.consumer?.disconnect();
+    this.consumer = null;
+    this.taskEvents.clear();
   }
 
-  private receiveMessage(message: MessageEvent, task: Task, taskKey: string): void {
-    if (this.subscribedTaskKey !== taskKey) {
-      return;
-    }
-
-    const data = JSON.parse(message.data);
-    if (data.type || !data.message?.event) {
-      return;
-    }
-
-    this.zone.run(() => {
-      this.events$.next({
-        event: data.message.event,
-        projectId: task.project.id,
-        taskDefinitionId: task.definition.id,
-      });
-    });
+  private getConsumer(): Consumer {
+    // The URL is rebuilt on each reconnect so it picks up a refreshed token
+    this.consumer ??= createConsumer(() => this.cableUrl());
+    return this.consumer;
   }
 
-  private send(data: object): void {
-    this.socket?.send(JSON.stringify(data));
-  }
-
-  private cableUrl(username: string, authToken: string): string {
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const host = this.constants.HOST_URL.replace(/^https?/, protocol);
+  private cableUrl(): string {
+    const user = this.userService.currentUser;
     const params = new URLSearchParams({
-      username,
-      authToken,
+      username: user?.username ?? '',
+      auth_token: user?.authenticationToken ?? '',
     });
 
-    return `${host}/cable?${params.toString()}`;
+    return `${this.constants.HOST_URL}/cable?${params.toString()}`;
   }
 }

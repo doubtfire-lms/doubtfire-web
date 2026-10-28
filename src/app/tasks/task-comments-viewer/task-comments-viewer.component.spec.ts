@@ -26,9 +26,7 @@ const feedbackTemplateServiceStub = {
   query: vi.fn(() => of([])),
 };
 const taskCableServiceStub = {
-  events$: new Subject(),
-  subscribeToTask: vi.fn(),
-  unsubscribe: vi.fn(),
+  eventsFor: vi.fn(() => EMPTY),
 };
 const emptyProvider = {};
 

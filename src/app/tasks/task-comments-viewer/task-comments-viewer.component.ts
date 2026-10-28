@@ -83,29 +83,12 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
         this.fetchComments(task, false);
       }
     });
-
-    this.taskCableSub = this.taskCableService.events$.subscribe((event) => {
-      if (
-        !this.task ||
-        this.task.project?.id !== event.projectId ||
-        this.task.definition?.id !== event.taskDefinitionId
-      ) {
-        return;
-      }
-
-      if (event.event === 'comment_created') {
-        this.fetchComments(this.task, false);
-      } else if (event.event === 'status_changed') {
-        this.task.getSubmissionDetails().subscribe();
-      }
-    });
   }
 
   ngOnDestroy(): void {
     this.taskStatusSub?.unsubscribe();
     this.commentAddedSub?.unsubscribe();
     this.taskCableSub?.unsubscribe();
-    this.taskCableService.unsubscribe();
   }
 
   public asAssessmentComment(comment: TaskComment): TaskAssessmentComment | null {
@@ -135,7 +118,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
       // Must have project for task to be mapped
       if (changes.task.currentValue?.project != null) {
         this.project = changes.task.currentValue.project;
-        this.taskCableService.subscribeToTask(this.task);
+        this.watchTaskEvents(this.task);
         this.fetchComments(this.task, true, true);
       } else {
         this.loading = false;
@@ -145,6 +128,18 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     if (changes.commentsVisible?.currentValue && !changes.commentsVisible.firstChange) {
       this.scrollDown();
     }
+  }
+
+  private watchTaskEvents(task: Task): void {
+    this.taskCableSub?.unsubscribe();
+    this.taskCableSub = this.taskCableService.eventsFor(task).subscribe((event) => {
+      if (event === 'comment_created' || event === 'reconnected') {
+        this.fetchComments(task, false);
+      }
+      if (event === 'status_changed' || event === 'reconnected') {
+        task.getSubmissionDetails().subscribe();
+      }
+    });
   }
 
   fetchComments(task: Task, useCache: boolean = true, fetchAfterCache: boolean = false) {

@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {AsyncSubject, Observable, catchError, map, throwError} from 'rxjs';
 import {User, UserService} from 'src/app/api/models/doubtfire-model';
+import {TaskCableService} from 'src/app/api/services/task-cable.service';
 import {AppInjector} from 'src/app/app-injector';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
@@ -237,6 +238,8 @@ export class AuthenticationService {
       // Setup ability to auth again
       this.authComplete$.complete();
       this.authComplete$ = new AsyncSubject<boolean>();
+
+      AppInjector.get(TaskCableService).disconnect();
 
       // Change the current user to the anonymous user
       this.userService.currentUser = this.userService.anonymousUser;

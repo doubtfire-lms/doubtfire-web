@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, Subject, Subscription} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskCableService} from 'src/app/api/services/task-cable.service';
 import {TaskService} from 'src/app/api/services/task.service';
@@ -24,24 +24,10 @@ export class SelectedTaskService {
     private taskService: TaskService,
     private globalState: GlobalStateService,
     private taskCableService: TaskCableService,
-  ) {
-    this.taskCableService.events$.subscribe((event) => {
-      const task = this.task$.value;
-      if (
-        event.event === 'status_changed' &&
-        task?.project?.id === event.projectId &&
-        task?.definition?.id === event.taskDefinitionId
-      ) {
-        task.getSubmissionDetails().subscribe(() => {
-          if (this.currentView$.value === DashboardViews.submission) {
-            this.showSubmission();
-          }
-        });
-      }
-    });
-  }
+  ) {}
 
   private task$: BehaviorSubject<Task> = new BehaviorSubject(null);
+  private taskEventsSub: Subscription;
   public currentPdfUrl$: BehaviorSubject<string> = new BehaviorSubject(null);
 
   public currentView$: BehaviorSubject<DashboardViews> = new BehaviorSubject(
@@ -83,8 +69,22 @@ export class SelectedTaskService {
 
   private selectTask(task: Task): void {
     this.task$.next(task);
-    this.taskCableService.subscribeToTask(task);
+    this.watchTaskEvents(task);
     task?.getSubmissionDetails().subscribe();
+  }
+
+  private watchTaskEvents(task: Task): void {
+    this.taskEventsSub?.unsubscribe();
+    this.taskEventsSub = this.taskCableService.eventsFor(task).subscribe((event) => {
+      if (event !== 'status_changed' && event !== 'reconnected') {
+        return;
+      }
+      task.getSubmissionDetails().subscribe(() => {
+        if (this.task$.value === task && this.currentView$.value === DashboardViews.submission) {
+          this.showSubmission();
+        }
+      });
+    });
   }
 
   public showTaskSheet() {
