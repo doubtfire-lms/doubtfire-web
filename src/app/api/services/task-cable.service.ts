@@ -14,7 +14,7 @@ export interface TaskCableEvent {
 
 @Injectable({providedIn: 'root'})
 export class TaskCableService {
-  public readonly events$ = new Subject<TaskCableEvent>();
+  public readonly events$: Subject<TaskCableEvent> = new Subject();
 
   private socket: WebSocket;
   private identifier: string;

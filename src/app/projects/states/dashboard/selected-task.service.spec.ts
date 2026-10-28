@@ -1,5 +1,7 @@
 import {beforeEach, describe, expect, it} from 'vitest';
 import {TestBed} from '@angular/core/testing';
+import {Subject} from 'rxjs';
+import {TaskCableService} from 'src/app/api/services/task-cable.service';
 import {TaskService} from 'src/app/api/services/task.service';
 import {GlobalStateService} from '../index/global-state.service';
 import {SelectedTaskService} from './selected-task.service';
@@ -15,6 +17,7 @@ describe('SelectedTaskService', () => {
         SelectedTaskService,
         {provide: TaskService, useValue: emptyProvider},
         {provide: GlobalStateService, useValue: emptyProvider},
+        {provide: TaskCableService, useValue: {events$: new Subject()}},
       ],
     });
     service = TestBed.inject(SelectedTaskService);
