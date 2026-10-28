@@ -98,6 +98,10 @@ export class TaskSimilarityViewComponent implements OnChanges {
             );
             this.jplagOpenState = true;
             this.loadingJplagReportFor = null;
+          })
+          .catch((error) => {
+            console.error(error);
+            this.loadingJplagReportFor = null;
           });
       },
       (error) => {

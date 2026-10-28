@@ -99,7 +99,7 @@
           <div
             aria-label="Teaching period breaks"
             class="relative mt-1 w-full select-none"
-            role="optgroup"
+            role="group"
             [style.height]="breakBandHeight"
           >
             @for (segment of breakSegments; track segment.key) {
@@ -121,7 +121,7 @@
             #weekTrack
             aria-label="Teaching weeks"
             class="relative -mt-1.5 h-7 w-full select-none"
-            role="optgroup"
+            role="group"
           >
             @for (segment of weekSegments; track segment.key) {
               <button
