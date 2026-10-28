@@ -1086,7 +1086,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private dateTime(date: Date): number {
-    const time = date ? new Date(date).getTime() : NaN;
+    const time = date ? new Date(date).getTime() : Number.NaN;
     return Number.isFinite(time) ? time : Number.MAX_SAFE_INTEGER;
   }
 

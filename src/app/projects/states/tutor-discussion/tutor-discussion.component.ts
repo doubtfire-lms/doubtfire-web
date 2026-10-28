@@ -435,7 +435,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.startCameraScan();
+    void this.startCameraScan();
   }
 
   public openAddEngagementDialog(): void {
@@ -524,15 +524,17 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       const fromStatus = task.status;
       if (task.definition.assessInPortfolioOnly) {
         const expectedStatus = status === 'complete' ? 'working_on_it' : status;
-        task.updateTaskStatus(expectedStatus, true, false, () =>
+        void task.updateTaskStatus(expectedStatus, true, false, () =>
           onStatusUpdated(task, fromStatus, expectedStatus),
         );
       } else if (status === 'fix_and_resubmit') {
-        task.updateTaskStatus(status, true, moveDependentTasks, () =>
+        void task.updateTaskStatus(status, true, moveDependentTasks, () =>
           onStatusUpdated(task, fromStatus, status),
         );
       } else {
-        task.updateTaskStatus(status, true, false, () => onStatusUpdated(task, fromStatus, status));
+        void task.updateTaskStatus(status, true, false, () =>
+          onStatusUpdated(task, fromStatus, status),
+        );
       }
     }
   }
@@ -567,7 +569,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     if (!this.unit?.enforceFeedbackBeforeDiscussedInClass) {
       for (const taskOption of selectedTasks) {
         const task = taskOption.value as Task;
-        task.markAsDiscussed(undefined, onDiscussionRecorded);
+        void task.markAsDiscussed(undefined, onDiscussionRecorded);
       }
       return;
     }
@@ -588,7 +590,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
 
         for (const taskOption of selectedTasks) {
           const task = taskOption.value as Task;
-          task.markAsDiscussed(reason, onDiscussionRecorded);
+          void task.markAsDiscussed(reason, onDiscussionRecorded);
         }
       });
   }
