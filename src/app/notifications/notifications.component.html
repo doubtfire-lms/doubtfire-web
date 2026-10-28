@@ -27,7 +27,7 @@
 
   <section class="mb-5 flex flex-col items-start gap-3">
     <div class="flex w-full flex-wrap items-center gap-3">
-      <mat-form-field appearance="outline" class="w-full max-w-[400px]" subscriptSizing="dynamic">
+      <mat-form-field appearance="outline" class="w-full max-w-100" subscriptSizing="dynamic">
         <mat-label>Search notifications</mat-label>
         <mat-icon matPrefix>search</mat-icon>
         <input
@@ -127,7 +127,7 @@
           ]"
         >
           <button
-            class="flex w-full cursor-pointer items-center gap-4 p-5 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-600 max-[720px]:flex-col max-[720px]:items-stretch"
+            class="flex w-full cursor-pointer items-center gap-4 p-5 text-left focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 max-[720px]:flex-col max-[720px]:items-stretch"
             type="button"
             [attr.aria-expanded]="
               group.counts.communication_email || group.counts.weekly_summary
@@ -176,7 +176,7 @@
 
           @if (group.messageBody && isExpanded(group)) {
             <section aria-label="Email body" class="border-t border-slate-200 px-5 py-4">
-              <div class="max-w-[800px] break-words whitespace-pre-wrap text-slate-800 select-text">
+              <div class="max-w-200 wrap-break-word whitespace-pre-wrap text-slate-800 select-text">
                 {{ group.messageBody }}
               </div>
             </section>
