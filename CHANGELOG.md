@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.1](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0...v11.0.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* link unit staff roles to their parent unit ([ab9f735](https://github.com/b0ink/doubtfire-deploy/commit/ab9f735af0dc8da95a8b4153e61e7f5a715773a8))
+* restore QR scanner and timeout icon sizes ([678bd53](https://github.com/b0ink/doubtfire-deploy/commit/678bd53911c45def59ce098b9f0d2e69a703a12d))
+* set icons to same scale ([098daa9](https://github.com/b0ink/doubtfire-deploy/commit/098daa9e0f9c3bc8a9aa84f2061fbaae4a38713d))
+
 ## [11.0.0](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-111...v11.0.0) (2026-10-26)
 
 ## [11.0.0-111](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0-110...v11.0.0-111) (2026-10-26)
