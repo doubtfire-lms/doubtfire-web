@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-5](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-4...v11.1.0-5) (2026-10-28)
+
+
+### Bug Fixes
+
+* comment full width span ([5f6873a](https://github.com/b0ink/doubtfire-deploy/commit/5f6873aa94aa028705c6cac45893baabe47ac723))
+* link unit staff roles to their parent unit ([6fefd80](https://github.com/b0ink/doubtfire-deploy/commit/6fefd807e764bf73a88529ae15354c152c3fbb6a))
+
+## [11.1.0-4](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-3...v11.1.0-4) (2026-10-28)
+
+
+### Bug Fixes
+
+* improve tutor discussion mobile layout ([81dd5a6](https://github.com/b0ink/doubtfire-deploy/commit/81dd5a66e408617ae98b1dc545f05cc9555faf97))
+* set icons to same scale ([4874081](https://github.com/b0ink/doubtfire-deploy/commit/4874081579fe315e37eb3bfbe364160f76706c8b))
+
+## [11.1.0-3](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-2...v11.1.0-3) (2026-10-28)
+
+
+### Bug Fixes
+
+* restore QR scanner and timeout icon sizes ([ee218c3](https://github.com/b0ink/doubtfire-deploy/commit/ee218c3891e0792b3b894d27e538dc750788b94e))
+
+## [11.1.0-2](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-1...v11.1.0-2) (2026-10-28)
+
 ## [11.1.0-1](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-0...v11.1.0-1) (2026-10-27)
 
 ## [11.1.0-0](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0...v11.1.0-0) (2026-10-27)
