@@ -431,7 +431,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.startCameraScan();
+    void this.startCameraScan();
   }
 
   public openAddEngagementDialog(): void {
@@ -517,7 +517,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
       );
     };
 
-    task.updateTaskStatus(
+    void task.updateTaskStatus(
       expectedStatus,
       true,
       status === 'fix_and_resubmit' && moveDependentTasks,
@@ -546,7 +546,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
     const onDiscussionRejected = () => this.refreshTaskComments(task);
 
     if (!this.unit?.enforceFeedbackBeforeDiscussedInClass) {
-      task.markAsDiscussed(undefined, onDiscussionRecorded, onDiscussionRejected);
+      void task.markAsDiscussed(undefined, onDiscussionRecorded, onDiscussionRejected);
       return;
     }
 
@@ -562,7 +562,7 @@ export class TutorDiscussionComponent implements AfterViewInit, OnDestroy {
           return;
         }
 
-        task.markAsDiscussed(reason, onDiscussionRecorded, onDiscussionRejected);
+        void task.markAsDiscussed(reason, onDiscussionRecorded, onDiscussionRejected);
       });
   }
 
