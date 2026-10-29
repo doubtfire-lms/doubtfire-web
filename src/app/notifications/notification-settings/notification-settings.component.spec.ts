@@ -44,6 +44,7 @@ describe('NotificationSettingsComponent', () => {
     digestTimezone: 'Australia/Melbourne',
     digestWeekday: 3,
     units: [] as unknown[],
+    emailDisabledUnitIds: [] as number[],
   });
   const savedWithUnits = () => ({
     ...savedSettings(),
@@ -164,6 +165,13 @@ describe('NotificationSettingsComponent', () => {
         channels: expect.objectContaining({new_task_comment: ['in_app']}),
       },
     ]);
+  });
+
+  it('flags units that never send email', async () => {
+    TestBed.resetTestingModule();
+    await build(false, {saved: {...savedSettings(), emailDisabledUnitIds: [2]}});
+
+    expect(component.scopes.map((scope) => scope.emailDisabled)).toEqual([false, false, true]);
   });
 
   it('keeps saved unit settings for units without a tab when saving', async () => {
