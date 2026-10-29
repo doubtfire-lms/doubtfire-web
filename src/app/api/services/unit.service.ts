@@ -195,6 +195,7 @@ export class UnitService extends CachedEntityService<Unit> {
       },
       'autoApplyExtensionBeforeDeadline',
       'sendNotifications',
+      'generateWeeklySummaries',
       'enableSyncEnrolments',
       'enableSyncTimetable',
       'allowStudentExtensionRequests',
@@ -338,6 +339,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'autoApplyExtensionBeforeDeadline',
       'markLateSubmissionsAsAssessInPortfolio',
       'sendNotifications',
+      'generateWeeklySummaries',
       'enableSyncEnrolments',
       'enableSyncTimetable',
 

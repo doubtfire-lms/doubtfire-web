@@ -112,30 +112,12 @@
         </mat-form-field>
       }
 
-      <section fxFlexFill fxLayout="column" fxLayoutAlign="center start">
-        <mat-checkbox
-          class=""
-          color="primary"
-          name="feedback_n"
-          [(ngModel)]="user.receiveFeedbackNotifications"
-          >Receive notifications for new messages</mat-checkbox
-        >
-        <div fxFlex></div>
-        <mat-checkbox
-          color="primary"
-          name="portfolio_n"
-          [(ngModel)]="user.receivePortfolioNotifications"
-          >Receive notifications when your portfolio is ready</mat-checkbox
-        >
-        <div fxFlex></div>
-        <mat-checkbox
-          color="primary"
-          fxFlex
-          name="task_n"
-          [(ngModel)]="user.receiveTaskNotifications"
-          >Receive notifications when new tasks are available</mat-checkbox
-        >
-      </section>
+      @if (mode === 'edit' && isCurrentUser) {
+        <button class="mb-3" mat-stroked-button routerLink="/notifications/settings" type="button">
+          <mat-icon class="size-[18px]! text-[18px]!">notifications</mat-icon>
+          Notification settings
+        </button>
+      }
       <section fxFlexFill fxLayout="row" fxLayoutAlign="start center">
         <mat-checkbox color="primary" name="optin" [(ngModel)]="user.optInToResearch"
           >Send anonymous research statistics

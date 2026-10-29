@@ -34,6 +34,8 @@ export class UserService extends CachedEntityService<User> {
       'hasRunFirstTimeSetup',
       'pronouns',
       'acceptedTiiEula',
+      'timezone',
+      'autoTimezone',
     );
 
     this._currentUser = this.anonymousUser;
