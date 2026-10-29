@@ -17,6 +17,7 @@ import {NotificationFrequency} from 'src/app/api/models/notification';
 import {NotificationSettings} from 'src/app/api/models/notification-settings';
 import {Unit, isUnitRunning} from 'src/app/api/models/unit';
 import {User} from 'src/app/api/models/user/user';
+import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {NotificationSettingsService} from 'src/app/api/services/notification-settings.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -115,6 +116,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     private settingsService: NotificationSettingsService,
     private userService: UserService,
     private alerts: AlertService,
+    private authenticationService: AuthenticationService,
   ) {}
 
   public ngOnInit(): void {
@@ -157,6 +159,14 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
       }),
     );
 
+    this.authenticationService.afterAuthCall((authenticated) => {
+      if (authenticated) {
+        this.loadSettings();
+      }
+    });
+  }
+
+  private loadSettings(): void {
     this.settingsService.load().subscribe({
       next: (settings) => {
         this.saved = settings;

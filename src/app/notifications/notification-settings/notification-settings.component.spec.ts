@@ -2,6 +2,7 @@ import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BehaviorSubject, of} from 'rxjs';
+import {AuthenticationService} from 'src/app/api/services/authentication.service';
 import {NotificationSettingsService} from 'src/app/api/services/notification-settings.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -72,6 +73,10 @@ describe('NotificationSettingsComponent', () => {
         },
         {provide: UserService, useValue: {currentUser: {isStaff}}},
         {provide: AlertService, useValue: {error: vi.fn(), success: vi.fn()}},
+        {
+          provide: AuthenticationService,
+          useValue: {afterAuthCall: (callback: (result: boolean) => void) => callback(true)},
+        },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
