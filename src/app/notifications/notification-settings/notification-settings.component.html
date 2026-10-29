@@ -47,6 +47,15 @@
             Turn off all notifications for this unit.
           </f-setting-toggle>
 
+          @if (currentScope.emailDisabled && !currentScope.muted) {
+            <p
+              class="m-0 flex items-center gap-2 border-t border-gray-200 px-2 py-3 text-sm text-gray-600"
+            >
+              <mat-icon class="shrink-0 text-gray-500">mail_lock</mat-icon>
+              {{ currentScope.code }} doesn't send emails. You'll still see these in OnTrack.
+            </p>
+          }
+
           @if (showsInheritanceBanner) {
             <div class="flex items-center justify-between gap-4 border-t border-gray-200 px-2 py-3">
               @if (currentScope.customised) {
@@ -207,6 +216,7 @@
                     class="justify-self-center"
                     [aria-label]="type.label + ' - ' + channel.label"
                     [checked]="isChecked(type.key, channel.key)"
+                    [disabled]="channel.key === 'email' && currentScope.emailDisabled"
                     (change)="setChannel(type.key, channel.key, $event.checked)"
                   ></mat-slide-toggle>
                 }

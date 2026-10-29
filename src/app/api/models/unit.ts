@@ -87,6 +87,7 @@ export class Unit extends Entity {
 
   autoApplyExtensionBeforeDeadline: boolean;
   sendNotifications: boolean;
+  generateWeeklySummaries: boolean;
   enableSyncEnrolments: boolean;
   enableSyncTimetable: boolean;
 

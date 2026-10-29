@@ -42,6 +42,8 @@ export interface NotificationScope {
   /** When false the scope follows the "All units" defaults. */
   customised: boolean;
   muted: boolean;
+  /** The unit never sends email, so email choices have no effect. */
+  emailDisabled: boolean;
   channels: ChannelSelection;
 }
 
@@ -414,6 +416,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   private applySavedUnit(scope: NotificationScope): void {
     const stored = this.saved?.units.find((unit) => unit.unitId === scope.unitId);
     scope.muted = stored?.muted ?? false;
+    scope.emailDisabled = this.saved?.emailDisabledUnitIds.includes(scope.unitId) ?? false;
     scope.customised = stored?.channels !== undefined;
     scope.channels = stored?.channels
       ? channelsFromWire(stored.channels)
@@ -427,6 +430,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
       name: 'Defaults for every unit',
       customised: true,
       muted: false,
+      emailDisabled: false,
       channels: defaultChannelSelection(),
     };
   }
@@ -438,6 +442,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
       name: unit.name,
       customised: false,
       muted: false,
+      emailDisabled: false,
       channels: defaultChannelSelection(),
     };
     // A unit that loads after the settings still needs its stored override.
