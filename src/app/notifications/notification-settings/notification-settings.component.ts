@@ -1,5 +1,18 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subscription, combineLatest, of, switchMap} from 'rxjs';
+import {
+  EMPTY,
+  Observable,
+  Subject,
+  Subscription,
+  catchError,
+  combineLatest,
+  concatMap,
+  defer,
+  finalize,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {NotificationFrequency} from 'src/app/api/models/notification';
 import {NotificationSettings} from 'src/app/api/models/notification-settings';
 import {Unit, isUnitRunning} from 'src/app/api/models/unit';
@@ -29,6 +42,21 @@ export interface NotificationScope {
   customised: boolean;
   muted: boolean;
   channels: ChannelSelection;
+}
+
+interface DigestSchedule {
+  digestFrequency: NotificationFrequency;
+  digestIntervalHours: number;
+  digestStartTime: string;
+  digestEndTime: string;
+  digestTime: string;
+  digestWeekday: number;
+}
+
+interface SaveRequest {
+  request: () => Observable<unknown>;
+  message: string;
+  revert?: () => void;
 }
 
 @Component({
@@ -69,12 +97,15 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   public digestEndTime = '22:00';
   public digestTime = '07:00';
   public digestWeekday = 1;
+  /** What the server has, so toggles saving instantly do not also save digest edits. */
+  private savedDigest: DigestSchedule = this.digestSchedule();
 
   public readonly browserTimezone = User.browserTimezone;
   public autoTimezone = true;
   public timezone = this.browserTimezone;
 
   private readonly subscriptions: Subscription[] = [];
+  private readonly saveQueue: Subject<SaveRequest> = new Subject();
 
   private units: Unit[] = [];
   private saved?: NotificationSettings;
@@ -90,6 +121,24 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     const user = this.userService.currentUser;
     this.autoTimezone = user?.autoTimezone ?? true;
     this.timezone = (!this.autoTimezone && user?.timezone) || this.browserTimezone;
+
+    // One save at a time, so quick toggles land on the server in the order they were made.
+    this.subscriptions.push(
+      this.saveQueue
+        .pipe(
+          concatMap((save) =>
+            defer(save.request).pipe(
+              tap(() => this.alerts.success(save.message, 2000)),
+              catchError(() => {
+                save.revert?.();
+                this.alerts.error('Unable to save your notification settings', 5000);
+                return EMPTY;
+              }),
+            ),
+          ),
+        )
+        .subscribe(),
+    );
 
     // Units taught and units studied - the same set the header's unit picker uses.
     this.subscriptions.push(
@@ -134,10 +183,30 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   }
 
   public autoTimezoneChanged(checked: boolean): void {
+    const previousTimezone = this.timezone;
     this.autoTimezone = checked;
     if (checked) {
       this.timezone = this.browserTimezone;
     }
+
+    const timezone = this.timezone;
+    this.saveQueue.next({
+      request: () => this.userService.currentUser.updateTimezone(timezone, checked),
+      message: checked ? 'Timezone set automatically' : 'Timezone no longer set automatically',
+      revert: () => {
+        this.autoTimezone = !checked;
+        this.timezone = previousTimezone;
+      },
+    });
+  }
+
+  /** Only the digest schedule and a chosen timezone wait for Save. */
+  public get hasUnsavedChanges(): boolean {
+    const timezoneChanged =
+      !this.autoTimezone && this.timezone !== this.userService.currentUser?.timezone;
+    const current = this.digestSchedule();
+    const keys = Object.keys(current) as (keyof DigestSchedule)[];
+    return timezoneChanged || keys.some((key) => current[key] !== this.savedDigest[key]);
   }
 
   public get hasUnits(): boolean {
@@ -193,25 +262,41 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.currentScope.channels[typeKey][channel] = checked;
+    const channels = this.currentScope.channels[typeKey];
+    channels[channel] = checked;
+    this.saveSettings(() => (channels[channel] = !checked));
   }
 
   /** Stop following "All units" and start from a copy of its current values. */
   public customise(): void {
-    const scope = this.currentScope;
-    scope.channels = cloneChannelSelection(this.scopes[0].channels);
-    scope.customised = true;
+    this.setCustomised(true);
   }
 
   public resetToGlobal(): void {
-    const scope = this.currentScope;
-    scope.channels = cloneChannelSelection(this.scopes[0].channels);
-    scope.customised = false;
+    this.setCustomised(false);
   }
 
   /** Muting is independent of customising, so unmuting restores what was there. */
   public muteChanged(muted: boolean): void {
-    this.currentScope.muted = muted;
+    const scope = this.currentScope;
+    scope.muted = muted;
+    this.saveSettings(() => (scope.muted = !muted));
+  }
+
+  private setCustomised(customised: boolean): void {
+    const scope = this.currentScope;
+    const previous = {channels: scope.channels, customised: scope.customised};
+    scope.channels = cloneChannelSelection(this.scopes[0].channels);
+    scope.customised = customised;
+    this.saveSettings(() => Object.assign(scope, previous));
+  }
+
+  private saveSettings(revert: () => void): void {
+    this.saveQueue.next({
+      request: () => this.settingsService.save(this.currentSettings(this.savedDigest)),
+      message: 'Notification settings updated',
+      revert,
+    });
   }
 
   /** Reuses existing scopes so a cache refresh never discards the user's edits. */
@@ -233,19 +318,28 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
   }
 
   public save(): void {
+    const digest = this.digestSchedule();
     this.saving = true;
-    this.saveTimezone()
-      .pipe(switchMap(() => this.settingsService.save(this.currentSettings())))
-      .subscribe({
-        next: () => {
-          this.saving = false;
-          this.alerts.success('Notification settings saved', 3000);
-        },
-        error: () => {
-          this.saving = false;
-          this.alerts.error('Unable to save your notification settings', 5000);
-        },
-      });
+    this.saveQueue.next({
+      request: () =>
+        this.saveTimezone().pipe(
+          switchMap(() => this.settingsService.save(this.currentSettings(digest))),
+          tap(() => (this.savedDigest = digest)),
+          finalize(() => (this.saving = false)),
+        ),
+      message: 'Email digest saved',
+    });
+  }
+
+  private digestSchedule(): DigestSchedule {
+    return {
+      digestFrequency: this.digestFrequency,
+      digestIntervalHours: this.digestIntervalHours,
+      digestStartTime: this.digestStartTime,
+      digestEndTime: this.digestEndTime,
+      digestTime: this.digestTime,
+      digestWeekday: this.digestWeekday,
+    };
   }
 
   // Saved on the user first, so the digest schedule is rebuilt in the new timezone.
@@ -260,19 +354,14 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     return user.updateTimezone(this.timezone, this.autoTimezone);
   }
 
-  private currentSettings(): NotificationSettings {
+  private currentSettings(digest: DigestSchedule): NotificationSettings {
     const settings = this.saved ?? new NotificationSettings();
     // The API drops any unit left out, so units without a tab keep what they had.
     const shown = new Set(this.scopes.slice(1).map((scope) => scope.unitId));
     const unshown = settings.units.filter((unit) => !shown.has(unit.unitId));
 
     settings.channels = channelsToWire(this.scopes[0].channels);
-    settings.digestFrequency = this.digestFrequency;
-    settings.digestIntervalHours = this.digestIntervalHours;
-    settings.digestStartTime = this.digestStartTime;
-    settings.digestEndTime = this.digestEndTime;
-    settings.digestTime = this.digestTime;
-    settings.digestWeekday = this.digestWeekday;
+    Object.assign(settings, digest);
     // Units following the defaults have nothing to store.
     settings.units = [
       ...this.scopes
@@ -302,6 +391,7 @@ export class NotificationSettingsComponent implements OnInit, OnDestroy {
     this.digestEndTime = this.saved.digestEndTime;
     this.digestTime = this.saved.digestTime;
     this.digestWeekday = this.saved.digestWeekday;
+    this.savedDigest = this.digestSchedule();
     this.scopes[0].channels = channelsFromWire(this.saved.channels);
 
     for (const scope of this.scopes.slice(1)) {

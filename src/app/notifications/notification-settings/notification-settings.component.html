@@ -131,6 +131,20 @@
                 <input class="digest-time-input" matInput type="time" [(ngModel)]="digestTime" />
               </mat-form-field>
             }
+
+            @if (hasUnsavedChanges) {
+              <button
+                class="mt-2 ml-auto self-start"
+                color="primary"
+                mat-flat-button
+                type="button"
+                [disabled]="saving"
+                (click)="save()"
+              >
+                <mat-icon>save</mat-icon>
+                Save
+              </button>
+            }
           </div>
 
           <f-setting-toggle
@@ -189,33 +203,18 @@
                   <span class="max-w-prose text-sm text-gray-600">{{ type.description }}</span>
                 </div>
                 @for (channel of channels; track channel.key) {
-                  <mat-checkbox
+                  <mat-slide-toggle
                     class="justify-self-center"
-                    [attr.aria-label]="type.label + ' - ' + channel.label"
+                    [aria-label]="type.label + ' - ' + channel.label"
                     [checked]="isChecked(type.key, channel.key)"
                     (change)="setChannel(type.key, channel.key, $event.checked)"
-                  ></mat-checkbox>
+                  ></mat-slide-toggle>
                 }
               </div>
             }
           </mat-card>
         }
       }
-    </div>
-  }
-
-  @if (!loading && hasUnits) {
-    <div class="fixed right-[50px] bottom-[50px] z-50">
-      <button
-        color="primary"
-        mat-fab
-        matTooltip="Save changes"
-        type="button"
-        [disabled]="saving"
-        (click)="save()"
-      >
-        <mat-icon>save</mat-icon>
-      </button>
     </div>
   }
 </main>
