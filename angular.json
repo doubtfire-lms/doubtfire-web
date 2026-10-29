@@ -107,7 +107,8 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "polyfills": ["zone.js"]
+              "polyfills": ["zone.js"],
+              "externalDependencies": ["node:fs", "node:path"]
             },
             "devcontainer": {
               "optimization": false,
