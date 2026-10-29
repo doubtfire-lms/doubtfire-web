@@ -48,11 +48,9 @@
           </f-setting-toggle>
 
           @if (currentScope.emailDisabled && !currentScope.muted) {
-            <p
-              class="m-0 flex items-center gap-2 border-t border-gray-200 px-2 py-3 text-sm text-gray-600"
-            >
-              <mat-icon class="shrink-0 text-gray-500">mail_lock</mat-icon>
-              {{ currentScope.code }} doesn't send emails. You'll still see these in OnTrack.
+            <p class="m-0 px-2 pb-3 text-sm text-gray-600">
+              Notification email digests are turned off for {{ currentScope.code }}. You'll still
+              see these notifications in-app.
             </p>
           }
 
