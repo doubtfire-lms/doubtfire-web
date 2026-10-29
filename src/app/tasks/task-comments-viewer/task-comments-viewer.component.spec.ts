@@ -1,7 +1,7 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA, SimpleChange} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {EMPTY, of} from 'rxjs';
+import {EMPTY, Subject, of} from 'rxjs';
 import {
   Project,
   Task,
@@ -19,9 +19,8 @@ const taskCommentServiceStub = {
   commentAdded$: EMPTY,
   fetchAll: vi.fn(() => of([])),
 };
-const taskServiceStub = {
-  taskStatusUpdated$: EMPTY,
-};
+const taskStatusUpdated$: Subject<unknown> = new Subject();
+const taskServiceStub = {taskStatusUpdated$};
 const feedbackTemplateServiceStub = {
   query: vi.fn(() => of([])),
 };
@@ -67,6 +66,19 @@ describe('TaskCommentsViewerComponent', () => {
     });
 
     expect(scrollDown).toHaveBeenCalledOnce();
+  });
+
+  it('refreshes comments only when the displayed task status changes', () => {
+    const displayedTask = {project: {id: 20}, definition: {id: 7}};
+    const fetchComments = vi.spyOn(component, 'fetchComments').mockImplementation(() => undefined);
+    component.project = displayedTask.project as typeof component.project;
+    component.task = displayedTask as typeof component.task;
+
+    taskStatusUpdated$.next({project: {id: 20}, definition: {id: 8}});
+    expect(fetchComments).not.toHaveBeenCalled();
+
+    taskStatusUpdated$.next(displayedTask);
+    expect(fetchComments).toHaveBeenCalledWith(displayedTask, false);
   });
 
   it('loads unit and task feedback templates for staff', () => {

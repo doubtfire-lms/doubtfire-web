@@ -78,7 +78,30 @@
                 </div>
               </mat-form-field>
             } @else {
-              <div class="markdown-to-html" [innerHTML]="note.note | marked"></div>
+              @if (note.note) {
+                <div class="markdown-to-html" [innerHTML]="note.note | marked"></div>
+              }
+              @if (note.hasAttachment) {
+                <button
+                  class="mt-2 block cursor-pointer text-left"
+                  type="button"
+                  (click)="openAttachment(note)"
+                >
+                  @if (note.attachmentType === 'image' && attachmentPreviewUrls[note.id]) {
+                    <img
+                      alt="Staff note image attachment"
+                      class="max-h-72 max-w-full rounded object-contain"
+                      [src]="attachmentPreviewUrls[note.id]"
+                    />
+                  } @else if (note.attachmentType === 'image') {
+                    <span>View image attachment</span>
+                  } @else {
+                    <span class="flex items-center gap-1 text-(--pdf-link-color) hover:underline">
+                      <mat-icon>picture_as_pdf</mat-icon> View PDF
+                    </span>
+                  }
+                </button>
+              }
             }
           </mat-card-content>
         </mat-card>
@@ -118,8 +141,28 @@
         class="w-full resize-none px-1 py-0.5 placeholder:px-1 placeholder:py-0.5"
         matInput
         [(ngModel)]="noteText"
+        (beforeinput)="handleBeforeInput($event)"
+        (paste)="handlePaste($event)"
       ></textarea>
-      <div class="flex justify-end">
+      <div class="flex items-center justify-end gap-1">
+        <input
+          #attachmentUploader
+          accept="image/*,.pdf"
+          class="hidden"
+          multiple
+          type="file"
+          (change)="uploadFiles($event.target.files)"
+        />
+        <button
+          aria-label="Attach images or PDFs"
+          class="attachment-button"
+          mat-icon-button
+          matTooltip="Attach images or PDFs"
+          type="button"
+          (click)="openFilePicker()"
+        >
+          <mat-icon>attach_file</mat-icon>
+        </button>
         <button color="primary" mat-raised-button (click)="submitNote()">Submit</button>
       </div>
     </mat-form-field>

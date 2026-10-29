@@ -1,5 +1,4 @@
 import {HotkeysHelpComponent, HotkeysService} from '@ngneat/hotkeys';
-import {MediaObserver} from 'ng-flex-layout';
 import {CdkDragEnd, CdkDragMove, CdkDragStart} from '@angular/cdk/drag-drop';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {
@@ -29,6 +28,8 @@ interface InboxTaskData {
     unit: Unit,
     taskDef?: TaskDefinition | number,
     fetchMyStudentsOnly?: boolean,
+    viewAsUnitRoleId?: number,
+    includeWithdrawn?: boolean,
   ) => Observable<Task[]> | null;
   selectedTask: Task | null;
   taskKey: unknown;
@@ -56,7 +57,6 @@ export class InboxComponent implements OnInit, OnDestroy {
     tutorialIdSelected: string | number;
     taskDefinitionIdSelected: number | TaskDefinition;
   }>;
-  @Input() showSearchOptions: boolean;
   @ViewChild('inboxpanel') inboxPanel: ElementRef;
   @ViewChild('commentspanel') commentspanel: ElementRef;
 
@@ -69,9 +69,10 @@ export class InboxComponent implements OnInit, OnDestroy {
   private dragMoveAudited$;
   private readonly destroy$: Subject<void> = new Subject();
   private readonly commentsBreakpoint = '(max-width: 999.98px)';
+  /** ng-flex-layout's `xs` breakpoint. */
+  private readonly mobileBreakpoint = '(max-width: 599.98px)';
 
   // protected filters;
-  // protected showSearchOptions;
 
   public taskSelected = false;
   public isCommentsNarrow = false;
@@ -84,7 +85,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   }
 
   get isMobileView(): boolean {
-    return this.mediaObserver.isActive('xs');
+    return this.breakpointObserver.isMatched(this.mobileBreakpoint);
   }
 
   get commentsPanelCollapsed(): boolean {
@@ -94,7 +95,6 @@ export class InboxComponent implements OnInit, OnDestroy {
   constructor(
     private hotkeys: HotkeysService,
     private selectedTask: SelectedTaskService,
-    public mediaObserver: MediaObserver,
     public fileDownloader: FileDownloaderService,
     private router: Router,
     public dialog: MatDialog,

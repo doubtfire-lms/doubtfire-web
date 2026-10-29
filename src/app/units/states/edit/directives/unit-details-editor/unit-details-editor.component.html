@@ -3,7 +3,7 @@
     <h3>Unit Details</h3>
     <p>Edit and configure all details and settings for this unit.</p>
   </div>
-  <mat-card appearance="outlined" class="gap-1 p-[16px]">
+  <mat-card appearance="outlined" class="gap-1 p-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Code</mat-label>
       <input matInput required [(ngModel)]="unit.code" />
@@ -20,7 +20,7 @@
     </mat-form-field>
   </mat-card>
 
-  <mat-card appearance="outlined" class="gap-1 p-[16px]">
+  <mat-card appearance="outlined" class="gap-1 p-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Teaching Period</mat-label>
       <mat-select placeholder="Select Teaching Period" [(ngModel)]="unit.teachingPeriod">
@@ -45,6 +45,19 @@
           <mat-datepicker-toggle matIconSuffix [for]="enddatepicker"></mat-datepicker-toggle>
           <mat-datepicker #enddatepicker></mat-datepicker>
         </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Last Teaching Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="lastTeachingDatePicker"
+            [(ngModel)]="unit.lastTeachingDate"
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="lastTeachingDatePicker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #lastTeachingDatePicker></mat-datepicker>
+        </mat-form-field>
       } @else {
         <mat-form-field appearance="outline" class="w-full" disabled>
           <mat-label>{{ unit.teachingPeriod.name }} Start Date</mat-label>
@@ -62,6 +75,15 @@
             matInput
             readonly
             [value]="$safeNavigationMigration(unit.teachingPeriod?.endDate) | date"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full" disabled>
+          <mat-label>{{ unit.teachingPeriod.name }} Last Teaching Date</mat-label>
+          <input
+            disabled
+            matInput
+            readonly
+            [value]="$safeNavigationMigration(unit.teachingPeriod?.lastTeachingDate) | date"
           />
         </mat-form-field>
       }
@@ -404,7 +426,7 @@
   </mat-card>
 
   @if (overseerEnabled.value) {
-    <mat-card class="gap-1 p-[16px]">
+    <mat-card class="gap-1 p-4">
       <f-setting-toggle
         class="-mx-2 mb-2"
         label="Overseer assessment"

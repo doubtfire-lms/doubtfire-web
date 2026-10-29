@@ -1,16 +1,90 @@
-import {MultiSeries} from '@glitchtip/ng-charts';
-import {Component, Input} from '@angular/core';
+import {MultiSeries, TooltipService} from '@glitchtip/ng-charts';
+import {
+  ChangeDetectorRef,
+  Component,
+  Injector,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewContainerRef,
+} from '@angular/core';
+import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
+import {Unit} from 'src/app/api/models/unit';
+import {TaskService} from 'src/app/api/services/task.service';
+import {getLastSnapshotByWeek, getTaskStats, statusMapping} from '../chart-data-helpers';
 
 @Component({
   selector: 'f-stacked-area-status-chart',
   templateUrl: './stacked-area-status-chart.component.html',
-  styleUrl: './stacked-area-status-chart.component.css',
   standalone: false,
 })
-export class StackedAreaStatusChartComponent {
-  @Input() weeklyData: MultiSeries = [];
-  @Input() colorScheme: {domain: string[]} = {domain: ['']};
+export class StackedAreaStatusChartComponent implements OnChanges {
+  @Input() unit: Unit;
+  @Input() snapshots: TaskCompletionSnapshot[] = [];
+  @Input() campusFilter: string = 'all';
+  @Input() tutorialFilter: string = 'all';
+  @Input() taskGradeFilter: number[] = [];
+  @Input() studentTargetGradeFilter: number[] = [];
+
+  weeklyData: MultiSeries = [];
+  colorScheme = {domain: ['']};
 
   XAxisLabel: string = 'Week';
-  YAxisLabel: string = 'Records';
+  YAxisLabel: string = 'Tasks';
+
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly chartToolTipService: TooltipService,
+    private readonly viewContainerRef: ViewContainerRef,
+    private readonly injectorObj: Injector,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+  ) {
+    // https://github.com/swimlane/ngx-charts/issues/1428#issuecomment-659237562
+    this.chartToolTipService = this.injectorObj.get(TooltipService);
+    this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (
+      changes['unit'] ||
+      changes['snapshots'] ||
+      changes['campusFilter'] ||
+      changes['tutorialFilter'] ||
+      changes['taskGradeFilter'] ||
+      changes['studentTargetGradeFilter']
+    ) {
+      this.colorScheme.domain = statusMapping.map(
+        (status) => this.taskService.statusColors.get(status) || '#000000',
+      );
+      this.weeklyData = this.unit && this.snapshots.length ? this.buildWeeklyChartData() : [];
+      this.changeDetectorRef.markForCheck();
+    }
+  }
+
+  private buildWeeklyChartData(): MultiSeries {
+    const weeks = [...getLastSnapshotByWeek(this.unit, this.snapshots).entries()].map(
+      ([name, snapshot]) => ({
+        name,
+        taskStats: getTaskStats(
+          snapshot,
+          this.campusFilter,
+          this.tutorialFilter,
+          this.taskGradeFilter,
+          this.studentTargetGradeFilter,
+          this.unit,
+        ),
+      }),
+    );
+
+    return statusMapping.map((status) => ({
+      name: this.taskService.statusLabels.get(status) || status,
+      series: weeks.map((week) => ({
+        name: week.name,
+        value: Object.values(week.taskStats).reduce(
+          (total, taskCounts) => total + (taskCounts[status] || 0),
+          0,
+        ),
+      })),
+    }));
+  }
 }

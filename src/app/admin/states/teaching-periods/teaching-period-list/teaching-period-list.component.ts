@@ -26,7 +26,15 @@ export class TeachingPeriodListComponent implements OnInit {
 
   public dataSource: MatTableDataSource<TeachingPeriod> = new MatTableDataSource();
 
-  displayedColumns: string[] = ['active', 'name', 'startDate', 'endDate', 'activeUntil', 'actions'];
+  displayedColumns: string[] = [
+    'active',
+    'name',
+    'startDate',
+    'lastTeachingDate',
+    'endDate',
+    'activeUntil',
+    'actions',
+  ];
 
   constructor(
     private teachingPeriodsService: TeachingPeriodService,
@@ -108,6 +116,12 @@ export class TeachingPeriodListComponent implements OnInit {
             this.sortDateValue(b.endDate),
             isAsc,
           );
+        case 'lastTeachingDate':
+          return this.sortCompare(
+            this.sortDateValue(a.lastTeachingDate),
+            this.sortDateValue(b.lastTeachingDate),
+            isAsc,
+          );
         case 'activeUntil':
           return this.sortCompare(
             this.sortDateValue(a.activeUntil),
@@ -149,6 +163,12 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
     this.campusService.query().subscribe((campuses) => (this.campuses = campuses));
   }
 
+  defaultLastTeachingDate(endDate: Date): void {
+    if (!this.newOrSelectedTeachingPeriod.lastTeachingDate) {
+      this.newOrSelectedTeachingPeriod.lastTeachingDate = endDate;
+    }
+  }
+
   addTeachingBreak() {
     this.newOrSelectedTeachingPeriod
       .addBreak(
@@ -159,9 +179,8 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
         this.tempBreak.pauseWeekCount,
       )
       .subscribe({
-        next: (teachingPeriodBreak) => {
+        next: () => {
           this.alertService.success('Break added');
-          console.log(teachingPeriodBreak);
         },
         error: (response) => {
           this.alertService.error(`Error adding break. ${response}`);
@@ -171,9 +190,6 @@ export class NewTeachingPeriodDialogComponent implements OnInit {
 
   deleteBreak(teachingPeriod: TeachingPeriod, teachingBreak: TeachingPeriodBreak): void {
     teachingPeriod.removeBreak(teachingBreak.id).subscribe({
-      next: (teachingPeriodBreak) => {
-        console.log(teachingPeriodBreak);
-      },
       error: (response) => {
         this.alertService.error(`Error deleting break. ${response}`);
       },

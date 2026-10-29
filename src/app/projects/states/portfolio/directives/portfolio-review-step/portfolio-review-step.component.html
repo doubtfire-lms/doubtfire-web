@@ -1,9 +1,16 @@
-<mat-card appearance="outlined" class="mx-auto max-w-[1100px]">
+<mat-card
+  appearance="outlined"
+  class="mx-auto max-w-275"
+  [class.w-fit]="portfolioIsCompiling || project?.portfolioAvailable"
+  [class.w-full]="!portfolioIsCompiling && !project?.portfolioAvailable"
+>
   <mat-card-header>
-    <mat-card-title>Review Portfolio</mat-card-title>
+    <mat-card-title>
+      {{ portfolioIsCompiling ? 'Processing Portfolio' : 'Review Portfolio' }}
+    </mat-card-title>
   </mat-card-header>
 
-  <mat-card-content class="p-3 px-12">
+  <mat-card-content class="py-3">
     @if (!hasLearningSummaryReport || !hasTasksSelected) {
       <mat-card appearance="outlined" class="p-1">
         <mat-card-header class="bg-red-500 text-white">
@@ -41,17 +48,11 @@
     }
 
     @if (portfolioIsCompiling) {
-      <mat-card appearance="outlined" class="mx-auto max-w-5xl p-1">
-        <mat-card-header>
-          <mat-card-title>Portfolio Processing</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p class="py-2">
-            Your portfolio compilation is scheduled with {{ externalName }}. This process will take
-            some time, check back soon to see if your portfolio is available.
-          </p>
-        </mat-card-content>
-      </mat-card>
+      <p class="max-w-prose py-2">
+        Your portfolio compilation is scheduled with {{ externalName }}. This process will take some
+        time, check back soon to see if your portfolio is available.
+      </p>
+      <mat-progress-bar class="my-3" mode="indeterminate"></mat-progress-bar>
     }
 
     @if (canCompilePortfolio) {
@@ -125,36 +126,32 @@
     }
 
     @if (project?.portfolioAvailable) {
-      <mat-card appearance="outlined" class="p-1">
-        <mat-card-header>
-          <mat-card-title>Download Portfolio</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <p class="py-1">
-            <strong>You're done!</strong> There's nothing left for you to do. Your portfolio has
-            been submitted.
-          </p>
-          <p class="py-1">
-            This is the <strong>exact same document</strong> your assessor will see.
-          </p>
-          <p class="py-1">
-            If you need to update any tasks or upload additional files, delete your portfolio and
-            compile it again before the submission deadline.
-          </p>
-        </mat-card-content>
-        <mat-card-actions class="flex gap-2 py-3">
-          <button class="text-white" color="warn" mat-raised-button (click)="deletePortfolio()">
-            Delete Portfolio
-          </button>
-          <button color="primary" mat-raised-button (click)="downloadPortfolio()">
-            Download Portfolio
-          </button>
-        </mat-card-actions>
-      </mat-card>
+      <div class="max-w-prose">
+        <p>
+          <strong>You're done!</strong> There's nothing left for you to do. Your portfolio has been
+          submitted.
+        </p>
+        <p>This is the <strong>exact same document</strong> your assessor will see.</p>
+        <p>
+          If you need to update any tasks or upload additional files, delete your portfolio and
+          compile it again before the submission deadline.
+        </p>
+      </div>
     }
   </mat-card-content>
 
-  <mat-card-footer class="flex w-full justify-start p-3">
-    <button mat-raised-button (click)="goBack()">Back</button>
-  </mat-card-footer>
+  @if (!portfolioIsCompiling) {
+    <mat-card-footer class="flex w-full justify-between p-3">
+      @if (!project?.portfolioAvailable) {
+        <button mat-raised-button (click)="goBack()">Back</button>
+      } @else {
+        <button color="warn" mat-stroked-button (click)="deletePortfolio()">
+          Delete Portfolio
+        </button>
+        <button color="primary" mat-raised-button (click)="downloadPortfolio()">
+          Download Portfolio
+        </button>
+      }
+    </mat-card-footer>
+  }
 </mat-card>

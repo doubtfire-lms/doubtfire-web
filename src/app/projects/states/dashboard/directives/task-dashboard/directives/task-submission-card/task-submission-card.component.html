@@ -15,7 +15,8 @@
     </p>
     @if (task?.hasPdf && task.submissionDate) {
       <p>
-        You uploaded this submission <strong>{{ task.submissionDate | date: 'dd/MM/yyyy' }}</strong
+        {{ task.definition.staffManagedTask && !isTutor ? 'Teaching staff' : 'You' }} uploaded this
+        submission <strong>{{ task.submissionDate | date: 'dd/MM/yyyy' }}</strong
         >.
       </p>
     }
@@ -23,7 +24,7 @@
       If you feel there has been an error in your submission, you can request to regenerate your
       submission under the "Actions" dropdown menu.
     </p>
-    <p [hidden]="!task?.inSubmittedState()">
+    <p [hidden]="!task?.inSubmittedState() || !canManageSubmission">
       If you would like to submit alternate evidence for use in your portfolio, you can upload
       alternate files under the "Actions" dropdown menu.
     </p></mat-card-content
@@ -43,7 +44,7 @@
     >
       <mat-icon>more_vert</mat-icon>
     </button>
-    <div fxFlex></div>
+    <div class="flex-1"></div>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="downloadSubmissionFiles()">Download original files</button>
     </mat-menu>
@@ -62,7 +63,11 @@
       >
     </button>
     <mat-menu #menu2="matMenu">
-      <button mat-menu-item [hidden]="!task?.inSubmittedState()" (click)="uploadAlternateFiles()">
+      <button
+        mat-menu-item
+        [hidden]="!task?.inSubmittedState() || !canManageSubmission"
+        (click)="uploadAlternateFiles()"
+      >
         Upload alternate files
       </button>
       <button mat-menu-item [hidden]="!canRegeneratePdf" (click)="regeneratePdf()">

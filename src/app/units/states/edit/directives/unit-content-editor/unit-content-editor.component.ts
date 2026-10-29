@@ -118,6 +118,16 @@ export class UnitContentEditorComponent implements OnInit {
     return this.allRouteRows.some((row) => !this.resourcePathIsValid(row));
   }
 
+  public skeletonHeightForSection(section: ContentRouteSection): number {
+    // Match the card header, table header, and typical loaded row heights to limit layout shifts.
+    if (section.id === 'grades') {
+      return Math.max(480, 146 + section.rows.length * 68);
+    }
+
+    const rowHeight = section.id === 'task-resources' ? 95 : 73;
+    return 146 + section.rows.length * rowHeight;
+  }
+
   public uploadSites(files: File[]): void {
     const file = files[0];
 
@@ -353,10 +363,13 @@ export class UnitContentEditorComponent implements OnInit {
   }
 
   private openPreview(contentRoute: string, contentSiteId: number): void {
+    const contentVersion = this.sites.find((site) => site.id === contentSiteId)?.contentVersion;
+
     this.dialog.open(UnitContentViewerComponent, {
       data: {
         contentRoute,
         contentSiteId,
+        contentVersion,
         unit: this.unit,
       },
       height: '90vh',

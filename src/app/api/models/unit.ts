@@ -4,13 +4,23 @@ import {Observable, shareReplay, switchMap, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {
+  ResumableUploadService,
+  UploadEvent,
+} from 'src/app/common/services/resumable-upload.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GroupService} from '../services/group.service';
 import {MarkingSessionService} from '../services/marking-session.service';
 import {ProjectService} from '../services/project.service';
 import {TaskDefinitionService} from '../services/task-definition.service';
 import {TaskPrerequisiteService} from '../services/task-prerequisite.service';
-import {MILLISECONDS_PER_WEEK, startOfDay} from './calendar-day';
+import {
+  MILLISECONDS_PER_WEEK,
+  addDays,
+  dayOffsetInWeek,
+  startOfDay,
+  toLocalDay,
+} from './calendar-day';
 import {D2lAssessmentMapping} from './d2l/d2l_assessment_mapping';
 import {
   Campus,
@@ -67,6 +77,7 @@ export class Unit extends Entity {
   teachingPeriod: TeachingPeriod;
   startDate: Date; //TODO: or string
   endDate: Date; //TODO: or string
+  lastTeachingDate: Date;
   portfolioAutoGenerationDate: Date;
   currentUnitWeek: number | null;
 
@@ -81,6 +92,8 @@ export class Unit extends Entity {
 
   draftTaskDefinition: TaskDefinition;
   hasMainContentSite: boolean = false;
+  mainContentSiteId?: number;
+  contentSiteVersions: Record<number, string> = {};
 
   allowStudentExtensionRequests: boolean;
   allowFlexibleDates: boolean = false;
@@ -92,6 +105,7 @@ export class Unit extends Entity {
   feedbackWarningThresholdDays: number;
   feedbackOverflowThresholdDays: number;
   discussTimeoutEnabled: boolean;
+  discussTimeoutActive: boolean;
   discussTimeoutWarningDays: number;
   discussTimeoutExpireDays: number;
   gradeDefinitions: GradeDefinition[] = [
@@ -152,6 +166,15 @@ export class Unit extends Entity {
     })`;
   }
 
+  public get periodLabel(): string {
+    if (this.teachingPeriod?.name) {
+      return this.teachingPeriod.name;
+    }
+    const format = (date: Date) =>
+      `${date.toLocaleString('en-US', {month: 'short'})} '${String(date.getFullYear()).slice(-2)}`;
+    return `${format(this.startDate)} - ${format(this.endDate)}`;
+  }
+
   public get isActive(): boolean {
     return this.active && (!this.teachingPeriod || this.teachingPeriod.active);
   }
@@ -184,6 +207,7 @@ export class Unit extends Entity {
       },
       {
         cache: this.staffCache,
+        constructorParams: this,
       },
     );
   }
@@ -338,6 +362,27 @@ export class Unit extends Entity {
   }
 
   /**
+   * The inverse of {@link weekNumber}.
+   *
+   * @param day the day of the week, 0 = Sunday
+   * @returns local midnight on that day
+   */
+  public dateForWeekAndDay(week: number, day: number): Date | null {
+    if (this.teachingPeriod) {
+      return this.teachingPeriod.dateForWeekAndDay(week, day);
+    }
+
+    const startDate = startOfDay(this.startDate);
+    if (!startDate || week === null || day === null) {
+      return null;
+    }
+
+    return toLocalDay(
+      addDays(startDate, (Math.floor(week) - 1) * 7 + dayOffsetInWeek(startDate.getUTCDay(), day)),
+    );
+  }
+
+  /**
    * Calculate how much time has elapsed in the teaching period, based on the start and
    * end date of the unit relative to the current date.
    *
@@ -361,7 +406,7 @@ export class Unit extends Entity {
 
   public rolloverTo(
     body:
-      | {new_unit_code?: string; start_date: Date; end_date: Date}
+      | {new_unit_code?: string; start_date: Date; end_date: Date; last_teaching_date?: Date}
       | {new_unit_code?: string; teaching_period_id: number},
   ): Observable<Unit> {
     const unitService = AppInjector.get(UnitService);
@@ -398,12 +443,16 @@ export class Unit extends Entity {
     });
   }
 
-  public fillWithUnStartedTasks(tasks: Task[], taskDef: TaskDefinition | number): Task[] {
+  public fillWithUnStartedTasks(
+    tasks: Task[],
+    taskDef: TaskDefinition | number,
+    includeWithdrawn: boolean = false,
+  ): Task[] {
     // Make sure the task definition is a task definition object from the unit
     const td = taskDef instanceof TaskDefinition ? taskDef : this.taskDef(taskDef);
 
-    // Now fill for the students in the unit
-    return this.students.map((p) => {
+    // Fill rows for enrolled students, and withdrawn students when requested
+    return (includeWithdrawn ? this.students : this.activeStudents).map((p) => {
       // See if we already have the task
       let t = tasks.find((t) => t.project.id === p.id && t.definition.id === td.id);
       if (!t) {
@@ -426,9 +475,6 @@ export class Unit extends Entity {
     AppInjector.get(UnitService)
       .fetch(this.id)
       .subscribe({
-        next: (unit) => {
-          console.log(unit.teachingPeriod?.name);
-        },
         error: (message) => alerts.error(message, 6000),
       });
   }
@@ -454,6 +500,7 @@ export class Unit extends Entity {
   }
 
   public refreshGroups(): void {
+    // TODO: Implement group refresh.
     // return unless unit.groups?.length > 0
     // # Query the groups within the unit.
     // Unit.groups.query( {id: unit.id} ,
@@ -463,8 +510,6 @@ export class Unit extends Entity {
     //   (failure) ->
     //     alertService.error( "Error refreshing unit groups: " + (failure.data?.error || "Unknown cause"), 6000)
     // )
-
-    console.log('implement refresh groups');
   }
 
   public getGroups(groupSet: GroupSet): Observable<Group[]> {
@@ -697,14 +742,18 @@ export class Unit extends Entity {
     }`;
   }
 
-  public getBatchFeedbackUploadUrl(taskDefinition: TaskDefinition | number): string {
-    const params = new URLSearchParams({unit_id: `${this.id}`});
+  public uploadBatchFeedback(
+    taskDefinition: TaskDefinition | number,
+    file: File,
+  ): Observable<UploadEvent> {
     const taskDefinitionId =
       taskDefinition instanceof TaskDefinition ? taskDefinition.id : taskDefinition;
 
-    params.set('task_definition_id', `${taskDefinitionId}`);
-
-    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_csv.json?${params.toString()}`;
+    return AppInjector.get(ResumableUploadService).upload(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/submission/batch_feedback_uploads`,
+      file,
+      {unit_id: this.id, task_definition_id: taskDefinitionId},
+    );
   }
 
   public getTaskDefinitionBatchUploadUrl(): string {

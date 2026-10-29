@@ -50,6 +50,7 @@ export class TaskDefinition extends Entity {
   plagiarismReportUrl: string;
   plagiarismWarnPct: number;
   restrictStatusUpdates: boolean;
+  staffManagedTask: boolean;
   // groupSetId: number;
   groupSet: GroupSet = null;
   hasTaskSheet: boolean;
@@ -165,9 +166,6 @@ export class TaskDefinition extends Entity {
         id: this.id,
       })
       .subscribe({
-        next: (taskDefinition) => {
-          console.log(taskDefinition.name);
-        },
         error: (message) => alerts.error(message, 6000),
       });
   }

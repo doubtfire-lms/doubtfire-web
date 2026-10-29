@@ -32,7 +32,7 @@ export class AddEngagementDialogComponent implements OnDestroy {
   readonly engagementTypes = [
     'Discuss',
     'Attendance',
-    'Forum',
+    'Community',
     'Email',
     'Opportunity',
     'Group Activity',
@@ -41,7 +41,7 @@ export class AddEngagementDialogComponent implements OnDestroy {
     attendance: 'Attended tutorial and participated in class activities.',
     discuss: 'Discussed tasks during tutorial.',
     discussion: 'Discussed tasks during tutorial.',
-    forum: 'Posted to the unit forum and engaged with discussion.',
+    community: 'Participated in the unit community.',
     email: 'Discussed unit progress with the teaching team via email.',
     opportunity: 'Engagement concern noted for follow-up.',
     'group activity': 'Participated in a group activity and collaborated with peers.',

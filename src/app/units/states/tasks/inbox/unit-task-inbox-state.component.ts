@@ -49,6 +49,8 @@ type TaskSource = (
   unit: Unit,
   taskDef?: TaskDefinition | number,
   fetchMyStudentsOnly?: boolean,
+  viewAsUnitRoleId?: number,
+  includeWithdrawn?: boolean,
 ) => Observable<Task[]>;
 
 @Component({
@@ -66,7 +68,6 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   @Input() public routeMode: UnitTaskRouteMode = 'inbox';
 
   public viewType: UnitTaskViewType = 'inbox';
-  public showSearchOptions = true;
 
   public unit: Unit;
   public unitRole: UnitRole;
@@ -174,7 +175,22 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   private getTaskSource(): TaskSource {
     switch (this.routeMode) {
       case 'definition':
-        return this.taskService.queryTasksForTaskExplorer.bind(this.taskService);
+        return (
+          unit,
+          taskDef,
+          _fetchMyStudentsOnly,
+          _viewAsUnitRoleId,
+          includeWithdrawn = false,
+        ) => {
+          const tasks$ = this.taskService.queryTasksForTaskExplorer(
+            unit,
+            taskDef,
+            includeWithdrawn,
+          );
+          return includeWithdrawn
+            ? this.projectService.loadStudents(unit, true, true).pipe(switchMap(() => tasks$))
+            : tasks$;
+        };
       case 'moderation':
         return this.taskService.queryTasksForMentorModeration.bind(this.taskService);
       case 'overflow':
@@ -191,23 +207,19 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     switch (this.routeMode) {
       case 'definition':
         this.viewType = 'explorer';
-        this.showSearchOptions = true;
         this.taskData.taskDefMode = true;
         break;
       case 'moderation':
         this.viewType = 'moderation';
-        this.showSearchOptions = false;
         this.taskData.taskDefMode = false;
         break;
       case 'overflow':
         this.viewType = 'overflow';
-        this.showSearchOptions = false;
         this.taskData.taskDefMode = false;
         break;
       case 'inbox':
       default:
         this.viewType = 'inbox';
-        this.showSearchOptions = false;
         this.taskData.taskDefMode = false;
         break;
     }

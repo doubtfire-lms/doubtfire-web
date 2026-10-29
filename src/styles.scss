@@ -86,6 +86,10 @@ $main-view-max-height: calc((var(--vh, 1vh) * (100)) - 85px);
   stroke: #ddd !important;
 }
 
+.mat-mdc-progress-spinner.spinner-primary circle {
+  stroke: #3939ff !important;
+}
+
 /* Ensures smooth resizing of task list in project dashboard */
 body.split-pane-resizing {
   cursor: col-resize;

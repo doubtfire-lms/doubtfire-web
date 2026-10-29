@@ -53,6 +53,9 @@ export class Task extends Entity {
   extensions: number;
   scormExtensions: number;
   submissionDate: Date;
+  // When the inbox started waiting on this task: the submission, or the oldest
+  // unread comment for tasks listed only because of comments
+  waitingSince: Date;
   completionDate: Date;
   timesAssessed: number;
   grade?: number;
@@ -83,6 +86,7 @@ export class Task extends Entity {
   targetDueDate: Date;
   movedToDiscussAt: Date;
   discussTimeoutExpiryAt: Date;
+  discussTimeoutExpiryDate: string;
 
   public topWeight: number = 0;
   public readonly commentCache: EntityCache<TaskComment> = new EntityCache<TaskComment>();
@@ -237,7 +241,7 @@ export class Task extends Entity {
     );
   }
 
-  public hasTaskKey(key: {studentId: number; taskDefAbbr: string}): boolean {
+  public hasTaskKey(key: {studentId: number | string; taskDefAbbr: string}): boolean {
     if (!key) {
       return false;
     }
@@ -925,7 +929,11 @@ export class Task extends Entity {
     taskService.notifyStatusChange(this);
   }
 
-  public async markAsDiscussed(reasonText?: string, onSuccess?: () => void) {
+  public async markAsDiscussed(
+    reasonText?: string,
+    onSuccess?: () => void,
+    onFailure?: () => void,
+  ) {
     const alerts: AlertService = AppInjector.get(AlertService);
     const taskService: TaskService = AppInjector.get(TaskService);
 
@@ -954,6 +962,7 @@ export class Task extends Entity {
           },
           error: (error) => {
             alerts.error(error, 6000);
+            onFailure?.();
           },
         });
     };
@@ -974,6 +983,7 @@ export class Task extends Entity {
           'Unable to find your staff role, so the tutor note could not be recorded.',
           6000,
         );
+        onFailure?.();
         return;
       }
 
@@ -985,6 +995,7 @@ export class Task extends Entity {
           },
           error: (error) => {
             alerts.error(`Unable to save the required tutor note: ${error}`, 6000);
+            onFailure?.();
           },
         });
       return;
@@ -998,6 +1009,7 @@ export class Task extends Entity {
     markAsDiscussed?: boolean,
     triggerRecursiveFix?: boolean,
     onSuccess?: () => void,
+    onFailure?: () => void,
   ) {
     const oldStatus = this.status;
     const oldGrade = this.grade;
@@ -1006,6 +1018,7 @@ export class Task extends Entity {
 
     if (status === 'complete' && !this.canMarkComplete && markAsDiscussed !== true) {
       alerts.error('This task must be discussed in class before it can marked complete.', 6000);
+      onFailure?.();
       return;
     }
 
@@ -1048,9 +1061,10 @@ export class Task extends Entity {
               this.project.taskCache.add(this);
             }
             this.processTaskStatusChange(status, alerts);
-            taskService.notifyStatusChange(this);
             if (this.status === status) {
               onSuccess?.();
+            } else {
+              onFailure?.();
             }
           },
           error: (error) => {
@@ -1058,6 +1072,7 @@ export class Task extends Entity {
             this.grade = oldGrade;
             this.qualityPts = oldQualityPts;
             alerts.error(error, 6000);
+            onFailure?.();
           },
         });
     }; // end update function
@@ -1078,6 +1093,7 @@ export class Task extends Entity {
         () => {
           this.status = oldStatus;
           alerts.message('Status reverted, as no grade was specified', 6000);
+          onFailure?.();
         },
       );
     } else {

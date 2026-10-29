@@ -1,11 +1,11 @@
 <div class="table-padding">
   <!-- Header -->
-  <div class="header-spacer" fxLayout="row">
-    <div fxLayout="column">
+  <div class="header-spacer flex flex-row">
+    <div class="flex flex-col">
       <h3>{{ externalName }} Users</h3>
       <h3>Users Administration View</h3>
     </div>
-    <span class="flex-grow"></span>
+    <span class="grow"></span>
     <mat-form-field appearance="outline">
       <input
         matInput
@@ -27,7 +27,7 @@
     <ng-container matColumnDef="avatar">
       <th *matHeaderCellDef mat-header-cell></th>
       <td *matCellDef="let user" mat-cell (click)="showUserModal(user)">
-        <user-icon fxFlexAlign="center" [size]="30" [user]="user"></user-icon>
+        <user-icon class="self-center" [size]="30" [user]="user"></user-icon>
       </td>
     </ng-container>
 
@@ -65,7 +65,7 @@
   <!-- Footer -->
   <span class="flex items-center">
     <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[10, 15, 20, 25]"></mat-paginator>
-    <span class="flex-grow"></span>
+    <span class="grow"></span>
     <button color="primary" mat-raised-button (click)="showUserModal()">Add New User</button>
   </span>
 

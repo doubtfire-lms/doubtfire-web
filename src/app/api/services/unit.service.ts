@@ -105,7 +105,9 @@ export class UnitService extends CachedEntityService<Unit> {
           // Add staff
           entity.staffCache.clear();
           data[key]?.forEach((staff) => {
-            entity.staffCache.add(unitRoleService.buildInstance(staff));
+            entity.staffCache.add(
+              unitRoleService.buildInstance(staff, {constructorParams: entity}),
+            );
           });
         },
       },
@@ -156,6 +158,11 @@ export class UnitService extends CachedEntityService<Unit> {
         toEntityFn: (data, key, _entity, _params?) => {
           return new Date(data[key]);
         },
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
+      {
+        keys: 'lastTeachingDate',
+        toEntityFn: MappingFunctions.mapDateToDay,
         toJsonFn: MappingFunctions.mapDayToJson,
       },
       'currentUnitWeek',
@@ -288,12 +295,15 @@ export class UnitService extends CachedEntityService<Unit> {
       'feedbackWarningThresholdDays',
       'feedbackOverflowThresholdDays',
       'discussTimeoutEnabled',
+      'discussTimeoutActive',
       'discussTimeoutWarningDays',
       'discussTimeoutExpireDays',
       {
         keys: ['gradeDefinitions', 'grade_definitions'],
       },
       'hasMainContentSite',
+      'mainContentSiteId',
+      'contentSiteVersions',
       {
         keys: 'contentLinks',
         toEntityOp: (data: object, key: string, unit: Unit) => {
@@ -319,6 +329,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'teachingPeriod',
       'startDate',
       'endDate',
+      'lastTeachingDate',
       'portfolioAutoGenerationDate',
 
       'assessmentEnabled',

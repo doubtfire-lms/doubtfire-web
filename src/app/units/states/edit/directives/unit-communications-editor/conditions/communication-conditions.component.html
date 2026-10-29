@@ -1,6 +1,6 @@
 <div class="flex flex-col p-6">
   <div class="flex">
-    <mat-form-field appearance="outline" class="min-w-[320px]">
+    <mat-form-field appearance="outline" class="min-w-80">
       <mat-label>Conditions</mat-label>
       <mat-select [(ngModel)]="rule.operator" (selectionChange)="editor.updateRuleOperator(rule)">
         @for (option of editor.logicalOperatorOptions; track option.value) {
@@ -14,7 +14,7 @@
 
   <mat-list class="overflow-visible px-3 pt-5">
     @for (condition of rule.conditions; track condition.id) {
-      <mat-list-item class="!h-auto items-start overflow-visible py-3">
+      <mat-list-item class="h-auto! items-start overflow-visible py-3">
         @if (editor.editingConditionId[rule.id] === condition.id) {
           <div class="flex w-full flex-wrap items-start gap-3 pt-2">
             <mat-form-field appearance="outline">
@@ -45,7 +45,7 @@
             }
 
             @if (editor.conditionFor(rule).type !== 'PortfolioSubmittedCondition') {
-              <mat-form-field appearance="outline" class="min-w-[300px]">
+              <mat-form-field appearance="outline" class="min-w-75">
                 <mat-label>Operator</mat-label>
                 <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
                   @for (
@@ -98,18 +98,18 @@
               }
               @case ('TaskDefinitionStatusCondition') {
                 <f-task-status-select
-                  class="block min-w-[320px]"
+                  class="block min-w-80"
                   [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
                 />
               }
               @case ('TaskStatusCountCondition') {
                 <f-task-status-select
-                  class="block min-w-[320px]"
+                  class="block min-w-80"
                   [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
                 />
               }
               @case ('LoginStatusCondition') {
-                <mat-form-field appearance="outline" class="min-w-[320px]">
+                <mat-form-field appearance="outline" class="min-w-80">
                   <mat-label>Days</mat-label>
                   <input
                     matInput
@@ -126,7 +126,7 @@
                 </mat-form-field>
               }
               @case ('UnitViewedStatusCondition') {
-                <mat-form-field appearance="outline" class="min-w-[320px]">
+                <mat-form-field appearance="outline" class="min-w-80">
                   <mat-label>Days</mat-label>
                   <input
                     matInput
@@ -423,7 +423,7 @@
       }
 
       @if (editor.conditionFor(rule).type !== 'PortfolioSubmittedCondition') {
-        <mat-form-field appearance="outline" class="min-w-[300px]">
+        <mat-form-field appearance="outline" class="min-w-75">
           <mat-label>Operator</mat-label>
           <mat-select [(ngModel)]="editor.conditionFor(rule).operator">
             @for (operator of editor.operatorsFor(editor.conditionFor(rule).type); track operator) {
@@ -474,20 +474,20 @@
 
         @case ('TaskDefinitionStatusCondition') {
           <f-task-status-select
-            class="block min-w-[320px]"
+            class="block min-w-80"
             [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
           />
         }
 
         @case ('TaskStatusCountCondition') {
           <f-task-status-select
-            class="block min-w-[320px]"
+            class="block min-w-80"
             [(taskStatuses)]="editor.conditionFor(rule).task_statuses"
           />
         }
 
         @case ('LoginStatusCondition') {
-          <mat-form-field appearance="outline" class="min-w-[320px]">
+          <mat-form-field appearance="outline" class="min-w-80">
             <mat-label>Days</mat-label>
             <input
               matInput
@@ -502,7 +502,7 @@
           </mat-form-field>
         }
         @case ('UnitViewedStatusCondition') {
-          <mat-form-field appearance="outline" class="min-w-[320px]">
+          <mat-form-field appearance="outline" class="min-w-80">
             <mat-label>Days</mat-label>
             <input
               matInput

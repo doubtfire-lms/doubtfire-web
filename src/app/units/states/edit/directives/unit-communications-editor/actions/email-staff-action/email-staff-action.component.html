@@ -1,5 +1,5 @@
 @if (mode === 'edit') {
-  <div class="flex w-full min-w-[520px] flex-col gap-3">
+  <div class="flex w-full min-w-130 flex-col gap-3">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Subject</mat-label>
       <input #staffSubjectInput matInput [(ngModel)]="editor.actionFor(rule).subject" />
@@ -63,10 +63,15 @@
       <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_tutors">Tutors</mat-checkbox>
       <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_convenors">Convenors</mat-checkbox>
     </div>
+    <mat-checkbox
+      matTooltip="Send only the text you enter, without the OnTrack notification layout or footer."
+      [(ngModel)]="editor.actionFor(rule).plain_text"
+      >Send as plain text</mat-checkbox
+    >
     <div class="text-sm text-black/50">Sent from the main convenor.</div>
   </div>
 } @else {
-  <div class="flex w-full min-w-[520px] flex-col gap-3">
+  <div class="flex w-full min-w-130 flex-col gap-3">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Subject</mat-label>
       <input #staffSubjectInputView matInput [(ngModel)]="editor.actionFor(rule).subject" />
@@ -135,6 +140,11 @@
       <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_tutors">Tutors</mat-checkbox>
       <mat-checkbox [(ngModel)]="editor.actionFor(rule).email_convenors">Convenors</mat-checkbox>
     </div>
+    <mat-checkbox
+      matTooltip="Send only the text you enter, without the OnTrack notification layout or footer."
+      [(ngModel)]="editor.actionFor(rule).plain_text"
+      >Send as plain text</mat-checkbox
+    >
     <div class="text-sm text-black/50">Sent from the main convenor.</div>
   </div>
 }

@@ -70,7 +70,13 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     });
 
     this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
-      if (task && task.project && this.project && task.project.id === this.project.id) {
+      if (
+        task &&
+        task.project &&
+        this.project &&
+        task.project.id === this.project.id &&
+        task.definition.id === this.task?.definition.id
+      ) {
         this.fetchComments(task, false);
       }
     });
@@ -254,7 +260,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
         this.alerts.error('I cannot upload that file - only images, audio, and PDFs.', 4000);
       }
     });
-    console.log('implement - check map comments');
+    // TODO: Check whether task comments need to be remapped.
     // this.task.comments = this.ts.mapComments(this.task.comments);
   }
 

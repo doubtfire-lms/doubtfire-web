@@ -128,11 +128,7 @@ export class AuthenticationService {
     }
 
     // Attempt to get a new access token using the refresh token cookie
-    this.attemptLoginUsingRefreshToken((result: boolean) => {
-      if (result) {
-        console.log('Successfully refreshed access token');
-      }
-    });
+    this.attemptLoginUsingRefreshToken(() => undefined);
   }
 
   private readonly validRoles: string[] = [
@@ -237,6 +233,7 @@ export class AuthenticationService {
   public signOut(ssoSignOut = true): void {
     // This function is called after the token is deleted...
     const doSignOut = () => {
+      sessionStorage.removeItem('ltiLaunch');
       // Setup ability to auth again
       this.authComplete$.complete();
       this.authComplete$ = new AsyncSubject<boolean>();
@@ -287,11 +284,7 @@ export class AuthenticationService {
     );
   }
 
-  public getContentToken(): Observable<string> {
-    return this.httpClient.get(this.AUTH_URL + '/content').pipe(
-      map((response) => {
-        return response['content_auth_token'];
-      }),
-    );
+  public prepareContentAccess(): Observable<void> {
+    return this.httpClient.get(this.AUTH_URL + '/content').pipe(map(() => undefined));
   }
 }

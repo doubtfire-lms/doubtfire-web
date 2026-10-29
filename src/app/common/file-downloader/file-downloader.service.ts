@@ -46,7 +46,7 @@ export class FileDownloaderService {
 
           // Check the start is the same as the length of the binary data received
           if (start !== data.binaryData.map((value) => value.size).reduce((pv, cv) => pv + cv, 0)) {
-            console.log('Error: start != oldLen');
+            console.error('Downloaded file part was received out of order');
             this.alerts.error('Error downloading file part received out of order');
           }
           data.binaryData.push(data.response.body);
@@ -76,7 +76,8 @@ export class FileDownloaderService {
       }
     } else {
       // no range... so we can't do anything!
-      console.log('Error reading response from server - no range with 206 response');
+      console.error('Error reading response from server - no range with 206 response');
+      this.alerts.error('Unable to read data from server');
       if (data.failure) {
         data.failure('Unable to read data from server');
       }
@@ -170,5 +171,26 @@ export class FileDownloaderService {
         this.alerts.error(`Error downloading file - ${error}`);
       },
     );
+  }
+
+  /**
+   * Start a browser-managed download after Rails has issued a short-lived,
+   * HTTP-only access cookie. Unlike the Blob downloader, this streams directly
+   * to disk and appears in the browser's Downloads UI immediately.
+   */
+  public downloadNativeFile(url: string): void {
+    this.httpClient.post<void>(`${url}/access`, null).subscribe({
+      next: () => {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.setAttribute('download', '');
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+      },
+      error: (error) => {
+        this.alerts.error(`Error starting download - ${error}`);
+      },
+    });
   }
 }

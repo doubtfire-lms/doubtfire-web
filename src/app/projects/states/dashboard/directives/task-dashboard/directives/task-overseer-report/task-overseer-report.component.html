@@ -2,7 +2,7 @@
   <button mat-stroked-button (click)="loadHistory(true)">Refresh</button>
 </div>
 @if (loading) {
-  <div class="flex min-h-[240px] items-center justify-center">
+  <div class="flex min-h-60 items-center justify-center">
     <mat-spinner [diameter]="48"></mat-spinner>
   </div>
 } @else {
@@ -171,34 +171,59 @@
                     </div>
                     @if (viewOutput === 'diff' || viewOutput === 'split_diff') {
                       @if (result.expectedOutput !== result.stdout) {
+                        @if (viewOutput === 'diff') {
+                          <div
+                            class="mb-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-xs text-gray-600"
+                          >
+                            <span class="flex items-center gap-2">
+                              <span
+                                class="inline-block size-3 rounded-xs border border-red-300 bg-red-100"
+                              ></span>
+                              Your output
+                            </span>
+                            <span class="flex items-center gap-2">
+                              <span
+                                class="inline-block size-3 rounded-xs border border-green-300 bg-green-100"
+                              ></span>
+                              Expected output
+                            </span>
+                          </div>
+                        } @else {
+                          <div
+                            class="mb-2 flex items-center text-xs font-medium tracking-wide text-gray-600 uppercase"
+                          >
+                            <div class="flex-1 px-3">Your Output</div>
+                            <div class="flex-1 px-3">Expected Output</div>
+                          </div>
+                        }
                         <ngx-monaco-diff-editor
                           [modifiedModel]="{
-                            language: 'plainttext',
-                            code: result.stdout,
+                            language: 'plaintext',
+                            code: result.expectedOutput,
                           }"
                           [options]="diffEditorOptions"
                           [originalModel]="{
                             language: 'plaintext',
-                            code: result.expectedOutput,
+                            code: result.stdout,
                           }"
                         ></ngx-monaco-diff-editor>
                       }
                     } @else if (viewOutput === 'your_output') {
                       <ngx-monaco-editor
-                        class="w-full p-3"
+                        class="w-full pt-6"
                         [options]="editorOptions"
                         [(ngModel)]="result.stdout"
                       ></ngx-monaco-editor>
                     } @else if (viewOutput === 'expected_output') {
                       <ngx-monaco-editor
-                        class="w-full p-3"
+                        class="w-full pt-6"
                         [options]="editorOptions"
                         [(ngModel)]="result.expectedOutput"
                       ></ngx-monaco-editor>
                     }
                   } @else if (result.stdout) {
                     <pre
-                      class="max-h-64 max-w-full scrollbar-gutter-stable overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap text-gray-800 shadow-inner"
+                      class="max-h-64 max-w-full scrollbar-gutter-stable overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed wrap-break-word whitespace-pre-wrap text-gray-800 shadow-inner"
                     ><code [innerHTML]="renderOutput(result.stdout)"></code></pre>
                   } @else if (result.pass) {
                     <div class="w-full text-center tracking-wide text-gray-400 uppercase">

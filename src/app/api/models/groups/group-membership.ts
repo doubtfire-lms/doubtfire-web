@@ -2,7 +2,7 @@ import {Entity} from 'ngx-entity-service';
 
 export class GroupMembership extends Entity {
   public get student_name(): string {
-    console.log('implement student_name');
+    // TODO: implement
     return 'TODO NAME';
   }
 }
