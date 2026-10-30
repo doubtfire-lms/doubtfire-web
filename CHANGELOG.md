@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-6](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-5...v11.1.0-6) (2026-10-30)
+
+
+### Features
+
+* allow dismissing the app update snack bar ([93c529a](https://github.com/b0ink/doubtfire-deploy/commit/93c529a811329741c07a58fa5bff1d24d0e0dedb))
+* check for app updates every 4 hours ([e118e1f](https://github.com/b0ink/doubtfire-deploy/commit/e118e1fb055226e2a4dbc15ad67629f9c245adc0))
+
+
+### Bug Fixes
+
+* address sonarqube errors ([#1699](https://github.com/b0ink/doubtfire-deploy/issues/1699)) ([cfdfe57](https://github.com/b0ink/doubtfire-deploy/commit/cfdfe572c1f0dd0bc4ea205be78d6e045252b254))
+
 ## [11.1.0-5](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-4...v11.1.0-5) (2026-10-28)
 
 
