@@ -11,6 +11,7 @@ import {UnitRole} from 'src/app/api/models/unit-role';
 export class TutorNotesViewComponent implements OnChanges {
   @Input() task?;
   @Input() unitRole: UnitRole;
+  @Input() focusNoteId?: number;
 
   private inferredUnitRole = false;
 

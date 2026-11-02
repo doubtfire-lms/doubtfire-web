@@ -16,9 +16,11 @@ export class TutorNotesModalComponent implements OnInit {
 
   task?: Task;
   unitRole?: UnitRole;
+  focusNoteId?: number;
 
   ngOnInit() {
     this.task = this.data.task;
     this.unitRole = this.data.unitRole;
+    this.focusNoteId = this.data.focusNoteId;
   }
 }

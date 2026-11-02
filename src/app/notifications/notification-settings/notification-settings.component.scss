@@ -1,0 +1,14 @@
+// Native time inputs otherwise collapse to a 13px line box inside Material's
+// 24px infix, clipping the 15px glyphs across their bottom edge.
+.digest-time-input {
+  line-height: 24px;
+
+  &::-webkit-date-and-time-value {
+    min-height: 24px;
+  }
+
+  &::-webkit-datetime-edit {
+    align-items: center;
+    min-height: 24px;
+  }
+}

@@ -1,7 +1,8 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, convertToParamMap} from '@angular/router';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {FUnitTaskListComponent} from './unit-task-list.component';
 
@@ -56,48 +57,26 @@ describe('FUnitTaskListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('shows the ongoing state after a task starts and before it is due', () => {
-    const now = new Date(2026, 7, 22, 12).getTime();
-    vi.spyOn(Date, 'now').mockReturnValue(now);
-    const task = {
-      startDate: new Date(now - 9 * 24 * 60 * 60 * 1000),
-      localDueDate: () => new Date(now + 5 * 24 * 60 * 60 * 1000),
-      inFinalState: () => false,
-    } as Task;
+  it('switches the selected task when the reused route parameter changes', async () => {
+    const params: Subject<ReturnType<typeof convertToParamMap>> = new Subject();
+    const firstTask = taskDefinition(1, 'P1');
+    const secondTask = taskDefinition(2, 'P2');
+    const selectedTaskDefinition$: BehaviorSubject<TaskDefinition> = new BehaviorSubject(firstTask);
+    const routeAwareComponent = new FUnitTaskListComponent(
+      emptyProvider as Router,
+      {paramMap: params.asObservable()} as ActivatedRoute,
+    );
+    routeAwareComponent.project = {} as Project;
+    routeAwareComponent.taskDefinitions = [firstTask, secondTask];
+    routeAwareComponent.tasks = [];
+    routeAwareComponent.selectedTaskDefinition$ = selectedTaskDefinition$;
+    routeAwareComponent.ngOnInit();
 
-    expect(component.taskOngoing(task)).toBe(true);
-  });
+    params.next(convertToParamMap({taskAbbreviation: 'P2'}));
+    await Promise.resolve();
 
-  it('ends the ongoing state when the task reaches its due date', () => {
-    const now = new Date(2026, 7, 22, 12).getTime();
-    vi.spyOn(Date, 'now').mockReturnValue(now);
-    const task = {
-      startDate: new Date(now - 14 * 24 * 60 * 60 * 1000),
-      localDueDate: () => new Date(now),
-      inFinalState: () => false,
-    } as Task;
-
-    expect(component.taskOngoing(task)).toBe(false);
-  });
-
-  it('shows the due state when a started task is due within five days', () => {
-    const task = {
-      isBeforeStartDate: () => false,
-      inSubmittedState: () => false,
-      daysUntilDueDate: () => 5,
-    } as Task;
-
-    expect(component.taskDueApproaching(task)).toBe(true);
-  });
-
-  it('does not show the due state more than five days before the due date', () => {
-    const task = {
-      isBeforeStartDate: () => false,
-      inSubmittedState: () => false,
-      daysUntilDueDate: () => 6,
-    } as Task;
-
-    expect(component.taskDueApproaching(task)).toBe(false);
+    expect(selectedTaskDefinition$.value).toBe(secondTask);
+    routeAwareComponent.ngOnDestroy();
   });
 
   it('sorts task definitions by task top weight by default', () => {

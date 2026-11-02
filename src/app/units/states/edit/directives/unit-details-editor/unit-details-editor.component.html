@@ -397,11 +397,19 @@
 
     <f-setting-toggle
       class="border-t border-gray-200"
-      label="Send notification emails"
+      label="Send notification email digest"
       [(checked)]="unit.sendNotifications"
     >
-      When true, emails will be set to students each week to indicate progress and suggest future
-      tasks for them to work on.
+      Email notification digests and discussion deadline reminders to staff and students. In-app
+      notifications are unaffected.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Generate weekly summary notifications"
+      [(checked)]="unit.generateWeeklySummaries"
+    >
+      Each Monday, give students and staff a summary of the past week's progress and activity.
     </f-setting-toggle>
 
     <f-setting-toggle

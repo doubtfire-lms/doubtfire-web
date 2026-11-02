@@ -4,11 +4,12 @@ import {
   HostBinding,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subject, takeUntil} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinitionNamePipe} from 'src/app/common/filters/task-definition-name.pipe';
 
@@ -36,9 +37,6 @@ const DEFAULT_VIEW_PREFERENCES: TaskListViewPreferences = {
   showBeyondTargetGrade: false,
 };
 
-const START_APPROACHING_DAYS = 7;
-const DUE_APPROACHING_DAYS = 5;
-
 @Component({
   selector: 'f-unit-task-list',
   templateUrl: './unit-task-list.component.html',
@@ -46,7 +44,7 @@ const DUE_APPROACHING_DAYS = 5;
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class FUnitTaskListComponent implements OnChanges, OnInit {
+export class FUnitTaskListComponent implements OnChanges, OnInit, OnDestroy {
   @Input() mode: 'project' | 'all-tasks';
   @Input() project: Project;
   @Input() taskDefinitions: readonly TaskDefinition[];
@@ -76,13 +74,7 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     {value: 'dueDate', label: 'Due date', icon: 'event_repeat'},
     {value: 'abbreviation', label: 'Abbreviation', icon: 'sort_by_alpha'},
   ];
-
-  protected get gradeNames(): Record<number, string> {
-    const unit = this.project?.unit ?? this.taskDefinitions?.[0]?.unit;
-    return Object.fromEntries(
-      (unit?.gradeDefinitions ?? []).map((definition) => [definition.value, definition.label]),
-    );
-  }
+  private readonly destroy$: Subject<void> = new Subject();
 
   constructor(
     private angularRouter: Router,
@@ -214,46 +206,6 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     return this.taskForTaskDef(taskDef);
   }
 
-  public taskStartApproaching(task: Task): boolean {
-    return (
-      !!task &&
-      !task.inFinalState() &&
-      task.isBeforeStartDate() &&
-      task.daysUntilStartDate() <= START_APPROACHING_DAYS
-    );
-  }
-
-  public taskStartLabel(task: Task): string {
-    const days = task.daysUntilStartDate();
-
-    if (days <= 0) {
-      return 'Start today';
-    }
-
-    return `Start in ${days} ${days === 1 ? 'day' : 'days'}`;
-  }
-
-  public taskOngoing(task: Task): boolean {
-    if (!task || task.inFinalState()) {
-      return false;
-    }
-
-    const now = Date.now();
-    const startTime = this.dateTime(task.startDate);
-    const dueTime = this.dateTime(task.localDueDate());
-
-    return now >= startTime && now < dueTime;
-  }
-
-  public taskDueApproaching(task: Task): boolean {
-    return (
-      !!task &&
-      !task.isBeforeStartDate() &&
-      !task.inSubmittedState() &&
-      task.daysUntilDueDate() <= DUE_APPROACHING_DAYS
-    );
-  }
-
   /*
     TODO: There's still an issue where loading the route for the first time will cause child components (like task-dashboard) to load trigger OnInit and OnChanges twice...
     Causing duplicate queries to submission_details and task comments.
@@ -283,21 +235,17 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     //   this.setSelectedTaskDefinition(this.taskDefinitions[0]);
     // }
 
-    // Load selected task from URL
-    const current = this.selectedTaskDefinition$.value;
-    const param = this.route.snapshot.paramMap.get('taskAbbreviation');
-
-    queueMicrotask(() => {
-      if (param) {
-        const taskDef = this.taskDefinitions.find((t) => t.abbreviation === param);
-
-        if (taskDef !== current) {
-          this.selectedTaskDefinition$.next(taskDef);
-        }
-      } else if (current !== null) {
-        this.selectedTaskDefinition$.next(null);
-      }
+    // The dashboard component is reused when only the task abbreviation changes,
+    // so react to route updates instead of reading the initial snapshot once.
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const param = params.get('taskAbbreviation');
+      queueMicrotask(() => this.selectTaskFromRoute(param));
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   setSelectedTaskDefinition(taskDef: TaskDefinition) {
@@ -321,6 +269,18 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
 
   public isSelectedTaskDefinition(taskDef: TaskDefinition): boolean {
     return this.selectedTaskDef?.id === taskDef?.id;
+  }
+
+  private selectTaskFromRoute(abbreviation: string | null): void {
+    const current = this.selectedTaskDefinition$.value;
+    if (abbreviation) {
+      const taskDef = this.taskDefinitions.find((task) => task.abbreviation === abbreviation);
+      if (taskDef && taskDef !== current) {
+        this.selectedTaskDefinition$.next(taskDef);
+      }
+    } else if (current !== null) {
+      this.selectedTaskDefinition$.next(null);
+    }
   }
 
   private replaceSelectionUrl(taskDef: TaskDefinition | null): void {
@@ -437,16 +397,16 @@ export class FUnitTaskListComponent implements OnChanges, OnInit {
     return aTime - bTime;
   }
 
+  private dateTime(date: Date): number {
+    const time = date ? new Date(date).getTime() : NaN;
+    return Number.isFinite(time) ? time : Number.MAX_SAFE_INTEGER;
+  }
+
   private compareStrings(a: string, b: string): number {
     return (a ?? '').localeCompare(b ?? '', undefined, {
       numeric: true,
       sensitivity: 'base',
     });
-  }
-
-  private dateTime(date: Date): number {
-    const time = date ? new Date(date).getTime() : NaN;
-    return Number.isFinite(time) ? time : Number.MAX_SAFE_INTEGER;
   }
 
   private loadViewPreferences(): void {

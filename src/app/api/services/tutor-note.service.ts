@@ -50,6 +50,7 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
         },
       },
       'readByUnitRole',
+      'requiresCurrentUserRead',
     );
 
     this.mapping.addJsonKey('note', 'createdAt', 'updatedAt');
@@ -136,13 +137,16 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     return this.put<boolean>(pathId, opts).pipe(
       tap((response: boolean) => {
         if (response) {
-          note.readByUnitRole = true;
-          if (unitRole.user.id !== note.user.id) {
-            unitRole.tutorNoteCount--;
+          note.requiresCurrentUserRead = false;
+          // read_by_unit_role and the unread badge belong to the tutor the note is
+          // about - a mentor or reply author clearing their own notification must
+          // leave both alone.
+          if (note.noteIsForMe) {
+            note.readByUnitRole = true;
+            if (unitRole.user.id !== note.user.id) {
+              unitRole.tutorNoteCount--;
+            }
           }
-          // unitRole.tutorNoteCount = unitRole.tutorNotesCache.currentValues.filter(
-          //   (note) => !note.readByUnitRole,
-          // ).length;
         }
       }),
     );
