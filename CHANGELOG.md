@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.2](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.1...v11.0.2) (2026-11-02)
+
+
+### Bug Fixes
+
+* address sonarqube errors ([#1699](https://github.com/b0ink/doubtfire-deploy/issues/1699)) ([36a454d](https://github.com/b0ink/doubtfire-deploy/commit/36a454d6732533dd045ac15bbac13fb4c3cf815f))
+
 ### [11.0.1](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.0...v11.0.1) (2026-10-28)
 
 
