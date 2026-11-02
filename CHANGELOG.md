@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-7](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-6...v11.1.0-7) (2026-11-02)
+
+
+### Features
+
+* add refresh button ([63fe3e0](https://github.com/b0ink/doubtfire-deploy/commit/63fe3e067644c4234baf577d4a3ea6190afd796a))
+* notifications ([#1402](https://github.com/b0ink/doubtfire-deploy/issues/1402)) ([686338a](https://github.com/b0ink/doubtfire-deploy/commit/686338a0bf1f4cb638a34a663cc1a29869466341))
+* show background job statistics in institution settings ([c0a7166](https://github.com/b0ink/doubtfire-deploy/commit/c0a716659e6c5b71ae776754cedf85e0d6c5b7cc))
+
 ## [11.1.0-6](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-5...v11.1.0-6) (2026-10-30)
 
 
