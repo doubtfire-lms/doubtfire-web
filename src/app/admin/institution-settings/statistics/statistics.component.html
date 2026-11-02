@@ -1,10 +1,19 @@
 <div class="px-4 pb-4">
-  <div class="flex">
+  <div class="flex flex-wrap items-center justify-between gap-4">
     <div class="mt-6">
       <h1 class="mb-0.5">Statistics</h1>
       <p>View recent user activity, background jobs, and system information</p>
     </div>
+    <button mat-stroked-button type="button" [disabled]="refreshing" (click)="refresh()">
+      {{ refreshing ? 'Refreshing…' : 'Refresh' }}
+    </button>
   </div>
+
+  @if (error && statistics) {
+    <p class="mt-2 text-sm text-red-700">
+      Could not refresh statistics. Showing the last available data.
+    </p>
+  }
 
   @if (loading) {
     <div aria-label="Loading statistics" class="flex justify-center py-16">

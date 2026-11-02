@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {EMPTY, Subscription, catchError, switchMap, timer} from 'rxjs';
+import {EMPTY, Subject, Subscription, catchError, finalize, merge, switchMap, timer} from 'rxjs';
 import API_URL from 'src/app/config/constants/apiUrl';
 
 type ActivityWindow =
@@ -42,24 +42,30 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   public selectedWindow: ActivityWindow = 'fiveMinutes';
   public statistics?: InstitutionStatistics;
   public loading = true;
+  public refreshing = false;
   public error = false;
 
+  private readonly refreshRequests: Subject<void> = new Subject();
   private subscription?: Subscription;
 
   constructor(private httpClient: HttpClient) {}
 
   public ngOnInit(): void {
-    this.subscription = timer(0, 30_000)
+    this.subscription = merge(timer(0, 30_000), this.refreshRequests)
       .pipe(
-        switchMap(() =>
-          this.httpClient.get<InstitutionStatistics>(`${API_URL}/admin/statistics`).pipe(
+        switchMap(() => {
+          this.refreshing = true;
+          return this.httpClient.get<InstitutionStatistics>(`${API_URL}/admin/statistics`).pipe(
             catchError(() => {
               this.loading = false;
               this.error = true;
               return EMPTY;
             }),
-          ),
-        ),
+            finalize(() => {
+              this.refreshing = false;
+            }),
+          );
+        }),
       )
       .subscribe((statistics) => {
         this.statistics = statistics;
@@ -70,6 +76,10 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.subscription?.unsubscribe();
+  }
+
+  public refresh(): void {
+    this.refreshRequests.next();
   }
 
   public get activeUsers(): number {
