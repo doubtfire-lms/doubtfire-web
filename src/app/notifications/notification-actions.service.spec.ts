@@ -48,6 +48,26 @@ describe('NotificationActionsService', () => {
     await vi.waitFor(() => expect(markRead).toHaveBeenCalledWith([1, 2]));
   });
 
+  it('marks a group read when its task is already open and the notification is clicked', async () => {
+    router.url = '/projects/8/dashboard/P4?view=details';
+    navigate.mockResolvedValueOnce(false);
+
+    service.open(groupFor());
+    await navigate.mock.results[0].value;
+
+    expect(markRead).toHaveBeenCalledWith([1, 2]);
+  });
+
+  it('keeps a failed report unread if its report destination does not open', async () => {
+    router.url = '/projects/8/dashboard/P4';
+    navigate.mockResolvedValueOnce(false);
+
+    service.open(groupFor({overseerAssessmentId: 4242}));
+    await navigate.mock.results[0].value;
+
+    expect(markRead).not.toHaveBeenCalled();
+  });
+
   it('does not mark an already read group again', () => {
     service.open(groupFor({read: true}));
 

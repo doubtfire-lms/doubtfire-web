@@ -107,11 +107,12 @@ export class NotificationActionsService {
       return;
     }
 
-    // Only consume a task notification once its destination has opened. This
-    // keeps it unread when navigation is cancelled or fails.
+    // Only consume a task notification after its destination opens, or when
+    // this click is already at that destination. A cancelled route elsewhere
+    // must leave it unread.
     void navigate()
       .then((opened) => {
-        if (opened) {
+        if (opened || this.isCurrentTaskDestination(group)) {
           this.notificationService.markRead(group.notificationIds).subscribe({
             error: () => undefined,
           });
@@ -163,6 +164,19 @@ export class NotificationActionsService {
     }
 
     return params;
+  }
+
+  private isCurrentTaskDestination(group: NotificationGroup): boolean {
+    const taskPath = `/projects/${group.task.projectId}/dashboard/${encodeURIComponent(group.task.abbreviation)}`;
+    if (this.currentPath !== taskPath) {
+      return false;
+    }
+
+    const query = this.router.url.split('?')[1]?.split('#')[0] ?? '';
+    const currentParams = new URLSearchParams(query);
+    return Object.entries(this.queryParamsFor(group)).every(
+      ([key, value]) => currentParams.get(key) === String(value),
+    );
   }
 
   private get currentPath(): string {
