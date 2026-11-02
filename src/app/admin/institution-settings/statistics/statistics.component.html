@@ -2,7 +2,7 @@
   <div class="flex">
     <div class="mt-6">
       <h1 class="mb-0.5">Statistics</h1>
-      <p>View recent user activity and basic system information</p>
+      <p>View recent user activity, background jobs, and system information</p>
     </div>
   </div>
 
@@ -53,6 +53,78 @@
         <p class="m-0 text-2xl font-semibold">
           {{ statistics.diskSpaceGb === null ? 'Unavailable' : statistics.diskSpaceGb + ' GB' }}
         </p>
+      </mat-card>
+    </div>
+
+    <h2 class="mt-8 mb-3">Sidekiq</h2>
+    @if (statistics.sidekiq; as sidekiq) {
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <mat-card appearance="outlined" class="p-6">
+          <p class="mb-1 text-sm text-gray-600">Running jobs</p>
+          <p class="m-0 text-2xl font-semibold">{{ sidekiq.activeJobs.length }}</p>
+          @if (sidekiq.activeJobs.length) {
+            <div class="mt-4 space-y-2">
+              @for (job of sidekiq.activeJobs; track $index) {
+                <div class="flex flex-wrap justify-between gap-x-4 gap-y-1 text-sm">
+                  <span class="break-all">{{ job.jobClass }}</span>
+                  <span class="text-gray-600">{{ job.queue }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="mt-3 mb-0 text-sm text-gray-500">No jobs are running.</p>
+          }
+        </mat-card>
+
+        <mat-card appearance="outlined" class="p-6">
+          <p class="mb-1 text-sm text-gray-600">Queued jobs</p>
+          <p class="m-0 text-2xl font-semibold">{{ sidekiq.queuedJobs }}</p>
+          @if (sidekiq.queues.length) {
+            <div class="mt-4 space-y-2">
+              @for (queue of sidekiq.queues; track queue.name) {
+                <div class="flex justify-between gap-4 text-sm">
+                  <span>{{ queue.name }}</span>
+                  <span>{{ queue.size }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="mt-3 mb-0 text-sm text-gray-500">No queues found.</p>
+          }
+        </mat-card>
+      </div>
+    } @else {
+      <mat-card appearance="outlined" class="p-6"
+        >Sidekiq statistics are currently unavailable.</mat-card
+      >
+    }
+
+    <h2 class="mt-8 mb-3">Portfolio PDF generator</h2>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <mat-card appearance="outlined" class="p-6">
+        <p class="mb-1 text-sm text-gray-600">Queued for compilation</p>
+        <p class="m-0 text-2xl font-semibold">
+          {{ statistics.portfolioCompilation.queuedProjects }}
+        </p>
+        <p class="mt-1 mb-0 text-sm text-gray-500">projects awaiting or claimed for compilation</p>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="p-6">
+        <p class="mb-1 text-sm text-gray-600">Waiting</p>
+        <p class="m-0 text-2xl font-semibold">
+          {{ statistics.portfolioCompilation.waitingProjects }}
+        </p>
+        <p class="mt-1 mb-0 text-sm text-gray-500">
+          projects waiting for the PDF generator to start processing them
+        </p>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="p-6">
+        <p class="mb-1 text-sm text-gray-600">Claimed by PDF generator</p>
+        <p class="m-0 text-2xl font-semibold">
+          {{ statistics.portfolioCompilation.claimedProjects }}
+        </p>
+        <p class="mt-1 mb-0 text-sm text-gray-500">projects in a processing batch</p>
       </mat-card>
     </div>
   }

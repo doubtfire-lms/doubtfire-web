@@ -10,6 +10,16 @@ interface InstitutionStatistics {
   activeUsers: Record<ActivityWindow, number>;
   totalUsers: number;
   diskSpaceGb: number | null;
+  sidekiq: {
+    activeJobs: {jobClass: string; queue: string}[];
+    queuedJobs: number;
+    queues: {name: string; size: number}[];
+  } | null;
+  portfolioCompilation: {
+    queuedProjects: number;
+    waitingProjects: number;
+    claimedProjects: number;
+  };
 }
 
 @Component({
