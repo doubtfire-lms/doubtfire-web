@@ -1,8 +1,18 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
+import {CommonModule} from '@angular/common';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {FormsModule} from '@angular/forms';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatIconModule} from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router, convertToParamMap} from '@angular/router';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, Subject, of} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {FUnitTaskListComponent} from './unit-task-list.component';
 
@@ -34,14 +44,24 @@ describe('FUnitTaskListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FUnitTaskListComponent],
+      imports: [
+        CommonModule,
+        FormsModule,
+        MatBadgeModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatIconModule,
+        MatListModule,
+        MatMenuModule,
+        MatTooltipModule,
+        NoopAnimationsModule,
+      ],
       providers: [
         {provide: Router, useValue: emptyProvider},
-        {provide: ActivatedRoute, useValue: emptyProvider},
+        {provide: ActivatedRoute, useValue: {paramMap: of(convertToParamMap({}))}},
       ],
       schemas: [NO_ERRORS_SCHEMA],
-    })
-      .overrideComponent(FUnitTaskListComponent, {set: {template: ''}})
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -55,6 +75,27 @@ describe('FUnitTaskListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('renders task definitions when the unit task list has no student tasks', () => {
+    const definition = {
+      ...taskDefinition(1, 'P1'),
+      name: 'Research Proposal',
+      targetGradeText: 'Pass',
+      isGroupTask: () => false,
+      unit: {id: 20},
+    } as TaskDefinition;
+    component.mode = 'all-tasks';
+    component.taskDefinitions = [definition];
+    component.tasks = [];
+    component.selectedTaskDefinition$ = new BehaviorSubject<TaskDefinition>(null);
+
+    fixture.detectChanges();
+
+    const taskRow = fixture.nativeElement.querySelector('mat-list-item') as HTMLElement;
+    expect(taskRow).not.toBeNull();
+    expect(taskRow.textContent).toContain('Research Proposal');
+    expect(taskRow.textContent).toContain('P1 - Pass Task');
   });
 
   it('switches the selected task when the reused route parameter changes', async () => {

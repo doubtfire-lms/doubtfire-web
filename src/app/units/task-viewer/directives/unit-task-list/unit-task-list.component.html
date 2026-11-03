@@ -218,6 +218,18 @@
             } @else {
               @if (taskListItem(taskDef); as task) {
                 <task-list-item [task]="task"></task-list-item>
+              } @else {
+                <div class="flex min-w-0 flex-col justify-center">
+                  <div class="truncate">{{ taskDef.name }}</div>
+                  <div class="flex min-w-0 items-center gap-0.5 text-sm leading-none text-gray-500">
+                    <mat-icon class="shrink-0 scale-75 text-gray-600">
+                      {{ taskDef.isGroupTask() ? 'groups' : 'person' }}
+                    </mat-icon>
+                    <span class="truncate">
+                      {{ taskDef.abbreviation }} - {{ taskDef.targetGradeText }} Task
+                    </span>
+                  </div>
+                </div>
               }
             }
           }
