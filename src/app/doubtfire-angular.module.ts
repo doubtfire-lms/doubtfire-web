@@ -376,6 +376,7 @@ import {TaskDefinitionOverseerComponent} from './units/states/edit/directives/un
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
 import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
+import {TaskDefinitionSkillsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-skills.component';
 import {TaskDefinitionUploadComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
 import {TaskDefinitionWhoComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
@@ -833,6 +834,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     },
   ],
   imports: [
+    TaskDefinitionSkillsComponent,
     FlexLayoutModule,
     BrowserModule,
     BrowserAnimationsModule,

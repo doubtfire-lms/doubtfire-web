@@ -1,6 +1,7 @@
 import {Routes, UrlMatchResult, UrlSegment} from '@angular/router';
 import {EditProfileComponent} from './account/edit-profile/edit-profile.component';
 import {InstitutionSettingsComponent} from './admin/institution-settings/institution-settings.component';
+import {CompetencyAdminComponent} from './admin/states/competencies/competency-admin.component';
 import {FUnitsComponent} from './admin/states/units/units.component';
 import {FUsersComponent} from './admin/states/users/users.component';
 import {roleWhitelistGuard} from './common/guards/role-whitelist.guard';
@@ -23,6 +24,7 @@ import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-v
 import {ProjectPlanComponent} from './projects/states/plan/project-plan.component';
 import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
 import {ProjectRootStateComponent} from './projects/states/project-root-state.component';
+import {ProjectSkillsComponent} from './projects/states/skills/project-skills.component';
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
@@ -114,6 +116,12 @@ export const routes: Routes = [
     component: FUnitsComponent,
     canActivate: [roleWhitelistGuard],
     data: {mode: 'admin', roleWhitelist: ['Admin', 'Auditor', 'Convenor']},
+  },
+  {
+    path: 'admin/competencies',
+    component: CompetencyAdminComponent,
+    canActivate: [roleWhitelistGuard],
+    data: {roleWhitelist: ['Admin']},
   },
   {
     path: 'admin/users',
@@ -357,6 +365,7 @@ export const routes: Routes = [
             component: ProjectDashboardComponent,
             data: {task: 'Dashboard'},
           },
+          {path: 'skills', component: ProjectSkillsComponent, data: {task: 'Skills'}},
           {
             path: 'dashboard/:taskAbbreviation',
             component: ProjectDashboardComponent,

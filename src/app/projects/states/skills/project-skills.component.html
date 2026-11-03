@@ -1,0 +1,85 @@
+<main class="mx-auto max-w-5xl space-y-6 p-6">
+  <a mat-button [routerLink]="['/projects', projectId, 'dashboard']">Back to unit dashboard</a>
+  <h1>Skills in this unit</h1>
+  @if (error) {
+    <p role="alert">{{ error }}</p>
+  }
+  @if (progress) {
+    @if (progress.unit_definition?.required_skills?.length) {
+      <section class="rounded-xl bg-white p-5 shadow-sm">
+        <h2>Unit requirements</h2>
+        <p class="text-gray-600">These are the levels this unit aims to develop.</p>
+        <div class="grid gap-2 sm:grid-cols-2">
+          @for (level of progress.unit_definition?.required_skills || []; track level.id) {
+            <details
+              class="rounded-lg border p-3"
+              [class.bg-green-50]="hasEndorsedEvidenceAtLevel(level.skill_id, level.rank)"
+            >
+              <summary class="cursor-pointer font-medium">
+                {{ hasEndorsedEvidenceAtLevel(level.skill_id, level.rank) ? '●' : '○' }}
+                {{ level.skill_code }} · {{ level.name }}
+              </summary>
+              <p class="mt-2 text-sm">{{ level.skill_name }}: {{ level.skill_description }}</p>
+              <p class="text-sm">{{ level.name }}: {{ level.description }}</p>
+            </details>
+          }
+        </div>
+      </section>
+    }
+    <section class="rounded-xl bg-white p-5 shadow-sm">
+      <h2>Task opportunities and evidence</h2>
+      <p class="text-gray-600">
+        Open a skill level to read its description, or open its task to see the work.
+      </p>
+      <div class="space-y-4">
+        @for (task of progress.tasks; track task.task_definition_id) {
+          @if (task.skills.length || task.evidence.length) {
+            <article class="rounded-lg border p-4">
+              <h3>
+                <a [routerLink]="['/projects', projectId, 'dashboard', task.abbreviation]">
+                  {{ task.abbreviation }} · {{ task.name }}
+                </a>
+              </h3>
+              <p class="text-sm text-gray-600">{{ task.status || 'Not started' }}</p>
+              <div class="mt-3 grid gap-2 sm:grid-cols-2">
+                @for (level of task.skills; track level.id) {
+                  <details
+                    class="rounded-lg border p-3"
+                    [class.bg-green-50]="isEndorsed(task, level.id)"
+                  >
+                    <summary class="cursor-pointer font-medium">
+                      {{ isEndorsed(task, level.id) ? '●' : '○' }}
+                      {{ level.skill_code }} · {{ level.name }}
+                    </summary>
+                    <p class="mt-2 text-sm">
+                      {{ level.skill_name }}: {{ level.skill_description }}
+                    </p>
+                    <p class="text-sm">{{ level.name }}: {{ level.description }}</p>
+                    @if (isEndorsed(task, level.id)) {
+                      <p class="text-sm text-green-800">Demonstrated in this completed task</p>
+                    } @else if (isSubmitted(task, level.id)) {
+                      <p class="text-sm text-amber-800">Submitted, awaiting completion</p>
+                    }
+                  </details>
+                }
+                @for (evidence of previouslyMappedEvidence(task); track evidence.evidence_id) {
+                  <details class="rounded-lg border p-3">
+                    <summary class="cursor-pointer font-medium">
+                      {{ evidence.endorsed_at ? '●' : '○' }}
+                      {{ evidence.skill_code }} · {{ evidence.name }}
+                    </summary>
+                    <p class="mt-2 text-sm">
+                      {{ evidence.skill_name }}: {{ evidence.skill_description }}
+                    </p>
+                    <p class="text-sm">{{ evidence.name }}: {{ evidence.description }}</p>
+                    <p class="text-sm text-gray-600">Mapped when this task was submitted</p>
+                  </details>
+                }
+              </div>
+            </article>
+          }
+        }
+      </div>
+    </section>
+  }
+</main>

@@ -1,0 +1,47 @@
+<p class="text-gray-600">
+  Choose one level per skill. Every student who completes this task demonstrates these levels.
+</p>
+@if (error) {
+  <p class="text-red-700" role="alert">{{ error }}</p>
+}
+@if (message) {
+  <p class="text-green-700" role="status">{{ message }}</p>
+}
+@if (!taskDefinition?.id) {
+  <p>Save the task before choosing skills.</p>
+} @else {
+  <mat-checkbox [(ngModel)]="showAll">Show all framework skills</mat-checkbox>
+  <div class="mt-3 grid gap-3 md:grid-cols-2">
+    @for (skill of visibleSkills; track skill.id) {
+      <mat-form-field>
+        <mat-label>{{ skill.code }} · {{ skill.name }}</mat-label>
+        <mat-select
+          [ngModel]="selectedLevels[skill.id] ?? null"
+          (ngModelChange)="selectedLevels[skill.id] = $event"
+        >
+          <mat-option [value]="null">Not mapped</mat-option>
+          @for (level of skill.levels; track level.id) {
+            <mat-option [value]="level.id">{{ level.name }} ({{ level.rank }})</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+  </div>
+  @if (visibleSkills.length === 0) {
+    <p>
+      No skills available yet. Administrators can add unit requirements after the framework catalog
+      is populated.
+    </p>
+  }
+  <button mat-flat-button type="button" [disabled]="saving" (click)="saveMappings()">
+    Save task skills
+  </button>
+  <div class="mt-5">
+    <mat-checkbox
+      [(ngModel)]="taskDefinition.allowStudentSkillSelection"
+      (change)="saveStudentSelectionFlag()"
+    >
+      Allow students to add their own skills (selection flow coming later)
+    </mat-checkbox>
+  </div>
+}

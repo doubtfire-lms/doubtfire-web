@@ -1,0 +1,171 @@
+<main class="mx-auto max-w-6xl space-y-8 p-6">
+  <div>
+    <h1>Competency curriculum</h1>
+    <p class="text-gray-600">
+      Manage course and unit definition versions and their required skills.
+    </p>
+  </div>
+  @if (error) {
+    <p class="rounded bg-red-50 p-3 text-red-800" role="alert">{{ error }}</p>
+  }
+  @if (message) {
+    <p class="rounded bg-green-50 p-3 text-green-800" role="status">{{ message }}</p>
+  }
+
+  <section class="rounded-xl bg-white p-5 shadow-sm">
+    <h2>Courses and majors</h2>
+    <div class="flex flex-wrap gap-3">
+      <mat-form-field class="min-w-72">
+        <mat-label>Edit a course version</mat-label>
+        <mat-select [ngModel]="course.id" (ngModelChange)="selectCourse($event)">
+          @for (item of courses; track item.id) {
+            <mat-option [value]="item.id"
+              >{{ item.code }} · {{ item.version }} · {{ item.name }}</mat-option
+            >
+          }
+        </mat-select>
+      </mat-form-field>
+      <button mat-stroked-button type="button" (click)="newCourse()">New course version</button>
+    </div>
+    <div class="grid gap-3 md:grid-cols-2">
+      <mat-form-field
+        ><mat-label>Code</mat-label><input matInput [(ngModel)]="course.code"
+      /></mat-form-field>
+      <mat-form-field
+        ><mat-label>Name</mat-label><input matInput [(ngModel)]="course.name"
+      /></mat-form-field>
+      <mat-form-field
+        ><mat-label>Version</mat-label><input matInput [(ngModel)]="course.version"
+      /></mat-form-field>
+      <mat-form-field>
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="course.kind">
+          <mat-option value="degree">Degree</mat-option>
+          <mat-option value="major">Major</mat-option>
+          <mat-option value="minor">Minor</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="md:col-span-2">
+        <mat-label>Description</mat-label
+        ><textarea matInput [(ngModel)]="course.description"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Frameworks</mat-label>
+        <mat-select multiple [(ngModel)]="course.framework_ids">
+          @for (framework of frameworks; track framework.id) {
+            <mat-option [value]="framework.id"
+              >{{ framework.name }} {{ framework.version }}</mat-option
+            >
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Unit definitions</mat-label>
+        <mat-select multiple [(ngModel)]="course.unit_definition_ids">
+          @for (definition of unitDefinitions; track definition.id) {
+            <mat-option [value]="definition.id"
+              >{{ definition.code }} · {{ definition.version }}</mat-option
+            >
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <h3>Required skill levels</h3>
+    <p class="text-gray-600">Choose one graduation level for each skill.</p>
+    <div class="grid gap-3 md:grid-cols-2">
+      @for (skill of courseSkills; track skill.id) {
+        <mat-form-field>
+          <mat-label>{{ skill.code }} · {{ skill.name }}</mat-label>
+          <mat-select
+            [ngModel]="courseLevels[skill.id] ?? null"
+            (ngModelChange)="courseLevels[skill.id] = $event"
+          >
+            <mat-option [value]="null">Not required</mat-option>
+            @for (level of skill.levels; track level.id) {
+              <mat-option [value]="level.id">{{ level.name }} ({{ level.rank }})</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+    </div>
+    <button mat-flat-button type="button" [disabled]="saving" (click)="saveCourse()">
+      Save course
+    </button>
+  </section>
+
+  <section class="rounded-xl bg-white p-5 shadow-sm">
+    <h2>Unit definitions</h2>
+    <div class="flex flex-wrap gap-3">
+      <mat-form-field class="min-w-72">
+        <mat-label>Edit a unit definition version</mat-label>
+        <mat-select [ngModel]="unitDefinition.id" (ngModelChange)="selectUnitDefinition($event)">
+          @for (item of unitDefinitions; track item.id) {
+            <mat-option [value]="item.id"
+              >{{ item.code }} · {{ item.version }} · {{ item.name }}</mat-option
+            >
+          }
+        </mat-select>
+      </mat-form-field>
+      <button mat-stroked-button type="button" (click)="newUnitDefinition()">New version</button>
+    </div>
+    <p class="text-gray-600">
+      Editing a version updates its requirements for every offering using it. Create a new version
+      to preserve historical requirements.
+    </p>
+    <div class="grid gap-3 md:grid-cols-2">
+      <mat-form-field
+        ><mat-label>Code</mat-label><input matInput [(ngModel)]="unitDefinition.code"
+      /></mat-form-field>
+      <mat-form-field
+        ><mat-label>Name</mat-label><input matInput [(ngModel)]="unitDefinition.name"
+      /></mat-form-field>
+      <mat-form-field
+        ><mat-label>Version</mat-label><input matInput [(ngModel)]="unitDefinition.version"
+      /></mat-form-field>
+      <mat-form-field
+        ><mat-label>Description</mat-label
+        ><textarea matInput [(ngModel)]="unitDefinition.description"></textarea>
+      </mat-form-field>
+    </div>
+    <h3>Required skill levels</h3>
+    <div class="grid gap-3 md:grid-cols-2">
+      @for (skill of allSkills; track skill.id) {
+        <mat-form-field>
+          <mat-label>{{ skill.code }} · {{ skill.name }}</mat-label>
+          <mat-select
+            [ngModel]="unitLevels[skill.id] ?? null"
+            (ngModelChange)="unitLevels[skill.id] = $event"
+          >
+            <mat-option [value]="null">Not required</mat-option>
+            @for (level of skill.levels; track level.id) {
+              <mat-option [value]="level.id">{{ level.name }} ({{ level.rank }})</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+    </div>
+    <button mat-flat-button type="button" [disabled]="saving" (click)="saveUnitDefinition()">
+      Save unit definition
+    </button>
+    @if (unitDefinition.id) {
+      <div class="mt-5 flex flex-wrap items-center gap-3">
+        <mat-form-field class="min-w-72">
+          <mat-label>Assign an offering to this version</mat-label>
+          <mat-select [(ngModel)]="selectedUnitId">
+            @for (unit of assignableUnits; track unit.id) {
+              <mat-option [value]="unit.id">{{ unit.code }} · {{ unit.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="!selectedUnitId"
+          (click)="assignUnit()"
+        >
+          Assign offering
+        </button>
+      </div>
+    }
+  </section>
+</main>

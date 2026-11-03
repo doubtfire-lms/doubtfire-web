@@ -51,6 +51,7 @@ export class TaskDefinition extends Entity {
   plagiarismWarnPct: number;
   restrictStatusUpdates: boolean;
   staffManagedTask: boolean;
+  allowStudentSkillSelection: boolean = false;
   // groupSetId: number;
   groupSet: GroupSet = null;
   hasTaskSheet: boolean;
