@@ -272,39 +272,37 @@ export class UploadSubmissionModalComponent implements OnInit {
       return;
     }
 
-    const supportId = this.extractWafSupportId(response);
-    if (supportId) {
-      this.uploadSubmitLocked = false;
-
-      this.dialogRef.afterClosed().subscribe(() => {
-        const requestDeniedDialogRef = this.dialog.open(SubmissionRequestDeniedModalComponent, {
-          autoFocus: false,
-          width: '100%',
-          maxWidth: '640px',
-          data: {
-            requestedAt: this.uploadRequestedAt ?? new Date(),
-            supportId,
-          },
-        });
-
-        requestDeniedDialogRef.afterClosed().subscribe(() => {
-          this.task.status = this.data.originalTaskStatus;
-          this.alertService.message(
-            'Submission was not received. The task status has been restored.',
-            6000,
-          );
-        });
-      });
-      this.dialogRef.close({value: this.task});
-      return;
-    }
-
     console.error('Invalid response', response);
     this.dialogRef.close({value: this.task});
     this.alertService.error(
       'Upload failed. Please try again, or contact your tutor if the issue continues.',
       8000,
     );
+  };
+
+  public onRequestDenied = (supportId: string): void => {
+    this.uploadSubmitLocked = false;
+
+    this.dialogRef.afterClosed().subscribe(() => {
+      const requestDeniedDialogRef = this.dialog.open(SubmissionRequestDeniedModalComponent, {
+        autoFocus: false,
+        width: '100%',
+        maxWidth: '640px',
+        data: {
+          requestedAt: this.uploadRequestedAt ?? new Date(),
+          supportId,
+        },
+      });
+
+      requestDeniedDialogRef.afterClosed().subscribe(() => {
+        this.task.status = this.data.originalTaskStatus;
+        this.alertService.message(
+          'Submission was not received. The task status has been restored.',
+          6000,
+        );
+      });
+    });
+    this.dialogRef.close({value: this.task});
   };
 
   public onUploadComplete = (): void => {
@@ -385,17 +383,5 @@ export class UploadSubmissionModalComponent implements OnInit {
     const candidate = response as Partial<UploadSubmissionResponse> | null;
 
     return !!candidate && typeof candidate === 'object' && !!candidate.id && !!candidate.project_id;
-  }
-
-  private extractWafSupportId(response: unknown): string | null {
-    if (
-      typeof response !== 'string' ||
-      !/Request Rejected/i.test(response) ||
-      !/requested URL was rejected/i.test(response)
-    ) {
-      return null;
-    }
-
-    return response.match(/Your support ID is\s*([^<\r\n]+)/i)?.[1]?.trim() || null;
   }
 }
