@@ -27,6 +27,6 @@ export class NotificationSettings extends Entity {
   /** Only the units that depart from the defaults above. */
   units: NotificationUnitSettings[] = [];
 
-  /** The user's units that never send email, whatever the user chooses. */
+  /** The user's units with email digests disabled, whatever the user chooses. */
   emailDisabledUnitIds: number[] = [];
 }

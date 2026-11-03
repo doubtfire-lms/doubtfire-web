@@ -167,7 +167,7 @@ describe('NotificationSettingsComponent', () => {
     ]);
   });
 
-  it('flags units that never send email', async () => {
+  it('flags units whose email digests are disabled', async () => {
     TestBed.resetTestingModule();
     await build(false, {saved: {...savedSettings(), emailDisabledUnitIds: [2]}});
 
