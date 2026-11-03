@@ -227,6 +227,11 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
           }));
         },
       },
+      {
+        keys: 'submissionOpensAt',
+        toEntityFn: MappingFunctions.mapDateToDay,
+        toJsonFn: MappingFunctions.mapDayToJson,
+      },
     );
 
     this.mapping.mapAllKeysToJsonExcept(
