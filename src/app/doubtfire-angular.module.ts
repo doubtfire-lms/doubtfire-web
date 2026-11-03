@@ -378,6 +378,7 @@ import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/u
 import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
 import {TaskDefinitionUploadComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
 import {TaskDefinitionWhoComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
+import {TaskDefinitionSubmissionDateComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-submission-date/task-definition-submission-date.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
 import {UnitTutorialsListComponent} from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import {UnitTutorialsManagerComponent} from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';
@@ -531,6 +532,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskDefinitionEditorComponent,
     TaskDefinitionGeneralComponent,
     TaskDefinitionWhoComponent,
+    TaskDefinitionSubmissionDateComponent,
     TaskDefinitionDatesComponent,
     TaskDefinitionUploadComponent,
     TaskDefinitionOptionsComponent,
