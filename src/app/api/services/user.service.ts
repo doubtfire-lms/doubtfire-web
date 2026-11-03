@@ -28,6 +28,7 @@ export class UserService extends CachedEntityService<User> {
       'username',
       'nickname',
       'systemRole',
+      'observeAllUnits',
       'receiveTaskNotifications',
       'receivePortfolioNotifications',
       'receiveFeedbackNotifications',
@@ -81,10 +82,15 @@ export class UserService extends CachedEntityService<User> {
     return this.adminOrAuditorRoleFor('Admin', unitId, user);
   }
 
-  public adminOrAuditorRoleFor(role: 'Admin' | 'Auditor', unitId: number, user: User): UnitRole {
+  public adminOrAuditorRoleFor(
+    role: 'Admin' | 'Auditor' | 'Convenor',
+    unitId: number,
+    user: User,
+  ): UnitRole {
     const result = new UnitRole();
     result.role = role;
     result.user = user;
+    result.observerOnly = role === 'Convenor';
 
     const unitService = AppInjector.get(UnitService);
     result.unit = unitService.cache.getOrCreate(unitId, unitService, {id: unitId});
