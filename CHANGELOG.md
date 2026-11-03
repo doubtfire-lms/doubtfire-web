@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-8](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-7...v11.1.0-8) (2026-11-03)
+
+
+### Bug Fixes
+
+* clarify digest and discuss timeout settings ([2a2886f](https://github.com/b0ink/doubtfire-deploy/commit/2a2886f917fb1e1bef5c371f54db4b0df433e457))
+* clarify notification settings ([#1706](https://github.com/b0ink/doubtfire-deploy/issues/1706)) ([11eafcd](https://github.com/b0ink/doubtfire-deploy/commit/11eafcd5f9cebb632e37c914d3a96d4087f2559f))
+* explain weekly summary notification timing ([8a74ff6](https://github.com/b0ink/doubtfire-deploy/commit/8a74ff6a4ccd5871d2f7546da325de13305088fd))
+* handle firewall rejections in shared filed uploader ([2ce3d81](https://github.com/b0ink/doubtfire-deploy/commit/2ce3d81ec308b5f09f08bf26965241fccf45c62f))
+* sort teaching periods by newest start date by default ([3b8d412](https://github.com/b0ink/doubtfire-deploy/commit/3b8d41267c7a29dbab94e77616e0af84e1ef47fb))
+
 ## [11.1.0-7](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-6...v11.1.0-7) (2026-11-02)
 
 
