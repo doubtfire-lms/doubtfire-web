@@ -363,8 +363,8 @@
       label="Discuss timeout"
       [(checked)]="unit.discussTimeoutEnabled"
     >
-      When enabled, students are warned when tasks stay in Discuss too long, then overdue tasks are
-      moved to Fix and Resubmit.
+      Warn students before and after the Discuss deadline, including by email if enabled in their
+      notification settings. Overdue tasks move to Fix and Resubmit.
     </f-setting-toggle>
 
     @if (unit.discussTimeoutEnabled) {
@@ -397,11 +397,11 @@
 
     <f-setting-toggle
       class="border-t border-gray-200"
-      label="Send notification email digest"
+      label="Send notification email digests"
       [(checked)]="unit.sendNotifications"
     >
-      Email notification digests and discussion deadline reminders to staff and students. In-app
-      notifications are unaffected.
+      Include this unit's notifications in email digests to staff and students. In-app notifications
+      and separate alert emails are unaffected.
     </f-setting-toggle>
 
     <f-setting-toggle

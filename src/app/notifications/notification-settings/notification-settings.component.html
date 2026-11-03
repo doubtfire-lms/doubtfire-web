@@ -49,8 +49,8 @@
 
           @if (currentScope.emailDisabled && !currentScope.muted) {
             <p class="m-0 px-2 pb-3 text-sm text-gray-600">
-              Notification email digests are turned off for {{ currentScope.code }}. You'll still
-              see these notifications in-app.
+              Notification email digests are turned off for {{ currentScope.code }}. In-app
+              notifications and separate alert emails are unaffected.
             </p>
           }
 
@@ -214,7 +214,11 @@
                     class="justify-self-center"
                     [aria-label]="type.label + ' - ' + channel.label"
                     [checked]="isChecked(type.key, channel.key)"
-                    [disabled]="channel.key === 'email' && currentScope.emailDisabled"
+                    [disabled]="
+                      channel.key === 'email' &&
+                      section.delivery === 'digest' &&
+                      currentScope.emailDisabled
+                    "
                     (change)="setChannel(type.key, channel.key, $event.checked)"
                   ></mat-slide-toggle>
                 }
