@@ -20,7 +20,7 @@
     "deploy:build2api:sourcemaps": "ng build --delete-output-path=true --configuration production --source-map=true --output-path dist",
     "sentry:sourcemaps": "node scripts/upload-sentry-sourcemaps.js",
     "deploy": "run-s -l deploy:build2api",
-    "prepare": "husky install",
+    "prepare": "husky",
     "test": "ng test",
     "test:ci": "ng test --no-watch --no-progress",
     "typecheck": "ngc -p src/tsconfig.app.json --noEmit"
