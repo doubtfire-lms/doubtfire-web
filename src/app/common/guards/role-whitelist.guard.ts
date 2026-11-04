@@ -12,8 +12,9 @@ export const roleWhitelistGuard: CanActivateFn = (
   const router = inject(Router);
   const userService = inject(UserService);
   const roleWhitelist = route.data['roleWhitelist'] as string[] | undefined;
+  const requiredCapability = route.data['requiredCapability'] as string | undefined;
 
-  if (!roleWhitelist?.length) {
+  if (!roleWhitelist?.length && !requiredCapability) {
     return of(true);
   }
 
@@ -22,9 +23,12 @@ export const roleWhitelistGuard: CanActivateFn = (
     take(1),
     map(() => {
       const role = roleForRoute(route, userService, globalState);
-      return authenticationService.isAuthorised(roleWhitelist, role)
-        ? true
-        : router.createUrlTree(['/unauthorised']);
+      const roleAllowed = roleWhitelist?.length
+        ? authenticationService.isAuthorised(roleWhitelist, role)
+        : false;
+      const capabilityAllowed =
+        requiredCapability === 'observeAllUnits' && userService.currentUser.observeAllUnits;
+      return roleAllowed || capabilityAllowed ? true : router.createUrlTree(['/unauthorised']);
     }),
   );
 };
@@ -47,6 +51,10 @@ export function roleForRoute(
 
     if (unitRole) {
       return unitRole.role;
+    }
+
+    if (userService.currentUser.observeAllUnits) {
+      return 'Convenor';
     }
 
     if (userService.currentUser.role === 'Admin' || userService.currentUser.role === 'Auditor') {

@@ -27,13 +27,17 @@ export const resolveUnit: ResolveFn<Unit> = (route, state) => {
 
       if (
         !unitRole &&
-        (userService.currentUser.role === 'Admin' || userService.currentUser.role === 'Auditor')
+        (userService.currentUser.role === 'Admin' ||
+          userService.currentUser.role === 'Auditor' ||
+          userService.currentUser.observeAllUnits)
       ) {
-        unitRole = userService.adminOrAuditorRoleFor(
-          userService.currentUser.role,
-          unitId,
-          userService.currentUser,
-        );
+        const role =
+          userService.currentUser.role === 'Admin'
+            ? 'Admin'
+            : userService.currentUser.observeAllUnits
+              ? 'Convenor'
+              : 'Auditor';
+        unitRole = userService.adminOrAuditorRoleFor(role, unitId, userService.currentUser);
       }
 
       if (unitRole && unitRole.role !== 'Student') {

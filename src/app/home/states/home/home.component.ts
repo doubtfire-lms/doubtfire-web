@@ -1,7 +1,14 @@
 import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Project, UnitRole, User, UserService} from 'src/app/api/models/doubtfire-model';
+import {
+  Project,
+  Unit,
+  UnitRole,
+  UnitService,
+  User,
+  UserService,
+} from 'src/app/api/models/doubtfire-model';
 import {DateService} from 'src/app/common/services/date.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global-state.service';
@@ -16,6 +23,8 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
 export class HomeComponent implements OnInit, OnDestroy {
   projects: Project[];
   unitRoles: UnitRole[];
+  observedUnits: Unit[] = [];
+  loadingObservedUnits = false;
   showSpinner: boolean;
   dataLoaded: boolean;
   notEnrolled: boolean;
@@ -28,6 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private constants: DoubtfireConstants,
     private globalState: GlobalStateService,
     private userService: UserService,
+    private unitService: UnitService,
     @Inject(DateService) private DateService: DateService,
     private router: Router,
   ) {
@@ -66,6 +76,33 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
 
     this.notEnrolled = this.checkEnrolled();
+
+    this.globalState.onLoad(() => {
+      if (!this.currentUser.observeAllUnits) {
+        return;
+      }
+
+      this.loadingObservedUnits = true;
+      this.subscriptions.push(
+        this.unitService.fetchAll().subscribe({
+          next: (units) => {
+            const assignedRoles = new Map(
+              this.globalState.loadedUnitRoles.currentValues.map((role) => [role.unit.id, role]),
+            );
+            this.observedUnits = units
+              .filter((unit) => {
+                const assignedRole = assignedRoles.get(unit.id);
+                return unit.isActive && (!assignedRole || assignedRole.observerOnly);
+              })
+              .sort((a, b) => b.startDate.getTime() - a.startDate.getTime());
+            this.loadingObservedUnits = false;
+          },
+          error: () => {
+            this.loadingObservedUnits = false;
+          },
+        }),
+      );
+    });
 
     if (this.currentUser.role === 'Auditor') {
       this.router.navigateByUrl('/admin/units');

@@ -48,7 +48,7 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
-  @Input({required: true}) mode: 'admin' | 'tutor' | 'student';
+  @Input({required: true}) mode: 'admin' | 'tutor' | 'student' | 'observer';
 
   displayedColumns: string[] = [
     'unit_code',
@@ -66,7 +66,7 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
   title: string;
 
   shouldShowUnitRoleColumn(): boolean {
-    return this.mode === 'admin' || this.mode === 'tutor';
+    return this.mode === 'admin' || this.mode === 'tutor' || this.mode === 'observer';
   }
 
   constructor(
@@ -91,8 +91,8 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
         });
       });
     }
-    if (this.mode === 'admin') {
-      this.title = 'Administer units';
+    if (this.mode === 'admin' || this.mode === 'observer') {
+      this.title = this.mode === 'observer' ? 'Units you observe' : 'Administer units';
 
       this.globalStateService.onLoad(() => {
         this.unitService.query(undefined, {params: {include_in_active: true}}).subscribe({
@@ -175,7 +175,19 @@ export class FUnitsComponent implements OnInit, AfterViewInit {
 
   mapUnitOrProjectsToColumns(unitOrProjects: readonly (Unit | Project | UnitRole)[]) {
     // copy the array of units/projects/unitRole and map each unit through the mapUnitSourceToColumn function
-    return [...unitOrProjects].map((unitOrProject) => this.mapUnitSourceToColumn(unitOrProject));
+    const visibleUnits =
+      this.mode === 'observer'
+        ? unitOrProjects.filter((unit) => {
+            if (!(unit instanceof Unit)) {
+              return false;
+            }
+            const assignedRole = this.globalStateService.loadedUnitRoles.currentValues.find(
+              (role) => role.unit.id === unit.id,
+            );
+            return !assignedRole || assignedRole.observerOnly;
+          })
+        : unitOrProjects;
+    return [...visibleUnits].map((unitOrProject) => this.mapUnitSourceToColumn(unitOrProject));
   }
 
   ngAfterViewInit(): void {

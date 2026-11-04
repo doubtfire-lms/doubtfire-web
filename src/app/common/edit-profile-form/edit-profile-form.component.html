@@ -112,6 +112,23 @@
         </mat-form-field>
       }
 
+      @if (canEditObserveAllUnits) {
+        <section fxFlexFill>
+          <mat-checkbox
+            color="primary"
+            name="observeAllUnits"
+            [disabled]="user.systemRole !== 'Tutor' && user.systemRole !== 'Convenor'"
+            [(ngModel)]="user.observeAllUnits"
+          >
+            Observe all units (read only)
+          </mat-checkbox>
+          <p class="text-sm">
+            Requires a Tutor or Convenor system role. Unit staff assignments still grant their usual
+            access.
+          </p>
+        </section>
+      }
+
       @if (mode === 'edit' && isCurrentUser) {
         <button class="mb-3" mat-stroked-button routerLink="/notifications/settings" type="button">
           <mat-icon class="size-[18px]! text-[18px]!">notifications</mat-icon>
