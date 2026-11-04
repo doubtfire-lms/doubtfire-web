@@ -4,7 +4,7 @@
     <h1 class="mat-headline m-0">Similarities</h1>
     <span class="grow"></span>
     <div class="example-action-buttons">
-      @if (!jplagOpenState) {
+      @if (!jplagOpenState && !loadingSimilarities && !similaritiesLoadError) {
         <button mat-button (click)="accordion.closeAll()">Collapse All</button>
       }
       @if (jplagOpenState) {
@@ -16,109 +16,113 @@
   <f-jplag-report-viewer #jplagViewer [hidden]="!jplagOpenState" />
 
   @if (!jplagOpenState) {
-    <mat-accordion multi>
-      @for (
-        similarity of $safeNavigationMigration(task?.similarityCache.values) | async;
-        track similarity
-      ) {
-        <div class="my-3">
-          @for (part of similarity.parts; track part; let i = $index) {
-            <mat-expansion-panel
-              hideToggle
-              (closed)="part.panelOpenState = false"
-              (opened)="part.panelOpenState = true"
-            >
-              <mat-expansion-panel-header [ngClass]="{flagged: similarity.flagged}">
-                <mat-panel-title>
-                  {{ similarity.friendlyTypeName }}
-                </mat-panel-title>
-                <mat-panel-description> {{ part.description }} </mat-panel-description>
-                @if (similarity.readyForViewer) {
-                  @if (similarity.type === 'JplagTaskSimilarity') {
-                    <!-- Kept outside mat-icon-button, which resizes every svg inside it -->
-                    @if (loadingJplagReportFor === similarity) {
-                      <span
-                        class="flex size-12 shrink-0 items-center justify-center"
-                        (click)="$event.stopPropagation()"
-                      >
-                        <mat-spinner class="spinner-primary" diameter="20" />
-                      </span>
-                    } @else {
+    @if (loadingSimilarities) {
+      <div
+        aria-busy="true"
+        aria-label="Loading similarities"
+        class="mt-6 flex w-full flex-col items-center gap-2 text-gray-400"
+      >
+        <mat-spinner diameter="36" />
+        Loading similarities...
+      </div>
+    } @else if (similaritiesLoadError) {
+      <div class="mt-6 w-full text-center text-gray-400">Similarities could not be loaded</div>
+    } @else {
+      <mat-accordion multi>
+        @for (
+          similarity of $safeNavigationMigration(task?.similarityCache.values) | async;
+          track similarity
+        ) {
+          <div class="my-3">
+            @for (part of similarity.parts; track part; let i = $index) {
+              <mat-expansion-panel
+                hideToggle
+                (closed)="part.panelOpenState = false"
+                (opened)="part.panelOpenState = true"
+              >
+                <mat-expansion-panel-header [ngClass]="{flagged: similarity.flagged}">
+                  <mat-panel-title>
+                    {{ similarity.friendlyTypeName }}
+                  </mat-panel-title>
+                  <mat-panel-description> {{ part.description }} </mat-panel-description>
+                  @if (similarity.readyForViewer) {
+                    @if (similarity.type === 'JplagTaskSimilarity') {
+                      <!-- Kept outside mat-icon-button, which resizes every svg inside it -->
+                      @if (loadingJplagReportFor === similarity) {
+                        <span
+                          class="flex size-12 shrink-0 items-center justify-center"
+                          (click)="$event.stopPropagation()"
+                        >
+                          <mat-spinner class="spinner-primary" diameter="20" />
+                        </span>
+                      } @else {
+                        <button
+                          aria-label="View Detailed Report"
+                          mat-icon-button
+                          matTooltip="View JPlag report for this similarity"
+                          (click)="viewJplagReport(similarity); $event.stopPropagation()"
+                        >
+                          <mat-icon>summarize</mat-icon>
+                        </button>
+                      }
+                    } @else if (similarity.type === 'TiiTaskSimilarity') {
                       <button
-                        aria-label="View Detailed Report"
+                        aria-label="View report"
                         mat-icon-button
-                        matTooltip="View JPlag report for this similarity"
-                        (click)="viewJplagReport(similarity); $event.stopPropagation()"
+                        matTooltip="View report in TurnItIn"
+                        (click)="openReport($event, similarity)"
                       >
                         <mat-icon>summarize</mat-icon>
                       </button>
                     }
-                  } @else if (similarity.type === 'TiiTaskSimilarity') {
+                  }
+                  @if (i === 0) {
                     <button
-                      aria-label="View report"
+                      aria-label="Flag similarities"
                       mat-icon-button
-                      matTooltip="View report in TurnItIn"
-                      (click)="openReport($event, similarity)"
+                      [matTooltip]="similarity.flagged ? 'Unflag similarity' : 'Flag similarity'"
+                      (click)="toggleFlag($event, similarity)"
                     >
-                      <mat-icon>summarize</mat-icon>
+                      <mat-icon [color]="similarity.flagged ? 'warn' : ''">{{
+                        similarity.flagged ? 'flag_circle' : 'check_circle'
+                      }}</mat-icon>
                     </button>
                   }
-                }
-                @if (i === 0) {
-                  <button
-                    aria-label="Flag similarities"
-                    mat-icon-button
-                    [matTooltip]="similarity.flagged ? 'Unflag similarity' : 'Flag similarity'"
-                    (click)="toggleFlag($event, similarity)"
-                  >
-                    <mat-icon [color]="similarity.flagged ? 'warn' : ''">{{
-                      similarity.flagged ? 'flag_circle' : 'check_circle'
-                    }}</mat-icon>
-                  </button>
-                }
-              </mat-expansion-panel-header>
-              @if (part.panelOpenState) {
-                @if (part.format) {
-                  @if (part.format === 'html' || part.format === 'pdf') {
-                    <f-file-viewer
-                      [fileType]="part.format"
-                      [src]="similarity.fileUrl(part.idx)"
-                    ></f-file-viewer>
-                  } @else if (part.format === 'jplag') {
-                    <button
-                      class="mx-auto block"
-                      color="primary"
-                      mat-raised-button
-                      [disabled]="loadingJplagReportFor === similarity"
-                      (click)="viewJplagReport(similarity)"
-                    >
-                      @if (loadingJplagReportFor === similarity) {
-                        <mat-spinner class="spinner-primary mr-2 inline-block" diameter="18" />
-                        Downloading report...
-                      } @else {
-                        View JPlag Similarity
-                      }
-                    </button>
+                </mat-expansion-panel-header>
+                @if (part.panelOpenState) {
+                  @if (part.format) {
+                    @if (part.format === 'html' || part.format === 'pdf') {
+                      <f-file-viewer
+                        [fileType]="part.format"
+                        [src]="similarity.fileUrl(part.idx)"
+                      ></f-file-viewer>
+                    } @else if (part.format === 'jplag') {
+                      <button
+                        class="mx-auto block"
+                        color="primary"
+                        mat-raised-button
+                        [disabled]="loadingJplagReportFor === similarity"
+                        (click)="viewJplagReport(similarity)"
+                      >
+                        @if (loadingJplagReportFor === similarity) {
+                          <mat-spinner class="spinner-primary mr-2 inline-block" diameter="18" />
+                          Downloading report...
+                        } @else {
+                          View JPlag Similarity
+                        }
+                      </button>
+                    }
+                  } @else {
+                    <p>There is no local similarity file for this.</p>
                   }
-                } @else {
-                  <p>There is no local similarity file for this.</p>
                 }
-              }
-            </mat-expansion-panel>
-          }
-        </div>
-      } @empty {
-        @if (loadingSimilarities) {
-          <div class="mt-6 flex w-full flex-col items-center gap-2 text-gray-400">
-            <mat-spinner diameter="36" />
-            Loading similarities...
+              </mat-expansion-panel>
+            }
           </div>
-        } @else {
-          <div class="mt-6 w-full text-center text-gray-400">
-            There are no similarities for this submission
-          </div>
+        } @empty {
+          <div class="mt-6 w-full text-center text-gray-400">No similarities</div>
         }
-      }
-    </mat-accordion>
+      </mat-accordion>
+    }
   }
 </div>

@@ -14,11 +14,39 @@
     </div>
   </div>
 
+  @if (loadingActions) {
+    <div aria-busy="true" aria-label="Loading Turnitin actions" class="overflow-hidden">
+      <div class="grid h-14 grid-cols-[2fr_1fr_1fr_1fr_3fr_48px] items-center gap-4 border-b px-4">
+        @for (column of columns; track column) {
+          <ngx-skeleton-loader
+            [theme]="{height: '12px', width: '70%', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        }
+      </div>
+      @for (row of skeletonRows; track row) {
+        <div
+          class="grid h-14 grid-cols-[2fr_1fr_1fr_1fr_3fr_48px] items-center gap-4 border-b px-4"
+        >
+          @for (column of columns; track column) {
+            <ngx-skeleton-loader
+              [theme]="{height: '12px', width: '80%', 'border-radius': '999px', margin: '0'}"
+            ></ngx-skeleton-loader>
+          }
+        </div>
+      }
+    </div>
+  } @else if (loadError) {
+    <p class="py-8 text-center text-gray-500">Turnitin actions could not be loaded.</p>
+  } @else if (tiiActionsSource.data.length === 0) {
+    <p class="py-8 text-center text-gray-500">No Turnitin actions.</p>
+  }
+
   <table
     class="f-table selectable grow"
     mat-table
     matSort
     [dataSource]="tiiActionsSource"
+    [hidden]="loadingActions || loadError || tiiActionsSource.data.length === 0"
     (matSortChange)="sortData($event)"
   >
     <ng-container matColumnDef="type" sticky>
