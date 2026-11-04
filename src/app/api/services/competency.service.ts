@@ -29,9 +29,25 @@ export interface FrameworkDto {
   code: string;
   name: string;
   version: string;
+  description: string;
   archived: boolean;
   skills: SkillDto[];
 }
+
+export type FrameworkInput = Pick<
+  FrameworkDto,
+  'code' | 'name' | 'version' | 'description' | 'archived'
+> & {
+  id?: number;
+};
+
+export type SkillInput = Pick<SkillDto, 'code' | 'name' | 'description' | 'archived'> & {
+  id?: number;
+};
+
+export type SkillLevelInput = Pick<SkillLevelDto, 'name' | 'rank' | 'description'> & {
+  id?: number;
+};
 
 export interface CourseDto {
   id?: number;
@@ -79,6 +95,30 @@ export class CompetencyService {
 
   frameworks(): Observable<FrameworkDto[]> {
     return this.http.get<FrameworkDto[]>(`${API_URL}/skill_frameworks`);
+  }
+
+  saveFramework(framework: FrameworkInput): Observable<FrameworkDto> {
+    const {id, ...attributes} = framework;
+    const body = {skill_framework: attributes};
+    return id
+      ? this.http.put<FrameworkDto>(`${API_URL}/skill_frameworks/${id}`, body)
+      : this.http.post<FrameworkDto>(`${API_URL}/skill_frameworks`, body);
+  }
+
+  saveSkill(frameworkId: number, skill: SkillInput): Observable<SkillDto> {
+    const {id, ...attributes} = skill;
+    const body = {skill: attributes};
+    return id
+      ? this.http.put<SkillDto>(`${API_URL}/skills/${id}`, body)
+      : this.http.post<SkillDto>(`${API_URL}/skill_frameworks/${frameworkId}/skills`, body);
+  }
+
+  saveSkillLevel(skillId: number, level: SkillLevelInput): Observable<SkillLevelDto> {
+    const {id, ...attributes} = level;
+    const body = {skill_level: attributes};
+    return id
+      ? this.http.put<SkillLevelDto>(`${API_URL}/skill_levels/${id}`, body)
+      : this.http.post<SkillLevelDto>(`${API_URL}/skills/${skillId}/levels`, body);
   }
 
   courses(): Observable<CourseDto[]> {

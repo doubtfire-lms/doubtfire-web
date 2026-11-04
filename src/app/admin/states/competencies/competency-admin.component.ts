@@ -6,6 +6,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
+import {MatTabsModule} from '@angular/material/tabs';
 import {forkJoin} from 'rxjs';
 import {
   CompetencyService,
@@ -15,6 +16,7 @@ import {
   UnitDefinitionDto,
 } from 'src/app/api/services/competency.service';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {FrameworkEditorComponent} from './framework-editor.component';
 
 interface UnitSummary {
   id: number;
@@ -33,6 +35,8 @@ interface UnitSummary {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatTabsModule,
+    FrameworkEditorComponent,
   ],
   templateUrl: './competency-admin.component.html',
 })
@@ -61,7 +65,9 @@ export class CompetencyAdminComponent implements OnInit {
 
   get allSkills(): SkillDto[] {
     return this.frameworks.flatMap((framework) =>
-      framework.skills.filter((skill) => !skill.archived || !!this.unitLevels[skill.id]),
+      framework.skills.filter(
+        (skill) => !!this.unitLevels[skill.id] || (!framework.archived && !skill.archived),
+      ),
     );
   }
 
@@ -69,7 +75,9 @@ export class CompetencyAdminComponent implements OnInit {
     return this.frameworks
       .filter((framework) => this.course.framework_ids.includes(framework.id))
       .flatMap((framework) =>
-        framework.skills.filter((skill) => !skill.archived || !!this.courseLevels[skill.id]),
+        framework.skills.filter(
+          (skill) => !!this.courseLevels[skill.id] || (!framework.archived && !skill.archived),
+        ),
       );
   }
 

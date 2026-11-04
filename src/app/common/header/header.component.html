@@ -74,6 +74,10 @@
         Manage Units
       </button>
       @if (currentUser.role === 'Admin') {
+        <button mat-menu-item routerLink="/admin/competencies">
+          <mat-icon matListItemIcon>account_tree</mat-icon>
+          Competency Curriculum
+        </button>
         <button mat-menu-item routerLink="/admin/users">
           <mat-icon matListItemIcon>people</mat-icon>
           Manage Users

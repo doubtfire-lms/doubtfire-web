@@ -52,7 +52,7 @@ export class TaskDefinitionSkillsComponent implements OnChanges {
       framework.skills.filter(
         (skill) =>
           selectedIds.has(skill.id) ||
-          (!skill.archived && (this.showAll || suggestedIds.has(skill.id))),
+          (!framework.archived && !skill.archived && (this.showAll || suggestedIds.has(skill.id))),
       ),
     );
   }

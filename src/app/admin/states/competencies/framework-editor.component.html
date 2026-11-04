@@ -1,0 +1,134 @@
+<section class="space-y-5">
+  <div>
+    <h2>Frameworks and skills</h2>
+    <p class="text-gray-600">
+      Create a framework version, add its skills, then define the available levels for each skill.
+    </p>
+  </div>
+  @if (error) {
+    <p class="rounded bg-red-50 p-3 text-red-800" role="alert">{{ error }}</p>
+  }
+  @if (message) {
+    <p class="rounded bg-green-50 p-3 text-green-800" role="status">{{ message }}</p>
+  }
+
+  <div class="grid gap-5 lg:grid-cols-3">
+    <section class="space-y-4 rounded-xl bg-white p-5 shadow-sm">
+      <h3>1. Framework version</h3>
+      <div class="flex flex-wrap items-center gap-3">
+        <mat-form-field class="min-w-56 flex-1">
+          <mat-label>Edit a framework</mat-label>
+          <mat-select [ngModel]="framework.id" (ngModelChange)="selectFramework($event)">
+            @for (item of frameworks; track item.id) {
+              <mat-option [value]="item.id">
+                {{ item.name }} · {{ item.version }}{{ item.archived ? ' (archived)' : '' }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <button mat-stroked-button type="button" (click)="newFramework()">New</button>
+      </div>
+      <div class="grid gap-3">
+        <mat-form-field>
+          <mat-label>Code</mat-label>
+          <input matInput [(ngModel)]="framework.code" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput [(ngModel)]="framework.name" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Version</mat-label>
+          <input matInput [(ngModel)]="framework.version" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <textarea matInput [(ngModel)]="framework.description"></textarea>
+        </mat-form-field>
+        @if (framework.id) {
+          <mat-checkbox [(ngModel)]="framework.archived">Archive this framework</mat-checkbox>
+        }
+      </div>
+      <button mat-flat-button type="button" [disabled]="saving" (click)="saveFramework()">
+        Save framework
+      </button>
+    </section>
+
+    <section class="space-y-4 rounded-xl bg-white p-5 shadow-sm">
+      <h3>2. Skills</h3>
+      @if (framework.id) {
+        <div class="flex flex-wrap items-center gap-3">
+          <mat-form-field class="min-w-56 flex-1">
+            <mat-label>Edit a skill</mat-label>
+            <mat-select [ngModel]="skill.id" (ngModelChange)="selectSkill($event)">
+              @for (item of skills; track item.id) {
+                <mat-option [value]="item.id">
+                  {{ item.code }} · {{ item.name }}{{ item.archived ? ' (archived)' : '' }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <button mat-stroked-button type="button" (click)="newSkill()">New</button>
+        </div>
+        <div class="grid gap-3">
+          <mat-form-field>
+            <mat-label>Skill code</mat-label>
+            <input matInput [(ngModel)]="skill.code" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Skill name</mat-label>
+            <input matInput [(ngModel)]="skill.name" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput [(ngModel)]="skill.description"></textarea>
+          </mat-form-field>
+          @if (skill.id) {
+            <mat-checkbox [(ngModel)]="skill.archived">Archive this skill</mat-checkbox>
+          }
+        </div>
+        <button mat-flat-button type="button" [disabled]="saving" (click)="saveSkill()">
+          Save skill
+        </button>
+      } @else {
+        <p class="text-gray-600">Save or select a framework first.</p>
+      }
+    </section>
+
+    <section class="space-y-4 rounded-xl bg-white p-5 shadow-sm">
+      <h3>3. Skill levels</h3>
+      @if (skill.id) {
+        <div class="flex flex-wrap items-center gap-3">
+          <mat-form-field class="min-w-56 flex-1">
+            <mat-label>Edit a level</mat-label>
+            <mat-select [ngModel]="level.id" (ngModelChange)="selectLevel($event)">
+              @for (item of levels; track item.id) {
+                <mat-option [value]="item.id">{{ item.name }} · rank {{ item.rank }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <button mat-stroked-button type="button" (click)="newLevel()">New</button>
+        </div>
+        <div class="grid gap-3">
+          <mat-form-field>
+            <mat-label>Level name</mat-label>
+            <input matInput [(ngModel)]="level.name" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Rank</mat-label>
+            <input matInput min="1" type="number" [(ngModel)]="level.rank" />
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput [(ngModel)]="level.description"></textarea>
+          </mat-form-field>
+        </div>
+        <button mat-flat-button type="button" [disabled]="saving" (click)="saveLevel()">
+          Save level
+        </button>
+      } @else {
+        <p class="text-gray-600">Save or select a skill first.</p>
+      }
+    </section>
+  </div>
+</section>
