@@ -304,44 +304,53 @@
   }
 
   @if (loading) {
-    <div class="min-h-0 flex-1 overflow-hidden" [ngClass]="isNarrow ? 'pt-0' : 'pt-[10px]'">
+    <div
+      aria-busy="true"
+      aria-label="Loading inbox tasks"
+      class="min-h-0 flex-1 overflow-hidden"
+      [ngClass]="isNarrow ? 'pt-0' : 'pt-[10px]'"
+    >
+      @if (!isNarrow) {
+        <div class="flex h-8 items-center justify-center">
+          <ngx-skeleton-loader
+            [theme]="{height: '12px', width: '75px', 'border-radius': '999px', margin: '0'}"
+          ></ngx-skeleton-loader>
+        </div>
+      }
       @for (row of skeletonRows; track row) {
         <div
           class="flex h-15 items-center"
-          [ngClass]="isNarrow ? 'justify-center gap-0 px-[5px]' : 'gap-[10px] pr-[8px] pl-[6px]'"
+          [ngClass]="isNarrow ? 'justify-center gap-0 px-[5px]' : 'gap-[10px] pr-[30px] pl-[22px]'"
         >
           <ngx-skeleton-loader
             appearance="circle"
-            class="flex-none"
-            [class.hidden]="isNarrow"
-            [theme]="{width: '8px', height: '8px', margin: '0'}"
-          ></ngx-skeleton-loader>
-          <ngx-skeleton-loader
-            appearance="circle"
+            class="shrink-0"
             [theme]="{width: '30px', height: '30px', margin: '0'}"
           ></ngx-skeleton-loader>
           <div class="min-w-0 flex-1" [hidden]="isNarrow">
+            <div class="flex items-center">
+              <ngx-skeleton-loader
+                class="min-w-0 flex-1"
+                [theme]="{
+                  height: '12px',
+                  width: row % 3 === 0 ? '90%' : row % 3 === 1 ? '85%' : '78%',
+                  'border-radius': '999px',
+                  margin: '0',
+                }"
+              ></ngx-skeleton-loader>
+            </div>
             <ngx-skeleton-loader
               [theme]="{
                 height: '10px',
-                width: '78%',
+                width: '76%',
                 'border-radius': '999px',
-                margin: '6px 0',
-              }"
-            ></ngx-skeleton-loader>
-            <ngx-skeleton-loader
-              [theme]="{
-                height: '10px',
-                width: '56%',
-                'border-radius': '999px',
-                margin: '6px 0',
+                margin: '7px 0 0',
               }"
             ></ngx-skeleton-loader>
           </div>
           <ngx-skeleton-loader
-            appearance="circle"
             [hidden]="isNarrow"
-            [theme]="{width: '32px', height: '32px', margin: '0'}"
+            [theme]="{width: '50px', height: '30px', 'border-radius': '999px', margin: '0'}"
           ></ngx-skeleton-loader>
         </div>
       }

@@ -16,8 +16,59 @@
   }
 
   @if (loading) {
-    <div aria-label="Loading statistics" class="flex justify-center py-16">
-      <mat-spinner diameter="36"></mat-spinner>
+    <div aria-busy="true" aria-label="Loading statistics">
+      <mat-card appearance="outlined" class="mt-6 p-6">
+        <ngx-skeleton-loader
+          [theme]="{height: '16px', width: '140px', 'border-radius': '999px', margin: '0 0 16px'}"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          [theme]="{height: '40px', width: '100px', 'border-radius': '8px', margin: '0'}"
+        ></ngx-skeleton-loader>
+      </mat-card>
+      <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+        @for (card of [0, 1, 2]; track card) {
+          <mat-card appearance="outlined" class="p-6">
+            <ngx-skeleton-loader
+              [theme]="{height: '14px', width: '60%', 'border-radius': '999px', margin: '0 0 14px'}"
+            ></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{height: '28px', width: '35%', 'border-radius': '8px', margin: '0'}"
+            ></ngx-skeleton-loader>
+          </mat-card>
+        }
+      </div>
+      <ngx-skeleton-loader
+        class="mt-8 block"
+        [theme]="{height: '24px', width: '110px', 'border-radius': '999px', margin: '0 0 12px'}"
+      ></ngx-skeleton-loader>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        @for (card of [0, 1]; track card) {
+          <mat-card appearance="outlined" class="h-44 p-6">
+            <ngx-skeleton-loader
+              [theme]="{height: '14px', width: '45%', 'border-radius': '999px', margin: '0 0 16px'}"
+            ></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{height: '28px', width: '20%', 'border-radius': '8px', margin: '0'}"
+            ></ngx-skeleton-loader>
+          </mat-card>
+        }
+      </div>
+      <ngx-skeleton-loader
+        class="mt-8 block"
+        [theme]="{height: '24px', width: '250px', 'border-radius': '999px', margin: '0 0 12px'}"
+      ></ngx-skeleton-loader>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        @for (card of [0, 1, 2]; track card) {
+          <mat-card appearance="outlined" class="h-36 p-6">
+            <ngx-skeleton-loader
+              [theme]="{height: '14px', width: '65%', 'border-radius': '999px', margin: '0 0 16px'}"
+            ></ngx-skeleton-loader>
+            <ngx-skeleton-loader
+              [theme]="{height: '28px', width: '30%', 'border-radius': '8px', margin: '0'}"
+            ></ngx-skeleton-loader>
+          </mat-card>
+        }
+      </div>
     </div>
   } @else if (error && !statistics) {
     <mat-card appearance="outlined" class="mt-6 p-6">

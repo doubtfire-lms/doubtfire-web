@@ -110,12 +110,22 @@ export const routes: Routes = [
     component: SubmissionFilesDownloadComponent,
   },
   {path: 'view-all-units', component: FUnitsComponent, data: {mode: 'tutor'}},
+  {
+    path: 'observe/units',
+    component: FUnitsComponent,
+    canActivate: [roleWhitelistGuard],
+    data: {mode: 'observer', requiredCapability: 'observeAllUnits'},
+  },
   {path: 'view-all-projects', component: FUnitsComponent, data: {mode: 'student'}},
   {
     path: 'admin/units',
     component: FUnitsComponent,
     canActivate: [roleWhitelistGuard],
-    data: {mode: 'admin', roleWhitelist: ['Admin', 'Auditor', 'Convenor']},
+    data: {
+      mode: 'admin',
+      roleWhitelist: ['Admin', 'Auditor', 'Convenor'],
+      requiredCapability: 'observeAllUnits',
+    },
   },
   {
     path: 'admin/competencies',

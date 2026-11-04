@@ -36,6 +36,7 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
     'username',
     'email',
     'systemRole',
+    'observeAllUnits',
   ];
   public dataSource: MatTableDataSource<User>;
   public filter: string;
@@ -140,6 +141,8 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
           return this.compare(a.lastName, b.lastName, isAsc);
         case 'systemRole':
           return this.compare(a.systemRole, b.systemRole, isAsc);
+        case 'observeAllUnits':
+          return this.compare(Number(a.observeAllUnits), Number(b.observeAllUnits), isAsc);
         default:
           return 0;
       }

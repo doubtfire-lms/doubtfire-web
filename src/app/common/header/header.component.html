@@ -45,7 +45,12 @@
       </button>
     }
     <notification-dropdown></notification-dropdown>
-    @if (currentUnit && !isTutorDiscussionRoute) {
+    @if (
+      currentUnit &&
+      !isTutorDiscussionRoute &&
+      (currentUser.role === 'Admin' ||
+        (!currentUnitRole?.observerOnly && !(currentUser.observeAllUnits && !currentUnitRole)))
+    ) {
       <button mat-icon-button (click)="showMyQr()">
         <mat-icon>qr_code_scanner</mat-icon>
       </button>

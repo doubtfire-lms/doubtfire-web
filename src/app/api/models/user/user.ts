@@ -16,6 +16,7 @@ export class User extends Entity {
   public username: string;
   public nickname: string;
   public systemRole: 'Admin' | 'Convenor' | 'Tutor' | 'Student' | 'Auditor';
+  public observeAllUnits: boolean;
   public receiveTaskNotifications: boolean;
   public receivePortfolioNotifications: boolean;
   public receiveFeedbackNotifications: boolean;

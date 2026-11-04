@@ -84,6 +84,14 @@ export class EditProfileFormComponent implements OnInit {
     );
   }
 
+  public get canEditObserveAllUnits(): boolean {
+    return (
+      this.mode === 'edit' &&
+      !this.isCurrentUser &&
+      this.userService.currentUser.systemRole === 'Admin'
+    );
+  }
+
   public get tiiEnabled(): boolean {
     return this.constants.IsTiiEnabled.value;
   }
