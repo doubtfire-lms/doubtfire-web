@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-9](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-8...v11.1.0-9) (2026-11-04)
+
+
+### Bug Fixes
+
+* restore missing task list item ([dba12ec](https://github.com/b0ink/doubtfire-deploy/commit/dba12ec3b5faa65ddad9bbaa68c7603a83409e60))
+
 ## [11.1.0-8](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-7...v11.1.0-8) (2026-11-03)
 
 
