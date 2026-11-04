@@ -14,7 +14,6 @@
     matSortActive="startDate"
     matSortDirection="desc"
     [dataSource]="dataSource"
-    (matSortChange)="sortTableData($event)"
   >
     <ng-container matColumnDef="active">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Active</th>

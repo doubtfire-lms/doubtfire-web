@@ -1,6 +1,6 @@
 {
   "name": "doubtfire",
-  "version": "11.1.0-7",
+  "version": "11.1.0-9",
   "homepage": "http://github.com/doubtfire-lms/",
   "description": "Learning and feedback tool.",
   "license": "AGPL-3.0",
@@ -20,7 +20,7 @@
     "deploy:build2api:sourcemaps": "ng build --delete-output-path=true --configuration production --source-map=true --output-path dist",
     "sentry:sourcemaps": "node scripts/upload-sentry-sourcemaps.js",
     "deploy": "run-s -l deploy:build2api",
-    "prepare": "husky install",
+    "prepare": "husky",
     "test": "ng test",
     "test:ci": "ng test --no-watch --no-progress",
     "typecheck": "ngc -p src/tsconfig.app.json --noEmit"
@@ -88,7 +88,7 @@
     "@types/canvas-confetti": "^1.6.0",
     "@types/d3": "^7.4.3",
     "@types/dompurify": "^3.2.0",
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "@typescript-eslint/eslint-plugin": "^8.68.0",
     "@typescript-eslint/parser": "^8.71.2",
     "angular-eslint": "^22.6.0",
@@ -114,9 +114,9 @@
   "optionalDependencies": {
     "@nx/nx-darwin-arm64": "^24.0.2",
     "@nx/nx-darwin-x64": "^24.0.2",
-    "@nx/nx-linux-arm64-gnu": "^24.0.2",
+    "@nx/nx-linux-arm64-gnu": "^24.0.3",
     "@nx/nx-linux-x64-gnu": "^24.0.2",
-    "@nx/nx-win32-x64-msvc": "^24.0.2",
+    "@nx/nx-win32-x64-msvc": "^24.0.3",
     "@rollup/rollup-linux-arm64-gnu": "^4.64.10",
     "@rollup/rollup-linux-x64-gnu": "^4.65.0"
   }

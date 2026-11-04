@@ -42,7 +42,7 @@ export interface NotificationScope {
   /** When false the scope follows the "All units" defaults. */
   customised: boolean;
   muted: boolean;
-  /** The unit never sends email, so email choices have no effect. */
+  /** The unit does not send digests, so digest email choices have no effect. */
   emailDisabled: boolean;
   channels: ChannelSelection;
 }
