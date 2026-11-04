@@ -1,210 +1,158 @@
 import {CommonModule} from '@angular/common';
-import {HttpErrorResponse} from '@angular/common/http';
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
+import {MatDialog} from '@angular/material/dialog';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {
   CompetencyService,
   FrameworkDto,
-  FrameworkInput,
   SkillDto,
-  SkillInput,
   SkillLevelDto,
-  SkillLevelInput,
 } from 'src/app/api/services/competency.service';
+import {
+  CompetencyItemDialogComponent,
+  CompetencyItemDialogData,
+} from './competency-item-dialog.component';
 
 @Component({
   selector: 'f-framework-editor',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-  ],
+  imports: [CommonModule, FormsModule, MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './framework-editor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class FrameworkEditorComponent implements OnInit {
   @Output() catalogChanged: EventEmitter<void> = new EventEmitter();
 
   frameworks: FrameworkDto[] = [];
-  framework: FrameworkInput = this.blankFramework();
-  skill: SkillInput = this.blankSkill();
-  level: SkillLevelInput = this.blankLevel();
-  saving = false;
+  frameworkId?: number;
+  skillId?: number;
+  levelId?: number;
+  skillFilter = '';
   error = '';
-  message = '';
 
-  constructor(private competencies: CompetencyService) {}
+  constructor(
+    private competencies: CompetencyService,
+    private dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
     this.reload();
   }
 
   get selectedFramework(): FrameworkDto | undefined {
-    return this.frameworks.find((item) => item.id === this.framework.id);
+    return this.frameworks.find((item) => item.id === this.frameworkId);
   }
 
   get skills(): SkillDto[] {
-    return this.selectedFramework?.skills ?? [];
+    const filter = this.skillFilter.trim().toLowerCase();
+    const skills = this.selectedFramework?.skills ?? [];
+    if (!filter) {
+      return skills;
+    }
+    return skills.filter(
+      (skill) =>
+        skill.code.toLowerCase().includes(filter) || skill.name.toLowerCase().includes(filter),
+    );
   }
 
   get selectedSkill(): SkillDto | undefined {
-    return this.skills.find((item) => item.id === this.skill.id);
+    return this.selectedFramework?.skills.find((item) => item.id === this.skillId);
   }
 
   get levels(): SkillLevelDto[] {
-    return this.selectedSkill?.levels ?? [];
+    return [...(this.selectedSkill?.levels ?? [])].sort((a, b) => a.rank - b.rank);
+  }
+
+  get selectedLevel(): SkillLevelDto | undefined {
+    return this.levels.find((item) => item.id === this.levelId);
+  }
+
+  get levelCount(): number {
+    return (this.selectedFramework?.skills ?? []).reduce(
+      (total, skill) => total + skill.levels.length,
+      0,
+    );
   }
 
   reload(): void {
-    const frameworkId = this.framework.id;
-    const skillId = this.skill.id;
-    const levelId = this.level.id;
     this.competencies.frameworks().subscribe({
-      next: (frameworks) => {
-        this.frameworks = frameworks;
-        if (frameworkId) {
-          this.selectFramework(frameworkId);
-        }
-        if (skillId) {
-          this.selectSkill(skillId);
-        }
-        if (levelId) {
-          this.selectLevel(levelId);
-        }
-      },
+      next: (frameworks) => (this.frameworks = frameworks),
       error: () => (this.error = 'Could not load frameworks.'),
     });
   }
 
-  selectFramework(id: number): void {
-    const selected = this.frameworks.find((item) => item.id === id);
-    if (selected) {
-      this.framework = {
-        id: selected.id,
-        code: selected.code,
-        name: selected.name,
-        version: selected.version,
-        description: selected.description,
-        archived: selected.archived,
-      };
-      this.newSkill();
+  selectFramework(framework: FrameworkDto): void {
+    if (this.frameworkId !== framework.id) {
+      this.skillFilter = '';
     }
+    this.frameworkId = framework.id;
+    this.skillId = undefined;
+    this.levelId = undefined;
   }
 
-  newFramework(): void {
-    this.framework = this.blankFramework();
-    this.newSkill();
+  selectSkill(skill: SkillDto): void {
+    this.skillId = skill.id;
+    this.levelId = undefined;
   }
 
-  saveFramework(): void {
-    this.saving = true;
-    this.error = '';
-    this.competencies.saveFramework(this.framework).subscribe({
-      next: (saved) => {
-        this.framework = saved;
-        this.message = 'Framework saved.';
-        this.saving = false;
-        this.catalogChanged.emit();
-        this.reload();
+  selectLevel(level: SkillLevelDto): void {
+    this.levelId = level.id;
+  }
+
+  editFramework(framework?: FrameworkDto): void {
+    this.openDialog(
+      {
+        kind: 'framework',
+        item: framework
+          ? {...framework}
+          : {code: '', name: '', version: '', description: '', archived: false},
       },
-      error: (error: HttpErrorResponse) => this.saveFailed(error),
-    });
+      (saved: FrameworkDto) => this.selectFramework(saved),
+    );
   }
 
-  selectSkill(id: number): void {
-    const selected = this.skills.find((item) => item.id === id);
-    if (selected) {
-      this.skill = {
-        id: selected.id,
-        code: selected.code,
-        name: selected.name,
-        description: selected.description,
-        archived: selected.archived,
-      };
-      this.newLevel();
-    }
-  }
-
-  newSkill(): void {
-    this.skill = this.blankSkill();
-    this.newLevel();
-  }
-
-  saveSkill(): void {
-    if (!this.framework.id) {
+  editSkill(skill?: SkillDto): void {
+    if (!this.frameworkId) {
       return;
     }
-    this.saving = true;
-    this.error = '';
-    this.competencies.saveSkill(this.framework.id, this.skill).subscribe({
-      next: (saved) => {
-        this.skill = saved;
-        this.message = 'Skill saved.';
-        this.saving = false;
-        this.catalogChanged.emit();
-        this.reload();
+    this.openDialog(
+      {
+        kind: 'skill',
+        parentId: this.frameworkId,
+        item: skill ? {...skill} : {code: '', name: '', description: '', archived: false},
       },
-      error: (error: HttpErrorResponse) => this.saveFailed(error),
-    });
+      (saved: SkillDto) => this.selectSkill(saved),
+    );
   }
 
-  selectLevel(id: number): void {
-    const selected = this.levels.find((item) => item.id === id);
-    if (selected) {
-      this.level = {
-        id: selected.id,
-        name: selected.name,
-        rank: selected.rank,
-        description: selected.description,
-      };
-    }
-  }
-
-  newLevel(): void {
-    this.level = this.blankLevel();
-  }
-
-  saveLevel(): void {
-    if (!this.skill.id) {
+  editLevel(level?: SkillLevelDto): void {
+    if (!this.skillId) {
       return;
     }
-    this.saving = true;
-    this.error = '';
-    this.competencies.saveSkillLevel(this.skill.id, this.level).subscribe({
-      next: (saved) => {
-        this.level = saved;
-        this.message = 'Skill level saved.';
-        this.saving = false;
-        this.catalogChanged.emit();
-        this.reload();
+    const nextRank = Math.max(0, ...this.levels.map((item) => item.rank)) + 1;
+    this.openDialog(
+      {
+        kind: 'level',
+        parentId: this.skillId,
+        item: level ? {...level} : {name: '', rank: nextRank, description: ''},
       },
-      error: (error: HttpErrorResponse) => this.saveFailed(error),
-    });
+      (saved: SkillLevelDto) => this.selectLevel(saved),
+    );
   }
 
-  private saveFailed(error: HttpErrorResponse): void {
-    this.error = error.error?.error || 'Could not save this catalog item.';
-    this.saving = false;
-  }
-
-  private blankFramework(): FrameworkInput {
-    return {code: '', name: '', version: '', description: '', archived: false};
-  }
-
-  private blankSkill(): SkillInput {
-    return {code: '', name: '', description: '', archived: false};
-  }
-
-  private blankLevel(): SkillLevelInput {
-    return {name: '', rank: 1, description: ''};
+  private openDialog<T>(data: CompetencyItemDialogData, onSaved: (saved: T) => void): void {
+    this.dialog
+      .open(CompetencyItemDialogComponent, {data, width: '560px'})
+      .afterClosed()
+      .subscribe((saved?: T) => {
+        if (saved) {
+          onSaved(saved);
+          this.catalogChanged.emit();
+          this.reload();
+        }
+      });
   }
 }

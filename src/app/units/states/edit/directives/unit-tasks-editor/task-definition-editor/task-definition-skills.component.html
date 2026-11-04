@@ -10,30 +10,22 @@
 @if (!taskDefinition?.id) {
   <p>Save the task before choosing skills.</p>
 } @else {
-  <mat-checkbox [(ngModel)]="showAll">Show all framework skills</mat-checkbox>
-  <div class="mt-3 grid gap-3 md:grid-cols-2">
-    @for (skill of visibleSkills; track skill.id) {
-      <mat-form-field>
-        <mat-label>{{ skill.code }} · {{ skill.name }}</mat-label>
-        <mat-select
-          [ngModel]="selectedLevels[skill.id] ?? null"
-          (ngModelChange)="selectedLevels[skill.id] = $event"
-        >
-          <mat-option [value]="null">Not mapped</mat-option>
-          @for (level of skill.levels; track level.id) {
-            <mat-option [value]="level.id">{{ level.name }} ({{ level.rank }})</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    }
-  </div>
-  @if (visibleSkills.length === 0) {
+  @if (skills.length) {
+    <div class="mt-3">
+      <f-skill-level-picker
+        [requiredSkillIds]="requiredSkillIds"
+        [selection]="selectedLevels"
+        [skills]="skills"
+        [suggestedSkillIds]="suggestedSkillIds"
+      ></f-skill-level-picker>
+    </div>
+  } @else {
     <p>
       No skills available yet. Administrators can add unit requirements after the framework catalog
       is populated.
     </p>
   }
-  <button mat-flat-button type="button" [disabled]="saving" (click)="saveMappings()">
+  <button class="mt-3" mat-flat-button type="button" [disabled]="saving" (click)="saveMappings()">
     Save task skills
   </button>
   <div class="mt-5">

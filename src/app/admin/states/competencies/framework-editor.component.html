@@ -2,133 +2,291 @@
   <div>
     <h2>Frameworks and skills</h2>
     <p class="text-gray-600">
-      Create a framework version, add its skills, then define the available levels for each skill.
+      Browse a framework's skills and the levels each skill is defined at.
     </p>
   </div>
   @if (error) {
     <p class="rounded bg-red-50 p-3 text-red-800" role="alert">{{ error }}</p>
   }
-  @if (message) {
-    <p class="rounded bg-green-50 p-3 text-green-800" role="status">{{ message }}</p>
-  }
 
-  <div class="grid gap-5 lg:grid-cols-3">
-    <section class="space-y-4 rounded-xl bg-white p-5 shadow-sm">
-      <h3>1. Framework version</h3>
-      <div class="flex flex-wrap items-center gap-3">
-        <mat-form-field class="min-w-56 flex-1">
-          <mat-label>Edit a framework</mat-label>
-          <mat-select [ngModel]="framework.id" (ngModelChange)="selectFramework($event)">
-            @for (item of frameworks; track item.id) {
-              <mat-option [value]="item.id">
-                {{ item.name }} · {{ item.version }}{{ item.archived ? ' (archived)' : '' }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <button mat-stroked-button type="button" (click)="newFramework()">New</button>
-      </div>
-      <div class="grid gap-3">
-        <mat-form-field>
-          <mat-label>Code</mat-label>
-          <input matInput [(ngModel)]="framework.code" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Name</mat-label>
-          <input matInput [(ngModel)]="framework.name" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Version</mat-label>
-          <input matInput [(ngModel)]="framework.version" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Description</mat-label>
-          <textarea matInput [(ngModel)]="framework.description"></textarea>
-        </mat-form-field>
-        @if (framework.id) {
-          <mat-checkbox [(ngModel)]="framework.archived">Archive this framework</mat-checkbox>
+  <div
+    class="grid overflow-hidden rounded-2xl bg-white shadow-sm lg:h-[calc(100vh-16rem)] lg:min-h-120 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1.5fr)]"
+  >
+    <section class="flex min-h-0 flex-col border-b border-gray-200 lg:border-r lg:border-b-0">
+      <header class="flex items-center justify-between border-b border-gray-200 py-1 pr-1 pl-4">
+        <h3 class="m-0 text-sm font-semibold">Frameworks</h3>
+        <button
+          aria-label="New framework"
+          mat-icon-button
+          matTooltip="New framework"
+          (click)="editFramework()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </header>
+      <div class="max-h-72 flex-1 overflow-auto p-1.5 lg:max-h-none">
+        @for (framework of frameworks; track framework.id) {
+          <div
+            class="group flex items-center rounded-md hover:bg-gray-50"
+            [ngClass]="{'bg-[#e7e7ff] hover:bg-[#e7e7ff]': framework.id === frameworkId}"
+          >
+            <button
+              class="flex min-w-0 flex-1 cursor-pointer items-center gap-2 border-0 bg-transparent px-2.5 py-2 text-left"
+              type="button"
+              [ngClass]="{'opacity-50': framework.archived}"
+              (click)="selectFramework(framework)"
+            >
+              <div class="min-w-0 flex-1">
+                <div class="truncate text-sm font-medium">{{ framework.name }}</div>
+                <div class="truncate text-xs text-gray-500">
+                  {{ framework.code }} · {{ framework.version
+                  }}{{ framework.archived ? ' · Archived' : '' }}
+                </div>
+              </div>
+            </button>
+            <button
+              aria-label="Edit framework"
+              mat-icon-button
+              [ngClass]="framework.id === frameworkId ? 'visible' : 'invisible group-hover:visible'"
+              (click)="editFramework(framework)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <mat-icon class="shrink-0 text-gray-400">chevron_right</mat-icon>
+          </div>
+        } @empty {
+          <p class="p-3 text-center text-sm text-gray-500">No frameworks yet.</p>
         }
       </div>
-      <button mat-flat-button type="button" [disabled]="saving" (click)="saveFramework()">
-        Save framework
-      </button>
     </section>
-
-    <section class="space-y-4 rounded-xl bg-white p-5 shadow-sm">
-      <h3>2. Skills</h3>
-      @if (framework.id) {
-        <div class="flex flex-wrap items-center gap-3">
-          <mat-form-field class="min-w-56 flex-1">
-            <mat-label>Edit a skill</mat-label>
-            <mat-select [ngModel]="skill.id" (ngModelChange)="selectSkill($event)">
-              @for (item of skills; track item.id) {
-                <mat-option [value]="item.id">
-                  {{ item.code }} · {{ item.name }}{{ item.archived ? ' (archived)' : '' }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          <button mat-stroked-button type="button" (click)="newSkill()">New</button>
+    <section class="flex min-h-0 flex-col border-b border-gray-200 lg:border-r lg:border-b-0">
+      <header class="flex items-center justify-between border-b border-gray-200 py-1 pr-1 pl-4">
+        <h3 class="m-0 text-sm font-semibold">
+          Skills
+          @if (selectedFramework) {
+            <span class="font-normal text-gray-500">({{ selectedFramework.skills.length }})</span>
+          }
+        </h3>
+        <button
+          aria-label="New skill"
+          mat-icon-button
+          matTooltip="New skill"
+          [disabled]="!selectedFramework"
+          (click)="editSkill()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </header>
+      @if (selectedFramework) {
+        <div class="flex items-center gap-1 border-b border-gray-200 px-3">
+          <mat-icon class="text-gray-400">search</mat-icon>
+          <input
+            autocomplete="off"
+            class="w-full border-0 bg-transparent py-2 text-sm outline-none"
+            placeholder="Search skills"
+            spellcheck="false"
+            type="text"
+            [(ngModel)]="skillFilter"
+          />
         </div>
-        <div class="grid gap-3">
-          <mat-form-field>
-            <mat-label>Skill code</mat-label>
-            <input matInput [(ngModel)]="skill.code" />
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Skill name</mat-label>
-            <input matInput [(ngModel)]="skill.name" />
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Description</mat-label>
-            <textarea matInput [(ngModel)]="skill.description"></textarea>
-          </mat-form-field>
-          @if (skill.id) {
-            <mat-checkbox [(ngModel)]="skill.archived">Archive this skill</mat-checkbox>
+        <div class="max-h-72 flex-1 overflow-auto p-1.5 lg:max-h-none">
+          @for (skill of skills; track skill.id) {
+            <div
+              class="group flex items-center rounded-md hover:bg-gray-50"
+              [ngClass]="{'bg-[#e7e7ff] hover:bg-[#e7e7ff]': skill.id === skillId}"
+            >
+              <button
+                class="flex min-w-0 flex-1 cursor-pointer items-center gap-2.5 border-0 bg-transparent px-2.5 py-2 text-left"
+                type="button"
+                [ngClass]="{'opacity-50': skill.archived}"
+                (click)="selectSkill(skill)"
+              >
+                <span
+                  class="w-12 shrink-0 rounded bg-gray-100 py-0.5 text-center font-mono text-xs"
+                  >{{ skill.code }}</span
+                >
+                <span class="min-w-0 flex-1 truncate text-sm">{{ skill.name }}</span>
+              </button>
+              <button
+                aria-label="Edit skill"
+                mat-icon-button
+                [ngClass]="skill.id === skillId ? 'visible' : 'invisible group-hover:visible'"
+                (click)="editSkill(skill)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <mat-icon class="shrink-0 text-gray-400">chevron_right</mat-icon>
+            </div>
+          } @empty {
+            <p class="p-3 text-center text-sm text-gray-500">
+              {{ skillFilter ? 'No skills match your search.' : 'No skills yet.' }}
+            </p>
           }
         </div>
-        <button mat-flat-button type="button" [disabled]="saving" (click)="saveSkill()">
-          Save skill
-        </button>
       } @else {
-        <p class="text-gray-600">Save or select a framework first.</p>
+        <p class="p-4 text-center text-sm text-gray-500">Select a framework.</p>
       }
     </section>
-
-    <section class="space-y-4 rounded-xl bg-white p-5 shadow-sm">
-      <h3>3. Skill levels</h3>
-      @if (skill.id) {
-        <div class="flex flex-wrap items-center gap-3">
-          <mat-form-field class="min-w-56 flex-1">
-            <mat-label>Edit a level</mat-label>
-            <mat-select [ngModel]="level.id" (ngModelChange)="selectLevel($event)">
-              @for (item of levels; track item.id) {
-                <mat-option [value]="item.id">{{ item.name }} · rank {{ item.rank }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-          <button mat-stroked-button type="button" (click)="newLevel()">New</button>
-        </div>
-        <div class="grid gap-3">
-          <mat-form-field>
-            <mat-label>Level name</mat-label>
-            <input matInput [(ngModel)]="level.name" />
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Rank</mat-label>
-            <input matInput min="1" type="number" [(ngModel)]="level.rank" />
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Description</mat-label>
-            <textarea matInput [(ngModel)]="level.description"></textarea>
-          </mat-form-field>
-        </div>
-        <button mat-flat-button type="button" [disabled]="saving" (click)="saveLevel()">
-          Save level
+    <section class="flex min-h-0 flex-col border-b border-gray-200 lg:border-r lg:border-b-0">
+      <header class="flex items-center justify-between border-b border-gray-200 py-1 pr-1 pl-4">
+        <h3 class="m-0 text-sm font-semibold">Levels</h3>
+        <button
+          aria-label="New level"
+          mat-icon-button
+          matTooltip="New level"
+          [disabled]="!selectedSkill"
+          (click)="editLevel()"
+        >
+          <mat-icon>add</mat-icon>
         </button>
+      </header>
+      @if (selectedSkill) {
+        <div class="max-h-72 flex-1 overflow-auto p-1.5 lg:max-h-none">
+          @for (level of levels; track level.id) {
+            <div
+              class="group flex items-center rounded-md hover:bg-gray-50"
+              [ngClass]="{'bg-[#e7e7ff] hover:bg-[#e7e7ff]': level.id === levelId}"
+            >
+              <button
+                class="flex min-w-0 flex-1 cursor-pointer items-center gap-2.5 border-0 bg-transparent px-2.5 py-2 text-left"
+                type="button"
+                (click)="selectLevel(level)"
+              >
+                <span
+                  class="flex size-7 shrink-0 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold"
+                  >{{ level.rank }}</span
+                >
+                <span class="min-w-0 flex-1 truncate text-sm">{{ level.name }}</span>
+              </button>
+              <button
+                aria-label="Edit level"
+                mat-icon-button
+                [ngClass]="level.id === levelId ? 'visible' : 'invisible group-hover:visible'"
+                (click)="editLevel(level)"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          } @empty {
+            <p class="p-3 text-center text-sm text-gray-500">No levels yet.</p>
+          }
+        </div>
       } @else {
-        <p class="text-gray-600">Save or select a skill first.</p>
+        <p class="p-4 text-center text-sm text-gray-500">Select a skill.</p>
       }
+    </section>
+    <section class="flex min-h-0 flex-col">
+      <header class="flex min-h-12 items-center border-b border-gray-200 px-4">
+        <h3 class="m-0 text-sm font-semibold">Details</h3>
+      </header>
+      <div class="flex-1 overflow-auto p-5">
+        @if (selectedLevel; as level) {
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="m-0 text-xs text-gray-500">
+                {{ selectedSkill?.code }} · {{ selectedSkill?.name }}
+              </p>
+              <h4 class="m-0 text-lg font-semibold">{{ level.name }}</h4>
+            </div>
+            <button aria-label="Edit level" mat-icon-button (click)="editLevel(level)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+          <dl class="mt-4 space-y-4 text-sm">
+            <div>
+              <dt class="text-xs font-medium text-gray-500 uppercase">Rank</dt>
+              <dd class="m-0">{{ level.rank }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 uppercase">Description</dt>
+              <dd class="m-0 whitespace-pre-line">{{ level.description || '—' }}</dd>
+            </div>
+          </dl>
+        } @else if (selectedSkill; as skill) {
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="m-0 text-xs text-gray-500">{{ selectedFramework?.name }}</p>
+              <h4 class="m-0 text-lg font-semibold">{{ skill.name }}</h4>
+            </div>
+            <button aria-label="Edit skill" mat-icon-button (click)="editSkill(skill)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+          <dl class="mt-4 space-y-4 text-sm">
+            <div>
+              <dt class="text-xs font-medium text-gray-500 uppercase">Code</dt>
+              <dd class="m-0 font-mono">{{ skill.code }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 uppercase">Description</dt>
+              <dd class="m-0 whitespace-pre-line">{{ skill.description || '—' }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 uppercase">Defined levels</dt>
+              <dd class="m-0 mt-1 flex flex-wrap gap-1.5">
+                @for (level of levels; track level.id) {
+                  <button
+                    class="flex size-7 cursor-pointer items-center justify-center rounded-full border-0 bg-gray-100 text-xs font-semibold hover:bg-formatif-blue-lighter"
+                    type="button"
+                    [matTooltip]="level.name"
+                    (click)="selectLevel(level)"
+                  >
+                    {{ level.rank }}
+                  </button>
+                } @empty {
+                  <span>—</span>
+                }
+              </dd>
+            </div>
+            @if (skill.archived) {
+              <div>
+                <dt class="text-xs font-medium text-gray-500 uppercase">Status</dt>
+                <dd class="m-0">Archived</dd>
+              </div>
+            }
+          </dl>
+        } @else if (selectedFramework; as framework) {
+          <div class="flex items-start justify-between gap-3">
+            <h4 class="m-0 min-w-0 text-lg font-semibold">{{ framework.name }}</h4>
+            <button aria-label="Edit framework" mat-icon-button (click)="editFramework(framework)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+          <dl class="mt-4 grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <dt class="text-xs font-medium text-gray-500 uppercase">Code</dt>
+              <dd class="m-0 font-mono">{{ framework.code }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 uppercase">Version</dt>
+              <dd class="m-0">{{ framework.version }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 uppercase">Skills</dt>
+              <dd class="m-0">{{ framework.skills.length }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs font-medium text-gray-500 uppercase">Levels</dt>
+              <dd class="m-0">{{ levelCount }}</dd>
+            </div>
+            <div class="col-span-2">
+              <dt class="text-xs font-medium text-gray-500 uppercase">Description</dt>
+              <dd class="m-0 whitespace-pre-line">{{ framework.description || '—' }}</dd>
+            </div>
+            @if (framework.archived) {
+              <div class="col-span-2">
+                <dt class="text-xs font-medium text-gray-500 uppercase">Status</dt>
+                <dd class="m-0">Archived</dd>
+              </div>
+            }
+          </dl>
+        } @else {
+          <div class="flex h-full flex-col items-center justify-center gap-2 text-center">
+            <mat-icon aria-hidden="true" class="text-gray-400">account_tree</mat-icon>
+            <p class="m-0 text-sm text-gray-500">Select a framework to explore its skills.</p>
+          </div>
+        }
+      </div>
     </section>
   </div>
 </section>

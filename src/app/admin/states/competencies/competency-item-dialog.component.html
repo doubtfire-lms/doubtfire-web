@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content class="flex flex-col gap-1">
+  @if (error) {
+    <p class="mb-3 rounded bg-red-50 p-3 text-red-800" role="alert">{{ error }}</p>
+  }
+  @if (data.kind !== 'level') {
+    <div class="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-3 pt-2">
+      <mat-form-field appearance="outline">
+        <mat-label>Code</mat-label>
+        <input cdkFocusInitial matInput required [(ngModel)]="code" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput required [(ngModel)]="name" />
+      </mat-form-field>
+    </div>
+  } @else {
+    <div class="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-3 pt-2">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input cdkFocusInitial matInput required [(ngModel)]="name" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Rank</mat-label>
+        <input matInput min="1" required type="number" [(ngModel)]="rank" />
+      </mat-form-field>
+    </div>
+  }
+  @if (data.kind === 'framework') {
+    <mat-form-field appearance="outline">
+      <mat-label>Version</mat-label>
+      <input matInput required [(ngModel)]="version" />
+    </mat-form-field>
+  }
+  <mat-form-field appearance="outline">
+    <mat-label>Description</mat-label>
+    <textarea matInput rows="6" [(ngModel)]="description"></textarea>
+  </mat-form-field>
+  @if (data.kind !== 'level' && !isNew) {
+    <mat-checkbox [(ngModel)]="archived">Archived</mat-checkbox>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close type="button">Cancel</button>
+  <button color="primary" mat-flat-button type="button" [disabled]="saving" (click)="save()">
+    Save
+  </button>
+</mat-dialog-actions>

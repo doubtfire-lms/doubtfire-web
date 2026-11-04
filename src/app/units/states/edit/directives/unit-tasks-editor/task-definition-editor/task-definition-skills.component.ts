@@ -1,11 +1,10 @@
 import {CommonModule} from '@angular/common';
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
 import {forkJoin} from 'rxjs';
+import {SkillLevelPickerComponent} from 'src/app/admin/states/competencies/skill-level-picker.component';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {
   CompetencyService,
@@ -22,17 +21,16 @@ import {
     FormsModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatFormFieldModule,
-    MatSelectModule,
+    SkillLevelPickerComponent,
   ],
   templateUrl: './task-definition-skills.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class TaskDefinitionSkillsComponent implements OnChanges {
   @Input() taskDefinition: TaskDefinition;
   frameworks: FrameworkDto[] = [];
   suggestions: SkillLevelDto[] = [];
   selectedLevels: Record<number, number | null> = {};
-  showAll = false;
   saving = false;
   error = '';
   message = '';
@@ -45,16 +43,24 @@ export class TaskDefinitionSkillsComponent implements OnChanges {
     }
   }
 
-  get visibleSkills(): SkillDto[] {
-    const suggestedIds = new Set(this.suggestions.map((level) => level.skill_id));
-    const selectedIds = new Set(Object.keys(this.selectedLevels).map(Number));
+  get skills(): SkillDto[] {
     return this.frameworks.flatMap((framework) =>
       framework.skills.filter(
-        (skill) =>
-          selectedIds.has(skill.id) ||
-          (!framework.archived && !skill.archived && (this.showAll || suggestedIds.has(skill.id))),
+        (skill) => !!this.selectedLevels[skill.id] || (!framework.archived && !skill.archived),
       ),
     );
+  }
+
+  get requiredSkillIds(): number[] {
+    return this.suggestions
+      .filter((level) => level.source === 'unit_definition')
+      .map((level) => level.skill_id);
+  }
+
+  get suggestedSkillIds(): number[] {
+    return this.suggestions
+      .filter((level) => level.source !== 'unit_definition')
+      .map((level) => level.skill_id);
   }
 
   load(): void {

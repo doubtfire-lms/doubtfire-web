@@ -13,6 +13,7 @@ export interface SkillLevelDto {
   skill_name?: string;
   skill_description?: string;
   framework_id?: number;
+  source?: 'unit_definition' | 'course';
 }
 
 export interface SkillDto {
@@ -89,6 +90,11 @@ export interface SkillProgressDto {
   }[];
 }
 
+export interface UnitDefinitionOptionsDto {
+  unit_definition_id: number | null;
+  options: {id: number; name: string; version: string; required_skill_count: number}[];
+}
+
 @Injectable({providedIn: 'root'})
 export class CompetencyService {
   constructor(private http: HttpClient) {}
@@ -146,10 +152,18 @@ export class CompetencyService {
       : this.http.post<UnitDefinitionDto>(`${API_URL}/unit_definitions`, body);
   }
 
+  unitDefinitionOptions(unitId: number): Observable<UnitDefinitionOptionsDto> {
+    return this.http.get<UnitDefinitionOptionsDto>(`${API_URL}/units/${unitId}/unit_definition`);
+  }
+
   assignUnit(unitId: number, unitDefinitionId: number): Observable<unknown> {
     return this.http.put(`${API_URL}/units/${unitId}/unit_definition`, {
       unit_definition_id: unitDefinitionId,
     });
+  }
+
+  unassignUnit(unitId: number): Observable<unknown> {
+    return this.http.delete(`${API_URL}/units/${unitId}/unit_definition`);
   }
 
   taskMappings(unitId: number, taskDefinitionId: number): Observable<SkillLevelDto[]> {

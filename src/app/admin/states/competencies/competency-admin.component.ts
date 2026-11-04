@@ -1,9 +1,10 @@
 import {CommonModule} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -17,12 +18,16 @@ import {
 } from 'src/app/api/services/competency.service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {FrameworkEditorComponent} from './framework-editor.component';
+import {SkillLevelPickerComponent} from './skill-level-picker.component';
 
 interface UnitSummary {
   id: number;
   code: string;
   name: string;
   unit_definition_id?: number;
+  start_date: string;
+  end_date: string;
+  active: boolean;
 }
 
 @Component({
@@ -33,12 +38,15 @@ interface UnitSummary {
     FormsModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatSelectModule,
     MatTabsModule,
     FrameworkEditorComponent,
+    SkillLevelPickerComponent,
   ],
   templateUrl: './competency-admin.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class CompetencyAdminComponent implements OnInit {
   frameworks: FrameworkDto[] = [];
@@ -49,7 +57,11 @@ export class CompetencyAdminComponent implements OnInit {
   unitDefinition: UnitDefinitionDto = this.blankUnitDefinition();
   courseLevels: Record<number, number | null> = {};
   unitLevels: Record<number, number | null> = {};
-  selectedUnitId?: number;
+  selectedUnitIds: number[] = [];
+  courseOpen = false;
+  unitDefinitionOpen = false;
+  courseFilter = '';
+  unitDefinitionFilter = '';
   saving = false;
   error = '';
   message = '';
@@ -81,8 +93,38 @@ export class CompetencyAdminComponent implements OnInit {
       );
   }
 
+  get filteredCourses(): CourseDto[] {
+    return this.courses.filter((course) => this.matches(course, this.courseFilter));
+  }
+
+  get filteredUnitDefinitions(): UnitDefinitionDto[] {
+    return this.unitDefinitions.filter((definition) =>
+      this.matches(definition, this.unitDefinitionFilter),
+    );
+  }
+
+  get linkedUnits(): UnitSummary[] {
+    return this.unitsFor(this.unitDefinition.id);
+  }
+
+  // Offerings must share the definition's code; ones already on this version are listed above.
   get assignableUnits(): UnitSummary[] {
-    return this.units.filter((unit) => unit.code === this.unitDefinition.code);
+    return this.units.filter(
+      (unit) =>
+        unit.code === this.unitDefinition.code &&
+        unit.unit_definition_id !== this.unitDefinition.id,
+    );
+  }
+
+  unitsFor(definitionId?: number): UnitSummary[] {
+    return definitionId
+      ? this.units.filter((unit) => unit.unit_definition_id === definitionId)
+      : [];
+  }
+
+  versionOf(unit: UnitSummary): string | undefined {
+    return this.unitDefinitions.find((definition) => definition.id === unit.unit_definition_id)
+      ?.version;
   }
 
   reload(): void {
@@ -113,12 +155,14 @@ export class CompetencyAdminComponent implements OnInit {
       this.courseLevels = Object.fromEntries(
         selected.required_skills.map((level) => [level.skill_id, level.id]),
       );
+      this.courseOpen = true;
     }
   }
 
   newCourse(): void {
     this.course = this.blankCourse();
     this.courseLevels = {};
+    this.courseOpen = true;
   }
 
   saveCourse(): void {
@@ -150,14 +194,16 @@ export class CompetencyAdminComponent implements OnInit {
       this.unitLevels = Object.fromEntries(
         selected.required_skills.map((level) => [level.skill_id, level.id]),
       );
-      this.selectedUnitId = undefined;
+      this.selectedUnitIds = [];
+      this.unitDefinitionOpen = true;
     }
   }
 
   newUnitDefinition(): void {
     this.unitDefinition = this.blankUnitDefinition();
     this.unitLevels = {};
-    this.selectedUnitId = undefined;
+    this.selectedUnitIds = [];
+    this.unitDefinitionOpen = true;
   }
 
   saveUnitDefinition(): void {
@@ -178,17 +224,38 @@ export class CompetencyAdminComponent implements OnInit {
     });
   }
 
-  assignUnit(): void {
-    if (!this.selectedUnitId || !this.unitDefinition.id) {
+  linkUnits(): void {
+    const definitionId = this.unitDefinition.id;
+    if (!this.selectedUnitIds.length || !definitionId) {
       return;
     }
-    this.competencies.assignUnit(this.selectedUnitId, this.unitDefinition.id).subscribe({
+    forkJoin(
+      this.selectedUnitIds.map((unitId) => this.competencies.assignUnit(unitId, definitionId)),
+    ).subscribe({
       next: () => {
-        this.message = 'Offering assigned to unit definition.';
+        this.message = 'Offerings linked to this version.';
+        this.selectedUnitIds = [];
         this.reload();
       },
-      error: () => (this.error = 'Could not assign offering.'),
+      error: () => (this.error = 'Could not link offerings.'),
     });
+  }
+
+  unlinkUnit(unit: UnitSummary): void {
+    this.competencies.unassignUnit(unit.id).subscribe({
+      next: () => {
+        this.message = `${unit.name} unlinked from this version.`;
+        this.reload();
+      },
+      error: () => (this.error = 'Could not unlink offering.'),
+    });
+  }
+
+  private matches(item: {code: string; name: string}, filter: string): boolean {
+    const query = filter.trim().toLowerCase();
+    return (
+      !query || item.code.toLowerCase().includes(query) || item.name.toLowerCase().includes(query)
+    );
   }
 
   private blankCourse(): CourseDto {
