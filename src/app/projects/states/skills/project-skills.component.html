@@ -37,9 +37,9 @@
       </div>
       <p class="mt-3 text-sm text-gray-600">
         Unit target stamps show pass-task progress as a pie: green is endorsed evidence, blue is
-        submitted evidence awaiting completion, and white is not yet submitted. The inner ring
-        tracks pass tasks and the outer ring tracks higher-grade tasks. Blue arcs show submissions;
-        green arcs show endorsements.
+        submitted evidence awaiting completion, and white is not yet submitted. The inner green arc
+        tracks pass-task endorsements. The outer ring shows higher-grade submissions in blue and
+        endorsements in green.
       </p>
 
       @if (skillColumns().length || sortedTasks().length) {
@@ -55,16 +55,16 @@
                 </th>
                 @for (column of skillColumns(); track column.skillId) {
                   <th
-                    class="w-40 min-w-40 border-r border-b border-gray-200 bg-gray-50 p-3 text-center align-top last:border-r-0"
+                    class="w-56 min-w-56 border-r border-b border-gray-200 bg-gray-50 p-3 text-center align-top last:border-r-0"
                     scope="col"
                   >
-                    <div class="min-h-12 text-sm font-semibold text-gray-800">
+                    <div class="min-h-12 text-base font-semibold text-gray-800">
                       {{ column.name }}
                     </div>
                     @if (column.target; as target) {
                       @if (targetProgress().get(column.skillId); as meter) {
                         <div
-                          class="relative mx-auto flex size-24 items-center justify-center"
+                          class="relative mx-auto flex size-32 items-center justify-center"
                           [style.--extra-endorsed]="meter.extraEndorsedPercent + '%'"
                           [style.--extra-submitted]="meter.extraSubmittedPercent + '%'"
                           [style.--pass-endorsed]="meter.passEndorsedPercent + '%'"
@@ -73,7 +73,7 @@
                           @if (meter.extra.total) {
                             <span
                               aria-hidden="true"
-                              class="pointer-events-none absolute inset-0 rounded-full border-2 border-dashed border-gray-400"
+                              class="pointer-events-none absolute inset-0 rounded-full border-[3px] border-dashed border-gray-400"
                             ></span>
                             <span
                               aria-hidden="true"
@@ -85,7 +85,7 @@
                             ></span>
                           }
                           <button
-                            class="relative flex size-20 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                            class="relative flex size-28 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                             type="button"
                             [attr.aria-label]="targetProgressLabel(target, meter)"
                             [matTooltip]="targetProgressLabel(target, meter)"
@@ -102,40 +102,42 @@
                             ></span>
                             <span
                               aria-hidden="true"
-                              class="pointer-events-none absolute inset-0 rounded-full border-2 border-dashed border-gray-400"
+                              class="pointer-events-none absolute inset-0 rounded-full border-[3px] border-dashed border-gray-400"
                             ></span>
+                            <!-- The pie already shows submitted pass-task progress.
                             <span
                               aria-hidden="true"
                               class="skill-progress-ring skill-progress-ring--pass-submitted pointer-events-none absolute inset-0 rounded-full"
                             ></span>
+                            -->
                             <span
                               aria-hidden="true"
                               class="skill-progress-ring skill-progress-ring--pass-endorsed pointer-events-none absolute inset-0 rounded-full"
                             ></span>
                             <span
                               aria-hidden="true"
-                              class="skill-level-stroke absolute text-5xl font-black text-white"
+                              class="skill-level-stroke absolute text-6xl font-black text-white"
                               >{{ target.rank }}</span
                             >
                             <span
                               aria-hidden="true"
-                              class="absolute text-5xl font-black text-gray-300"
+                              class="absolute text-6xl font-black text-gray-300"
                               >{{ target.rank }}</span
                             >
-                            <span class="relative text-sm font-extrabold text-gray-900">{{
+                            <span class="relative text-lg font-extrabold text-gray-900">{{
                               column.code
                             }}</span>
                           </button>
                         </div>
-                        <div class="mt-1 text-xs text-gray-600">Target: {{ target.name }}</div>
-                        <div class="mt-1 text-xs font-medium text-gray-700">
+                        <div class="mt-2 text-sm text-gray-600">Target: {{ target.name }}</div>
+                        <div class="mt-1 text-sm font-medium text-gray-700">
                           Pass: {{ meter.pass.endorsed + meter.pass.pending }}/{{
                             meter.pass.total
                           }}
                           submitted · {{ meter.pass.endorsed }} endorsed
                         </div>
                         @if (meter.extra.total) {
-                          <div class="mt-1 text-xs text-gray-600">
+                          <div class="mt-1 text-sm text-gray-600">
                             Extra: {{ meter.extra.endorsed + meter.extra.pending }}/{{
                               meter.extra.total
                             }}
