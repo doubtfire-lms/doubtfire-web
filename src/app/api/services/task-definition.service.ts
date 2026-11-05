@@ -42,6 +42,7 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
       'hasJplagReport',
       'assessInPortfolioOnly',
       'requiresDiscussion',
+      'allowStudentSkillSelection',
       {
         keys: 'targetDate',
         toEntityFn: MappingFunctions.mapDateToEndOfDay,

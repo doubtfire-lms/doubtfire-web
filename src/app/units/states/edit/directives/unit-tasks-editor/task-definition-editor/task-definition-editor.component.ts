@@ -24,6 +24,7 @@ import {TaskDefinitionOverseerComponent} from './task-definition-overseer/task-d
 type TaskDefinitionSectionId =
   | 'task-details'
   | 'task-learning-outcomes'
+  | 'task-skills'
   | 'inbox'
   | 'due-dates'
   | 'upload-requirements'
@@ -59,6 +60,7 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
   public readonly sectionList: TaskDefinitionSection[] = [
     {id: 'task-details', label: 'Task Details'},
     {id: 'task-learning-outcomes', label: 'Learning Outcomes'},
+    {id: 'task-skills', label: 'Develop Skills'},
     {id: 'inbox', label: 'Inbox'},
     {id: 'due-dates', label: 'Due Dates'},
     {id: 'upload-requirements', label: 'Upload Requirements'},

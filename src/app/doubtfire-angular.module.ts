@@ -303,6 +303,7 @@ import {PortfolioReviewStepComponent} from './projects/states/portfolio/directiv
 import {PortfolioWelcomeStepComponent} from './projects/states/portfolio/directives/portfolio-welcome-step/portfolio-welcome-step.component';
 import {PortfolioStateComponent} from './projects/states/portfolio/portfolio-state.component';
 import {ProjectRootStateComponent} from './projects/states/project-root-state.component';
+import {ProjectSkillsComponent} from './projects/states/skills/project-skills.component';
 import {StaffNotesComponent} from './projects/states/staff-notes/staff-notes.component';
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {TutorNotesComponent} from './projects/states/tutor-notes/tutor-notes.component';
@@ -376,6 +377,7 @@ import {TaskDefinitionOverseerComponent} from './units/states/edit/directives/un
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
 import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
+import {TaskDefinitionSkillsComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-skills.component';
 import {TaskDefinitionUploadComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
 import {TaskDefinitionWhoComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
@@ -611,6 +613,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     FTaskSheetViewComponent,
     UnitRootStateComponent,
     ProjectRootStateComponent,
+    ProjectSkillsComponent,
     UnitContentViewerComponent,
     TaskViewerStateComponent,
     FUsersComponent,
@@ -833,6 +836,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     },
   ],
   imports: [
+    TaskDefinitionSkillsComponent,
     FlexLayoutModule,
     BrowserModule,
     BrowserAnimationsModule,

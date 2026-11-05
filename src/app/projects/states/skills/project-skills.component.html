@@ -1,0 +1,345 @@
+<main class="mx-auto max-w-[75vw] space-y-6 p-6">
+  <a mat-button [routerLink]="['/projects', projectId, 'dashboard']">Back to unit dashboard</a>
+  <div>
+    <h1>Skills in this unit</h1>
+    <p class="mt-1 text-gray-600">
+      Each column shows a skill and this unit's target level. Task stamps show the level mapped to
+      each task and the status of its evidence.
+    </p>
+  </div>
+
+  @if (error()) {
+    <p role="alert">{{ error() }}</p>
+  }
+  @if (progress()) {
+    <section aria-labelledby="skill-overview" class="rounded-xl bg-white p-5 shadow-sm">
+      <h2 id="skill-overview">Skill overview</h2>
+      <div
+        aria-label="Skill stamp legend"
+        class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-600"
+      >
+        <span class="inline-flex items-center gap-2">
+          <span class="size-4 rounded-full border-2 border-dashed border-gray-400"></span>
+          Mapped for a task; no evidence yet
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <span
+            class="skill-stamp-legend--submitted size-4 rounded-full border-2 bg-blue-50"
+          ></span>
+          Submitted; awaiting completion
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <span
+            class="skill-stamp-legend--endorsed size-4 rounded-full border-2 bg-green-50"
+          ></span>
+          Endorsed by a completed task
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <span class="text-gray-400">—</span>
+          No skill mapped for this task
+        </span>
+      </div>
+      <p class="mt-3 text-sm text-gray-600">
+        Rings count mapped tasks up to your target grade, from Pass on the inside outward. Each task
+        counts once for its skill, regardless of its mapped level. Grey means no submission, blue
+        means submitted, and green means endorsed. The centre combines the visible rings. Skill
+        certification is decided separately during portfolio marking.
+      </p>
+
+      @if (skillColumns().length || sortedTasks().length) {
+        <div class="mt-5 overflow-x-auto rounded-lg border border-gray-200">
+          <table class="w-full min-w-max border-separate border-spacing-0 text-left">
+            <thead>
+              <tr>
+                <th
+                  class="sticky left-0 z-20 w-96 min-w-96 border-r border-b border-gray-200 bg-gray-50 p-4 align-bottom"
+                  scope="col"
+                >
+                  <span class="text-sm font-semibold text-gray-700">Unit targets and tasks</span>
+                </th>
+                @for (column of skillColumns(); track column.skillId) {
+                  <th
+                    class="w-56 min-w-56 border-r border-b border-gray-200 bg-gray-50 p-3 text-center align-top last:border-r-0"
+                    scope="col"
+                  >
+                    <div class="min-h-12 text-base font-semibold text-gray-800">
+                      {{ column.name }}
+                    </div>
+                    @if (column.target; as target) {
+                      @if (targetProgress().get(column.skillId); as meter) {
+                        <button
+                          class="relative mx-auto flex size-48 cursor-pointer items-center justify-center overflow-hidden rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                          type="button"
+                          [attr.aria-label]="
+                            column.name + ', target ' + target.name + '. View skill details'
+                          "
+                          [matTooltip]="column.name + ' · ' + target.name"
+                          [style.--overall-endorsed]="meter.overall.endorsedPercent + '%'"
+                          [style.--overall-submitted]="meter.overall.submittedPercent + '%'"
+                          (click)="
+                            openStamp(
+                              {level: target, earlierMapping: false, isTarget: true},
+                              detailsDialog
+                            )
+                          "
+                        >
+                          @if (meter.overall.total) {
+                            <span
+                              aria-hidden="true"
+                              class="skill-progress-pie pointer-events-none absolute inset-12 rounded-full"
+                            ></span>
+                          }
+                          <svg
+                            aria-hidden="true"
+                            class="pointer-events-none absolute inset-0 size-full"
+                            viewBox="0 0 192 192"
+                          >
+                            @for (ring of meter.rings; track ring.grade.value) {
+                              <circle
+                                class="skill-progress-track"
+                                cx="96"
+                                cy="96"
+                                [attr.r]="ring.radius"
+                              />
+                              @if (ring.submittedPercent > 0) {
+                                <circle
+                                  class="skill-progress-arc skill-progress-arc--submitted"
+                                  cx="96"
+                                  cy="96"
+                                  pathLength="100"
+                                  [attr.r]="ring.radius"
+                                  [attr.stroke-dasharray]="ring.submittedPercent + ' 100'"
+                                  [class.skill-progress-arc--complete]="
+                                    ring.submittedPercent === 100
+                                  "
+                                />
+                              }
+                              @if (ring.endorsedPercent > 0) {
+                                <circle
+                                  class="skill-progress-arc skill-progress-arc--endorsed"
+                                  cx="96"
+                                  cy="96"
+                                  pathLength="100"
+                                  [attr.r]="ring.radius"
+                                  [attr.stroke-dasharray]="ring.endorsedPercent + ' 100'"
+                                  [class.skill-progress-arc--complete]="
+                                    ring.endorsedPercent === 100
+                                  "
+                                />
+                              }
+                            }
+                          </svg>
+                          <span
+                            aria-hidden="true"
+                            class="skill-level-stroke absolute text-6xl font-black text-white"
+                            >{{ target.rank }}</span
+                          >
+                          <span
+                            aria-hidden="true"
+                            class="absolute text-6xl font-black text-gray-300"
+                            >{{ target.rank }}</span
+                          >
+                          <span class="relative text-lg font-extrabold text-gray-900">{{
+                            column.code
+                          }}</span>
+                        </button>
+                        <div class="mt-2 text-sm text-gray-600">Unit target: {{ target.name }}</div>
+                      }
+                    } @else {
+                      <div class="flex h-20 items-center justify-center text-xs text-gray-500">
+                        No unit target
+                      </div>
+                    }
+                  </th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (task of sortedTasks(); track task.task_definition_id) {
+                <tr>
+                  <th
+                    class="sticky left-0 z-10 w-96 min-w-96 border-r border-b border-gray-200 bg-white p-3 text-left align-middle hover:bg-gray-50"
+                    scope="row"
+                  >
+                    @if (projectTaskFor(task); as projectTask) {
+                      <a
+                        class="block text-inherit no-underline"
+                        [routerLink]="['/projects', projectId, 'dashboard', task.abbreviation]"
+                      >
+                        <task-list-item [task]="projectTask"></task-list-item>
+                      </a>
+                    } @else {
+                      <a
+                        class="text-blue-700 hover:underline"
+                        [routerLink]="['/projects', projectId, 'dashboard', task.abbreviation]"
+                      >
+                        {{ task.name }} ({{ task.abbreviation }})
+                      </a>
+                    }
+                  </th>
+                  @for (column of skillColumns(); track column.skillId) {
+                    <td
+                      class="border-r border-b border-gray-200 p-3 text-center align-middle last:border-r-0"
+                    >
+                      <div class="flex flex-wrap justify-center gap-2">
+                        @for (stamp of stampsFor(task, column.skillId); track stamp.level.id) {
+                          <button
+                            class="skill-evidence-stamp relative flex size-24 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                            type="button"
+                            [attr.aria-label]="
+                              task.abbreviation +
+                              ': ' +
+                              column.code +
+                              ' ' +
+                              stamp.level.name +
+                              '. ' +
+                              evidenceLabel(stamp.evidence)
+                            "
+                            [class.bg-blue-50]="stamp.evidence && !stamp.evidence.endorsed_at"
+                            [class.bg-green-50]="stamp.evidence?.endorsed_at"
+                            [class.bg-white]="!stamp.evidence"
+                            [class.border-dashed]="!stamp.evidence"
+                            [class.border-gray-400]="!stamp.evidence"
+                            [class.skill-evidence-stamp--endorsed]="stamp.evidence?.endorsed_at"
+                            [class.skill-evidence-stamp--submitted]="
+                              stamp.evidence && !stamp.evidence.endorsed_at
+                            "
+                            [matTooltip]="
+                              task.abbreviation +
+                              ' · ' +
+                              column.code +
+                              ' ' +
+                              stamp.level.name +
+                              ' · ' +
+                              evidenceLabel(stamp.evidence)
+                            "
+                            (click)="
+                              openStamp(
+                                {
+                                  level: stamp.level,
+                                  evidence: stamp.evidence,
+                                  earlierMapping: stamp.earlierMapping,
+                                  task: task,
+                                  isTarget: false,
+                                },
+                                detailsDialog
+                              )
+                            "
+                          >
+                            <span
+                              aria-hidden="true"
+                              class="absolute text-5xl font-black"
+                              [class.text-blue-300]="stamp.evidence && !stamp.evidence.endorsed_at"
+                              [class.text-gray-200]="!stamp.evidence"
+                              [class.text-green-300]="stamp.evidence?.endorsed_at"
+                              >{{ stamp.level.rank }}</span
+                            >
+                            <span class="relative text-sm font-extrabold text-gray-800">{{
+                              column.code
+                            }}</span>
+                          </button>
+                        } @empty {
+                          <span aria-label="No skill mapped to this task" class="text-gray-300"
+                            >—</span
+                          >
+                        }
+                      </div>
+                    </td>
+                  }
+                </tr>
+              } @empty {
+                <tr>
+                  <td class="p-5 text-sm text-gray-600" [attr.colspan]="skillColumns().length + 1">
+                    No tasks are available in this unit yet.
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-sm text-gray-500">
+          Hover or focus a stamp for its status. Select it to read the skill and level descriptions.
+        </p>
+      } @else {
+        <p class="mt-4 text-gray-600">No tasks or unit skill targets are available yet.</p>
+      }
+    </section>
+  } @else if (!error()) {
+    <p role="status">Loading skills for this unit...</p>
+  }
+
+  <dialog
+    #detailsDialog
+    class="w-[min(92vw,32rem)] rounded-xl border border-gray-200 p-6 shadow-xl backdrop:bg-black/40"
+  >
+    @if (selectedStamp(); as selected) {
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-medium text-gray-600">
+            {{ selected.isTarget ? 'Unit target' : selected.task?.abbreviation + ' task skill' }}
+          </p>
+          <h2 class="mt-1 text-xl font-semibold">
+            {{ selected.level.skill_code }} · {{ selected.level.skill_name }}
+          </h2>
+          <p class="mt-1 text-gray-600">{{ selected.level.name }}</p>
+        </div>
+        <button
+          aria-label="Close skill details"
+          class="rounded p-1 text-gray-600 hover:bg-gray-100"
+          type="button"
+          (click)="detailsDialog.close()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      @if (selected.isTarget) {
+        <p
+          class="mt-4 text-sm font-medium"
+          [class.text-green-800]="
+            hasEndorsedEvidenceAtLevel(selected.level.skill_id, selected.level.rank)
+          "
+        >
+          {{
+            hasEndorsedEvidenceAtLevel(selected.level.skill_id, selected.level.rank)
+              ? 'Endorsed task evidence at or above this level'
+              : 'No endorsed task evidence at or above this level yet'
+          }}
+        </p>
+        @if (targetProgress().get(selected.level.skill_id); as meter) {
+          @if (meter.overall.total) {
+            <p class="mt-2 text-sm font-medium text-gray-800">
+              Overall: {{ meter.overall.endorsed + meter.overall.pending }} of
+              {{ meter.overall.total }} submitted; {{ meter.overall.endorsed }} endorsed.
+            </p>
+          }
+          @for (ring of meter.rings; track ring.grade.value) {
+            <p class="mt-1 text-sm text-gray-700">
+              {{ ring.grade.label }}: {{ ring.endorsed + ring.pending }} of
+              {{ ring.total }} submitted; {{ ring.endorsed }} endorsed.
+            </p>
+          } @empty {
+            <p class="mt-1 text-sm text-gray-700">No mapped tasks at your target grade.</p>
+          }
+        }
+      } @else {
+        <p
+          class="mt-4 text-sm font-medium"
+          [class.text-blue-700]="selected.evidence && !selected.evidence.endorsed_at"
+          [class.text-green-800]="selected.evidence?.endorsed_at"
+        >
+          {{ evidenceLabel(selected.evidence) }}
+        </p>
+        @if (selected.earlierMapping) {
+          <p class="mt-1 text-sm text-gray-600">
+            This skill was mapped when the task was submitted.
+          </p>
+        }
+      }
+      <h3 class="mt-5 font-semibold">About this skill</h3>
+      <p class="mt-1 text-sm text-gray-700">{{ selected.level.skill_description }}</p>
+      <h3 class="mt-4 font-semibold">{{ selected.level.name }}</h3>
+      <p class="mt-1 text-sm text-gray-700">{{ selected.level.description }}</p>
+      <button class="mt-5" mat-button type="button" (click)="detailsDialog.close()">Close</button>
+    }
+  </dialog>
+</main>

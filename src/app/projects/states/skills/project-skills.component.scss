@@ -1,0 +1,77 @@
+@use 'sass:color';
+@use 'styles/mixins/task-status-colors-generator' as *;
+
+$skill-endorsed-color: color.adjust(
+  task-status-color('complete'),
+  $saturation: 25%,
+  $lightness: 3%
+);
+$skill-submitted-color: color.adjust(task-status-color('ready-for-feedback'), $lightness: 3%);
+$skill-ring-width: 10px;
+$skill-stamp-border-width: 5px;
+
+.skill-stamp-legend {
+  &--submitted {
+    border-color: $skill-submitted-color;
+  }
+
+  &--endorsed {
+    border-color: $skill-endorsed-color;
+  }
+}
+
+.skill-evidence-stamp {
+  border: 2px solid transparent;
+
+  &--submitted {
+    border-color: $skill-submitted-color;
+    border-width: $skill-stamp-border-width;
+  }
+
+  &--endorsed {
+    border-color: $skill-endorsed-color;
+    border-width: $skill-stamp-border-width;
+  }
+}
+
+.skill-progress-pie {
+  background: conic-gradient(
+    color.mix($skill-endorsed-color, white, 35%) 0 var(--overall-endorsed),
+    color.mix($skill-submitted-color, white, 35%) var(--overall-endorsed) var(--overall-submitted),
+    white var(--overall-submitted) 100%
+  );
+}
+
+.skill-progress-track,
+.skill-progress-arc {
+  fill: none;
+  transform: rotate(-90deg);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.skill-progress-track {
+  stroke: #d1d5db;
+  stroke-width: $skill-ring-width;
+}
+
+.skill-progress-arc {
+  stroke-width: $skill-ring-width;
+  stroke-linecap: round;
+
+  &--submitted {
+    stroke: $skill-submitted-color;
+  }
+
+  &--endorsed {
+    stroke: $skill-endorsed-color;
+  }
+
+  &--complete {
+    stroke-linecap: butt;
+  }
+}
+
+.skill-level-stroke {
+  -webkit-text-stroke: 8px white;
+}

@@ -1,0 +1,359 @@
+<main class="mx-auto max-w-[90vw] space-y-8 p-6">
+  <div>
+    <h1>Competency curriculum</h1>
+    <p class="text-gray-600">Manage frameworks, course targets, and unit targets.</p>
+  </div>
+  @if (error) {
+    <p class="rounded bg-red-50 p-3 text-red-800" role="alert">{{ error }}</p>
+  }
+  @if (message) {
+    <p class="rounded bg-green-50 p-3 text-green-800" role="status">{{ message }}</p>
+  }
+
+  <mat-tab-group>
+    <mat-tab label="Frameworks and skills">
+      <div class="py-5">
+        <f-framework-editor (catalogChanged)="reload()"></f-framework-editor>
+      </div>
+    </mat-tab>
+    <mat-tab label="Courses and majors">
+      <div class="flex flex-col items-start gap-2.5 py-5 md:flex-row">
+        <aside class="w-full self-start md:sticky md:top-2.5 md:w-90 md:shrink-0">
+          <div
+            class="overflow-hidden rounded-2xl bg-white shadow-sm md:flex md:h-[calc(100vh-16rem)] md:flex-col"
+          >
+            <div class="flex items-center border-b border-gray-200 pr-1">
+              <button aria-label="Search icon" class="flex-none" disabled mat-icon-button>
+                <mat-icon>search</mat-icon>
+              </button>
+              <input
+                autocomplete="off"
+                class="w-full border-0 bg-transparent text-sm outline-none"
+                placeholder="Search courses"
+                spellcheck="false"
+                type="text"
+                [(ngModel)]="courseFilter"
+              />
+              <button aria-label="New course" mat-icon-button (click)="newCourse()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+            <div class="max-h-96 overflow-auto p-1.5 md:max-h-none md:flex-1">
+              @for (item of filteredCourses; track item.id) {
+                <button
+                  class="flex w-full cursor-pointer items-center gap-2.5 rounded-md border-0 bg-transparent px-2.5 py-2 text-left hover:bg-gray-50"
+                  type="button"
+                  [ngClass]="{'bg-[#e7e7ff] hover:bg-[#e7e7ff]': item.id === course.id}"
+                  (click)="selectCourse(item.id!)"
+                >
+                  <span
+                    class="max-w-24 shrink-0 truncate rounded bg-gray-100 px-1.5 py-0.5 font-mono text-xs"
+                    >{{ item.code }}</span
+                  >
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate text-sm font-medium">{{ item.name }}</span>
+                    <span class="block truncate text-xs text-gray-500"
+                      >{{ item.version }} · {{ item.kind | titlecase }}</span
+                    >
+                  </span>
+                </button>
+              } @empty {
+                <p class="p-3 text-center text-sm text-gray-500">
+                  {{ courseFilter ? 'Nothing matches your search.' : 'No courses yet.' }}
+                </p>
+              }
+            </div>
+          </div>
+        </aside>
+
+        <div class="w-full min-w-0 flex-1">
+          @if (courseOpen) {
+            <section class="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="m-0">{{ course.id ? course.name : 'New course version' }}</h2>
+                <button
+                  color="primary"
+                  mat-flat-button
+                  type="button"
+                  [disabled]="saving"
+                  (click)="saveCourse()"
+                >
+                  Save course
+                </button>
+              </div>
+              <div class="grid gap-3 md:grid-cols-2">
+                <mat-form-field appearance="outline"
+                  ><mat-label>Code</mat-label><input matInput [(ngModel)]="course.code"
+                /></mat-form-field>
+                <mat-form-field appearance="outline"
+                  ><mat-label>Name</mat-label><input matInput [(ngModel)]="course.name"
+                /></mat-form-field>
+                <mat-form-field appearance="outline"
+                  ><mat-label>Version</mat-label><input matInput [(ngModel)]="course.version"
+                /></mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Type</mat-label>
+                  <mat-select [(ngModel)]="course.kind">
+                    <mat-option value="degree">Degree</mat-option>
+                    <mat-option value="major">Major</mat-option>
+                    <mat-option value="minor">Minor</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="md:col-span-2">
+                  <mat-label>Description</mat-label
+                  ><textarea matInput [(ngModel)]="course.description"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Frameworks</mat-label>
+                  <mat-select multiple [(ngModel)]="course.framework_ids">
+                    @for (framework of frameworks; track framework.id) {
+                      <mat-option
+                        [disabled]="
+                          framework.archived && !course.framework_ids.includes(framework.id)
+                        "
+                        [value]="framework.id"
+                      >
+                        {{ framework.name }} {{ framework.version
+                        }}{{ framework.archived ? ' (archived)' : '' }}
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Unit definitions</mat-label>
+                  <mat-select multiple [(ngModel)]="course.unit_definition_ids">
+                    @for (definition of unitDefinitions; track definition.id) {
+                      <mat-option [value]="definition.id"
+                        >{{ definition.code }} · {{ definition.version }}</mat-option
+                      >
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <h3>Required skill levels</h3>
+              <p class="text-gray-600">Choose one graduation level for each skill.</p>
+              <f-skill-level-picker
+                [selection]="courseLevels"
+                [skills]="courseSkills"
+              ></f-skill-level-picker>
+            </section>
+          } @else {
+            <div
+              class="flex min-h-105 flex-col items-center justify-center gap-4 rounded-2xl bg-white p-10 text-center shadow-sm"
+            >
+              <mat-icon
+                aria-hidden="true"
+                class="text-gray-400"
+                style="width: 56px; height: 56px; font-size: 56px"
+                >school</mat-icon
+              >
+              <div class="flex flex-col gap-1">
+                <h4 class="m-0 text-base font-bold text-gray-900">No course selected</h4>
+                <p class="m-0 max-w-prose text-sm text-gray-600">
+                  Pick a course or major from the list, or use + to create a new course version.
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Unit definitions">
+      <div class="flex flex-col items-start gap-2.5 py-5 md:flex-row">
+        <aside class="w-full self-start md:sticky md:top-2.5 md:w-90 md:shrink-0">
+          <div
+            class="overflow-hidden rounded-2xl bg-white shadow-sm md:flex md:h-[calc(100vh-16rem)] md:flex-col"
+          >
+            <div class="flex items-center border-b border-gray-200 pr-1">
+              <button aria-label="Search icon" class="flex-none" disabled mat-icon-button>
+                <mat-icon>search</mat-icon>
+              </button>
+              <input
+                autocomplete="off"
+                class="w-full border-0 bg-transparent text-sm outline-none"
+                placeholder="Search unit definitions"
+                spellcheck="false"
+                type="text"
+                [(ngModel)]="unitDefinitionFilter"
+              />
+              <button
+                aria-label="New unit definition"
+                mat-icon-button
+                (click)="newUnitDefinition()"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+            <div class="max-h-96 overflow-auto p-1.5 md:max-h-none md:flex-1">
+              @for (item of filteredUnitDefinitions; track item.id) {
+                <button
+                  class="flex w-full cursor-pointer items-center gap-2.5 rounded-md border-0 bg-transparent px-2.5 py-2 text-left hover:bg-gray-50"
+                  type="button"
+                  [ngClass]="{'bg-[#e7e7ff] hover:bg-[#e7e7ff]': item.id === unitDefinition.id}"
+                  (click)="selectUnitDefinition(item.id!)"
+                >
+                  <span
+                    class="max-w-24 shrink-0 truncate rounded bg-gray-100 px-1.5 py-0.5 font-mono text-xs"
+                    >{{ item.code }}</span
+                  >
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate text-sm font-medium">{{ item.name }}</span>
+                    <span class="block truncate text-xs text-gray-500"
+                      >{{ item.version }}
+                      @if (unitsFor(item.id).length; as count) {
+                        · {{ count }} offering{{ count === 1 ? '' : 's' }}
+                      }
+                    </span>
+                  </span>
+                </button>
+              } @empty {
+                <p class="p-3 text-center text-sm text-gray-500">
+                  {{
+                    unitDefinitionFilter
+                      ? 'Nothing matches your search.'
+                      : 'No unit definitions yet.'
+                  }}
+                </p>
+              }
+            </div>
+          </div>
+        </aside>
+
+        <div class="w-full min-w-0 flex-1">
+          @if (unitDefinitionOpen) {
+            <section class="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="m-0">
+                  {{ unitDefinition.id ? unitDefinition.name : 'New unit definition version' }}
+                </h2>
+                <button
+                  color="primary"
+                  mat-flat-button
+                  type="button"
+                  [disabled]="saving"
+                  (click)="saveUnitDefinition()"
+                >
+                  Save unit definition
+                </button>
+              </div>
+              <p class="text-gray-600">
+                Editing a version updates its requirements for every offering using it. Create a new
+                version to preserve historical requirements.
+              </p>
+              <div class="grid gap-3 md:grid-cols-2">
+                <mat-form-field appearance="outline"
+                  ><mat-label>Code</mat-label><input matInput [(ngModel)]="unitDefinition.code"
+                /></mat-form-field>
+                <mat-form-field appearance="outline"
+                  ><mat-label>Name</mat-label><input matInput [(ngModel)]="unitDefinition.name"
+                /></mat-form-field>
+                <mat-form-field appearance="outline"
+                  ><mat-label>Version</mat-label
+                  ><input matInput [(ngModel)]="unitDefinition.version"
+                /></mat-form-field>
+                <mat-form-field appearance="outline"
+                  ><mat-label>Description</mat-label
+                  ><textarea matInput [(ngModel)]="unitDefinition.description"></textarea>
+                </mat-form-field>
+              </div>
+              <h3>Required skill levels</h3>
+              <f-skill-level-picker
+                [selection]="unitLevels"
+                [skills]="allSkills"
+              ></f-skill-level-picker>
+              <div class="space-y-3 border-t border-gray-200 pt-5">
+                <div>
+                  <h3 class="m-0">Offerings using this version</h3>
+                  <p class="m-0 text-sm text-gray-600">
+                    Unit offerings with the code {{ unitDefinition.code || '…' }} that take their
+                    skill requirements from this version. An offering can only use one version at a
+                    time.
+                  </p>
+                </div>
+                @if (unitDefinition.id) {
+                  <div class="divide-y divide-gray-100 rounded-lg border border-gray-200">
+                    @for (unit of linkedUnits; track unit.id) {
+                      <div class="flex items-center gap-3 py-1.5 pr-1 pl-3">
+                        <div class="min-w-0 flex-1">
+                          <div class="truncate text-sm font-medium">{{ unit.name }}</div>
+                          <div class="text-xs text-gray-500">
+                            {{ unit.start_date | date: 'd MMM y' }} –
+                            {{ unit.end_date | date: 'd MMM y'
+                            }}{{ unit.active ? '' : ' · Inactive' }}
+                          </div>
+                        </div>
+                        <button
+                          mat-icon-button
+                          type="button"
+                          [attr.aria-label]="'Unlink ' + unit.name"
+                          (click)="unlinkUnit(unit)"
+                        >
+                          <mat-icon>link_off</mat-icon>
+                        </button>
+                      </div>
+                    } @empty {
+                      <p class="m-0 p-3 text-sm text-gray-500">
+                        No offerings use this version yet.
+                      </p>
+                    }
+                  </div>
+                  <div class="flex flex-wrap items-center gap-3">
+                    <mat-form-field appearance="outline" class="min-w-72 flex-1">
+                      <mat-label>Link offerings</mat-label>
+                      <mat-select multiple [(ngModel)]="selectedUnitIds">
+                        @for (unit of assignableUnits; track unit.id) {
+                          <mat-option [value]="unit.id">
+                            {{ unit.name }} · {{ unit.start_date | date: 'MMM y' }}
+                            @if (versionOf(unit); as version) {
+                              <span class="text-gray-500">(moves from {{ version }})</span>
+                            }
+                          </mat-option>
+                        } @empty {
+                          <mat-option disabled
+                            >No other {{ unitDefinition.code }} offerings</mat-option
+                          >
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <button
+                      mat-stroked-button
+                      type="button"
+                      [disabled]="!selectedUnitIds.length"
+                      (click)="linkUnits()"
+                    >
+                      Link {{ selectedUnitIds.length || '' }} offering{{
+                        selectedUnitIds.length === 1 ? '' : 's'
+                      }}
+                    </button>
+                  </div>
+                } @else {
+                  <p class="m-0 text-sm text-gray-500">
+                    Save this version to link offerings to it.
+                  </p>
+                }
+              </div>
+            </section>
+          } @else {
+            <div
+              class="flex min-h-105 flex-col items-center justify-center gap-4 rounded-2xl bg-white p-10 text-center shadow-sm"
+            >
+              <mat-icon
+                aria-hidden="true"
+                class="text-gray-400"
+                style="width: 56px; height: 56px; font-size: 56px"
+                >menu_book</mat-icon
+              >
+              <div class="flex flex-col gap-1">
+                <h4 class="m-0 text-base font-bold text-gray-900">No unit definition selected</h4>
+                <p class="m-0 max-w-prose text-sm text-gray-600">
+                  Pick a unit definition from the list, or use + to create a new version.
+                </p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</main>
