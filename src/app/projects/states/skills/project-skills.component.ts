@@ -28,10 +28,26 @@ interface SelectedStamp extends SkillStamp {
   isTarget: boolean;
 }
 
+interface EvidenceProgress {
+  total: number;
+  pending: number;
+  endorsed: number;
+}
+
+interface TargetSkillProgress {
+  pass: EvidenceProgress;
+  extra: EvidenceProgress;
+  passEndorsedPercent: number;
+  passSubmittedPercent: number;
+  extraEndorsedPercent: number;
+  extraSubmittedPercent: number;
+}
+
 @Component({
   selector: 'f-project-skills',
   standalone: false,
   templateUrl: './project-skills.component.html',
+  styleUrls: ['./project-skills.component.scss'],
 })
 export class ProjectSkillsComponent implements OnInit {
   projectId: number;
@@ -66,6 +82,47 @@ export class ProjectSkillsComponent implements OnInit {
       }
     }
     return [...columns.values()];
+  });
+  targetProgress = computed(() => {
+    const progress = this.progress();
+    const result: Map<number, TargetSkillProgress> = new Map();
+    if (!progress || !this.project?.unit?.gradeValues.length) {
+      return result;
+    }
+
+    const passGrade = Math.min(...this.project.unit.gradeValues);
+    for (const column of this.skillColumns()) {
+      if (!column.target) {
+        continue;
+      }
+
+      const opportunities = progress.tasks.filter(
+        (task) =>
+          task.skills.some((level) => level.skill_id === column.skillId) ||
+          task.evidence.some((evidence) => evidence.skill_id === column.skillId),
+      );
+      const passTasks = opportunities.filter((task) => this.taskGradeFor(task) === passGrade);
+      const extraTasks = opportunities.filter((task) => {
+        const grade = this.taskGradeFor(task);
+        return grade > passGrade && grade <= this.project.targetGrade;
+      });
+      const pass = this.countEvidence(passTasks, column.skillId);
+      const extra = this.countEvidence(extraTasks, column.skillId);
+      const passEndorsedPercent = this.percent(pass.endorsed, pass.total);
+      const passSubmittedPercent = this.percent(pass.endorsed + pass.pending, pass.total);
+      const extraEndorsedPercent = this.percent(extra.endorsed, extra.total);
+      const extraSubmittedPercent = this.percent(extra.endorsed + extra.pending, extra.total);
+
+      result.set(column.skillId, {
+        pass,
+        extra,
+        passEndorsedPercent,
+        passSubmittedPercent,
+        extraEndorsedPercent,
+        extraSubmittedPercent,
+      });
+    }
+    return result;
   });
 
   constructor(
@@ -117,6 +174,38 @@ export class ProjectSkillsComponent implements OnInit {
         (definition) => definition.id === task.task_definition_id,
       )?.seq ?? Number.MAX_SAFE_INTEGER
     );
+  }
+
+  private taskGradeFor(task: SkillTask): number {
+    return this.projectTaskFor(task)?.definition?.targetGrade ?? Number.MAX_SAFE_INTEGER;
+  }
+
+  private countEvidence(tasks: SkillTask[], skillId: number): EvidenceProgress {
+    let pending = 0;
+    let endorsed = 0;
+    for (const task of tasks) {
+      const evidence = task.evidence.filter((row) => row.skill_id === skillId);
+      if (evidence.some((row) => !!row.endorsed_at)) {
+        endorsed++;
+      } else if (evidence.length) {
+        pending++;
+      }
+    }
+    return {total: tasks.length, pending, endorsed};
+  }
+
+  private percent(count: number, total: number): number {
+    return total ? (count / total) * 100 : 0;
+  }
+
+  targetProgressLabel(level: SkillLevelDto, progress: TargetSkillProgress): string {
+    const passSubmitted = progress.pass.pending + progress.pass.endorsed;
+    const extraSubmitted = progress.extra.pending + progress.extra.endorsed;
+    const passSummary = `Pass tasks: ${passSubmitted} of ${progress.pass.total} submitted, ${progress.pass.endorsed} endorsed.`;
+    const extraSummary = progress.extra.total
+      ? ` Extra higher-grade tasks: ${extraSubmitted} of ${progress.extra.total} submitted, ${progress.extra.endorsed} endorsed.`
+      : '';
+    return `${level.skill_code} ${level.name}. ${passSummary}${extraSummary}`;
   }
 
   stampsFor(task: SkillTask, skillId: number): SkillStamp[] {

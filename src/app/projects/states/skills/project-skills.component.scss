@@ -1,0 +1,44 @@
+.skill-progress-pie {
+  background: conic-gradient(
+    #bbf7d0 0 var(--pass-endorsed),
+    #bfdbfe var(--pass-endorsed) var(--pass-submitted),
+    white var(--pass-submitted) 100%
+  );
+}
+
+.skill-progress-ring {
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 2px));
+
+  &--pass-submitted {
+    background: conic-gradient(
+      #2563eb 0 var(--pass-submitted),
+      transparent var(--pass-submitted) 100%
+    );
+  }
+
+  &--pass-endorsed {
+    background: conic-gradient(
+      #16a34a 0 var(--pass-endorsed),
+      transparent var(--pass-endorsed) 100%
+    );
+  }
+
+  &--extra-submitted {
+    background: conic-gradient(
+      #2563eb 0 var(--extra-submitted),
+      transparent var(--extra-submitted) 100%
+    );
+  }
+
+  &--extra-endorsed {
+    background: conic-gradient(
+      #16a34a 0 var(--extra-endorsed),
+      transparent var(--extra-endorsed) 100%
+    );
+  }
+}
+
+.skill-level-stroke {
+  -webkit-text-stroke: 6px white;
+}

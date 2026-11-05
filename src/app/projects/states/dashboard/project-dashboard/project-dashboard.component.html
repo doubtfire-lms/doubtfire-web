@@ -146,9 +146,6 @@
 </ng-template>
 
 @if (project$ | async; as project) {
-  <a class="mx-2 inline-block" mat-button [routerLink]="['/projects', project.id, 'skills']"
-    >Skills in this unit</a
-  >
   <div class="h-[calc(100vh-100px)] w-full overflow-hidden">
     <div #boundary class="flex h-full min-h-0 flex-row">
       @if (subs$ | async) {
