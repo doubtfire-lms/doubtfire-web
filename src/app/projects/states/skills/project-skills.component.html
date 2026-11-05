@@ -3,8 +3,8 @@
   <div>
     <h1>Skills in this unit</h1>
     <p class="mt-1 text-gray-600">
-      Each column is a skill. The target at the top is what this unit expects; the stamps below show
-      what each task can demonstrate and what you have submitted.
+      Each column shows a skill and this unit's target level. Task stamps show the level mapped to
+      each task and the status of its evidence.
     </p>
   </div>
 
@@ -40,9 +40,10 @@
         </span>
       </div>
       <p class="mt-3 text-sm text-gray-600">
-        Rings show mapped tasks up to your target grade, from Pass on the inside outward. Grey is
-        not yet submitted, blue is submitted, and green is endorsed. The centre combines progress
-        across all visible rings.
+        Rings count mapped tasks up to your target grade, from Pass on the inside outward. Each task
+        counts once for its skill, regardless of its mapped level. Grey means no submission, blue
+        means submitted, and green means endorsed. The centre combines the visible rings. Skill
+        certification is decided separately during portfolio marking.
       </p>
 
       @if (skillColumns().length || sortedTasks().length) {
@@ -142,7 +143,7 @@
                             column.code
                           }}</span>
                         </button>
-                        <div class="mt-2 text-sm text-gray-600">Target: {{ target.name }}</div>
+                        <div class="mt-2 text-sm text-gray-600">Unit target: {{ target.name }}</div>
                       }
                     } @else {
                       <div class="flex h-20 items-center justify-center text-xs text-gray-500">
@@ -300,8 +301,8 @@
         >
           {{
             hasEndorsedEvidenceAtLevel(selected.level.skill_id, selected.level.rank)
-              ? 'Target evidenced by a completed task'
-              : 'Target not yet evidenced'
+              ? 'Endorsed task evidence at or above this level'
+              : 'No endorsed task evidence at or above this level yet'
           }}
         </p>
         @if (targetProgress().get(selected.level.skill_id); as meter) {
