@@ -1,12 +1,14 @@
 <div class="flex flex-col gap-2">
-  <div class="grid gap-3 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+  <div class="grid items-start gap-3 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_auto]">
     <mat-form-field appearance="outline">
       <mat-label>Skill</mat-label>
       <input
         matInput
         placeholder="Search by code or name"
+        [disabled]="disabled"
         [matAutocomplete]="skillAuto"
         [(ngModel)]="query"
+        (ngModelChange)="onQueryChange($event)"
       />
       <mat-autocomplete
         #skillAuto="matAutocomplete"
@@ -25,16 +27,21 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Level</mat-label>
-      <mat-select
-        [disabled]="!skill"
-        [(ngModel)]="levelId"
-        (selectionChange)="addLevel($event.value)"
-      >
+      <mat-select [disabled]="disabled || !skill" [(ngModel)]="levelId">
         @for (level of skill?.levels ?? []; track level.id) {
           <mat-option [value]="level.id">{{ level.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
+    <button
+      class="md:mt-2"
+      mat-flat-button
+      type="button"
+      [disabled]="disabled || !skill || levelId === null"
+      (click)="addLevel()"
+    >
+      {{ skill && selection[skill.id] ? 'Update skill' : 'Add skill' }}
+    </button>
   </div>
 
   @if (chips.length) {
@@ -42,7 +49,11 @@
       @for (chip of chips; track chip.skill.id) {
         <mat-chip (removed)="remove(chip.skill)">
           <span class="font-mono">{{ chip.skill.code }}</span> · {{ chip.level.name }}
-          <button matChipRemove [attr.aria-label]="'Remove ' + chip.skill.name">
+          <button
+            matChipRemove
+            [attr.aria-label]="'Remove ' + chip.skill.name"
+            [disabled]="disabled"
+          >
             <mat-icon>cancel</mat-icon>
           </button>
         </mat-chip>

@@ -1,6 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
+import {TaskStatusEnum} from 'src/app/api/models/task-status';
 import API_URL from 'src/app/config/constants/apiUrl';
 
 export interface SkillLevelDto {
@@ -84,7 +85,7 @@ export interface SkillProgressDto {
     abbreviation: string;
     name: string;
     task_id?: number;
-    status?: string;
+    status?: TaskStatusEnum;
     skills: SkillLevelDto[];
     evidence: SkillEvidenceDto[];
   }[];

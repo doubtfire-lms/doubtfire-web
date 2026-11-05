@@ -1,7 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {forkJoin} from 'rxjs';
 import {SkillLevelPickerComponent} from 'src/app/admin/states/competencies/skill-level-picker.component';
@@ -16,13 +15,7 @@ import {
 @Component({
   selector: 'f-task-definition-skills',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    SkillLevelPickerComponent,
-  ],
+  imports: [CommonModule, FormsModule, MatCheckboxModule, SkillLevelPickerComponent],
   templateUrl: './task-definition-skills.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
 })
@@ -31,6 +24,7 @@ export class TaskDefinitionSkillsComponent implements OnChanges {
   frameworks: FrameworkDto[] = [];
   suggestions: SkillLevelDto[] = [];
   selectedLevels: Record<number, number | null> = {};
+  private savedLevels: Record<number, number | null> = {};
   saving = false;
   error = '';
   message = '';
@@ -75,24 +69,34 @@ export class TaskDefinitionSkillsComponent implements OnChanges {
         this.selectedLevels = Object.fromEntries(
           mappings.map((level) => [level.skill_id, level.id]),
         );
+        this.savedLevels = {...this.selectedLevels};
       },
       error: () => (this.error = 'Could not load task skills.'),
     });
   }
 
   saveMappings(): void {
+    if (this.saving) {
+      return;
+    }
     this.saving = true;
     this.error = '';
+    this.message = '';
     const ids = Object.values(this.selectedLevels).filter((id): id is number => id !== null);
     this.competencies
       .saveTaskMappings(this.taskDefinition.unit.id, this.taskDefinition.id, ids)
       .subscribe({
-        next: () => {
+        next: (mappings) => {
+          this.savedLevels = Object.fromEntries(
+            mappings.map((level) => [level.skill_id, level.id]),
+          );
+          this.selectedLevels = {...this.savedLevels};
           this.message = 'Task skills saved.';
           this.saving = false;
         },
         error: () => {
-          this.error = 'Could not save task skills.';
+          this.selectedLevels = {...this.savedLevels};
+          this.error = 'Could not save task skills. The change was reverted; please try again.';
           this.saving = false;
         },
       });

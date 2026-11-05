@@ -1,85 +1,289 @@
-<main class="mx-auto max-w-5xl space-y-6 p-6">
+<main class="mx-auto max-w-6xl space-y-6 p-6">
   <a mat-button [routerLink]="['/projects', projectId, 'dashboard']">Back to unit dashboard</a>
-  <h1>Skills in this unit</h1>
-  @if (error) {
-    <p role="alert">{{ error }}</p>
+  <div>
+    <h1>Skills in this unit</h1>
+    <p class="mt-1 text-gray-600">
+      Each column is a skill. The target at the top is what this unit expects; the stamps below show
+      what each task can demonstrate and what you have submitted.
+    </p>
+  </div>
+
+  @if (error()) {
+    <p role="alert">{{ error() }}</p>
   }
-  @if (progress) {
-    @if (progress.unit_definition?.required_skills?.length) {
-      <section class="rounded-xl bg-white p-5 shadow-sm">
-        <h2>Unit requirements</h2>
-        <p class="text-gray-600">These are the levels this unit aims to develop.</p>
-        <div class="grid gap-2 sm:grid-cols-2">
-          @for (level of progress.unit_definition?.required_skills || []; track level.id) {
-            <details
-              class="rounded-lg border p-3"
-              [class.bg-green-50]="hasEndorsedEvidenceAtLevel(level.skill_id, level.rank)"
-            >
-              <summary class="cursor-pointer font-medium">
-                {{ hasEndorsedEvidenceAtLevel(level.skill_id, level.rank) ? '●' : '○' }}
-                {{ level.skill_code }} · {{ level.name }}
-              </summary>
-              <p class="mt-2 text-sm">{{ level.skill_name }}: {{ level.skill_description }}</p>
-              <p class="text-sm">{{ level.name }}: {{ level.description }}</p>
-            </details>
-          }
-        </div>
-      </section>
-    }
-    <section class="rounded-xl bg-white p-5 shadow-sm">
-      <h2>Task opportunities and evidence</h2>
-      <p class="text-gray-600">
-        Open a skill level to read its description, or open its task to see the work.
-      </p>
-      <div class="space-y-4">
-        @for (task of progress.tasks; track task.task_definition_id) {
-          @if (task.skills.length || task.evidence.length) {
-            <article class="rounded-lg border p-4">
-              <h3>
-                <a [routerLink]="['/projects', projectId, 'dashboard', task.abbreviation]">
-                  {{ task.abbreviation }} · {{ task.name }}
-                </a>
-              </h3>
-              <p class="text-sm text-gray-600">{{ task.status || 'Not started' }}</p>
-              <div class="mt-3 grid gap-2 sm:grid-cols-2">
-                @for (level of task.skills; track level.id) {
-                  <details
-                    class="rounded-lg border p-3"
-                    [class.bg-green-50]="isEndorsed(task, level.id)"
-                  >
-                    <summary class="cursor-pointer font-medium">
-                      {{ isEndorsed(task, level.id) ? '●' : '○' }}
-                      {{ level.skill_code }} · {{ level.name }}
-                    </summary>
-                    <p class="mt-2 text-sm">
-                      {{ level.skill_name }}: {{ level.skill_description }}
-                    </p>
-                    <p class="text-sm">{{ level.name }}: {{ level.description }}</p>
-                    @if (isEndorsed(task, level.id)) {
-                      <p class="text-sm text-green-800">Demonstrated in this completed task</p>
-                    } @else if (isSubmitted(task, level.id)) {
-                      <p class="text-sm text-amber-800">Submitted, awaiting completion</p>
-                    }
-                  </details>
-                }
-                @for (evidence of previouslyMappedEvidence(task); track evidence.evidence_id) {
-                  <details class="rounded-lg border p-3">
-                    <summary class="cursor-pointer font-medium">
-                      {{ evidence.endorsed_at ? '●' : '○' }}
-                      {{ evidence.skill_code }} · {{ evidence.name }}
-                    </summary>
-                    <p class="mt-2 text-sm">
-                      {{ evidence.skill_name }}: {{ evidence.skill_description }}
-                    </p>
-                    <p class="text-sm">{{ evidence.name }}: {{ evidence.description }}</p>
-                    <p class="text-sm text-gray-600">Mapped when this task was submitted</p>
-                  </details>
-                }
-              </div>
-            </article>
-          }
-        }
+  @if (progress()) {
+    <section aria-labelledby="skill-overview" class="rounded-xl bg-white p-5 shadow-sm">
+      <h2 id="skill-overview">Skill overview</h2>
+      <div
+        aria-label="Skill stamp legend"
+        class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-600"
+      >
+        <span class="inline-flex items-center gap-2">
+          <span class="size-4 rounded-full border-2 border-dashed border-gray-400"></span>
+          Mapped for a task; no evidence yet
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <span class="size-4 rounded-full border-2 border-blue-600 bg-blue-50"></span>
+          Submitted; awaiting completion
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <span class="size-4 rounded-full border-2 border-green-600 bg-green-50"></span>
+          Endorsed by a completed task
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <span class="text-gray-400">—</span>
+          No skill mapped for this task
+        </span>
       </div>
+
+      @if (skillColumns().length || sortedTasks().length) {
+        <div class="mt-5 overflow-x-auto rounded-lg border border-gray-200">
+          <table class="w-full min-w-max border-separate border-spacing-0 text-left">
+            <thead>
+              <tr>
+                <th
+                  class="sticky left-0 z-20 w-96 min-w-96 border-r border-b border-gray-200 bg-gray-50 p-4 align-bottom"
+                  scope="col"
+                >
+                  <span class="text-sm font-semibold text-gray-700">Unit targets and tasks</span>
+                </th>
+                @for (column of skillColumns(); track column.skillId) {
+                  <th
+                    class="w-40 min-w-40 border-r border-b border-gray-200 bg-gray-50 p-3 text-center align-top last:border-r-0"
+                    scope="col"
+                  >
+                    <div class="min-h-12 text-sm font-semibold text-gray-800">
+                      {{ column.name }}
+                    </div>
+                    @if (column.target; as target) {
+                      <button
+                        class="relative mx-auto flex size-20 cursor-pointer items-center justify-center rounded-full border-2 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                        type="button"
+                        [attr.aria-label]="
+                          'Unit target: ' +
+                          column.code +
+                          ' ' +
+                          target.name +
+                          (hasEndorsedEvidenceAtLevel(column.skillId, target.rank)
+                            ? ', evidenced'
+                            : ', not yet evidenced')
+                        "
+                        [class.bg-green-50]="
+                          hasEndorsedEvidenceAtLevel(column.skillId, target.rank)
+                        "
+                        [class.bg-white]="!hasEndorsedEvidenceAtLevel(column.skillId, target.rank)"
+                        [class.border-dashed]="
+                          !hasEndorsedEvidenceAtLevel(column.skillId, target.rank)
+                        "
+                        [class.border-gray-400]="
+                          !hasEndorsedEvidenceAtLevel(column.skillId, target.rank)
+                        "
+                        [class.border-green-600]="
+                          hasEndorsedEvidenceAtLevel(column.skillId, target.rank)
+                        "
+                        [matTooltip]="
+                          'Unit target: ' +
+                          column.code +
+                          ' ' +
+                          target.name +
+                          (hasEndorsedEvidenceAtLevel(column.skillId, target.rank)
+                            ? ' · Evidenced'
+                            : ' · Not yet evidenced')
+                        "
+                        (click)="
+                          openStamp(
+                            {level: target, earlierMapping: false, isTarget: true},
+                            detailsDialog
+                          )
+                        "
+                      >
+                        <span
+                          aria-hidden="true"
+                          class="absolute text-5xl font-black text-gray-200"
+                          >{{ target.rank }}</span
+                        >
+                        <span class="relative text-sm font-extrabold text-gray-800">{{
+                          column.code
+                        }}</span>
+                      </button>
+                      <div class="mt-2 text-xs text-gray-600">Target: {{ target.name }}</div>
+                    } @else {
+                      <div class="flex h-20 items-center justify-center text-xs text-gray-500">
+                        No unit target
+                      </div>
+                    }
+                  </th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (task of sortedTasks(); track task.task_definition_id) {
+                <tr>
+                  <th
+                    class="sticky left-0 z-10 w-96 min-w-96 border-r border-b border-gray-200 bg-white p-3 text-left align-middle hover:bg-gray-50"
+                    scope="row"
+                  >
+                    @if (projectTaskFor(task); as projectTask) {
+                      <a
+                        class="block text-inherit no-underline"
+                        [routerLink]="['/projects', projectId, 'dashboard', task.abbreviation]"
+                      >
+                        <task-list-item [task]="projectTask"></task-list-item>
+                      </a>
+                    } @else {
+                      <a
+                        class="text-blue-700 hover:underline"
+                        [routerLink]="['/projects', projectId, 'dashboard', task.abbreviation]"
+                      >
+                        {{ task.name }} ({{ task.abbreviation }})
+                      </a>
+                    }
+                  </th>
+                  @for (column of skillColumns(); track column.skillId) {
+                    <td
+                      class="border-r border-b border-gray-200 p-3 text-center align-middle last:border-r-0"
+                    >
+                      <div class="flex flex-wrap justify-center gap-2">
+                        @for (stamp of stampsFor(task, column.skillId); track stamp.level.id) {
+                          <button
+                            class="relative flex size-20 cursor-pointer items-center justify-center rounded-full border-2 transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                            type="button"
+                            [attr.aria-label]="
+                              task.abbreviation +
+                              ': ' +
+                              column.code +
+                              ' ' +
+                              stamp.level.name +
+                              '. ' +
+                              evidenceLabel(stamp.evidence)
+                            "
+                            [class.bg-blue-50]="stamp.evidence && !stamp.evidence.endorsed_at"
+                            [class.bg-green-50]="stamp.evidence?.endorsed_at"
+                            [class.bg-white]="!stamp.evidence"
+                            [class.border-blue-600]="stamp.evidence && !stamp.evidence.endorsed_at"
+                            [class.border-dashed]="!stamp.evidence"
+                            [class.border-gray-400]="!stamp.evidence"
+                            [class.border-green-600]="stamp.evidence?.endorsed_at"
+                            [matTooltip]="
+                              task.abbreviation +
+                              ' · ' +
+                              column.code +
+                              ' ' +
+                              stamp.level.name +
+                              ' · ' +
+                              evidenceLabel(stamp.evidence)
+                            "
+                            (click)="
+                              openStamp(
+                                {
+                                  level: stamp.level,
+                                  evidence: stamp.evidence,
+                                  earlierMapping: stamp.earlierMapping,
+                                  task: task,
+                                  isTarget: false,
+                                },
+                                detailsDialog
+                              )
+                            "
+                          >
+                            <span
+                              aria-hidden="true"
+                              class="absolute text-5xl font-black"
+                              [class.text-blue-100]="stamp.evidence && !stamp.evidence.endorsed_at"
+                              [class.text-gray-200]="!stamp.evidence"
+                              [class.text-green-100]="stamp.evidence?.endorsed_at"
+                              >{{ stamp.level.rank }}</span
+                            >
+                            <span class="relative text-sm font-extrabold text-gray-800">{{
+                              column.code
+                            }}</span>
+                          </button>
+                        } @empty {
+                          <span aria-label="No skill mapped to this task" class="text-gray-300"
+                            >—</span
+                          >
+                        }
+                      </div>
+                    </td>
+                  }
+                </tr>
+              } @empty {
+                <tr>
+                  <td class="p-5 text-sm text-gray-600" [attr.colspan]="skillColumns().length + 1">
+                    No tasks are available in this unit yet.
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-sm text-gray-500">
+          Hover or focus a stamp for its status. Select it to read the skill and level descriptions.
+        </p>
+      } @else {
+        <p class="mt-4 text-gray-600">No tasks or unit skill targets are available yet.</p>
+      }
     </section>
+  } @else if (!error()) {
+    <p role="status">Loading skills for this unit...</p>
   }
+
+  <dialog
+    #detailsDialog
+    class="w-[min(92vw,32rem)] rounded-xl border border-gray-200 p-6 shadow-xl backdrop:bg-black/40"
+  >
+    @if (selectedStamp(); as selected) {
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm font-medium text-gray-600">
+            {{ selected.isTarget ? 'Unit target' : selected.task?.abbreviation + ' task skill' }}
+          </p>
+          <h2 class="mt-1 text-xl font-semibold">
+            {{ selected.level.skill_code }} · {{ selected.level.skill_name }}
+          </h2>
+          <p class="mt-1 text-gray-600">{{ selected.level.name }}</p>
+        </div>
+        <button
+          aria-label="Close skill details"
+          class="rounded p-1 text-gray-600 hover:bg-gray-100"
+          type="button"
+          (click)="detailsDialog.close()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      @if (selected.isTarget) {
+        <p
+          class="mt-4 text-sm font-medium"
+          [class.text-green-800]="
+            hasEndorsedEvidenceAtLevel(selected.level.skill_id, selected.level.rank)
+          "
+        >
+          {{
+            hasEndorsedEvidenceAtLevel(selected.level.skill_id, selected.level.rank)
+              ? 'Target evidenced by a completed task'
+              : 'Target not yet evidenced'
+          }}
+        </p>
+      } @else {
+        <p
+          class="mt-4 text-sm font-medium"
+          [class.text-blue-700]="selected.evidence && !selected.evidence.endorsed_at"
+          [class.text-green-800]="selected.evidence?.endorsed_at"
+        >
+          {{ evidenceLabel(selected.evidence) }}
+        </p>
+        @if (selected.earlierMapping) {
+          <p class="mt-1 text-sm text-gray-600">
+            This skill was mapped when the task was submitted.
+          </p>
+        }
+      }
+      <h3 class="mt-5 font-semibold">About this skill</h3>
+      <p class="mt-1 text-sm text-gray-700">{{ selected.level.skill_description }}</p>
+      <h3 class="mt-4 font-semibold">{{ selected.level.name }}</h3>
+      <p class="mt-1 text-sm text-gray-700">{{ selected.level.description }}</p>
+      <button class="mt-5" mat-button type="button" (click)="detailsDialog.close()">Close</button>
+    }
+  </dialog>
 </main>

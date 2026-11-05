@@ -1,7 +1,8 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
@@ -16,6 +17,7 @@ import {SkillDto, SkillLevelDto} from 'src/app/api/services/competency.service';
     CommonModule,
     FormsModule,
     MatAutocompleteModule,
+    MatButtonModule,
     MatChipsModule,
     MatFormFieldModule,
     MatIconModule,
@@ -32,6 +34,8 @@ export class SkillLevelPickerComponent {
   // Skills listed first in the search: required ones, then suggested ones.
   @Input() requiredSkillIds: number[] = [];
   @Input() suggestedSkillIds: number[] = [];
+  @Input() disabled = false;
+  @Output() selectionUpdated: EventEmitter<void> = new EventEmitter();
 
   query: string | SkillDto = '';
   skill?: SkillDto;
@@ -82,21 +86,47 @@ export class SkillLevelPickerComponent {
   }
 
   pickSkill(skill: SkillDto): void {
-    this.skill = skill;
-    this.levelId = this.selection[skill.id] ?? null;
-  }
-
-  addLevel(levelId: number): void {
-    if (!this.skill) {
+    if (this.disabled) {
       return;
     }
-    this.selection[this.skill.id] = levelId;
+    this.skill = skill;
+    this.levelId =
+      this.selection[skill.id] ??
+      skill.levels.reduce<SkillLevelDto | undefined>(
+        (lowest, level) => (!lowest || level.rank < lowest.rank ? level : lowest),
+        undefined,
+      )?.id ??
+      null;
+  }
+
+  onQueryChange(value: string | SkillDto): void {
+    if (typeof value === 'string') {
+      this.skill = undefined;
+      this.levelId = null;
+    }
+  }
+
+  addLevel(): void {
+    if (
+      this.disabled ||
+      !this.skill ||
+      this.levelId === null ||
+      !this.skill.levels.some((level) => level.id === this.levelId)
+    ) {
+      return;
+    }
+    this.selection[this.skill.id] = this.levelId;
     this.query = '';
     this.skill = undefined;
     this.levelId = null;
+    this.selectionUpdated.emit();
   }
 
   remove(skill: SkillDto): void {
+    if (this.disabled) {
+      return;
+    }
     delete this.selection[skill.id];
+    this.selectionUpdated.emit();
   }
 }
