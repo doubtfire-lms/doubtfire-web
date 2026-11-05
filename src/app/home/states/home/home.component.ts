@@ -117,13 +117,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   unitRolesLoaded(unitRoles: UnitRole[]): void {
-    this.unitRoles = unitRoles;
+    this.unitRoles = [...unitRoles].sort((a, b) => this.compareUnits(a.unit, b.unit));
     this.loadingUnitRoles = false;
   }
 
   projectsLoaded(projects: Project[]): void {
-    this.projects = projects;
+    this.projects = [...projects].sort((a, b) => this.compareUnits(a.unit, b.unit));
     this.loadingProjects = false;
+  }
+
+  private compareUnits(a: Unit, b: Unit): number {
+    const aStart = a.teachingPeriod?.startDate ?? a.startDate;
+    const bStart = b.teachingPeriod?.startDate ?? b.startDate;
+
+    return bStart.getTime() - aStart.getTime() || a.code.localeCompare(b.code);
   }
 
   checkEnrolled(): boolean {
