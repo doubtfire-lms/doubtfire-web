@@ -1,6 +1,7 @@
 import {Component, OnInit, computed, signal} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Project, Task} from 'src/app/api/models/doubtfire-model';
+import {GradeDefinition} from 'src/app/api/models/unit';
 import {
   CompetencyService,
   SkillEvidenceDto,
@@ -34,13 +35,19 @@ interface EvidenceProgress {
   endorsed: number;
 }
 
+interface OverallSkillProgress extends EvidenceProgress {
+  submittedPercent: number;
+  endorsedPercent: number;
+}
+
+interface GradeSkillProgress extends OverallSkillProgress {
+  grade: GradeDefinition;
+  radius: number;
+}
+
 interface TargetSkillProgress {
-  pass: EvidenceProgress;
-  extra: EvidenceProgress;
-  passEndorsedPercent: number;
-  passSubmittedPercent: number;
-  extraEndorsedPercent: number;
-  extraSubmittedPercent: number;
+  overall: OverallSkillProgress;
+  rings: GradeSkillProgress[];
 }
 
 @Component({
@@ -86,11 +93,13 @@ export class ProjectSkillsComponent implements OnInit {
   targetProgress = computed(() => {
     const progress = this.progress();
     const result: Map<number, TargetSkillProgress> = new Map();
-    if (!progress || !this.project?.unit?.gradeValues.length) {
+    const grades = this.project?.unit?.gradeDefinitions
+      .filter((grade) => grade.value >= 0)
+      .sort((left, right) => left.value - right.value);
+    if (!progress || !grades?.length) {
       return result;
     }
 
-    const passGrade = Math.min(...this.project.unit.gradeValues);
     for (const column of this.skillColumns()) {
       if (!column.target) {
         continue;
@@ -101,25 +110,36 @@ export class ProjectSkillsComponent implements OnInit {
           task.skills.some((level) => level.skill_id === column.skillId) ||
           task.evidence.some((evidence) => evidence.skill_id === column.skillId),
       );
-      const passTasks = opportunities.filter((task) => this.taskGradeFor(task) === passGrade);
-      const extraTasks = opportunities.filter((task) => {
-        const grade = this.taskGradeFor(task);
-        return grade > passGrade && grade <= this.project.targetGrade;
+      const gradeProgress = grades.map((grade, index) => {
+        const tasks = opportunities.filter((task) => this.taskGradeFor(task) === grade.value);
+        const evidence = this.countEvidence(tasks, column.skillId);
+        return {
+          ...evidence,
+          grade,
+          radius: 90 - (grades.length - index - 1) * 12,
+          submittedPercent: this.percent(evidence.endorsed + evidence.pending, evidence.total),
+          endorsedPercent: this.percent(evidence.endorsed, evidence.total),
+        };
       });
-      const pass = this.countEvidence(passTasks, column.skillId);
-      const extra = this.countEvidence(extraTasks, column.skillId);
-      const passEndorsedPercent = this.percent(pass.endorsed, pass.total);
-      const passSubmittedPercent = this.percent(pass.endorsed + pass.pending, pass.total);
-      const extraEndorsedPercent = this.percent(extra.endorsed, extra.total);
-      const extraSubmittedPercent = this.percent(extra.endorsed + extra.pending, extra.total);
+      const rings = gradeProgress.filter(
+        (ring) => ring.grade.value <= this.project.targetGrade && ring.total > 0,
+      );
+      const totals = rings.reduce<EvidenceProgress>(
+        (sum, ring) => ({
+          total: sum.total + ring.total,
+          pending: sum.pending + ring.pending,
+          endorsed: sum.endorsed + ring.endorsed,
+        }),
+        {total: 0, pending: 0, endorsed: 0},
+      );
 
       result.set(column.skillId, {
-        pass,
-        extra,
-        passEndorsedPercent,
-        passSubmittedPercent,
-        extraEndorsedPercent,
-        extraSubmittedPercent,
+        overall: {
+          ...totals,
+          submittedPercent: this.percent(totals.endorsed + totals.pending, totals.total),
+          endorsedPercent: this.percent(totals.endorsed, totals.total),
+        },
+        rings,
       });
     }
     return result;
@@ -196,16 +216,6 @@ export class ProjectSkillsComponent implements OnInit {
 
   private percent(count: number, total: number): number {
     return total ? (count / total) * 100 : 0;
-  }
-
-  targetProgressLabel(level: SkillLevelDto, progress: TargetSkillProgress): string {
-    const passSubmitted = progress.pass.pending + progress.pass.endorsed;
-    const extraSubmitted = progress.extra.pending + progress.extra.endorsed;
-    const passSummary = `Pass tasks: ${passSubmitted} of ${progress.pass.total} submitted, ${progress.pass.endorsed} endorsed.`;
-    const extraSummary = progress.extra.total
-      ? ` Extra higher-grade tasks: ${extraSubmitted} of ${progress.extra.total} submitted, ${progress.extra.endorsed} endorsed.`
-      : '';
-    return `${level.skill_code} ${level.name}. ${passSummary}${extraSummary}`;
   }
 
   stampsFor(task: SkillTask, skillId: number): SkillStamp[] {

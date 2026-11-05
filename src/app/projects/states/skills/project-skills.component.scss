@@ -1,41 +1,74 @@
+@use 'sass:color';
+@use 'styles/mixins/task-status-colors-generator' as *;
+
+$skill-endorsed-color: color.adjust(
+  task-status-color('complete'),
+  $saturation: 25%,
+  $lightness: 3%
+);
+$skill-submitted-color: color.adjust(task-status-color('ready-for-feedback'), $lightness: 3%);
+$skill-ring-width: 10px;
+$skill-stamp-border-width: 5px;
+
+.skill-stamp-legend {
+  &--submitted {
+    border-color: $skill-submitted-color;
+  }
+
+  &--endorsed {
+    border-color: $skill-endorsed-color;
+  }
+}
+
+.skill-evidence-stamp {
+  border: 2px solid transparent;
+
+  &--submitted {
+    border-color: $skill-submitted-color;
+    border-width: $skill-stamp-border-width;
+  }
+
+  &--endorsed {
+    border-color: $skill-endorsed-color;
+    border-width: $skill-stamp-border-width;
+  }
+}
+
 .skill-progress-pie {
   background: conic-gradient(
-    #bbf7d0 0 var(--pass-endorsed),
-    #bfdbfe var(--pass-endorsed) var(--pass-submitted),
-    white var(--pass-submitted) 100%
+    color.mix($skill-endorsed-color, white, 35%) 0 var(--overall-endorsed),
+    color.mix($skill-submitted-color, white, 35%) var(--overall-endorsed) var(--overall-submitted),
+    white var(--overall-submitted) 100%
   );
 }
 
-.skill-progress-ring {
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 6px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 6px));
+.skill-progress-track,
+.skill-progress-arc {
+  fill: none;
+  transform: rotate(-90deg);
+  transform-box: fill-box;
+  transform-origin: center;
+}
 
-  &--pass-submitted {
-    background: conic-gradient(
-      #2563eb 0 var(--pass-submitted),
-      transparent var(--pass-submitted) 100%
-    );
+.skill-progress-track {
+  stroke: #d1d5db;
+  stroke-width: $skill-ring-width;
+}
+
+.skill-progress-arc {
+  stroke-width: $skill-ring-width;
+  stroke-linecap: round;
+
+  &--submitted {
+    stroke: $skill-submitted-color;
   }
 
-  &--pass-endorsed {
-    background: conic-gradient(
-      #16a34a 0 var(--pass-endorsed),
-      transparent var(--pass-endorsed) 100%
-    );
+  &--endorsed {
+    stroke: $skill-endorsed-color;
   }
 
-  &--extra-submitted {
-    background: conic-gradient(
-      #2563eb 0 var(--extra-submitted),
-      transparent var(--extra-submitted) 100%
-    );
-  }
-
-  &--extra-endorsed {
-    background: conic-gradient(
-      #16a34a 0 var(--extra-endorsed),
-      transparent var(--extra-endorsed) 100%
-    );
+  &--complete {
+    stroke-linecap: butt;
   }
 }
 
