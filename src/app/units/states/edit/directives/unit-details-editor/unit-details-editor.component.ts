@@ -231,7 +231,14 @@ export class UnitDetailsEditorComponent implements OnInit {
       ? this.competencies.assignUnit(this.unit.id, definitionId)
       : this.competencies.unassignUnit(this.unit.id);
     request.subscribe({
-      next: () => this.alertsService.success('Unit definition updated.', 2000),
+      next: (assignment) => {
+        this.unitDefinitionId = assignment.unit_definition_id;
+        if (assignment.unit_definition_id === definitionId) {
+          this.alertsService.success('Unit definition updated.', 2000);
+        } else {
+          this.alertsService.error('The selected unit definition was not saved.', 6000);
+        }
+      },
       error: (response) => {
         this.unitDefinitionId = previousId;
         this.alertsService.error(`Failed to update unit definition. ${response}`, 6000);

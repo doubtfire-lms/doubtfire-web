@@ -95,6 +95,11 @@ export interface UnitDefinitionOptionsDto {
   options: {id: number; name: string; version: string; required_skill_count: number}[];
 }
 
+export interface UnitDefinitionAssignmentDto {
+  unit_id: number;
+  unit_definition_id: number | null;
+}
+
 @Injectable({providedIn: 'root'})
 export class CompetencyService {
   constructor(private http: HttpClient) {}
@@ -156,14 +161,19 @@ export class CompetencyService {
     return this.http.get<UnitDefinitionOptionsDto>(`${API_URL}/units/${unitId}/unit_definition`);
   }
 
-  assignUnit(unitId: number, unitDefinitionId: number): Observable<unknown> {
-    return this.http.put(`${API_URL}/units/${unitId}/unit_definition`, {
-      unit_definition_id: unitDefinitionId,
-    });
+  assignUnit(unitId: number, unitDefinitionId: number): Observable<UnitDefinitionAssignmentDto> {
+    return this.http.put<UnitDefinitionAssignmentDto>(
+      `${API_URL}/units/${unitId}/unit_definition`,
+      {
+        unit_definition_id: unitDefinitionId,
+      },
+    );
   }
 
-  unassignUnit(unitId: number): Observable<unknown> {
-    return this.http.delete(`${API_URL}/units/${unitId}/unit_definition`);
+  unassignUnit(unitId: number): Observable<UnitDefinitionAssignmentDto> {
+    return this.http.delete<UnitDefinitionAssignmentDto>(
+      `${API_URL}/units/${unitId}/unit_definition`,
+    );
   }
 
   taskMappings(unitId: number, taskDefinitionId: number): Observable<SkillLevelDto[]> {
