@@ -92,6 +92,7 @@ export class ProjectService extends CachedEntityService<Project> {
         },
       },
       'portfolioAvailable',
+      'portfolioLocked',
       'usesDraftLearningSummary',
       {
         keys: ['taskStats', 'stats'],
