@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-10](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-9...v11.1.0-10) (2026-11-05)
+
+
+### Features
+
+* add missing skeleton ui and improve existing ([85fd51d](https://github.com/b0ink/doubtfire-deploy/commit/85fd51dda78c0691cd5526fb7a8fa1b114748a37))
+
+
+### Bug Fixes
+
+* portfolio list item task status alignment ([4092cbe](https://github.com/b0ink/doubtfire-deploy/commit/4092cbefa31eb82518e58c1c13fe83ae6cd4d8d2))
+
 ## [11.1.0-9](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-8...v11.1.0-9) (2026-11-04)
 
 
