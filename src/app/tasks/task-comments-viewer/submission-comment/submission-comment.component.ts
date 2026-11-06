@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Task, TaskComment} from 'src/app/api/models/doubtfire-model';
-import { SubmissionComment } from 'src/app/api/models/task-comment/submission-comment';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {SubmissionComment} from 'src/app/api/models/task-comment/submission-comment';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'submission-comment',
-  styleUrl: './submission-comment.component.css',
+  styleUrls: ['../extension-comment/extension-comment.component.scss'],
   templateUrl: './submission-comment.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,

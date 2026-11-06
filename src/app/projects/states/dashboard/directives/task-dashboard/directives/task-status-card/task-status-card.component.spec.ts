@@ -1,5 +1,7 @@
 import {beforeEach, describe, expect, it} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {SubmissionAccessModalService} from 'src/app/common/modals/submission-access-modal/submission-access-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {EMPTY} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
@@ -33,6 +35,8 @@ describe('TaskStatusCardComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [TaskStatusCardComponent],
       providers: [
+        {provide: SubmissionAccessModalService, useValue: emptyProvider},
+        {provide: AlertService, useValue: emptyProvider},
         {provide: ExtensionModalService, useValue: emptyProvider},
         {provide: TaskService, useValue: taskServiceStub},
         {provide: QrModalService, useValue: emptyProvider},

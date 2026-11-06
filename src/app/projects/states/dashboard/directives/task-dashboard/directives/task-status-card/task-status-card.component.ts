@@ -15,6 +15,8 @@ import {UnitRole} from 'src/app/api/models/unit-role';
 import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
+import {SubmissionAccessModalService} from 'src/app/common/modals/submission-access-modal/submission-access-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {ExistingSubmissionChoiceModalService} from 'src/app/tasks/modals/existing-submission-choice-modal/existing-submission-choice-modal.service';
@@ -42,6 +44,8 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
     private userService: UserService,
     private feedbackAppealService: FeedbackAppealModalService,
     private existingSubmissionChoiceModal: ExistingSubmissionChoiceModalService,
+    private submissionAccess: SubmissionAccessModalService,
+    private alerts: AlertService,
   ) {
     this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
       if (this.isCurrentTask(task)) {
@@ -138,6 +142,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
   }
 
   uploadSubmission(): void {
+    if (!this.isTutor && this.task.submissionsNotOpen) {
+      this.alerts.error('Submissions are not open yet. Request submission access to submit early.');
+      return;
+    }
     if (this.isTutor && this.task.requiresFileUpload()) {
       this.task.presentTaskSubmissionModal('ready_for_feedback');
       return;
@@ -151,7 +159,24 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
   }
 
   updateFilesInSubmission(): void {
+    if (!this.isTutor && this.task.submissionsNotOpen) return;
     this.task.presentTaskSubmissionModal(this.task.status, true);
+  }
+
+  applyForSubmissionAccess(): void {
+    if (this.task.blockedByPrerequisiteTasks()) {
+      this.alerts.error('You must submit or complete the prerequisite tasks before requesting submission access.');
+      return;
+    }
+    if (!this.task.canApplyForSubmissionAccess()) {
+      this.alerts.error(
+        this.task.submissionAccessRequestError || 'Submission access cannot be requested for this task.',
+      );
+      return;
+    }
+    this.submissionAccess.show(this.task, () => {
+      this.task.refreshCommentData();
+    });
   }
 
   openDiscussionQrCode(): void {

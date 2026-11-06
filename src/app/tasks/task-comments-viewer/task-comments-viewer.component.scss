@@ -141,6 +141,7 @@ $comment-inner-border-radius: 4px;
   }
 
   .comment-container .comment-extension,
+  .comment-container .comment-submission,
   .comment-container .comment-scorm-extension {
     width: 100%;
   }
@@ -355,6 +356,7 @@ $comment-inner-border-radius: 4px;
   }
 
   .comment .extension-bubble,
+  .comment .submission-bubble,
   .comment .scorm_extension-bubble {
     width: 100%;
     background-color: transparent;

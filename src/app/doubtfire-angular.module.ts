@@ -325,6 +325,8 @@ import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task
 import {CommentBubbleActionComponent} from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import {DiscussTimeoutCommentComponent} from './tasks/task-comments-viewer/discuss-timeout-comment/discuss-timeout-comment.component';
 import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
+import {SubmissionCommentComponent} from './tasks/task-comments-viewer/submission-comment/submission-comment.component';
+import {SubmissionAccessModalComponent} from './common/modals/submission-access-modal/submission-access-modal.component';
 import {
   IntelligentDiscussionDialog,
   IntelligentDiscussionPlayerComponent,
@@ -507,6 +509,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     IntelligentDiscussionRecorderComponent,
     DiscussTimeoutCommentComponent,
     ExtensionCommentComponent,
+    SubmissionCommentComponent,
+    SubmissionAccessModalComponent,
     PdfImageCommentComponent,
     CampusListComponent,
     ActivityTypeListComponent,

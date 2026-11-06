@@ -1,5 +1,6 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {SubmissionCommentComponent} from './submission-comment.component';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 describe('SubmissionCommentComponent', () => {
   let component: SubmissionCommentComponent;
@@ -7,8 +8,11 @@ describe('SubmissionCommentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubmissionCommentComponent],
-    }).compileComponents();
+      declarations: [SubmissionCommentComponent],
+      providers: [{provide: AlertService, useValue: {}}],
+    })
+      .overrideComponent(SubmissionCommentComponent, {set: {template: ''}})
+      .compileComponents();
 
     fixture = TestBed.createComponent(SubmissionCommentComponent);
     component = fixture.componentInstance;

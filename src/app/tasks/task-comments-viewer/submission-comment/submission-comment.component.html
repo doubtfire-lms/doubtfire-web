@@ -13,8 +13,7 @@
 
   @if (!comment.assessed) {
     <div class="flex flex-col items-center justify-around">
-      <hr class="hr-fade" />
-      <p>
+      <p class="fade-text">
         {{ isStudent ? 'You have' : comment.author.name + ' has' }} requested access to submit.
         <br />
         <strong> reason:</strong> {{ comment.text }}
@@ -32,7 +31,6 @@
           <button color="warn" mat-flat-button (click)="denySubmissionRequest()">Deny</button>
         </div>
       }
-      <hr class="hr-fade" />
     </div>
   }
 </div>
