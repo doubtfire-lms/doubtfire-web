@@ -4,7 +4,6 @@
     <input
       matInput
       placeholder="Start date"
-      required
       [matDatepicker]="submissiondatepicker"
       [(ngModel)]="taskDefinition.SubmissionOpensOn"
     />
@@ -13,8 +12,7 @@
     <mat-hint>Selected date to accept submissions for this task.</mat-hint>
   </mat-form-field>
 
-  <!-- TODO: button click() -->
-  <button color="primary" mat-flat-button>
-            <mat-icon>delete</mat-icon> Clear
-          </button>
+  <button type="button" color="primary" mat-flat-button (click)="clearSubmissionDate()">
+    <mat-icon>delete</mat-icon> Clear
+  </button>
 </div>

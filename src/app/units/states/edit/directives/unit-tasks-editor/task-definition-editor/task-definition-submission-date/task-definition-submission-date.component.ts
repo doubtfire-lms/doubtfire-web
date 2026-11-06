@@ -12,6 +12,10 @@ import {Unit} from 'src/app/api/models/unit';
 export class TaskDefinitionSubmissionDateComponent {
   @Input() taskDefinition: TaskDefinition;
 
+  public clearSubmissionDate(): void {
+    this.taskDefinition.SubmissionOpensOn = this.taskDefinition.startDate;
+  }
+
   public get unit(): Unit {
     return this.taskDefinition?.unit;
   }
