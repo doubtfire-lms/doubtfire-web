@@ -115,6 +115,18 @@ export function aggregateAllCampuses(
   }, {} as TaskCodeStats);
 }
 
+function aggregateSnapshotTaskStats(snapshot: TaskCompletionSnapshot): TaskCodeStats {
+  const populationStats = snapshot.status_population_stats?.all;
+  if (!populationStats) {
+    return aggregateAllCampuses(snapshot.stats);
+  }
+
+  return Object.values(populationStats).reduce((acc, campusData) => {
+    mergeTaskCounts(acc, campusData['__all__'] ?? {});
+    return acc;
+  }, {} as TaskCodeStats);
+}
+
 export function getTaskStats(
   snapshot: TaskCompletionSnapshot,
   campusFilter: string = 'all',
@@ -228,6 +240,18 @@ export function getTaskPopulationStats(
   );
 }
 
+// Normalised charts need a nonzero visual value to draw grey bars for an empty day.
+export function getEmptySnapshotTaskStats(unit: Unit, taskGradeFilter: number[]): TaskCodeStats {
+  return Object.fromEntries(
+    unit.taskDefinitions
+      .filter(
+        (taskDefinition) =>
+          taskGradeFilter.length === 0 || taskGradeFilter.includes(taskDefinition.targetGrade),
+      )
+      .map((taskDefinition) => [taskDefinition.abbreviation, {not_started: 1}]),
+  );
+}
+
 export function isPreWeekZeroSnapshot(unit: Unit, snapshot: TaskCompletionSnapshot): boolean {
   const snapshotDate = new Date(snapshot.snapshot_date);
   if (Number.isNaN(snapshotDate.valueOf())) {
@@ -238,7 +262,7 @@ export function isPreWeekZeroSnapshot(unit: Unit, snapshot: TaskCompletionSnapsh
 }
 
 export function hasOnlyNotStartedStatuses(snapshot: TaskCompletionSnapshot): boolean {
-  const aggregatedTaskStats = aggregateAllCampuses(snapshot.stats);
+  const aggregatedTaskStats = aggregateSnapshotTaskStats(snapshot);
   const taskStatusEntries = Object.values(aggregatedTaskStats);
 
   if (taskStatusEntries.length === 0) {
@@ -257,14 +281,22 @@ export function shouldIncludeSnapshot(unit: Unit, snapshot: TaskCompletionSnapsh
 }
 
 export function isEmptySnapshot(snapshot: TaskCompletionSnapshot): boolean {
-  return Object.values(aggregateAllCampuses(snapshot.stats)).every((taskStatusCounts) =>
+  return Object.values(aggregateSnapshotTaskStats(snapshot)).every((taskStatusCounts) =>
     Object.values(taskStatusCounts).every((value) => Number(value) === 0),
   );
 }
 
-export function dropLeadingEmptySnapshots(
+export function filterEmptySnapshots(
   snapshots: TaskCompletionSnapshot[],
 ): TaskCompletionSnapshot[] {
   const firstPopulated = snapshots.findIndex((snapshot) => !isEmptySnapshot(snapshot));
-  return firstPopulated <= 0 ? snapshots : snapshots.slice(firstPopulated);
+  if (firstPopulated === -1) {
+    return snapshots.slice(-1);
+  }
+
+  const leadIn = firstPopulated > 0 ? [snapshots[firstPopulated - 1]] : [];
+  return [
+    ...leadIn,
+    ...snapshots.slice(firstPopulated).filter((snapshot) => !isEmptySnapshot(snapshot)),
+  ];
 }

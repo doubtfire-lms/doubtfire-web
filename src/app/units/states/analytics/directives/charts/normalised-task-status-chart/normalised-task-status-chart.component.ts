@@ -15,7 +15,9 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {
   countStudentsFromSnapshot,
   formatSnapshotLabel,
+  getEmptySnapshotTaskStats,
   getTaskPopulationStats,
+  isEmptySnapshot,
   statusMapping,
 } from '../chart-data-helpers';
 
@@ -156,26 +158,27 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
       return;
     }
 
-    this.data =
-      this.unit && selectedSnapshot
-        ? this.buildChartData(
-            getTaskPopulationStats(
-              selectedSnapshot,
-              this.campusFilter,
-              this.tutorialFilter,
-              this.taskGradeFilter,
-              this.studentTargetGradeFilter,
-              this.unit,
-            ),
-          )
-        : [];
+    const emptySnapshot = isEmptySnapshot(selectedSnapshot);
+    this.data = this.unit
+      ? this.buildChartData(
+          emptySnapshot
+            ? getEmptySnapshotTaskStats(this.unit, this.taskGradeFilter)
+            : getTaskPopulationStats(
+                selectedSnapshot,
+                this.campusFilter,
+                this.tutorialFilter,
+                this.taskGradeFilter,
+                this.studentTargetGradeFilter,
+                this.unit,
+              ),
+          emptySnapshot,
+        )
+      : [];
 
-    // Padded week 0 days carry no stats - show the chart empty rather than falling back
-    // to the loading spinner.
     this.hasChartData = !!this.unit && this.snapshots.length > 0;
   }
 
-  private buildChartData(taskStats: TaskCodeStats): MultiSeries {
+  private buildChartData(taskStats: TaskCodeStats, emptySnapshot: boolean): MultiSeries {
     const orderByCode = new Map(
       this.unit.taskDefinitions.map((taskDefinition) => [
         taskDefinition.abbreviation,
@@ -205,7 +208,10 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
             return {
               name: this.taskService.statusLabels.get(status) || status,
               value,
-              extra: {percentage: total > 0 ? ((value / total) * 100).toFixed(2) : '0.00'},
+              extra: {
+                percentage: total > 0 ? ((value / total) * 100).toFixed(2) : '0.00',
+                emptySnapshot,
+              },
             };
           }),
         };
