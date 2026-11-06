@@ -166,7 +166,12 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
           task.commentCache.add(comment);
         } else if (
           existingComment.recipientReadTime !== comment.recipientReadTime ||
-          existingComment.text !== comment.text
+          existingComment.text !== comment.text ||
+          (comment.commentType === 'submission' &&
+            ((existingComment as SubmissionComment).submissionAssessedAt !==
+              (comment as SubmissionComment).submissionAssessedAt ||
+              (existingComment as SubmissionComment).submissionGranted !==
+                (comment as SubmissionComment).submissionGranted))
         ) {
           // Update cached read receipts or edited messages
           task.commentCache.set(comment.id, comment);
@@ -178,6 +183,24 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
           // This comment is in cache but not in the latest comments list
           task.commentCache.delete(cachedComment.id);
         }
+      }
+
+      const submissionRequests = comments.filter(
+        (comment) =>
+          comment.commentType === 'submission' &&
+          comment.author.id === task.project.student.id,
+      ) as SubmissionComment[];
+
+      if (submissionRequests.some((request) => request.assessed && request.submissionGranted)) {
+        task.submissionAccessGranted = true;
+      }
+
+      if (submissionRequests.length > 0) {
+        task.submissionAccessRequestError = !task.submissionsNotOpen
+          ? 'Submissions are already open for this task.'
+          : submissionRequests.some((request) => !request.assessed)
+            ? 'A submission access request is already awaiting assessment.'
+            : null;
       }
 
       task.refreshCommentData();
