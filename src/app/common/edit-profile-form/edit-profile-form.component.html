@@ -129,6 +129,67 @@
         </section>
       }
 
+      @if (data?.showUnitMemberships && user.id) {
+        <section class="w-full px-0! py-2!">
+          <h2 class="mb-1 text-base font-medium">Units</h2>
+          @if (unitMembershipsLoading) {
+            <mat-progress-spinner aria-label="Loading units" mode="indeterminate" [diameter]="24">
+            </mat-progress-spinner>
+          } @else if (unitMembershipsError) {
+            <p class="text-sm">Unable to load units.</p>
+          } @else {
+            @if (visibleUnitMemberships.length === 0) {
+              <p class="text-sm">
+                {{
+                  unitMemberships.length === 0
+                    ? 'No units assigned or enrolled.'
+                    : 'No active units.'
+                }}
+              </p>
+            } @else {
+              <mat-chip-set aria-label="User units">
+                @for (
+                  membership of visibleUnitMemberships;
+                  track membership.kind + '-' + membership.unitId
+                ) {
+                  <a
+                    class="inline-flex cursor-pointer! no-underline **:cursor-pointer!"
+                    mat-dialog-close
+                    [attr.aria-label]="'Open ' + membership.unitCode + ' as ' + membership.role"
+                    [routerLink]="unitMembershipLink(membership)"
+                  >
+                    <mat-chip>
+                      <span class="font-semibold">{{ membership.unitCode }}</span>
+                      @if (membership.teachingPeriodName) {
+                        <span class="ml-2">{{ membership.teachingPeriodName }}</span>
+                      }
+                      <span class="ml-2">{{ membership.role }}</span>
+                      @if (!membership.active) {
+                        <span class="ml-2">Inactive</span>
+                      }
+                    </mat-chip>
+                  </a>
+                }
+              </mat-chip-set>
+            }
+            @if (unitMemberships.length > activeUnitMemberships.length) {
+              <button
+                class="mt-2"
+                mat-button
+                type="button"
+                [attr.aria-expanded]="showAllUnitMemberships"
+                (click)="showAllUnitMemberships = !showAllUnitMemberships"
+              >
+                <mat-icon class="size-5! text-xl!">
+                  {{ showAllUnitMemberships ? 'expand_less' : 'expand_more' }}
+                </mat-icon>
+                {{ showAllUnitMemberships ? 'Show active only' : 'View all' }}
+              </button>
+            }
+          }
+        </section>
+      }
+
       @if (mode === 'edit' && isCurrentUser) {
         <button class="mb-3" mat-stroked-button routerLink="/notifications/settings" type="button">
           <mat-icon class="size-[18px]! text-[18px]!">notifications</mat-icon>

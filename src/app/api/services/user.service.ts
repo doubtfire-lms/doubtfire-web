@@ -1,10 +1,30 @@
 import {CachedEntityService} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, map} from 'rxjs';
 import {UnitRole, UnitService, User} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
 import API_URL from 'src/app/config/constants/apiUrl';
+
+interface UnitMembershipResponse {
+  kind: 'staff' | 'student';
+  unit_id: number;
+  unit_code: string;
+  teaching_period_name: string | null;
+  active: boolean;
+  role: string;
+  project_id?: number;
+}
+
+export interface UserUnitMembership {
+  kind: 'staff' | 'student';
+  unitId: number;
+  unitCode: string;
+  teachingPeriodName: string | null;
+  active: boolean;
+  role: string;
+  projectId?: number;
+}
 
 @Injectable()
 export class UserService extends CachedEntityService<User> {
@@ -13,8 +33,8 @@ export class UserService extends CachedEntityService<User> {
 
   public readonly csvURL: string;
 
-  constructor(httpClient: HttpClient) {
-    super(httpClient, API_URL);
+  constructor(private readonly unitMembershipHttpClient: HttpClient) {
+    super(unitMembershipHttpClient, API_URL);
 
     this.csvURL = API_URL + '/csv/users';
 
@@ -76,6 +96,24 @@ export class UserService extends CachedEntityService<User> {
 
   public getTutors(): Observable<User[]> {
     return this.query(undefined, {endpointFormat: this.tutorEndpointFormat});
+  }
+
+  public getUnitMemberships(userId: number): Observable<UserUnitMembership[]> {
+    return this.unitMembershipHttpClient
+      .get<UnitMembershipResponse[]>(`${API_URL}/users/${userId}/unit_memberships`)
+      .pipe(
+        map((memberships) =>
+          memberships.map((membership) => ({
+            kind: membership.kind,
+            unitId: membership.unit_id,
+            unitCode: membership.unit_code,
+            teachingPeriodName: membership.teaching_period_name,
+            active: membership.active,
+            role: membership.role,
+            projectId: membership.project_id,
+          })),
+        ),
+      );
   }
 
   public adminRoleFor(unitId: number, user: User): UnitRole {
