@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-12](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-11...v11.1.0-12) (2026-11-06)
+
+
+### Features
+
+* show unit memberships in admin user modal ([#1724](https://github.com/b0ink/doubtfire-deploy/issues/1724)) ([fcd3653](https://github.com/b0ink/doubtfire-deploy/commit/fcd36534974c94a7c334b70d20a9a1163e20f692))
+
 ## [11.1.0-11](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-10...v11.1.0-11) (2026-11-05)
 
 
