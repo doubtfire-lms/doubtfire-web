@@ -10,11 +10,7 @@ import {
 } from '@angular/core';
 import {filter, map, take} from 'rxjs/operators';
 import {addDays, startOfDay} from 'src/app/api/models/calendar-day';
-import {
-  CampusStats,
-  TaskCodeStats,
-  TaskCompletionSnapshot,
-} from 'src/app/api/models/doubtfire-model';
+import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {Unit} from 'src/app/api/models/unit';
@@ -23,9 +19,9 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 import {
   displayWeekNumber,
-  dropLeadingEmptySnapshots,
+  filterEmptySnapshots,
   formatSnapshotLabel,
-  shouldIncludeSnapshot,
+  isEmptySnapshot,
 } from '../chart-data-helpers';
 
 export interface SnapshotWeekSegment {
@@ -64,7 +60,6 @@ const FULL_LABEL_MIN_WIDTH = 56;
 const SHORT_LABEL_MIN_WIDTH = 28;
 // Beyond this many snapshots the slider's tick marks merge into a solid line, so they are hidden.
 const MAX_TICK_MARKS = 40;
-const DAYS_PER_WEEK = 7;
 // A one week break is only a few dozen pixels wide, so its name is truncated rather
 // than hidden. Below this even an ellipsis is noise, and the tooltip has to carry it.
 const BREAK_LABEL_MIN_WIDTH = 24;
@@ -197,7 +192,8 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
 
   onSnapshotSliderChange(value: number): void {
     this.sliderSelect = Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax);
-    this.campuses = Object.keys(this.snapshots[this.sliderSelect]?.stats ?? {});
+    const snapshot = this.snapshots[this.sliderSelect];
+    this.campuses = Object.keys(snapshot?.status_population_stats?.all ?? snapshot?.stats ?? {});
   }
 
   private updateWeekBand(): void {
@@ -488,73 +484,27 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
     return start === end ? start : `${start} – ${end}`;
   }
 
-  /**
-   * Week 0 holds whatever came before the teaching period started, so it is usually a
-   * few days rather than a full week and renders as a stub beside the other segments.
-   * Pad the front with blank days so it takes a full week's width, and always leave at
-   * least one blank day at the very start so the beginning of the data is visible.
-   *
-   * Only applies when there is a week 0 to begin with - a unit whose stats start on or
-   * after week 1 is left alone.
-   */
+  // Add a single empty day when week 0 has no captured empty day to precede its data.
   private padWeekZero(snapshots: TaskCompletionSnapshot[]): TaskCompletionSnapshot[] {
     const firstDay = startOfDay(snapshots[0]?.snapshot_date);
-    if (!firstDay) {
+    if (
+      !firstDay ||
+      isEmptySnapshot(snapshots[0]) ||
+      displayWeekNumber(this.unit, firstDay) !== 0
+    ) {
       return snapshots;
     }
 
-    const weekZeroDays = snapshots.filter(
-      (snapshot) => displayWeekNumber(this.unit, new Date(snapshot.snapshot_date)) === 0,
-    ).length;
-
-    if (weekZeroDays === 0) {
-      return snapshots;
-    }
-
-    const blankDays = Math.max(DAYS_PER_WEEK - weekZeroDays, 1);
-    const stats = this.notStartedStats(snapshots[0]);
-    const padding: TaskCompletionSnapshot[] = [];
-
-    for (let offset = blankDays; offset > 0; offset -= 1) {
-      const day = addDays(firstDay, -offset);
-      padding.push({
+    const day = addDays(firstDay, -1);
+    return [
+      {
         snapshot_date: day.toISOString().slice(0, 10),
         snapshot_timestamp: `${Math.floor(day.getTime() / 1000)}`,
-        stats,
+        stats: {},
         placeholder: true,
-      });
-    }
-
-    return [...padding, ...snapshots];
-  }
-
-  /**
-   * Stats for a filler day: every task sitting at not started, so the bars read as a
-   * full column of 'not started' rather than the chart blanking out.
-   *
-   * The campus keys are copied from a real snapshot, because the campus filter is built
-   * from whichever snapshot is selected - a filler day has to offer the same choices.
-   */
-  private notStartedStats(reference: TaskCompletionSnapshot): CampusStats {
-    const taskCodes: Set<string> = new Set();
-    Object.values(reference.stats).forEach((tutorials) =>
-      Object.values(tutorials).forEach((taskStats) =>
-        Object.keys(taskStats).forEach((taskCode) => taskCodes.add(taskCode)),
-      ),
-    );
-
-    const notStarted: TaskCodeStats = {};
-    taskCodes.forEach((taskCode) => (notStarted[taskCode] = {not_started: 1}));
-
-    const stats: CampusStats = {};
-    Object.entries(reference.stats).forEach(([campus, tutorials]) => {
-      const tutorialCode = Object.keys(tutorials)[0];
-      if (tutorialCode) {
-        stats[campus] = {[tutorialCode]: notStarted};
-      }
-    });
-
-    return stats;
+      },
+      ...snapshots,
+    ];
   }
 
   onSelect(): void {}
@@ -573,11 +523,9 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
               acc.push(snapshot);
             }
             return acc;
-          }, [] as TaskCompletionSnapshot[])
-          .filter((snapshot) => shouldIncludeSnapshot(this.unit, snapshot));
-        this.snapshots = this.padWeekZero(dropLeadingEmptySnapshots([...this.snapshots].reverse()));
-        this.sliderSelect = Math.max(this.snapshots.length - 1, 0);
-        this.campuses = Object.keys(this.snapshots[this.sliderSelect]?.stats ?? {});
+          }, [] as TaskCompletionSnapshot[]);
+        this.snapshots = this.padWeekZero(filterEmptySnapshots([...this.snapshots].reverse()));
+        this.onSnapshotSliderChange(Math.max(this.snapshots.length - 1, 0));
         this.buildWeekSegments();
         this.changeDetectorRef.detectChanges();
 
