@@ -156,6 +156,8 @@
                     class="inline-flex cursor-pointer! no-underline **:cursor-pointer!"
                     mat-dialog-close
                     [attr.aria-label]="'Open ' + membership.unitCode + ' as ' + membership.role"
+                    [matTooltip]="membership.unitCode + ' ' + membership.unitName"
+                    [matTooltipShowDelay]="1000"
                     [routerLink]="unitMembershipLink(membership)"
                   >
                     <mat-chip>

@@ -10,6 +10,7 @@ interface UnitMembershipResponse {
   kind: 'staff' | 'student';
   unit_id: number;
   unit_code: string;
+  unit_name: string;
   teaching_period_name: string | null;
   active: boolean;
   role: string;
@@ -20,6 +21,7 @@ export interface UserUnitMembership {
   kind: 'staff' | 'student';
   unitId: number;
   unitCode: string;
+  unitName: string;
   teachingPeriodName: string | null;
   active: boolean;
   role: string;
@@ -107,6 +109,7 @@ export class UserService extends CachedEntityService<User> {
             kind: membership.kind,
             unitId: membership.unit_id,
             unitCode: membership.unit_code,
+            unitName: membership.unit_name,
             teachingPeriodName: membership.teaching_period_name,
             active: membership.active,
             role: membership.role,
