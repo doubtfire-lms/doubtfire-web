@@ -47,7 +47,7 @@
     "@ngstack/code-editor": "^9.0.0",
     "@sentry/angular": "^10.75.0",
     "@sentry/cli": "^3.8.2",
-    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/postcss": "^4.3.4",
     "@worktile/gantt": "^22.0.0",
     "angular-calendar": "^0.32.2",
     "ansi-to-html": "^0.7.2",
@@ -105,11 +105,11 @@
     "postcss": "^8.5.31",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.9.10",
-    "sass": "^1.106.1",
-    "tailwindcss": "^4.3.3",
+    "sass": "^1.107.1",
+    "tailwindcss": "^4.3.4",
     "ts-node": "~10.9",
     "typescript": "~6.0.3",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
   },
   "optionalDependencies": {
     "@nx/nx-darwin-arm64": "^24.0.3",
@@ -118,6 +118,6 @@
     "@nx/nx-linux-x64-gnu": "^24.0.2",
     "@nx/nx-win32-x64-msvc": "^24.0.3",
     "@rollup/rollup-linux-arm64-gnu": "^4.67.4",
-    "@rollup/rollup-linux-x64-gnu": "^4.65.0"
+    "@rollup/rollup-linux-x64-gnu": "^4.67.4"
   }
 }
