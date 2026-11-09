@@ -108,11 +108,13 @@ export class TaskSimilarityViewComponent implements OnChanges, OnDestroy {
           .then((response) => response.blob())
           .then((report) => {
             this.fileDownloaderService.releaseBlob(url);
-            this.jplagViewer.openComparison(
+            return this.jplagViewer.openComparison(
               report,
               similarity.task.project.student.username,
               similarity.otherStudent.username,
             );
+          })
+          .then(() => {
             this.jplagOpenState = true;
             this.loadingJplagReportFor = null;
           })
