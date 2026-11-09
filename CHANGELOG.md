@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-14...v11.1.0-15) (2026-11-09)
+
+
+### Bug Fixes
+
+* allow special characters in task inbox scroll lookup ([d06bbe0](https://github.com/b0ink/doubtfire-deploy/commit/d06bbe0aeebb9bef4fb2933f6d6ebc1231c3785f))
+* handle jplag comparison open failures ([1f2574f](https://github.com/b0ink/doubtfire-deploy/commit/1f2574fddb9f11472c57755336d1ca837f681895))
+* scroll to selected task in inbox after route load ([458d1b4](https://github.com/b0ink/doubtfire-deploy/commit/458d1b4159a52c3d352781fc79f4ba867b2fb866))
+
 ## [11.1.0-14](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-13...v11.1.0-14) (2026-11-09)
 
 
