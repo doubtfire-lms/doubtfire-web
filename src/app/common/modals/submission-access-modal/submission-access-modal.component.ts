@@ -39,7 +39,9 @@ export class SubmissionAccessModalComponent {
     const reason = this.submissionData.controls.submissionReason;
     reason.setValue(reason.value.trim());
     reason.markAsTouched();
-    if (this.submissionData.invalid || this.submitting) return;
+    if (this.submissionData.invalid || this.submitting) {
+      return;
+    }
     if (this.data.task.blockedByPrerequisiteTasks()) {
       this.error = 'You must satisfy the prerequisite tasks before requesting submission access.';
       return;
@@ -65,7 +67,9 @@ export class SubmissionAccessModalComponent {
         },
         error: (error) => {
           this.error =
-            error?.error?.error || error?.data?.error || error?.message ||
+            error?.error?.error ||
+            error?.data?.error ||
+            error?.message ||
             (typeof error === 'string' ? error : 'Unable to request submission access.');
         },
       });

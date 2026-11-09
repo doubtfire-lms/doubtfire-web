@@ -15,9 +15,9 @@ import {UnitRole} from 'src/app/api/models/unit-role';
 import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
+import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {SubmissionAccessModalService} from 'src/app/common/modals/submission-access-modal/submission-access-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {ExistingSubmissionChoiceModalService} from 'src/app/tasks/modals/existing-submission-choice-modal/existing-submission-choice-modal.service';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
@@ -159,18 +159,23 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
   }
 
   updateFilesInSubmission(): void {
-    if (!this.isTutor && this.task.submissionsNotOpen) return;
+    if (!this.isTutor && this.task.submissionsNotOpen) {
+      return;
+    }
     this.task.presentTaskSubmissionModal(this.task.status, true);
   }
 
   applyForSubmissionAccess(): void {
     if (this.task.blockedByPrerequisiteTasks()) {
-      this.alerts.error('You must submit or complete the prerequisite tasks before requesting submission access.');
+      this.alerts.error(
+        'You must submit or complete the prerequisite tasks before requesting submission access.',
+      );
       return;
     }
     if (!this.task.canApplyForSubmissionAccess()) {
       this.alerts.error(
-        this.task.submissionAccessRequestError || 'Submission access cannot be requested for this task.',
+        this.task.submissionAccessRequestError ||
+          'Submission access cannot be requested for this task.',
       );
       return;
     }

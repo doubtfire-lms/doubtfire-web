@@ -187,8 +187,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
 
       const submissionRequests = comments.filter(
         (comment) =>
-          comment.commentType === 'submission' &&
-          comment.author.id === task.project.student.id,
+          comment.commentType === 'submission' && comment.author.id === task.project.student.id,
       ) as SubmissionComment[];
 
       if (submissionRequests.some((request) => request.assessed && request.submissionGranted)) {

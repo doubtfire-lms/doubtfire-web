@@ -83,7 +83,9 @@ export class Task extends Entity {
 
   public get submissionsNotOpen(): boolean {
     const opensOn = this.definition?.SubmissionOpensOn;
-    if (!opensOn || this.submissionAccessGranted) return false;
+    if (!opensOn || this.submissionAccessGranted) {
+      return false;
+    }
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return today < opensOn;

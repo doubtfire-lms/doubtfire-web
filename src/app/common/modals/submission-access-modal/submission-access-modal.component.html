@@ -1,13 +1,20 @@
 <h3 mat-dialog-title>Request submission access</h3>
 <div mat-dialog-content [formGroup]="submissionData">
   <p class="w-full">
-    Please explain the attempt you have made and why you would like to submit early. Your tutor will assess your request shortly.
+    Please explain the attempt you have made and why you would like to submit early. Your tutor will
+    assess your request shortly.
   </p>
 
   <mat-form-field appearance="outline" style="width: 100%">
     <mat-label>Reason</mat-label>
-    <textarea matInput [maxlength]="reasonMaxLength" [formControl]="submissionData.controls.submissionReason"></textarea>
-    <mat-hint align="end">{{ submissionData.controls.submissionReason.value.length }} / {{ reasonMaxLength }}</mat-hint>
+    <textarea
+      matInput
+      [formControl]="submissionData.controls.submissionReason"
+      [maxlength]="reasonMaxLength"
+    ></textarea>
+    <mat-hint align="end"
+      >{{ submissionData.controls.submissionReason.value.length }} / {{ reasonMaxLength }}</mat-hint
+    >
     @if (submissionData.controls.submissionReason.hasError('required')) {
       <mat-error>You must enter a reason</mat-error>
     }

@@ -220,6 +220,7 @@ import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/side
 import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.component';
 import {SpecConModalComponent} from './common/modals/spec-con-modal/spec-con-modal.component';
 import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal.service';
+import {SubmissionAccessModalComponent} from './common/modals/submission-access-modal/submission-access-modal.component';
 import {TaskAssessmentModalComponent} from './common/modals/task-assessment-modal/task-assessment-modal.component';
 import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
 import {ObjectSelectComponent} from './common/obect-select/object-select.component';
@@ -325,8 +326,6 @@ import {TaskFeedbackTemplatesComponent} from './tasks/task-comment-composer/task
 import {CommentBubbleActionComponent} from './tasks/task-comments-viewer/comment-bubble-action/comment-bubble-action.component';
 import {DiscussTimeoutCommentComponent} from './tasks/task-comments-viewer/discuss-timeout-comment/discuss-timeout-comment.component';
 import {ExtensionCommentComponent} from './tasks/task-comments-viewer/extension-comment/extension-comment.component';
-import {SubmissionCommentComponent} from './tasks/task-comments-viewer/submission-comment/submission-comment.component';
-import {SubmissionAccessModalComponent} from './common/modals/submission-access-modal/submission-access-modal.component';
 import {
   IntelligentDiscussionDialog,
   IntelligentDiscussionPlayerComponent,
@@ -335,6 +334,7 @@ import {IntelligentDiscussionRecorderComponent} from './tasks/task-comments-view
 import {PdfImageCommentComponent} from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
+import {SubmissionCommentComponent} from './tasks/task-comments-viewer/submission-comment/submission-comment.component';
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
@@ -378,9 +378,9 @@ import {TaskDefinitionOverseerComponent} from './units/states/edit/directives/un
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
 import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
+import {TaskDefinitionSubmissionDateComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-submission-date/task-definition-submission-date.component';
 import {TaskDefinitionUploadComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
 import {TaskDefinitionWhoComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
-import {TaskDefinitionSubmissionDateComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-submission-date/task-definition-submission-date.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
 import {UnitTutorialsListComponent} from './units/states/edit/directives/unit-tutorials-list/unit-tutorials-list.component';
 import {UnitTutorialsManagerComponent} from './units/states/edit/directives/unit-tutorials-manager/unit-tutorials-manager.component';

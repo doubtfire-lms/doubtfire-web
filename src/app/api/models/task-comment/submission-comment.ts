@@ -22,7 +22,8 @@ export class SubmissionComment extends TaskComment {
 
         // A denial does not revoke access granted by an earlier request.
         task.submissionAccessGranted =
-          task.submissionAccessGranted || (submission.assessed && submission.submissionGranted === true);
+          task.submissionAccessGranted ||
+          (submission.assessed && submission.submissionGranted === true);
         task.submissionAccessRequestError = task.submissionsNotOpen
           ? null
           : 'Submissions are already open for this task.';

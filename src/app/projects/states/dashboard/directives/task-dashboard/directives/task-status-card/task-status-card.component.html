@@ -51,8 +51,8 @@
       <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
       @if (!isTutor && task?.submissionsNotOpen) {
         <p>
-          Submissions open on {{ task.definition.SubmissionOpensOn | date: 'mediumDate' }}.
-          You can request early access once the prerequisites are satisfied.
+          Submissions open on {{ task.definition.SubmissionOpensOn | date: 'mediumDate' }}. You can
+          request early access once the prerequisites are satisfied.
         </p>
       }
       @if (task?.blockedByPrerequisiteTasks()) {
@@ -93,7 +93,13 @@
         task?.requiresFileUpload() &&
         (!task?.definition.staffManagedTask || canManageStaffTask)
       ) {
-        <button mat-stroked-button [disabled]="task?.submissionsNotOpen && !isTutor" (click)="updateFilesInSubmission()">Upload new files</button>
+        <button
+          mat-stroked-button
+          [disabled]="task?.submissionsNotOpen && !isTutor"
+          (click)="updateFilesInSubmission()"
+        >
+          Upload new files
+        </button>
       }
     </div>
 

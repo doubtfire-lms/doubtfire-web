@@ -1,7 +1,5 @@
 import {beforeEach, describe, expect, it} from 'vitest';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SubmissionAccessModalService} from 'src/app/common/modals/submission-access-modal/submission-access-modal.service';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {EMPTY} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
@@ -11,6 +9,8 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
 import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
+import {SubmissionAccessModalService} from 'src/app/common/modals/submission-access-modal/submission-access-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';

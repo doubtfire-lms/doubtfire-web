@@ -1,6 +1,6 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {SubmissionCommentComponent} from './submission-comment.component';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {SubmissionCommentComponent} from './submission-comment.component';
 
 describe('SubmissionCommentComponent', () => {
   let component: SubmissionCommentComponent;
