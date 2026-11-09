@@ -105,7 +105,7 @@
     "postcss": "^8.5.31",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.9.10",
-    "sass": "^1.106.1",
+    "sass": "^1.107.1",
     "tailwindcss": "^4.3.4",
     "ts-node": "~10.9",
     "typescript": "~6.0.3",
