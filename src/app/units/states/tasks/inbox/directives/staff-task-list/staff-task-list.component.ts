@@ -800,19 +800,27 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private scrollToTaskInList(task: Task) {
-    const taskEl = document.getElementById(task.taskKeyToIdString()) as
-      | (HTMLElement & {
-          scrollIntoViewIfNeeded?: (options?: ScrollIntoViewOptions) => void;
-        })
-      | null;
-    if (!taskEl) {
-      return;
-    }
-    if (taskEl.scrollIntoViewIfNeeded) {
-      taskEl.scrollIntoViewIfNeeded({behavior: 'smooth'});
-    } else {
-      taskEl.scrollIntoView({behavior: 'smooth'});
-    }
+    // Defer so the viewport has rendered after loading flips to false.
+    setTimeout(() => {
+      const taskEl = document.getElementById(task.taskKeyToIdString()) as
+        | (HTMLElement & {
+            scrollIntoViewIfNeeded?: (options?: ScrollIntoViewOptions) => void;
+          })
+        | null;
+      if (taskEl) {
+        if (taskEl.scrollIntoViewIfNeeded) {
+          taskEl.scrollIntoViewIfNeeded({behavior: 'smooth'});
+        } else {
+          taskEl.scrollIntoView({behavior: 'smooth'});
+        }
+        return;
+      }
+      // Virtual scroll doesn't render off-screen rows, so scroll by index instead.
+      const index = this.filteredTasks?.findIndex((t) => t?.hasTaskKey(task.taskKey())) ?? -1;
+      if (index >= 0) {
+        this.viewport?.scrollToIndex(index);
+      }
+    });
   }
 
   isSelectedTask(task: Task) {
