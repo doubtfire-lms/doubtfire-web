@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-13](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-12...v11.1.0-13) (2026-11-09)
+
+
+### Bug Fixes
+
+* reduce unread notification count polling ([078c19f](https://github.com/b0ink/doubtfire-deploy/commit/078c19f887a0744f27f6cf7b97821f3b98184b0d))
+* resolve task definition via task unit when mapping tasks ([9f7119d](https://github.com/b0ink/doubtfire-deploy/commit/9f7119db649d281060df61d12c8a41f323ac3bb0))
+* show task snapshots before tutorial enrolment ([d9aee75](https://github.com/b0ink/doubtfire-deploy/commit/d9aee75b7d3399997d626a8b99e755ca419d9c67))
+
 ## [11.1.0-12](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-11...v11.1.0-12) (2026-11-06)
 
 
