@@ -48,7 +48,11 @@ type StaffTaskListSortOption = 'default' | 'feedbackDeadline';
 
 type StaffTaskListSortDirection = 'asc' | 'desc';
 
-type StaffTaskListFilterKey = 'awaitingFeedback' | 'similaritiesDetected' | 'showWithdrawnStudents';
+type StaffTaskListFilterKey =
+  | 'awaitingFeedback'
+  | 'feedbackOverdue'
+  | 'similaritiesDetected'
+  | 'showWithdrawnStudents';
 
 interface StaffTaskListViewPreferences {
   sortBy: StaffTaskListSortOption;
@@ -83,6 +87,7 @@ const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
   sortDirection: 'asc',
   filters: {
     awaitingFeedback: false,
+    feedbackOverdue: false,
     similaritiesDetected: false,
     showWithdrawnStudents: false,
   },
@@ -221,6 +226,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   ];
 
   statusOptions: StaffTaskListStatusOptionView[] = [];
+  feedbackOverdueCount = 0;
 
   filtersExpanded = false;
 
@@ -598,9 +604,16 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     // the statuses you could switch to.
     const beforeStatusFilter = filteredTasks?.filter((task) => this.matchesQuickFilters(task));
     this.statusOptions = this.buildStatusOptions(beforeStatusFilter);
+    this.feedbackOverdueCount =
+      beforeStatusFilter?.filter((task) => task && this.getWarningIcon(task) === 'overflow').length ?? 0;
 
     filteredTasks = this.sortTasks(
-      beforeStatusFilter?.filter((task) => this.matchesStatusFilter(task)),
+      beforeStatusFilter?.filter(
+        (task) =>
+          this.matchesStatusFilter(task) &&
+          (!this.isFilterActive('feedbackOverdue') ||
+            (task && this.getWarningIcon(task) === 'overflow')),
+      ),
     );
     this.filteredTasks = filteredTasks;
 
@@ -950,7 +963,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public clearStatusFilter(): void {
-    this.viewPreferences = {...this.viewPreferences, statuses: []};
+    this.viewPreferences = {
+      ...this.viewPreferences,
+      statuses: [],
+      filters: {...this.viewPreferences.filters, feedbackOverdue: false},
+    };
     this.viewPreferencesChanged();
   }
 
@@ -966,7 +983,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   // A lone status is not worth a filter row -- everything in the list already has it
   public get showStatusFilter(): boolean {
-    return this.statusOptions.length > 1 || this.viewPreferences.statuses.length > 0;
+    return (
+      this.statusOptions.length > 1 ||
+      this.viewPreferences.statuses.length > 0 ||
+      this.feedbackOverdueCount > 0 ||
+      this.isFilterActive('feedbackOverdue')
+    );
   }
 
   public get activeFilterCount(): number {
