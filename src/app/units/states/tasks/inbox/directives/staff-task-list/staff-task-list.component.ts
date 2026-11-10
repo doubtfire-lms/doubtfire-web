@@ -50,10 +50,7 @@ type StaffTaskListSortOption = 'default' | 'feedbackDeadline';
 type StaffTaskListSortDirection = 'asc' | 'desc';
 
 type StaffTaskListFilterKey =
-  | 'awaitingFeedback'
-  | 'feedbackOverdue'
-  | 'similaritiesDetected'
-  | 'showWithdrawnStudents';
+  'awaitingFeedback' | 'feedbackOverdue' | 'similaritiesDetected' | 'showWithdrawnStudents';
 
 interface StaffTaskListViewPreferences {
   sortBy: StaffTaskListSortOption;
@@ -618,7 +615,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     const beforeStatusFilter = filteredTasks?.filter((task) => this.matchesQuickFilters(task));
     this.statusOptions = this.buildStatusOptions(beforeStatusFilter);
     this.feedbackOverdueCount =
-      beforeStatusFilter?.filter((task) => task && this.getWarningIcon(task) === 'overflow').length ?? 0;
+      beforeStatusFilter?.filter((task) => task && this.getWarningIcon(task) === 'overflow')
+        .length ?? 0;
 
     filteredTasks = this.sortTasks(
       beforeStatusFilter?.filter(

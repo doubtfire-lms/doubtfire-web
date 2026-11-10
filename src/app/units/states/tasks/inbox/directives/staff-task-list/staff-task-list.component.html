@@ -243,7 +243,8 @@
               [attr.aria-pressed]="isFilterActive('feedbackOverdue')"
               [ngClass]="{
                 'border-red-500 bg-red-50 text-red-700': isFilterActive('feedbackOverdue'),
-                'border-gray-200 text-gray-700 hover:bg-gray-50': !isFilterActive('feedbackOverdue'),
+                'border-gray-200 text-gray-700 hover:bg-gray-50':
+                  !isFilterActive('feedbackOverdue'),
               }"
               (click)="toggleFilter('feedbackOverdue', !isFilterActive('feedbackOverdue'))"
             >
