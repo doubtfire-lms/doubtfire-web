@@ -67,6 +67,7 @@
           <ng-container *ngTemplateOutlet="TaskListSkeleton"></ng-container>
         } @else if (taskData) {
           <df-staff-task-list
+            [dashboardInboxPreset]="dashboardInboxPreset"
             [filters]="filters"
             [isNarrow]="narrowTaskInbox"
             [taskData]="taskData"
@@ -173,6 +174,7 @@
       } @else if (taskData) {
         <df-staff-task-list
           [filters]="filters"
+          [dashboardInboxPreset]="dashboardInboxPreset"
           [isNarrow]="false"
           [taskData]="taskData"
           [unit]="unit"

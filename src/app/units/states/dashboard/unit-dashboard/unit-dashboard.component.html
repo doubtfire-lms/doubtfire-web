@@ -1,31 +1,37 @@
 <main class="w-full max-w-225 text-center">
   <h1 class="m-0 mb-2 text-[28px] font-medium">Unit dashboard</h1>
   <div class="mx-auto my-7 grid max-w-70 grid-cols-1 gap-5 sm:max-w-none sm:grid-cols-3">
-    <div
-      class="box-border flex aspect-square flex-col items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white p-5 text-slate-800 no-underline hover:border-formatif-blue hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
-    >
-      <mat-icon aria-hidden="true" class="text-formatif-blue">rate_review</mat-icon>
-      <h2 class="m-0 text-lg font-medium">Ready for feedback</h2>
-      <span class="text-[44px] leading-none font-medium tabular-nums">{{
-        readyForFeedbackCount
-      }}</span>
-    </div>
-    <div
-      class="box-border flex aspect-square flex-col items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white p-5 text-slate-800 no-underline hover:border-formatif-blue hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
-    >
-      <mat-icon aria-hidden="true" class="text-formatif-blue">help_outline</mat-icon>
-      <h2 class="m-0 text-lg font-medium">Needs help</h2>
-      <span class="text-[44px] leading-none font-medium tabular-nums">{{ needsHelpCount }}</span>
-    </div>
-    <div
-      class="box-border flex aspect-square flex-col items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white p-5 text-slate-800 no-underline hover:border-formatif-blue hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
-    >
-      <mat-icon aria-hidden="true" class="text-formatif-blue">schedule</mat-icon>
-      <h2 class="m-0 text-lg font-medium">Feedback overdue</h2>
-      <span class="text-[44px] leading-none font-medium tabular-nums">{{
-        feedbackOverdueCount
-      }}</span>
-    </div>
+    <a [routerLink]="['../tasks/inbox']" [state]="{dashboardInboxPreset: 'ready_for_feedback'}">
+      <div
+        class="box-border flex aspect-square flex-col items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white p-5 text-slate-800 no-underline hover:border-formatif-blue hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
+      >
+        <mat-icon aria-hidden="true" class="text-formatif-blue">rate_review</mat-icon>
+        <h2 class="m-0 text-lg font-medium">Ready for feedback</h2>
+        <span class="text-[44px] leading-none font-medium tabular-nums">{{
+          readyForFeedbackCount
+        }}</span>
+      </div>
+    </a>
+    <a [routerLink]="['../tasks/inbox']" [state]="{dashboardInboxPreset: 'need_help'}">
+      <div
+        class="box-border flex aspect-square flex-col items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white p-5 text-slate-800 no-underline hover:border-formatif-blue hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
+      >
+        <mat-icon aria-hidden="true" class="text-formatif-blue">help_outline</mat-icon>
+        <h2 class="m-0 text-lg font-medium">Needs help</h2>
+        <span class="text-[44px] leading-none font-medium tabular-nums">{{ needsHelpCount }}</span>
+      </div>
+    </a>
+    <a [routerLink]="['../tasks/inbox']" [state]="{dashboardInboxPreset: 'feedback_overdue'}">
+      <div
+        class="box-border flex aspect-square flex-col items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white p-5 text-slate-800 no-underline hover:border-formatif-blue hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
+      >
+        <mat-icon aria-hidden="true" class="text-formatif-blue">schedule</mat-icon>
+        <h2 class="m-0 text-lg font-medium">Feedback overdue</h2>
+        <span class="text-[44px] leading-none font-medium tabular-nums">{{
+          feedbackOverdueCount
+        }}</span>
+      </div>
+    </a>
   </div>
   <p class="my-6 flex items-center justify-center gap-2">
     <mat-icon aria-hidden="true">mail_outline</mat-icon>

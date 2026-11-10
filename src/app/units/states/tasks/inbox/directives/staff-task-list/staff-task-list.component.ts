@@ -40,6 +40,7 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import type {DashboardInboxPreset} from '../../unit-task-inbox-state.component';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 
 type StaffTaskListViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
@@ -147,6 +148,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   };
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
+  @Input() dashboardInboxPreset: DashboardInboxPreset | null = null;
   @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
@@ -310,6 +312,17 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.fetchedAllTasks = false;
     this.viewPreferences = this.defaultViewPreferences();
     this.viewAsUnitRoleId = VIEW_AS_SELF;
+
+    // Apply the card's selection after defaults and before the first task fetch.
+    switch (this.dashboardInboxPreset) {
+      case 'ready_for_feedback':
+      case 'need_help':
+        this.viewPreferences.statuses = [this.dashboardInboxPreset];
+        break;
+      case 'feedback_overdue':
+        this.viewPreferences.filters.feedbackOverdue = true;
+        break;
+    }
 
     // Does the current user have any tutorials?
     this.userHasTutorials = this.unit.tutorialsForUserName(this.inboxUserName)?.length > 0;

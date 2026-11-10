@@ -22,6 +22,7 @@ import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import type {DashboardInboxPreset} from './unit-task-inbox-state.component';
 
 interface InboxTaskData {
   source: (
@@ -49,6 +50,7 @@ export class InboxComponent implements OnInit, OnDestroy {
   @Input() unitRole: UnitRole;
   @Input() taskData: InboxTaskData;
   @Input() loading = false;
+  @Input() dashboardInboxPreset: DashboardInboxPreset | null = null;
   @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
