@@ -15,6 +15,7 @@ type DownloadState = 'downloading' | 'downloaded' | 'failed';
 })
 export class SubmissionFilesDownloadComponent implements OnInit {
   protected downloadState: DownloadState = 'downloading';
+  protected fileLabel = 'submitted files';
   private downloadUrl = '';
 
   constructor(
@@ -28,7 +29,12 @@ export class SubmissionFilesDownloadComponent implements OnInit {
     const projectId = this.route.snapshot.paramMap.get('projectId');
     const taskDefId = this.route.snapshot.paramMap.get('taskDefId');
 
-    this.downloadUrl = `${this.constants.API_URL}/projects/${projectId}/task_def_id/${taskDefId}/submission_files?as_attachment=true`;
+    if (this.route.snapshot.data['portfolioAdditionalFiles']) {
+      this.fileLabel = 'additional files';
+      this.downloadUrl = `${this.constants.API_URL}/submission/project/${projectId}/portfolio/additional_files`;
+    } else {
+      this.downloadUrl = `${this.constants.API_URL}/projects/${projectId}/task_def_id/${taskDefId}/submission_files?as_attachment=true`;
+    }
     this.authenticationService.afterAuthCall((authenticated) => {
       if (authenticated) {
         this.download();
@@ -44,7 +50,7 @@ export class SubmissionFilesDownloadComponent implements OnInit {
       (resourceUrl: string, response: HttpResponse<Blob>) => {
         this.fileDownloader.downloadBlobToFile(
           resourceUrl,
-          this.filenameFromResponse(response) ?? 'submitted-files.zip',
+          this.filenameFromResponse(response) ?? `${this.fileLabel.replace(' ', '-')}.zip`,
         );
         this.downloadState = 'downloaded';
       },

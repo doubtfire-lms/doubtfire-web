@@ -75,6 +75,10 @@ export class PortfolioReviewStepComponent implements OnInit {
     return (this.project?.portfolioFiles ?? []).filter((file) => file.idx !== 0);
   }
 
+  public get hasExtraFiles(): boolean {
+    return this.extraFiles.length > 0;
+  }
+
   public get selectedTasks(): Task[] {
     const toBeWorkedOn = this.taskService?.toBeWorkedOn ?? [];
     return [...(this.project?.tasks ?? [])]
@@ -125,6 +129,14 @@ export class PortfolioReviewStepComponent implements OnInit {
     this.fileDownloaderService.downloadFile(
       this.project.portfolioUrl(true),
       `${username}-portfolio.pdf`,
+    );
+  }
+
+  public downloadAdditionalFiles(): void {
+    const username = this.project?.student?.username ?? 'student';
+    this.fileDownloaderService.downloadFile(
+      this.project.portfolioAdditionalFilesUrl(),
+      `${username}-additional-files.zip`,
     );
   }
 

@@ -2,12 +2,12 @@
   @switch (downloadState) {
     @case ('downloading') {
       <mat-spinner diameter="32" />
-      <p class="mat-body-1">Downloading submitted files...</p>
+      <p class="mat-body-1">Downloading {{ fileLabel }}...</p>
     }
 
     @case ('downloaded') {
       <mat-icon class="size-12 text-5xl" color="primary">check_circle</mat-icon>
-      <p class="mat-body-1">Submitted files downloaded.</p>
+      <p class="mat-body-1">{{ fileLabel | titlecase }} downloaded.</p>
       <button color="primary" mat-raised-button type="button" (click)="download()">
         <mat-icon>download</mat-icon>
         Download again
@@ -16,7 +16,7 @@
 
     @case ('failed') {
       <mat-icon class="size-12 text-5xl" color="warn">error</mat-icon>
-      <p class="mat-body-1">Could not download submitted files.</p>
+      <p class="mat-body-1">Could not download {{ fileLabel }}.</p>
       <button color="primary" mat-raised-button type="button" (click)="download()">
         <mat-icon>download</mat-icon>
         Try again
