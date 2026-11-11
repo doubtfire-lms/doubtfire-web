@@ -115,7 +115,7 @@
     "@nx/nx-darwin-arm64": "^24.0.3",
     "@nx/nx-darwin-x64": "^24.0.3",
     "@nx/nx-linux-arm64-gnu": "^24.0.3",
-    "@nx/nx-linux-x64-gnu": "^24.0.2",
+    "@nx/nx-linux-x64-gnu": "^24.0.5",
     "@nx/nx-win32-x64-msvc": "^24.0.3",
     "@rollup/rollup-linux-arm64-gnu": "^4.67.4",
     "@rollup/rollup-linux-x64-gnu": "^4.67.4"
