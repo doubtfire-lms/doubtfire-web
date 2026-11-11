@@ -3,10 +3,12 @@ import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {
   displayWeekNumber,
-  dropLeadingEmptySnapshots,
+  filterEmptySnapshots,
   formatSnapshotLabel,
+  getEmptySnapshotTaskStats,
   getTaskPopulationStats,
   isEmptySnapshot,
+  shouldIncludeSnapshot,
 } from './chart-data-helpers';
 
 const unitStartingOn = (start: string): Unit =>
@@ -60,33 +62,115 @@ describe('isEmptySnapshot', () => {
   it('does not treat an all-not-started cohort as empty', () => {
     expect(isEmptySnapshot(snapshot('2025-03-03', {not_started: 40}))).toBe(false);
   });
+
+  it('uses campus-wide counts when students have no tutorials', () => {
+    const withoutTutorials = {
+      ...snapshot('2025-03-03'),
+      status_population_stats: {
+        all: {Burwood: {__all__: {T1: {complete: 2, not_started: 38}}}},
+        target_grades: {},
+      },
+    };
+
+    expect(isEmptySnapshot(withoutTutorials)).toBe(false);
+    expect(getTaskPopulationStats(withoutTutorials, 'all', 'all', [], [], {} as Unit)).toEqual({
+      T1: {complete: 2, not_started: 38},
+    });
+  });
 });
 
-describe('dropLeadingEmptySnapshots', () => {
-  it('drops only the leading run of empty snapshots', () => {
+describe('filterEmptySnapshots', () => {
+  it('keeps only the last empty snapshot before data begins', () => {
     const snapshots = [
       snapshot('2025-02-17'),
       snapshot('2025-02-18'),
       snapshot('2025-03-07', {not_started: 40}),
-      snapshot('2025-03-08'), // empty mid-semester: kept, so week widths stay true
+      snapshot('2025-03-08'),
       snapshot('2025-03-09', {complete: 3, not_started: 37}),
     ];
 
-    expect(dropLeadingEmptySnapshots(snapshots).map((s) => s.snapshot_date)).toEqual([
+    expect(filterEmptySnapshots(snapshots).map((s) => s.snapshot_date)).toEqual([
+      '2025-02-18',
       '2025-03-07',
-      '2025-03-08',
       '2025-03-09',
     ]);
   });
 
-  it('leaves a list that starts with data alone', () => {
+  it('drops later empty days when the series starts with data', () => {
     const snapshots = [snapshot('2025-03-07', {complete: 1}), snapshot('2025-03-08')];
-    expect(dropLeadingEmptySnapshots(snapshots)).toBe(snapshots);
+    expect(filterEmptySnapshots(snapshots)).toEqual([snapshots[0]]);
   });
 
-  it('keeps everything when every snapshot is empty', () => {
+  it('keeps the latest snapshot when every snapshot is empty', () => {
     const snapshots = [snapshot('2025-02-17'), snapshot('2025-02-18')];
-    expect(dropLeadingEmptySnapshots(snapshots)).toBe(snapshots);
+    expect(filterEmptySnapshots(snapshots)).toEqual([snapshots[1]]);
+  });
+
+  it('keeps a populated snapshot without tutorials', () => {
+    const snapshots = [
+      snapshot('2025-03-03'),
+      {
+        ...snapshot('2025-03-04'),
+        status_population_stats: {
+          all: {Burwood: {__all__: {T1: {complete: 2}}}},
+          target_grades: {},
+        },
+      },
+    ];
+
+    expect(filterEmptySnapshots(snapshots).map((entry) => entry.snapshot_date)).toEqual([
+      '2025-03-03',
+      '2025-03-04',
+    ]);
+  });
+
+  it('treats all-not-started students as data', () => {
+    const allNotStarted = {
+      ...snapshot('2025-02-19'),
+      status_population_stats: {
+        all: {Burwood: {__all__: {T1: {not_started: 40}}}},
+        target_grades: {},
+      },
+    };
+
+    expect(
+      filterEmptySnapshots([snapshot('2025-02-17'), snapshot('2025-02-18'), allNotStarted]).map(
+        (entry) => entry.snapshot_date,
+      ),
+    ).toEqual(['2025-02-18', '2025-02-19']);
+  });
+});
+
+describe('getEmptySnapshotTaskStats', () => {
+  it('shows every task as not started while respecting the task grade filter', () => {
+    const unit = {
+      taskDefinitions: [
+        {abbreviation: 'P1', targetGrade: 0},
+        {abbreviation: 'C1', targetGrade: 1},
+      ],
+    } as unknown as Unit;
+
+    expect(getEmptySnapshotTaskStats(unit, [])).toEqual({
+      P1: {not_started: 1},
+      C1: {not_started: 1},
+    });
+    expect(getEmptySnapshotTaskStats(unit, [1])).toEqual({C1: {not_started: 1}});
+  });
+});
+
+describe('shouldIncludeSnapshot', () => {
+  const unit = unitStartingOn('2025-03-03');
+
+  it('keeps pre-teaching snapshots with progress and no tutorials', () => {
+    const withProgress = {
+      ...snapshot('2025-02-24'),
+      status_population_stats: {
+        all: {Burwood: {__all__: {T1: {complete: 2, not_started: 38}}}},
+        target_grades: {},
+      },
+    };
+
+    expect(shouldIncludeSnapshot(unit, withProgress)).toBe(true);
   });
 });
 

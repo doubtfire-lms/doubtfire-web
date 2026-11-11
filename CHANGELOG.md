@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-14...v11.1.0-15) (2026-11-09)
+
+
+### Bug Fixes
+
+* allow special characters in task inbox scroll lookup ([d06bbe0](https://github.com/b0ink/doubtfire-deploy/commit/d06bbe0aeebb9bef4fb2933f6d6ebc1231c3785f))
+* handle jplag comparison open failures ([1f2574f](https://github.com/b0ink/doubtfire-deploy/commit/1f2574fddb9f11472c57755336d1ca837f681895))
+* scroll to selected task in inbox after route load ([458d1b4](https://github.com/b0ink/doubtfire-deploy/commit/458d1b4159a52c3d352781fc79f4ba867b2fb866))
+
+## [11.1.0-14](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-13...v11.1.0-14) (2026-11-09)
+
+
+### Bug Fixes
+
+* wait for student before rendering assessment ([54e7841](https://github.com/b0ink/doubtfire-deploy/commit/54e7841dd4fc6af1a9c4a677e05a0d8c7905a3ab))
+
+## [11.1.0-13](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-12...v11.1.0-13) (2026-11-09)
+
+
+### Bug Fixes
+
+* reduce unread notification count polling ([078c19f](https://github.com/b0ink/doubtfire-deploy/commit/078c19f887a0744f27f6cf7b97821f3b98184b0d))
+* resolve task definition via task unit when mapping tasks ([9f7119d](https://github.com/b0ink/doubtfire-deploy/commit/9f7119db649d281060df61d12c8a41f323ac3bb0))
+* show task snapshots before tutorial enrolment ([d9aee75](https://github.com/b0ink/doubtfire-deploy/commit/d9aee75b7d3399997d626a8b99e755ca419d9c67))
+
+## [11.1.0-12](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-11...v11.1.0-12) (2026-11-06)
+
+
+### Features
+
+* show unit memberships in admin user modal ([#1724](https://github.com/b0ink/doubtfire-deploy/issues/1724)) ([fcd3653](https://github.com/b0ink/doubtfire-deploy/commit/fcd36534974c94a7c334b70d20a9a1163e20f692))
+
+## [11.1.0-11](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-10...v11.1.0-11) (2026-11-05)
+
+
+### Bug Fixes
+
+* sort units by teaching period ([7175f6d](https://github.com/b0ink/doubtfire-deploy/commit/7175f6d3e9978631b951374c39e7b259b8538b90))
+
 ## [11.1.0-10](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-9...v11.1.0-10) (2026-11-05)
 
 

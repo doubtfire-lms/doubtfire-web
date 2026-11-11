@@ -114,7 +114,7 @@ export class FUsersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public showUserModal(user?: User) {
     const userToShow = user ? user : this.userService.createInstanceFrom({});
-    this.editProfileDialogService.openDialog(userToShow, 'edit');
+    this.editProfileDialogService.openDialog(userToShow, 'edit', !!user);
   }
 
   public compare(a: number | string, b: number | string, isAsc: boolean): number {
