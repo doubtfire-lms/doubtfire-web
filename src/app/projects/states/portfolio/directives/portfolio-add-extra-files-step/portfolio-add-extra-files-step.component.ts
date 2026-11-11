@@ -36,7 +36,8 @@ export class PortfolioAddExtraFilesStepComponent implements OnInit {
     document: 'article_outlined',
     code: 'integration_instructions_outlined',
     image: 'image_outlined',
-    zip: 'zip_outlined',
+    zip: 'folder_zip',
+    archive: 'folder_zip',
   };
 
   ngOnInit(): void {
