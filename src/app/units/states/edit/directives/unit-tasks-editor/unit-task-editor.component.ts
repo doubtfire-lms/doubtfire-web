@@ -54,7 +54,7 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
     return date ? new Date(date).getDay() : null;
   }
 
-  // The feedback deadline belongs to the task itself, so it is only shown under the pass grade
+  // The feedback deadline belongs to the task itself, so it is shown at the task's minimum grade.
   setFeedbackDeadline(td: TaskDefinition, value: Date | null): void {
     td.dueDate = value;
     this.saveTaskDefinition(td);
@@ -117,28 +117,59 @@ export class UnitTaskEditorComponent implements OnInit, OnDestroy {
   }
 
   getGradeStartDate(td: TaskDefinition, grade: GradeDefinition): Date | null {
-    return grade.value === 0 ? td.startDate : (td.gradeStartDate(grade.value) ?? td.startDate);
+    return grade.value === td.targetGrade
+      ? td.startDate
+      : (td.gradeStartDate(grade.value) ?? td.startDate);
   }
 
   isFallbackStartDate(td: TaskDefinition, grade: GradeDefinition): boolean {
-    return grade.value !== 0 && !td.gradeStartDate(grade.value);
+    return grade.value !== td.targetGrade && !td.gradeStartDate(grade.value);
   }
 
   setGradeStartDate(td: TaskDefinition, grade: GradeDefinition, value: Date | null): void {
-    td.setGradeStartDate(grade.value, value);
+    if (grade.value === td.targetGrade) {
+      td.startDate = value;
+      if (grade.value > 0 && td.gradeStartDate(grade.value)) {
+        td.setGradeStartDate(grade.value, null);
+      }
+    } else {
+      td.setGradeStartDate(grade.value, value);
+    }
     this.saveTaskDefinition(td);
   }
 
   getGradeDueDate(td: TaskDefinition, grade: GradeDefinition): Date | null {
-    return grade.value === 0 ? td.targetDate : (td.gradeTargetDate(grade.value) ?? td.targetDate);
+    return grade.value === td.targetGrade
+      ? td.targetDate
+      : (td.gradeTargetDate(grade.value) ?? td.targetDate);
   }
 
   isFallbackTargetDate(td: TaskDefinition, grade: GradeDefinition): boolean {
-    return grade.value !== 0 && !td.gradeTargetDate(grade.value);
+    return grade.value !== td.targetGrade && !td.gradeTargetDate(grade.value);
   }
 
   setGradeDueDate(td: TaskDefinition, grade: GradeDefinition, value: Date | null): void {
-    td.setGradeTargetDate(grade.value, value);
+    if (grade.value === td.targetGrade) {
+      td.targetDate = value;
+      if (grade.value > 0 && td.gradeTargetDate(grade.value)) {
+        td.setGradeTargetDate(grade.value, null);
+      }
+    } else {
+      td.setGradeTargetDate(grade.value, value);
+    }
+    this.saveTaskDefinition(td);
+  }
+
+  hasMinimumGradeDateOverride(td: TaskDefinition): boolean {
+    return (
+      td.targetGrade > 0 &&
+      (!!td.gradeStartDate(td.targetGrade) || !!td.gradeTargetDate(td.targetGrade))
+    );
+  }
+
+  clearMinimumGradeDateOverride(td: TaskDefinition): void {
+    td.setGradeStartDate(td.targetGrade, null);
+    td.setGradeTargetDate(td.targetGrade, null);
     this.saveTaskDefinition(td);
   }
 
