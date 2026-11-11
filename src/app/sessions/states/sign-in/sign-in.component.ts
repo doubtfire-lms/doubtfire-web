@@ -73,6 +73,18 @@ export class SignInComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const currentUrl = new URL(window.location.href);
+    const oneTimeToken = currentUrl.searchParams.get('authToken');
+    if (oneTimeToken !== null) {
+      this.authToken = oneTimeToken;
+      currentUrl.searchParams.delete('authToken');
+      window.history.replaceState(
+        window.history.state,
+        '',
+        `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`,
+      );
+    }
+
     this.authService.afterAuthCall((result) => {
       if (result) {
         const params = getUrlParams(document.location.href);
@@ -119,7 +131,7 @@ export class SignInComponent implements OnInit {
     const params = getUrlParams(document.location.href);
     if (!this.username) {
       this.username = queryParams.username || params.username;
-      this.authToken = queryParams.authToken || params.authToken;
+      this.authToken = this.authToken || queryParams.authToken || params.authToken;
     }
 
     this.isLtiLogin =

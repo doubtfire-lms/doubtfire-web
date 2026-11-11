@@ -16,12 +16,20 @@ const emptyProvider = {};
 describe('SignInComponent', () => {
   let component: SignInComponent;
   let fixture: ComponentFixture<SignInComponent>;
-  let authenticationService: {signIn: ReturnType<typeof vi.fn>};
+  let authenticationService: {
+    signIn: ReturnType<typeof vi.fn>;
+    afterAuthCall: ReturnType<typeof vi.fn>;
+  };
   let router: {navigate: ReturnType<typeof vi.fn>};
+  let globalState: {onLoad: ReturnType<typeof vi.fn>};
 
   beforeEach(async () => {
-    authenticationService = {signIn: vi.fn(() => of(undefined))};
+    authenticationService = {
+      signIn: vi.fn(() => of(undefined)),
+      afterAuthCall: vi.fn(),
+    };
     router = {navigate: vi.fn()};
+    globalState = {onLoad: vi.fn()};
 
     await TestBed.configureTestingModule({
       declarations: [SignInComponent],
@@ -32,7 +40,7 @@ describe('SignInComponent', () => {
         {provide: ActivatedRoute, useValue: emptyProvider},
         {provide: DoubtfireConstants, useValue: emptyProvider},
         {provide: HttpClient, useValue: emptyProvider},
-        {provide: GlobalStateService, useValue: emptyProvider},
+        {provide: GlobalStateService, useValue: globalState},
         {provide: AlertService, useValue: emptyProvider},
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -48,6 +56,20 @@ describe('SignInComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('removes a one-time token from history before attempting sign-in', () => {
+    const originalUrl = window.location.href;
+    try {
+      window.history.replaceState({}, '', '/sign_in?authToken=one-time-token&username=user');
+
+      component.ngOnInit();
+
+      expect(component.authToken).toBe('one-time-token');
+      expect(window.location.pathname + window.location.search).toBe('/sign_in?username=user');
+    } finally {
+      window.history.replaceState({}, '', originalUrl);
+    }
   });
 
   it('uses the cookie-backed LTI session without propagating an ltik', () => {
