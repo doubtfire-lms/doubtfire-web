@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-16...v11.1.0-17) (2026-11-11)
+
+
+### Bug Fixes
+
+* remove one-time auth tokens from browser history ([4a61ca8](https://github.com/b0ink/doubtfire-deploy/commit/4a61ca836dc460fc4c96617f6ebad07d94ce0152))
+
 ## [11.1.0-16](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-15...v11.1.0-16) (2026-11-11)
 
 ## [11.1.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-14...v11.1.0-15) (2026-11-09)
