@@ -242,6 +242,7 @@ import {SettingToggleComponent} from './common/setting-toggle/setting-toggle.com
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
+import {TaskFileViewerComponent} from './common/task-file-viewer/task-file-viewer.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {UserBadgeComponent} from './common/user-badge/user-badge.component';
 import {UserIconComponent} from './common/user-icon/user-icon.component';
@@ -605,6 +606,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
     ArchiveViewerComponent,
+    TaskFileViewerComponent,
     AlertComponent,
     FUnitTaskListComponent,
     FTaskDetailsViewComponent,
