@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-20](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-19...v11.1.0-20) (2026-11-12)
+
+
+### Bug Fixes
+
+* prevent overlapping Sidekiq progress polls ([d73f011](https://github.com/b0ink/doubtfire-deploy/commit/d73f0116638c8288043b9d9db9051cde3f917c59))
+* prevent tutors from calling d2l requests ([f0803d7](https://github.com/b0ink/doubtfire-deploy/commit/f0803d71efaacde45c3c4c8e712135c92b6c6099))
+
 ## [11.1.0-19](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-18...v11.1.0-19) (2026-11-12)
 
 ## [11.1.0-18](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-17...v11.1.0-18) (2026-11-12)
