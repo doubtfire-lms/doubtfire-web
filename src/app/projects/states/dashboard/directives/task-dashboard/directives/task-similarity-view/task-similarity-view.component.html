@@ -49,12 +49,15 @@
                     @if (similarity.type === 'JplagTaskSimilarity') {
                       <!-- Kept outside mat-icon-button, which resizes every svg inside it -->
                       @if (loadingJplagReportFor === similarity) {
-                        <span
+                        <button
+                          aria-disabled="true"
+                          aria-label="JPlag report loading"
                           class="flex size-12 shrink-0 items-center justify-center"
+                          type="button"
                           (click)="$event.stopPropagation()"
                         >
                           <mat-spinner class="spinner-primary" diameter="20" />
-                        </span>
+                        </button>
                       } @else {
                         <button
                           aria-label="View Detailed Report"

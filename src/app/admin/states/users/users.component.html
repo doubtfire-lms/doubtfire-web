@@ -60,8 +60,15 @@
 
     <ng-container matColumnDef="observeAllUnits">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Observe Units</th>
-      <td *matCellDef="let user" mat-cell (click)="showUserModal(user)">
-        {{ user.observeAllUnits ? 'Yes' : '' }}
+      <td *matCellDef="let user" mat-cell>
+        <button
+          class="w-full text-left"
+          type="button"
+          [attr.aria-label]="'View details for ' + user.username"
+          (click)="showUserModal(user)"
+        >
+          {{ user.observeAllUnits ? 'Yes' : '' }}
+        </button>
       </td>
     </ng-container>
 
