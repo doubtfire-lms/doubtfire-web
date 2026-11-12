@@ -101,10 +101,7 @@ export class PortfoliosComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (
-      this.userService.currentUser.systemRole === 'Admin' ||
-      this.userService.currentUser.systemRole === 'Convenor'
-    ) {
+    if (this.userService.currentUser.systemRole === 'Admin' || unit.myRole === 'Convenor') {
       unit.loadD2lMapping().subscribe();
     }
 
