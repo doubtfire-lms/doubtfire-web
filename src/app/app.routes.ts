@@ -27,6 +27,7 @@ import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
+import {UnitDashboardComponent} from './units/states/dashboard/unit-dashboard/unit-dashboard.component';
 import {UnitAdminStateComponent} from './units/states/edit/unit-admin-state.component';
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
@@ -180,7 +181,16 @@ export const routes: Routes = [
           unit: resolveUnit,
         },
         children: [
-          {path: '', pathMatch: 'full', redirectTo: 'tasks/inbox'},
+          {path: '', pathMatch: 'full', redirectTo: 'dashboard'},
+          {
+            path: 'dashboard',
+            component: UnitDashboardComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {
+              task: 'Unit Dashboard',
+              roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
+            },
+          },
           {
             path: 'analytics',
             component: UnitAnalyticsComponent,

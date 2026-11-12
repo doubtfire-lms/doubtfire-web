@@ -42,11 +42,7 @@
   <h2 class="my-2 ml-3.5" mat-subheader [hidden]="unitRoles?.length === 0">Units you teach</h2>
   @for (unitRole of unitRoles; track unitRole) {
     @if (!unitRole.unit.teachingPeriod || unitRole.unit.teachingPeriod?.active) {
-      <div
-        class="w-full"
-        mat-menu-item
-        [routerLink]="['/units', unitRole.unit.id, 'tasks', 'inbox']"
-      >
+      <div class="w-full" mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'dashboard']">
         <div class="flex w-full items-center">
           <div class="unitName max-w-55 flex-none truncate">{{ unitRole.unit.name }}</div>
           <div class="grow"></div>
