@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-18](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-17...v11.1.0-18) (2026-11-12)
+
+
+### Features
+
+* hide login ui when redirecting via auth token ([e16d3e7](https://github.com/b0ink/doubtfire-deploy/commit/e16d3e7fcaba5317db6bd4a955041993fe2c4983))
+
+
+### Bug Fixes
+
+* keep confirmation button checkmark vertically aligned ([4957902](https://github.com/b0ink/doubtfire-deploy/commit/495790265f56b1bf479a64aacb56e99a59db8cc8))
+
 ## [11.1.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-16...v11.1.0-17) (2026-11-11)
 
 
