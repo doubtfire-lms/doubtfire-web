@@ -198,14 +198,18 @@ describe('NotificationService', () => {
     visibility = 'hidden';
     document.dispatchEvent(new Event('visibilitychange'));
     vi.advanceTimersByTime(10 * 60_000);
-    httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
+    expect(
+      httpMock.match((candidate) => candidate.url.endsWith('/notifications/unread_count')),
+    ).toHaveLength(0);
 
     visibility = 'visible';
     document.dispatchEvent(new Event('visibilitychange'));
     vi.advanceTimersByTime(0);
-    httpMock
-      .expectOne((candidate) => candidate.url.endsWith('/notifications/unread_count'))
-      .flush({count: 2});
+    const resumedRequest = httpMock.expectOne((candidate) =>
+      candidate.url.endsWith('/notifications/unread_count'),
+    );
+    expect(resumedRequest.request.method).toBe('GET');
+    resumedRequest.flush({count: 2});
 
     service.stopCountPolling();
     visibilitySpy.mockRestore();
@@ -217,7 +221,9 @@ describe('NotificationService', () => {
 
     afterAuthCallback?.(false);
 
-    httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
+    expect(
+      httpMock.match((candidate) => candidate.url.endsWith('/notifications/unread_count')),
+    ).toHaveLength(0);
   });
 
   it('does not start delayed polling after polling has been stopped', () => {
@@ -226,7 +232,9 @@ describe('NotificationService', () => {
 
     afterAuthCallback?.(true);
 
-    httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
+    expect(
+      httpMock.match((candidate) => candidate.url.endsWith('/notifications/unread_count')),
+    ).toHaveLength(0);
   });
 
   it('polls immediately when the user is already authenticated', () => {
@@ -239,6 +247,7 @@ describe('NotificationService', () => {
     const request = httpMock.expectOne((candidate) =>
       candidate.url.endsWith('/notifications/unread_count'),
     );
+    expect(request.request.method).toBe('GET');
     request.flush({count: 5});
 
     service.stopCountPolling();
@@ -262,6 +271,7 @@ describe('NotificationService', () => {
     const request = httpMock.expectOne((candidate) =>
       candidate.url.endsWith('/notifications/unread_count'),
     );
+    expect(request.request.method).toBe('GET');
     request.flush({count: 7});
 
     service.stopCountPolling();
@@ -280,6 +290,7 @@ describe('NotificationService', () => {
     const request = httpMock.expectOne((candidate) =>
       candidate.url.endsWith('/notifications/unread_count'),
     );
+    expect(request.request.method).toBe('GET');
     request.flush({count: 3});
     vi.useRealTimers();
   });
