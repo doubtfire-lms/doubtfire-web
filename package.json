@@ -20,7 +20,6 @@
     "deploy:build2api:sourcemaps": "ng build --delete-output-path=true --configuration production --source-map=true --output-path dist",
     "sentry:sourcemaps": "node scripts/upload-sentry-sourcemaps.js",
     "deploy": "run-s -l deploy:build2api",
-    "postinstall": "node scripts/patch-gantt-drag-boundary.mjs",
     "prepare": "husky",
     "test": "ng test",
     "test:ci": "ng test --no-watch --no-progress",
