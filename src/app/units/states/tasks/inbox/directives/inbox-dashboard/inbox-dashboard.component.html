@@ -69,16 +69,31 @@
     <div class="min-h-0 flex-1 overflow-hidden">
       @switch (currentTab) {
         @case (InboxDashboardTab.submission) {
-          <div class="h-full">
-            @if (task.hasPdf) {
-              <f-pdf-viewer [pdfUrl]="task.submissionUrl()"></f-pdf-viewer>
-            } @else {
-              <div class="flex h-full flex-col items-center justify-center">
-                <mat-icon class="size-[120px] text-[120px] text-[#c5c5c5]">
-                  description_off
-                </mat-icon>
-              </div>
-            }
+          <div class="flex h-full flex-col">
+            <div class="flex shrink-0 justify-end px-2 py-1">
+              <mat-button-toggle-group
+                aria-label="Submission view"
+                hideSingleSelectionIndicator
+                [value]="submissionViewMode"
+                (change)="setSubmissionViewMode($event.value)"
+              >
+                <mat-button-toggle value="pdf">PDF</mat-button-toggle>
+                <mat-button-toggle value="files">Files</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <div class="min-h-0 flex-1">
+              @if (submissionViewMode === 'files') {
+                <f-task-file-viewer [task]="task"></f-task-file-viewer>
+              } @else if (task.hasPdf) {
+                <f-pdf-viewer [pdfUrl]="task.submissionUrl()"></f-pdf-viewer>
+              } @else {
+                <div class="flex h-full flex-col items-center justify-center">
+                  <mat-icon class="size-[120px] text-[120px] text-[#c5c5c5]">
+                    description_off
+                  </mat-icon>
+                </div>
+              }
+            </div>
           </div>
         }
         @case (InboxDashboardTab.taskSheet) {
