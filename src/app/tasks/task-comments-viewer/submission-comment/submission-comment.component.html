@@ -18,17 +18,19 @@
         <br />
         <strong> reason:</strong> {{ comment.text }}
       </p>
-      @if (isNotStudent) {
+      @if (isNotStudent && task.submissionsNotOpen) {
         <div class="flex flex-row items-center justify-evenly">
           <button
             color="primary"
             mat-flat-button
-            style="background-color: #43a047"
+            mat-stroked-button
             (click)="grantSubmissionRequest()"
           >
             Grant
           </button>
-          <button color="warn" mat-flat-button (click)="denySubmissionRequest()">Deny</button>
+          <button color="warn" mat-flat-button mat-stroked-button (click)="denySubmissionRequest()">
+            Deny
+          </button>
         </div>
       }
     </div>

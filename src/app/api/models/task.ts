@@ -82,7 +82,7 @@ export class Task extends Entity {
   submissionAccessRequestError: string | null = null;
 
   public get submissionsNotOpen(): boolean {
-    const opensOn = this.definition?.SubmissionOpensOn;
+    const opensOn = this.definition?.submissionOpensOn;
     if (!opensOn || this.submissionAccessGranted) {
       return false;
     }

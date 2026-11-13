@@ -13,7 +13,7 @@ export class TaskDefinitionSubmissionDateComponent {
   @Input() taskDefinition: TaskDefinition;
 
   public clearSubmissionDate(): void {
-    this.taskDefinition.SubmissionOpensOn = this.taskDefinition.startDate;
+    this.taskDefinition.submissionOpensOn = null;
   }
 
   public get unit(): Unit {
