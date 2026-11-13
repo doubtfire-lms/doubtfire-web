@@ -45,6 +45,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   };
   public currentView: DashboardViews;
   public currentIndex = 0;
+  public submissionViewMode: 'pdf' | 'files' = 'pdf';
 
   private requestedDestination?: Params;
   private openedAssessmentId?: number;
@@ -103,6 +104,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue) {
+      this.submissionViewMode = 'pdf';
       this.urls = {
         taskSheetPdfUrl: changes.task.currentValue.definition.getTaskPDFUrl(),
         taskSubmissionPdfUrl: changes.task.currentValue.submissionUrl(),
