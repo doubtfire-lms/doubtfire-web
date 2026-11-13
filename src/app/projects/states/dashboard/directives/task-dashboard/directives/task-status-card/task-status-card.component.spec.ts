@@ -9,6 +9,8 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {UserService} from 'src/app/api/services/user.service';
 import {ExtensionModalService} from 'src/app/common/modals/extension-modal/extension-modal.service';
 import {QrModalService} from 'src/app/common/modals/qr-modal/qr-modal.service';
+import {SubmissionAccessModalService} from 'src/app/common/modals/submission-access-modal/submission-access-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {FeedbackAppealModalService} from 'src/app/tasks/modals/feedback-appeal-modal/feedback-appeal-modal.service';
 import {SubmissionTypeModalService} from 'src/app/tasks/modals/submission-type-modal/submission-type-modal.service';
@@ -33,6 +35,8 @@ describe('TaskStatusCardComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [TaskStatusCardComponent],
       providers: [
+        {provide: SubmissionAccessModalService, useValue: emptyProvider},
+        {provide: AlertService, useValue: emptyProvider},
         {provide: ExtensionModalService, useValue: emptyProvider},
         {provide: TaskService, useValue: taskServiceStub},
         {provide: QrModalService, useValue: emptyProvider},

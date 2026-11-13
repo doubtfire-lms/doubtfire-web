@@ -73,6 +73,8 @@ export class TaskService extends CachedEntityService<Task> {
       'discussTimeoutExpiryDate',
       'extensions',
       'scormExtensions',
+      'submissionAccessGranted',
+      'submissionAccessRequestError',
       {
         keys: 'submissionDate',
         toEntityFn: MappingFunctions.mapDate,
@@ -93,6 +95,7 @@ export class TaskService extends CachedEntityService<Task> {
       'numNewComments',
       'trigger',
       'hasExtensions',
+      'hasSubmissionRequests',
       'pinned',
       {
         keys: 'new_stat',
