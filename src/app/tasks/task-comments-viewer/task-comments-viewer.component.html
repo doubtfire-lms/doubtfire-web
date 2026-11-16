@@ -219,6 +219,14 @@
                     }
 
                     @switch (comment.commentType) {
+                      @case ('submission') {
+                        <div class="comment-submission">
+                          @if (asSubmissionComment(comment); as submissionComment) {
+                            <submission-comment [comment]="submissionComment" [task]="task">
+                            </submission-comment>
+                          }
+                        </div>
+                      }
                       @case ('extension') {
                         <div class="comment-extension">
                           @if (asExtensionComment(comment); as extensionComment) {

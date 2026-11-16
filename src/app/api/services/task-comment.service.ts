@@ -16,6 +16,7 @@ import API_URL from 'src/app/config/constants/apiUrl';
 import {DiscussionComment} from '../models/task-comment/discussion-comment';
 import {ExtensionComment} from '../models/task-comment/extension-comment';
 import {ScormExtensionComment} from '../models/task-comment/scorm-extension-comment';
+import {SubmissionComment} from '../models/task-comment/submission-comment';
 import {MappingFunctions} from './mapping-fn';
 
 @Injectable()
@@ -30,6 +31,10 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     'projects/:projectId:/task_def_id/:taskDefinitionId:/assess_extension/:id:';
   private readonly requestExtensionEndpointFormat =
     'projects/:projectId:/task_def_id/:taskDefinitionId:/request_extension';
+  private readonly submissionAccessGrantEndpointFormat =
+    'projects/:projectId:/task_def_id/:taskDefinitionId:/assess_submission_access/:id:';
+  private readonly requestSubmissionAccessEndpointFormat =
+    'projects/:projectId:/task_def_id/:taskDefinitionId:/request_submission_access';
   private readonly scormExtensionGrantEndpointFormat =
     'projects/:projectId:/task_def_id/:taskDefinitionId:/assess_scorm_extension/:id:';
   private readonly scormRequestExtensionEndpointFormat =
@@ -96,6 +101,10 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       ['taskDueDate', 'due_date'],
       ['taskExtensions', 'extensions'],
 
+      // Submission comments
+      'submissionAssessedAt',
+      'submissionGranted',
+
       // Discussion Comments
       'status',
       'numberOfPrompts',
@@ -139,6 +148,8 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
         return new DiscussionComment(other);
       case 'extension':
         return new ExtensionComment(other);
+      case 'submission':
+        return new SubmissionComment(other);
       case 'scorm':
         return new ScormComment(other);
       case 'scorm_extension':
@@ -228,6 +239,28 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
     );
   }
 
+  public assessSubmissionAccess(
+    submission: SubmissionComment,
+    granted: boolean,
+  ): Observable<TaskComment> {
+    const opts: RequestOptions<TaskComment> = {
+      endpointFormat: this.submissionAccessGrantEndpointFormat,
+      entity: submission,
+      body: {granted},
+      cache: submission.task.commentCache,
+      constructorParams: submission.task,
+    };
+
+    return super.update(
+      {
+        id: submission.id,
+        projectId: submission.project.id,
+        taskDefinitionId: submission.task.definition.id,
+      },
+      opts,
+    );
+  }
+
   public editComment(comment: TaskComment, text: string): Observable<TaskComment> {
     const opts: RequestOptions<TaskComment> = {
       endpointFormat: this.commentEndpointFormat,
@@ -268,6 +301,22 @@ export class TaskCommentService extends CachedEntityService<TaskComment> {
       },
       cache: task.commentCache,
     };
+    return super.create(
+      {
+        projectId: task.project.id,
+        taskDefinitionId: task.definition.id,
+      },
+      opts,
+    );
+  }
+
+  public requestSubmissionAccess(reason: string, task: Task): Observable<TaskComment> {
+    const opts: RequestOptions<TaskComment> = {
+      endpointFormat: this.requestSubmissionAccessEndpointFormat,
+      body: {comment: reason},
+      cache: task.commentCache,
+    };
+
     return super.create(
       {
         projectId: task.project.id,

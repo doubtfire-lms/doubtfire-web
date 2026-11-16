@@ -1,0 +1,37 @@
+<div class="flex flex-row items-center gap-2.5">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Submission Open Date</mat-label>
+    <input
+      matInput
+      placeholder="Start date"
+      [matDatepicker]="submissiondatepicker"
+      [(ngModel)]="taskDefinition.submissionOpensOn"
+    />
+    <mat-datepicker-toggle matIconSuffix [for]="submissiondatepicker"></mat-datepicker-toggle>
+    <mat-datepicker #submissiondatepicker></mat-datepicker>
+    <mat-hint>Selected date to accept submissions for this task.</mat-hint>
+  </mat-form-field>
+
+  @if (!taskDefinition.submissionOpensOn) {
+    <button
+      class="mb-5.5"
+      color="primary"
+      disabled
+      mat-flat-button
+      type="button"
+      (click)="clearSubmissionDate()"
+    >
+      <mat-icon>close</mat-icon> Clear
+    </button>
+  } @else {
+    <button
+      class="mb-5.5"
+      color="primary"
+      mat-flat-button
+      type="button"
+      (click)="clearSubmissionDate()"
+    >
+      <mat-icon>close</mat-icon> Clear
+    </button>
+  }
+</div>

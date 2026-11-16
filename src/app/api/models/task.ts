@@ -64,6 +64,7 @@ export class Task extends Entity {
   similarityFlag: boolean = false;
   numNewComments: number = 0;
   hasExtensions: boolean;
+  hasSubmissionRequests: boolean;
 
   moderationType: 'random_sample' | 'escalation' | 'first_feedback';
 
@@ -77,6 +78,18 @@ export class Task extends Entity {
   claimedByUnitRoleId: number | null;
 
   loadingSubmissionDetails: boolean = false;
+  submissionAccessGranted: boolean = false;
+  submissionAccessRequestError: string | null = null;
+
+  public get submissionsNotOpen(): boolean {
+    const opensOn = this.definition?.submissionOpensOn;
+    if (!opensOn || this.submissionAccessGranted) {
+      return false;
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today < opensOn;
+  }
 
   pinned: boolean = false;
   hover?: boolean;
@@ -236,6 +249,7 @@ export class Task extends Entity {
       this.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
       this.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
       (this.hasExtensions && 'extension'.indexOf(matchText) == 0) ||
+      (this.hasSubmissionRequests && 'submission'.indexOf(matchText) == 0) ||
       (this.similarityFlag && 'similarity'.indexOf(matchText) == 0) ||
       this.project.matches(matchText)
     );
@@ -1175,6 +1189,15 @@ export class Task extends Entity {
       this.inStateThatAllowsExtension() &&
       (!this.isPastDeadline() || this.wasSubmittedOnTime()) &&
       this.maxWeeksCanExtend() > 0
+    );
+  }
+
+  public canApplyForSubmissionAccess(): boolean {
+    return (
+      !this.definition.staffManagedTask &&
+      this.submissionsNotOpen &&
+      !this.blockedByPrerequisiteTasks() &&
+      !this.submissionAccessRequestError
     );
   }
 
