@@ -113,7 +113,7 @@
           }
         }
         @case ('lms') {
-          @if (unit && ltiEnabled) {
+          @if (unit && canManageLms) {
             <div class="mx-auto max-w-[90vw]">
               <f-unit-lms-integration [unit]="unit"></f-unit-lms-integration>
             </div>
