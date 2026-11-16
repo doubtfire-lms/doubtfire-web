@@ -9,11 +9,23 @@ import {
   filter,
   finalize,
   map,
+  merge,
+  of,
   switchMap,
   takeUntil,
+  tap,
 } from 'rxjs';
-import {ProjectService, Task, TaskService, Unit} from 'src/app/api/models/doubtfire-model';
+import {ProjectService, Task, TaskService, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {AlertService} from 'src/app/common/services/alert.service';
+import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+
+interface DashboardQueue {
+  path: 'moderation' | 'overflow';
+  title: string;
+  role: string;
+  icon: string;
+  count: number | 'Unavailable' | null;
+}
 
 @Component({
   imports: [MatIconModule, RouterLink],
@@ -35,12 +47,15 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
   public feedbackOverdueCount: number | null = null;
   public oldestSubmissionAgeDays: number | null = null;
   public unreadMessagesCount: number | null = null;
+  public unitRole: string | null = null;
+  public queues: DashboardQueue[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private projectService: ProjectService,
     private taskService: TaskService,
     private alertService: AlertService,
+    private globalStateService: GlobalStateService,
   ) {}
 
   ngOnInit(): void {
@@ -56,11 +71,34 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
           this.feedbackOverdueCount = null;
           this.oldestSubmissionAgeDays = null;
           this.unreadMessagesCount = null;
+          this.configureRolesAndQueues(unit);
 
-          // TaskService maps inbox tasks to projects in the unit's student cache.
+          // TaskService maps queue and inbox tasks to projects in the unit's student cache.
           return this.projectService.loadStudents(unit).pipe(
-            switchMap(() => this.taskService.queryTasksForTaskInbox(unit, undefined, true)),
+            switchMap(() => {
+              const inbox$ = this.taskService.queryTasksForTaskInbox(unit, undefined, true).pipe(
+                tap((tasks) => this.calculateMetrics(tasks)),
+                catchError(() => {
+                  this.alertService.error('Error loading tutor dashboard.', 6000);
+                  return EMPTY;
+                }),
+              );
+              const queues$ = this.queues.map((queue) => {
+                const tasks$ =
+                  queue.path === 'moderation'
+                    ? this.taskService.queryTasksForMentorModeration(unit)
+                    : this.taskService.queryTasksForOverflow(unit);
+
+                return tasks$.pipe(
+                  map((tasks) => tasks.length),
+                  catchError(() => of('Unavailable' as const)),
+                  tap((count) => (queue.count = count)),
+                );
+              });
+              return merge(inbox$, ...queues$);
+            }),
             catchError(() => {
+              this.queues.forEach((queue) => (queue.count = 'Unavailable'));
               this.alertService.error('Error loading tutor dashboard.', 6000);
               return EMPTY;
             }),
@@ -69,12 +107,39 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
         }),
         takeUntil(this.destroy$),
       )
-      .subscribe((tasks) => this.calculateMetrics(tasks));
+      .subscribe();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private configureRolesAndQueues(unit: Unit): void {
+    const entity = this.globalStateService.currentViewAndEntitySubject$.value?.entity;
+    const role = entity instanceof UnitRole && entity.unit.id === unit.id ? entity : null;
+    this.unitRole = role?.role ?? null;
+    this.queues = [];
+
+    if (role?.role === 'Convenor' || (role?.id && unit.staff.some((s) => s.mentorId === role.id))) {
+      this.queues.push({
+        path: 'moderation',
+        title: 'Moderation queue',
+        role: 'Moderator',
+        icon: 'rate_review',
+        count: null,
+      });
+    }
+
+    if (role && unit.staff.find((s) => s.id === role.id)?.canMarkOverflowTasks) {
+      this.queues.push({
+        path: 'overflow',
+        title: 'Overflow queue',
+        role: 'Overflow tutor',
+        icon: 'more_time',
+        count: null,
+      });
+    }
   }
 
   private calculateMetrics(tasks: Task[]): void {
