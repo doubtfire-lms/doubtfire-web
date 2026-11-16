@@ -141,8 +141,6 @@ export class SignInComponent implements OnInit {
     const wait = new Promise((resolve) => setTimeout(resolve, 3000));
     this.http.get(`${this.constants.API_URL}/auth/method`).subscribe({
       next: (response: {redirect_to?: string}) => {
-        this.isLoading = false;
-
         // if there is a string in response.data.redirect_to
         this.SSOLoginUrl = response.redirect_to || '';
 
@@ -153,7 +151,10 @@ export class SignInComponent implements OnInit {
             username: this.username,
             remember: this.authService.rememberMe,
           });
-        } else if (this.SSOLoginUrl) {
+        }
+
+        this.isLoading = false;
+        if (this.SSOLoginUrl) {
           if (this.autoLogin) {
             this.redirectingSSO = true;
             return wait.then(() => {
@@ -179,6 +180,7 @@ export class SignInComponent implements OnInit {
       },
       error: (_err) => {
         this.authMethodFailed = true;
+        this.isLoading = false;
         // this.error = err;
 
         // return after waiting with the wait promise
@@ -263,6 +265,7 @@ export class SignInComponent implements OnInit {
       },
       error: (err) => {
         this.signingIn = false;
+        this.isLoading = false;
         this.formData.password = '';
         this.invalidCredentials = true;
         this.alerts.error(err, 6000);

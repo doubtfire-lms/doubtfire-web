@@ -26,19 +26,7 @@ export class NotificationActionsService {
 
   public open(group: NotificationGroup): void {
     if (group.counts?.communication_email || group.counts?.weekly_summary) {
-      const navigate = () =>
-        this.router.navigate(['/notifications'], {
-          queryParams: {expanded: group.notificationIds[0]},
-        });
-
-      if (group.read) {
-        navigate();
-      } else {
-        this.notificationService.markRead(group.notificationIds).subscribe({
-          next: navigate,
-          error: navigate,
-        });
-      }
+      this.openMessageGroup(group);
       return;
     }
 
@@ -119,6 +107,22 @@ export class NotificationActionsService {
         }
       })
       .catch(() => undefined);
+  }
+
+  private openMessageGroup(group: NotificationGroup): void {
+    const navigate = () =>
+      this.router.navigate(['/notifications'], {
+        queryParams: {expanded: group.notificationIds[0]},
+      });
+
+    if (group.read) {
+      navigate();
+    } else {
+      this.notificationService.markRead(group.notificationIds).subscribe({
+        next: navigate,
+        error: navigate,
+      });
+    }
   }
 
   /**
