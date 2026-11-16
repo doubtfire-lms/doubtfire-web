@@ -27,7 +27,7 @@ export class TaskFileViewerComponent implements OnChanges {
   // Identifies the latest request, so a slow download for a previous task is ignored.
   private loadToken = 0;
 
-  constructor(private fileDownloader: FileDownloaderService) {}
+  constructor(private readonly fileDownloader: FileDownloaderService) {}
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['task']) {
