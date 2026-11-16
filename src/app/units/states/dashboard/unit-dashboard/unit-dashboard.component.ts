@@ -1,8 +1,10 @@
+import {DatePipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {
   EMPTY,
+  Observable,
   Subject,
   catchError,
   distinctUntilChanged,
@@ -15,7 +17,15 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import {ProjectService, Task, TaskService, Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
+import {
+  ProjectService,
+  Task,
+  TaskService,
+  Unit,
+  UnitRole,
+} from 'src/app/api/models/doubtfire-model';
+import {WeeklySummary} from 'src/app/api/models/notification';
+import {NotificationService} from 'src/app/api/services/notification.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
 
@@ -28,7 +38,7 @@ interface DashboardQueue {
 }
 
 @Component({
-  imports: [MatIconModule, RouterLink],
+  imports: [DatePipe, MatIconModule, RouterLink],
   selector: 'f-unit-dashboard',
   host: {
     class:
@@ -49,6 +59,9 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
   public unreadMessagesCount: number | null = null;
   public unitRole: string | null = null;
   public queues: DashboardQueue[] = [];
+  public weeklySummary: WeeklySummary | null = null;
+  public weeklySummaryLoading = true;
+  public weeklySummaryUnavailable = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +69,7 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
     private taskService: TaskService,
     private alertService: AlertService,
     private globalStateService: GlobalStateService,
+    private notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -71,10 +85,22 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
           this.feedbackOverdueCount = null;
           this.oldestSubmissionAgeDays = null;
           this.unreadMessagesCount = null;
+          this.weeklySummary = null;
+          this.weeklySummaryLoading = true;
+          this.weeklySummaryUnavailable = false;
           this.configureRolesAndQueues(unit);
 
+          const weeklySummary$ = this.loadWeeklySummary(unit.id).pipe(
+            tap((summary) => (this.weeklySummary = summary)),
+            catchError(() => {
+              this.weeklySummaryUnavailable = true;
+              return EMPTY;
+            }),
+            finalize(() => (this.weeklySummaryLoading = false)),
+          );
+
           // TaskService maps queue and inbox tasks to projects in the unit's student cache.
-          return this.projectService.loadStudents(unit).pipe(
+          const workload$ = this.projectService.loadStudents(unit).pipe(
             switchMap(() => {
               const inbox$ = this.taskService.queryTasksForTaskInbox(unit, undefined, true).pipe(
                 tap((tasks) => this.calculateMetrics(tasks)),
@@ -104,6 +130,7 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
             }),
             finalize(() => (this.loading = false)),
           );
+          return merge(workload$, weeklySummary$);
         }),
         takeUntil(this.destroy$),
       )
@@ -113,6 +140,22 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private loadWeeklySummary(unitId: number, page = 1): Observable<WeeklySummary | null> {
+    return this.notificationService
+      .getNotifications({unitId, kinds: ['weekly_summary'], state: 'all', page})
+      .pipe(
+        switchMap(({groups, perPage, total}) => {
+          const summary = groups.find(
+            (group) => group.weeklySummary?.audience === 'staff',
+          )?.weeklySummary;
+          if (summary || page * perPage >= total) {
+            return of(summary ?? null);
+          }
+          return this.loadWeeklySummary(unitId, page + 1);
+        }),
+      );
   }
 
   private configureRolesAndQueues(unit: Unit): void {
