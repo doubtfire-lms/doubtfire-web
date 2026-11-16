@@ -33,6 +33,7 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
   public readyForFeedbackCount: number | null = null;
   public needsHelpCount: number | null = null;
   public feedbackOverdueCount: number | null = null;
+  public oldestSubmissionAgeDays: number | null = null;
   public unreadMessagesCount: number | null = null;
 
   constructor(
@@ -53,6 +54,7 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
           this.readyForFeedbackCount = null;
           this.needsHelpCount = null;
           this.feedbackOverdueCount = null;
+          this.oldestSubmissionAgeDays = null;
           this.unreadMessagesCount = null;
 
           // TaskService maps inbox tasks to projects in the unit's student cache.
@@ -80,18 +82,26 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
     let needsHelp = 0;
     let feedbackOverdue = 0;
     let unreadMessages = 0;
+    let oldestSubmissionTime = Infinity;
+    let oldestSubmissionAgeDays: number | null = null;
     const now = Date.now();
 
     tasks.forEach((task) => {
       if (task.status === 'ready_for_feedback') {
         readyForFeedback++;
 
-        // Match the inbox's overdue indicator, including teaching-break pauses.
-        if (
-          task.submissionDate &&
-          task.daysSinceSubmission(now) >= task.unit.feedbackOverflowThresholdDays
-        ) {
-          feedbackOverdue++;
+        if (task.submissionDate) {
+          // Match the inbox's feedback age, including teaching-break pauses.
+          const ageDays = task.daysSinceSubmission(now);
+          if (ageDays >= task.unit.feedbackOverflowThresholdDays) {
+            feedbackOverdue++;
+          }
+
+          const submissionTime = task.submissionDate.getTime();
+          if (submissionTime < oldestSubmissionTime) {
+            oldestSubmissionTime = submissionTime;
+            oldestSubmissionAgeDays = ageDays;
+          }
         }
       }
 
@@ -105,6 +115,7 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
     this.readyForFeedbackCount = readyForFeedback;
     this.needsHelpCount = needsHelp;
     this.feedbackOverdueCount = feedbackOverdue;
+    this.oldestSubmissionAgeDays = oldestSubmissionAgeDays;
     this.unreadMessagesCount = unreadMessages;
   }
 }

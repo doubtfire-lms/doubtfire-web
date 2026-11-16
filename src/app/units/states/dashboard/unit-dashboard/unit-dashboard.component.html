@@ -33,6 +33,14 @@
       </div>
     </a>
   </div>
+  @if (oldestSubmissionAgeDays !== null) {
+    <p class="my-6">
+      Oldest submission awaiting feedback:
+      <strong class="tabular-nums">
+        {{ oldestSubmissionAgeDays }} {{ oldestSubmissionAgeDays === 1 ? 'day' : 'days' }}
+      </strong>
+    </p>
+  }
   <p class="my-6 flex items-center justify-center gap-2">
     <mat-icon aria-hidden="true">mail_outline</mat-icon>
     {{ unreadMessagesCount }} unread messages
