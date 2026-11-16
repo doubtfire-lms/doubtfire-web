@@ -1,5 +1,13 @@
 <div class="p-3">
-  <h2>Review portfolio of {{ project.student.name }}</h2>
+  <div class="flex items-center justify-between gap-3">
+    <h2>Review portfolio of {{ project.student.name }}</h2>
+    @if (project.portfolioAvailable && hasAdditionalFiles) {
+      <button color="primary" mat-stroked-button (click)="downloadAdditionalFiles()">
+        <mat-icon>folder_zip</mat-icon>
+        Download additional files
+      </button>
+    }
+  </div>
   <p>View or download portfolio for assessment.</p>
 
   @if (project.portfolioAvailable) {

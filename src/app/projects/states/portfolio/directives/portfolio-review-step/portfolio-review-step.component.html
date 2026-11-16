@@ -148,9 +148,33 @@
         <button color="warn" mat-stroked-button (click)="deletePortfolio()">
           Delete Portfolio
         </button>
-        <button color="primary" mat-raised-button (click)="downloadPortfolio()">
-          Download Portfolio
-        </button>
+        <div class="inline-flex overflow-hidden rounded-md bg-white/30 shadow-sm">
+          <button
+            class="rounded-none! shadow-none!"
+            color="primary"
+            mat-raised-button
+            (click)="downloadPortfolio()"
+          >
+            Download Portfolio
+          </button>
+          @if (hasExtraFiles) {
+            <button
+              aria-label="More portfolio download options"
+              class="min-w-10! rounded-none! border-l! border-white/30! px-2! shadow-none!"
+              color="primary"
+              mat-raised-button
+              [matMenuTriggerFor]="portfolioDownloadMenu"
+            >
+              <mat-icon class="m-0!">arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #portfolioDownloadMenu="matMenu" xPosition="before">
+              <button mat-menu-item (click)="downloadAdditionalFiles()">
+                <mat-icon>folder_zip</mat-icon>
+                <span>Download additional files</span>
+              </button>
+            </mat-menu>
+          }
+        </div>
       }
     </mat-card-footer>
   }

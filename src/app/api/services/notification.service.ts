@@ -2,11 +2,16 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable, OnDestroy} from '@angular/core';
 import {
   BehaviorSubject,
+  EMPTY,
   Observable,
+  Subject,
   Subscription,
   catchError,
+  debounceTime,
+  fromEvent,
   map,
-  of,
+  merge,
+  startWith,
   switchMap,
   tap,
   timer,
@@ -37,6 +42,11 @@ interface NotificationCountResponse {
   unread_counts_by_unit?: Record<string, number>;
 }
 
+// Poll rarely while visible; refetch on return to the tab only if the count is this stale.
+const POLL_INTERVAL_MS = 5 * 60_000;
+const REFOCUS_STALE_MS = 60_000;
+const REFRESH_DEBOUNCE_MS = 1_000;
+
 @Injectable()
 export class NotificationService implements OnDestroy {
   private readonly unreadCountSubject: BehaviorSubject<number> = new BehaviorSubject(0);
@@ -45,6 +55,10 @@ export class NotificationService implements OnDestroy {
   private pollingSubscription?: Subscription;
   private pollingConsumers = 0;
   private waitingForAuthentication = false;
+  private lastCountAt = 0;
+  private readonly countChecked: Subject<void> = new Subject();
+  private readonly refreshRequests: Subject<void> = new Subject();
+  private readonly refreshSubscription: Subscription;
 
   public readonly unreadCount$ = this.unreadCountSubject.asObservable();
   public readonly unreadCountsByUnit$ = this.unreadCountsByUnitSubject.asObservable();
@@ -52,7 +66,14 @@ export class NotificationService implements OnDestroy {
   constructor(
     private httpClient: HttpClient,
     private authenticationService: AuthenticationService,
-  ) {}
+  ) {
+    this.refreshSubscription = this.refreshRequests
+      .pipe(
+        debounceTime(REFRESH_DEBOUNCE_MS),
+        switchMap(() => this.fetchUnreadCount()),
+      )
+      .subscribe();
+  }
 
   public startCountPolling(): void {
     this.pollingConsumers += 1;
@@ -82,21 +103,37 @@ export class NotificationService implements OnDestroy {
   }
 
   private beginCountPolling(): void {
-    this.pollingSubscription = timer(0, 60_000)
+    // Reschedule whenever the tab visibility changes or any request updates the count.
+    this.pollingSubscription = merge(fromEvent(document, 'visibilitychange'), this.countChecked)
       .pipe(
-        switchMap(() =>
-          this.httpClient
-            .get<NotificationCountResponse>(`${API_URL}/notifications/unread_count`)
-            .pipe(
-              catchError(() =>
-                of({
-                  count: this.unreadCountSubject.value,
-                }),
-              ),
-            ),
-        ),
+        startWith(undefined),
+        switchMap(() => {
+          if (document.visibilityState === 'hidden') {
+            return EMPTY;
+          }
+          const age = Date.now() - this.lastCountAt;
+          const delay = age >= REFOCUS_STALE_MS ? 0 : POLL_INTERVAL_MS - age;
+          return timer(delay).pipe(switchMap(() => this.fetchUnreadCount()));
+        }),
       )
-      .subscribe((response) => this.updateUnreadCounts(response));
+      .subscribe();
+  }
+
+  private fetchUnreadCount(): Observable<NotificationCountResponse> {
+    return this.httpClient
+      .get<NotificationCountResponse>(`${API_URL}/notifications/unread_count`)
+      .pipe(
+        tap((response) => this.updateUnreadCounts(response)),
+        catchError(() => {
+          this.markCountChecked();
+          return EMPTY;
+        }),
+      );
+  }
+
+  private markCountChecked(): void {
+    this.lastCountAt = Date.now();
+    this.countChecked.next();
   }
 
   public stopCountPolling(): void {
@@ -114,12 +151,7 @@ export class NotificationService implements OnDestroy {
   }
 
   public refreshUnreadCount(): void {
-    this.httpClient
-      .get<NotificationCountResponse>(`${API_URL}/notifications/unread_count`)
-      .subscribe({
-        next: (response) => this.updateUnreadCounts(response),
-        error: () => undefined,
-      });
+    this.refreshRequests.next();
   }
 
   public getNotifications(query: NotificationQuery = {}): Observable<NotificationPage> {
@@ -150,6 +182,7 @@ export class NotificationService implements OnDestroy {
       tap((page) => {
         this.unreadCountSubject.next(page.unreadCount);
         this.unreadCountsByUnitSubject.next(page.unreadCountsByUnit);
+        this.markCountChecked();
       }),
     );
   }
@@ -171,6 +204,7 @@ export class NotificationService implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.refreshSubscription.unsubscribe();
     this.stopCountPolling();
   }
 
@@ -181,6 +215,7 @@ export class NotificationService implements OnDestroy {
         this.mapUnreadCountsByUnit(response.unread_counts_by_unit),
       );
     }
+    this.markCountChecked();
   }
 
   private mapUnreadCountsByUnit(counts: Record<string, number>): Record<number, number> {

@@ -2,6 +2,69 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-21](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-20...v11.1.0-21) (2026-11-12)
+
+
+### Bug Fixes
+
+* show tutorial deletion errors in alert ([5fe25a9](https://github.com/b0ink/doubtfire-deploy/commit/5fe25a9cfca22c0b596dbe7a0953aa2abc1ccfbf))
+
+## [11.1.0-20](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-19...v11.1.0-20) (2026-11-12)
+
+
+### Bug Fixes
+
+* prevent overlapping Sidekiq progress polls ([d73f011](https://github.com/b0ink/doubtfire-deploy/commit/d73f0116638c8288043b9d9db9051cde3f917c59))
+* prevent tutors from calling d2l requests ([f0803d7](https://github.com/b0ink/doubtfire-deploy/commit/f0803d71efaacde45c3c4c8e712135c92b6c6099))
+
+## [11.1.0-19](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-18...v11.1.0-19) (2026-11-12)
+
+## [11.1.0-18](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-17...v11.1.0-18) (2026-11-12)
+
+
+### Features
+
+* hide login ui when redirecting via auth token ([e16d3e7](https://github.com/b0ink/doubtfire-deploy/commit/e16d3e7fcaba5317db6bd4a955041993fe2c4983))
+
+
+### Bug Fixes
+
+* keep confirmation button checkmark vertically aligned ([4957902](https://github.com/b0ink/doubtfire-deploy/commit/495790265f56b1bf479a64aacb56e99a59db8cc8))
+
+## [11.1.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-16...v11.1.0-17) (2026-11-11)
+
+
+### Bug Fixes
+
+* remove one-time auth tokens from browser history ([4a61ca8](https://github.com/b0ink/doubtfire-deploy/commit/4a61ca836dc460fc4c96617f6ebad07d94ce0152))
+
+## [11.1.0-16](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-15...v11.1.0-16) (2026-11-11)
+
+## [11.1.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-14...v11.1.0-15) (2026-11-09)
+
+
+### Bug Fixes
+
+* allow special characters in task inbox scroll lookup ([d06bbe0](https://github.com/b0ink/doubtfire-deploy/commit/d06bbe0aeebb9bef4fb2933f6d6ebc1231c3785f))
+* handle jplag comparison open failures ([1f2574f](https://github.com/b0ink/doubtfire-deploy/commit/1f2574fddb9f11472c57755336d1ca837f681895))
+* scroll to selected task in inbox after route load ([458d1b4](https://github.com/b0ink/doubtfire-deploy/commit/458d1b4159a52c3d352781fc79f4ba867b2fb866))
+
+## [11.1.0-14](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-13...v11.1.0-14) (2026-11-09)
+
+
+### Bug Fixes
+
+* wait for student before rendering assessment ([54e7841](https://github.com/b0ink/doubtfire-deploy/commit/54e7841dd4fc6af1a9c4a677e05a0d8c7905a3ab))
+
+## [11.1.0-13](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-12...v11.1.0-13) (2026-11-09)
+
+
+### Bug Fixes
+
+* reduce unread notification count polling ([078c19f](https://github.com/b0ink/doubtfire-deploy/commit/078c19f887a0744f27f6cf7b97821f3b98184b0d))
+* resolve task definition via task unit when mapping tasks ([9f7119d](https://github.com/b0ink/doubtfire-deploy/commit/9f7119db649d281060df61d12c8a41f323ac3bb0))
+* show task snapshots before tutorial enrolment ([d9aee75](https://github.com/b0ink/doubtfire-deploy/commit/d9aee75b7d3399997d626a8b99e755ca419d9c67))
+
 ## [11.1.0-12](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-11...v11.1.0-12) (2026-11-06)
 
 

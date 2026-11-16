@@ -122,6 +122,7 @@ describe('NotificationService', () => {
   });
 
   it('marks only the supplied notification ids as read', () => {
+    vi.useFakeTimers();
     service.markRead([1, 2]).subscribe();
 
     const request = httpMock.expectOne((candidate) =>
@@ -130,11 +131,13 @@ describe('NotificationService', () => {
     expect(request.request.method).toBe('PUT');
     expect(request.request.body).toEqual({notification_ids: [1, 2]});
     request.flush({count: 2});
+    vi.advanceTimersByTime(1_000);
 
     const countRequest = httpMock.expectOne((candidate) =>
       candidate.url.endsWith('/notifications/unread_count'),
     );
     countRequest.flush({count: 0});
+    vi.useRealTimers();
   });
 
   it('waits for authentication before polling the grouped unread count', () => {
@@ -162,7 +165,7 @@ describe('NotificationService', () => {
     expect(latestCount).toBe(4);
     expect(latestCountsByUnit).toEqual({3: 2, 7: 2});
 
-    vi.advanceTimersByTime(60_000);
+    vi.advanceTimersByTime(5 * 60_000);
     const nextRequest = httpMock.expectOne((candidate) =>
       candidate.url.endsWith('/notifications/unread_count'),
     );
@@ -170,11 +173,46 @@ describe('NotificationService', () => {
     expect(latestCount).toBe(2);
 
     service.stopCountPolling();
-    vi.advanceTimersByTime(60_000);
+    vi.advanceTimersByTime(5 * 60_000);
     httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
 
     subscription.unsubscribe();
     unitSubscription.unsubscribe();
+    vi.useRealTimers();
+  });
+
+  it('pauses polling while the tab is hidden', () => {
+    vi.useFakeTimers();
+    authenticated = true;
+    let visibility: DocumentVisibilityState = 'visible';
+    const visibilitySpy = vi
+      .spyOn(document, 'visibilityState', 'get')
+      .mockImplementation(() => visibility);
+
+    service.startCountPolling();
+    vi.advanceTimersByTime(0);
+    httpMock
+      .expectOne((candidate) => candidate.url.endsWith('/notifications/unread_count'))
+      .flush({count: 1});
+
+    visibility = 'hidden';
+    document.dispatchEvent(new Event('visibilitychange'));
+    vi.advanceTimersByTime(10 * 60_000);
+    expect(
+      httpMock.match((candidate) => candidate.url.endsWith('/notifications/unread_count')),
+    ).toHaveLength(0);
+
+    visibility = 'visible';
+    document.dispatchEvent(new Event('visibilitychange'));
+    vi.advanceTimersByTime(0);
+    const resumedRequest = httpMock.expectOne((candidate) =>
+      candidate.url.endsWith('/notifications/unread_count'),
+    );
+    expect(resumedRequest.request.method).toBe('GET');
+    resumedRequest.flush({count: 2});
+
+    service.stopCountPolling();
+    visibilitySpy.mockRestore();
     vi.useRealTimers();
   });
 
@@ -183,7 +221,9 @@ describe('NotificationService', () => {
 
     afterAuthCallback?.(false);
 
-    httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
+    expect(
+      httpMock.match((candidate) => candidate.url.endsWith('/notifications/unread_count')),
+    ).toHaveLength(0);
   });
 
   it('does not start delayed polling after polling has been stopped', () => {
@@ -192,7 +232,9 @@ describe('NotificationService', () => {
 
     afterAuthCallback?.(true);
 
-    httpMock.expectNone((candidate) => candidate.url.endsWith('/notifications/unread_count'));
+    expect(
+      httpMock.match((candidate) => candidate.url.endsWith('/notifications/unread_count')),
+    ).toHaveLength(0);
   });
 
   it('polls immediately when the user is already authenticated', () => {
@@ -205,6 +247,7 @@ describe('NotificationService', () => {
     const request = httpMock.expectOne((candidate) =>
       candidate.url.endsWith('/notifications/unread_count'),
     );
+    expect(request.request.method).toBe('GET');
     request.flush({count: 5});
 
     service.stopCountPolling();
@@ -228,6 +271,7 @@ describe('NotificationService', () => {
     const request = httpMock.expectOne((candidate) =>
       candidate.url.endsWith('/notifications/unread_count'),
     );
+    expect(request.request.method).toBe('GET');
     request.flush({count: 7});
 
     service.stopCountPolling();
@@ -246,6 +290,7 @@ describe('NotificationService', () => {
     const request = httpMock.expectOne((candidate) =>
       candidate.url.endsWith('/notifications/unread_count'),
     );
+    expect(request.request.method).toBe('GET');
     request.flush({count: 3});
     vi.useRealTimers();
   });

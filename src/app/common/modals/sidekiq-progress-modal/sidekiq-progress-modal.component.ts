@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Subject} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {AlertService} from '../../services/alert.service';
@@ -24,7 +24,9 @@ export interface SidekiqProgressModalData {
 export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
   private readonly pollingInterval: number = 1250;
 
-  private jobPollingInterval; // NodeJS.timeout
+  private jobPollingTimeout?: ReturnType<typeof setTimeout>;
+  private jobPollingSubscription?: Subscription;
+  private pollingStopped = false;
 
   pollFailureCount: number = 0;
   pollFailureLimit: number = 5;
@@ -45,30 +47,28 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
     this.pollFailureLimit = this.data.pollFailureLimit ?? 5;
     this.pollFailureCount = 0;
 
-    this.getSidekiqJob();
-    this.jobPollingInterval = setInterval(() => {
-      this.getSidekiqJob();
-    }, this.pollingInterval);
-
     this.dialogRef.afterClosed().subscribe(() => {
-      clearInterval(this.jobPollingInterval);
+      this.stopPolling();
     });
+
+    this.getSidekiqJob();
   }
 
   private getSidekiqJob() {
     if (!this.data.jobId) {
-      clearInterval(this.jobPollingInterval);
+      this.stopPolling();
       this.dialogRef.close();
+      return;
     }
 
-    this.sidekiqJobService.getSidekiqJob(this.data.jobId).subscribe({
+    this.jobPollingSubscription = this.sidekiqJobService.getSidekiqJob(this.data.jobId).subscribe({
       next: (job) => {
         this.sidekiqJobService.setJob(job.id, this.data.title, this.data.subject, job);
         this.job = job;
         this.pollFailureCount = 0;
 
         if (job.status === 'complete' || job.status === 'failed') {
-          clearInterval(this.jobPollingInterval);
+          this.stopPolling();
         }
       },
       error: (error) => {
@@ -77,14 +77,29 @@ export class SidekiqProgressModalComponent implements OnInit, OnDestroy {
 
         if (this.pollFailureCount >= this.pollFailureLimit) {
           this.alertService.error(error, 6000);
-          clearInterval(this.jobPollingInterval);
+          this.stopPolling();
+        } else {
+          this.scheduleNextPoll();
         }
       },
+      complete: () => this.scheduleNextPoll(),
     });
   }
 
+  private scheduleNextPoll(): void {
+    if (!this.pollingStopped) {
+      this.jobPollingTimeout = setTimeout(() => this.getSidekiqJob(), this.pollingInterval);
+    }
+  }
+
+  private stopPolling(): void {
+    this.pollingStopped = true;
+    clearTimeout(this.jobPollingTimeout);
+    this.jobPollingSubscription?.unsubscribe();
+  }
+
   ngOnDestroy(): void {
-    clearInterval(this.jobPollingInterval);
+    this.stopPolling();
   }
 
   public viewResult() {

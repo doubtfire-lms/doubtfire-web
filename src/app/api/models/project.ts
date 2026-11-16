@@ -282,6 +282,10 @@ export class Project extends Entity {
     }`;
   }
 
+  public portfolioAdditionalFilesUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/submission/project/${this.id}/portfolio/additional_files`;
+  }
+
   public deletePortfolio(): Observable<void> {
     const httpClient = AppInjector.get(HttpClient);
     return httpClient.delete<void>(this.portfolioUrl(false));
