@@ -79,16 +79,18 @@
                 @if (grade.value >= td.targetGrade) {
                   <div class="flex flex-col gap-1">
                     @if (grade.value === td.targetGrade && hasMinimumGradeDateOverride(td)) {
-                      <div class="rounded border border-amber-300 bg-amber-50 p-2 text-sm">
-                        <p>
-                          An existing {{ grade.label }} override still applies to students. Editing
-                          a default date removes its override:
-                        </p>
+                      <div class="text-xs text-gray-600">
+                        <p>{{ grade.label }} student dates:</p>
                         @if (td.gradeStartDate(grade.value)) {
-                          <p>Start: {{ td.gradeStartDate(grade.value) | date: 'd MMM y' }}</p>
+                          <p>
+                            Start {{ td.gradeStartDate(grade.value) | date: 'd MMM y' }} (override)
+                          </p>
                         }
                         @if (td.gradeTargetDate(grade.value)) {
-                          <p>Target: {{ td.gradeTargetDate(grade.value) | date: 'd MMM y' }}</p>
+                          <p>
+                            Target
+                            {{ td.gradeTargetDate(grade.value) | date: 'd MMM y' }} (override)
+                          </p>
                         }
                         <button mat-button (click)="clearMinimumGradeDateOverride(td)">
                           Use default dates
