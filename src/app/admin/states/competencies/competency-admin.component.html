@@ -319,8 +319,8 @@
                     <button
                       mat-stroked-button
                       type="button"
-                      [disabled]="!selectedUnitIds.length"
-                      (click)="linkUnits()"
+                      [disabled]="!selectedUnitIds.length || linkingUnits"
+                      (click)="linkUnits(linkConfirmationDialog)"
                     >
                       Link {{ selectedUnitIds.length || '' }} offering{{
                         selectedUnitIds.length === 1 ? '' : 's'
@@ -357,3 +357,33 @@
     </mat-tab>
   </mat-tab-group>
 </main>
+
+<dialog
+  #linkConfirmationDialog
+  aria-labelledby="link-confirmation-title"
+  class="w-[min(92vw,36rem)] rounded-xl border border-gray-200 p-6 shadow-xl backdrop:bg-black/40"
+>
+  <h2 class="mt-0 text-xl font-semibold" id="link-confirmation-title">
+    Move offerings to {{ unitDefinition.version }}?
+  </h2>
+  <p class="text-sm text-gray-600">
+    Each offering can use one unit definition version at a time. Moving it changes the version it
+    uses for its skill requirements. Other offerings stay on their current versions.
+  </p>
+  <ul class="max-h-64 overflow-auto rounded-lg border border-gray-200 px-4 py-2 text-sm">
+    @for (unit of selectedUnitsForLink; track unit.id) {
+      <li class="my-2">
+        <span class="font-medium">{{ unit.name }} · {{ unit.start_date | date: 'MMM y' }}</span>
+        <span class="block text-gray-600">
+          {{ versionOf(unit) || 'No current version' }} → {{ unitDefinition.version }}
+        </span>
+      </li>
+    }
+  </ul>
+  <div class="mt-5 flex justify-end gap-2">
+    <button mat-button type="button" (click)="linkConfirmationDialog.close()">Cancel</button>
+    <button mat-flat-button type="button" (click)="confirmLinkUnits(linkConfirmationDialog)">
+      Confirm move
+    </button>
+  </div>
+</dialog>

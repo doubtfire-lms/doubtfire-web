@@ -58,6 +58,7 @@ export class CompetencyAdminComponent implements OnInit {
   courseLevels: Record<number, number | null> = {};
   unitLevels: Record<number, number | null> = {};
   selectedUnitIds: number[] = [];
+  linkingUnits = false;
   courseOpen = false;
   unitDefinitionOpen = false;
   courseFilter = '';
@@ -114,6 +115,10 @@ export class CompetencyAdminComponent implements OnInit {
         unit.code === this.unitDefinition.code &&
         unit.unit_definition_id !== this.unitDefinition.id,
     );
+  }
+
+  get selectedUnitsForLink(): UnitSummary[] {
+    return this.units.filter((unit) => this.selectedUnitIds.includes(unit.id));
   }
 
   unitsFor(definitionId?: number): UnitSummary[] {
@@ -224,20 +229,46 @@ export class CompetencyAdminComponent implements OnInit {
     });
   }
 
-  linkUnits(): void {
+  linkUnits(dialog: HTMLDialogElement): void {
     const definitionId = this.unitDefinition.id;
-    if (!this.selectedUnitIds.length || !definitionId) {
+    if (!this.selectedUnitIds.length || !definitionId || this.linkingUnits) {
       return;
     }
+    if (this.selectedUnitsForLink.some((unit) => !!unit.unit_definition_id)) {
+      dialog.showModal();
+      return;
+    }
+    this.persistUnitLinks();
+  }
+
+  confirmLinkUnits(dialog: HTMLDialogElement): void {
+    dialog.close();
+    this.persistUnitLinks();
+  }
+
+  private persistUnitLinks(): void {
+    const definitionId = this.unitDefinition.id;
+    if (!definitionId || !this.selectedUnitIds.length || this.linkingUnits) {
+      return;
+    }
+    this.linkingUnits = true;
+    this.error = '';
+    this.message = '';
     forkJoin(
       this.selectedUnitIds.map((unitId) => this.competencies.assignUnit(unitId, definitionId)),
     ).subscribe({
       next: () => {
         this.message = 'Offerings linked to this version.';
         this.selectedUnitIds = [];
+        this.linkingUnits = false;
         this.reload();
       },
-      error: () => (this.error = 'Could not link offerings.'),
+      error: () => {
+        this.error = 'Could not link every offering. Review the links before trying again.';
+        this.selectedUnitIds = [];
+        this.linkingUnits = false;
+        this.reload();
+      },
     });
   }
 
