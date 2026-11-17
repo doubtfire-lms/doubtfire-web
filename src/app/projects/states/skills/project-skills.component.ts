@@ -1,4 +1,5 @@
-import {Component, OnInit, computed, signal} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild, computed, signal} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 import {Project, Task} from 'src/app/api/models/doubtfire-model';
 import {GradeDefinition} from 'src/app/api/models/unit';
@@ -57,6 +58,8 @@ interface TargetSkillProgress {
   styleUrls: ['./project-skills.component.scss'],
 })
 export class ProjectSkillsComponent implements OnInit {
+  @ViewChild('detailsDialog') detailsDialog: TemplateRef<unknown>;
+
   projectId: number;
   project: Project;
   progress = signal<SkillProgressDto | null>(null);
@@ -153,6 +156,7 @@ export class ProjectSkillsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private competencies: CompetencyService,
+    private dialog: MatDialog,
   ) {
     this.projectId = Number(this.route.parent?.snapshot.paramMap.get('projectId'));
     this.project = this.route.parent?.snapshot.data.project as Project;
@@ -249,9 +253,9 @@ export class ProjectSkillsComponent implements OnInit {
     return 'No evidence submitted';
   }
 
-  openStamp(stamp: SelectedStamp, dialog: HTMLDialogElement): void {
+  openStamp(stamp: SelectedStamp): void {
     this.selectedStamp.set(stamp);
-    dialog.showModal();
+    this.dialog.open(this.detailsDialog, {width: '32rem', maxWidth: '92vw'});
   }
 
   hasEndorsedEvidenceAtLevel(skillId: number, rank: number): boolean {
