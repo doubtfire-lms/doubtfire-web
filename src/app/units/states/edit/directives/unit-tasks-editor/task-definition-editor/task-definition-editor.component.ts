@@ -26,6 +26,7 @@ type TaskDefinitionSectionId =
   | 'task-learning-outcomes'
   | 'task-skills'
   | 'inbox'
+  | 'submission-open-date'
   | 'due-dates'
   | 'upload-requirements'
   | 'task-resources'
@@ -62,6 +63,7 @@ export class TaskDefinitionEditorComponent implements OnInit, AfterViewInit, OnC
     {id: 'task-learning-outcomes', label: 'Learning Outcomes'},
     {id: 'task-skills', label: 'Develop Skills'},
     {id: 'inbox', label: 'Inbox'},
+    {id: 'submission-open-date', label: 'Submission Open Date'},
     {id: 'due-dates', label: 'Due Dates'},
     {id: 'upload-requirements', label: 'Upload Requirements'},
     {id: 'task-resources', label: 'Task Resources'},

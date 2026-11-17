@@ -119,9 +119,17 @@ export class GlobalStateService implements OnDestroy {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
     this.currentUserProjects = this.projectService.cache;
+    const returningWithLoginToken =
+      window.location.pathname === '/sign_in' &&
+      new URLSearchParams(window.location.search).has('authToken');
 
     // Use timeout to ensure everything is loaded before we try to login
     setTimeout(() => {
+      if (returningWithLoginToken) {
+        this.isLoadingSubject.next(false);
+        return;
+      }
+
       // LTI launch errors are shown to users who have no OnTrack session
       const isLtiLaunchError =
         window.location.pathname === '/lti' &&
