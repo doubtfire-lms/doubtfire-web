@@ -28,6 +28,7 @@ import {WeeklySummary} from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+import {WeeklyTimesheetComponent} from './weekly-timesheet.component';
 
 interface DashboardQueue {
   path: 'moderation' | 'overflow';
@@ -38,7 +39,7 @@ interface DashboardQueue {
 }
 
 @Component({
-  imports: [DatePipe, MatIconModule, RouterLink],
+  imports: [DatePipe, MatIconModule, RouterLink, WeeklyTimesheetComponent],
   selector: 'f-unit-dashboard',
   host: {
     class:
@@ -58,6 +59,7 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
   public oldestSubmissionAgeDays: number | null = null;
   public unreadMessagesCount: number | null = null;
   public unitRole: string | null = null;
+  public timesheetUnit: Unit | null = null;
   public queues: DashboardQueue[] = [];
   public weeklySummary: WeeklySummary | null = null;
   public weeklySummaryLoading = true;
@@ -162,6 +164,12 @@ export class UnitDashboardComponent implements OnInit, OnDestroy {
     const entity = this.globalStateService.currentViewAndEntitySubject$.value?.entity;
     const role = entity instanceof UnitRole && entity.unit.id === unit.id ? entity : null;
     this.unitRole = role?.role ?? null;
+    this.timesheetUnit =
+      role &&
+      (role.role === 'Tutor' || role.role === 'Convenor') &&
+      unit.staff.some((staffRole) => staffRole.id === role.id)
+        ? unit
+        : null;
     this.queues = [];
 
     if (role?.role === 'Convenor' || (role?.id && unit.staff.some((s) => s.mentorId === role.id))) {

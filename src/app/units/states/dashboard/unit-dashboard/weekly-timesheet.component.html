@@ -1,0 +1,126 @@
+<section
+  aria-labelledby="weekly-timesheet-heading"
+  class="mx-auto mt-8 rounded-xl border border-slate-300 bg-white p-5 text-left"
+>
+  <header class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h2 class="m-0 text-lg font-medium" id="weekly-timesheet-heading">Weekly Timesheet</h2>
+      <p aria-live="polite" class="mt-1 mb-0 text-sm text-slate-600">{{ weekLabel }}</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-2 text-sm">
+      <button
+        aria-label="Previous week"
+        class="rounded-md border border-slate-300 px-2 py-1 hover:bg-blue-50 disabled:opacity-50"
+        type="button"
+        [disabled]="!canGoBack"
+        (click)="changeWeek(-1)"
+      >
+        ‹
+      </button>
+      <button
+        aria-label="Next week"
+        class="rounded-md border border-slate-300 px-2 py-1 hover:bg-blue-50 disabled:opacity-50"
+        type="button"
+        [disabled]="isCurrentWeek"
+        (click)="changeWeek(1)"
+      >
+        ›
+      </button>
+    </div>
+  </header>
+
+  @if (timesheet$ | async; as timesheet) {
+    @switch (timesheet.status) {
+      @case ('loading') {
+        <p class="mt-4 mb-0 text-sm text-slate-600" role="status">Loading timesheet…</p>
+      }
+      @case ('error') {
+        <p class="mt-4 mb-0 text-sm text-slate-600" role="alert">Could not load the timesheet.</p>
+      }
+      @case ('empty') {
+        <p class="mt-4 mb-0 text-sm text-slate-600" role="status">
+          No timesheet activity this week.
+        </p>
+      }
+      @case ('ready') {
+        <dl class="mt-4 mb-0 grid grid-cols-1 gap-3 text-center sm:grid-cols-2">
+          <div class="rounded-lg bg-slate-100 p-3">
+            <dt class="text-sm">Weekly time spent on OnTrack</dt>
+            <dd class="m-0 text-2xl font-medium tabular-nums">
+              {{ formatDuration(timesheet.minutes) }}
+            </dd>
+          </div>
+          <div class="rounded-lg bg-slate-100 p-3">
+            <dt class="text-sm">Weekly total tasks assessed</dt>
+            <dd class="m-0 text-2xl font-medium tabular-nums">{{ timesheet.assessments }}</dd>
+          </div>
+        </dl>
+        <p class="mt-2 mb-0 text-sm text-slate-600">
+          Excludes tutorial sessions · {{ browserTimezone }}
+        </p>
+        <div class="mt-4 grid grid-cols-2 gap-2 text-center text-sm sm:grid-cols-4 md:grid-cols-7">
+          @for (day of timesheet.days; track day.label) {
+            @if (day.sessions.length) {
+              <button
+                aria-controls="weekly-timesheet-sessions"
+                class="rounded-md border border-slate-300 px-1 py-2 hover:bg-blue-50 aria-expanded:border-formatif-blue aria-expanded:bg-blue-50"
+                type="button"
+                [attr.aria-expanded]="openDay === day"
+                (click)="toggleDay(day)"
+              >
+                <span>{{ day.label }} {{ openDay === day ? '▴' : '▾' }}</span>
+                <strong class="block tabular-nums">{{ formatDuration(day.minutes) }}</strong>
+                <span>{{ day.assessments }} assessed</span>
+              </button>
+            } @else {
+              <div class="rounded-md border border-slate-200 px-1 py-2 text-slate-600">
+                <span class="block">{{ day.label }}</span>
+                <span>No sessions</span>
+              </div>
+            }
+          }
+        </div>
+        <div id="weekly-timesheet-sessions" [hidden]="!openDay">
+          @if (openDay; as day) {
+            <table class="mt-4 w-full border-collapse text-sm tabular-nums">
+              <caption class="pb-2 text-left font-medium">
+                Sessions for
+                {{
+                  day.label
+                }}
+                {{
+                  formatDate(day.date)
+                }}
+              </caption>
+              <thead>
+                <tr class="border-b border-slate-300">
+                  <th class="p-1" scope="col">Start</th>
+                  <th class="p-1" scope="col">End</th>
+                  <th class="p-1 text-right" scope="col">Duration</th>
+                  <th class="p-1 text-right" scope="col">Tasks Assessed</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (session of day.sessions; track session.id) {
+                  <tr class="border-b border-slate-200">
+                    <td class="p-1">{{ session.startTime | date: 'HH:mm' }}</td>
+                    <td class="p-1">{{ session.endTime | date: 'HH:mm' }}</td>
+                    <td class="p-1 text-right">{{ formatDuration(session.durationMinutes) }}</td>
+                    <td class="p-1 text-right">{{ session.assessments }}</td>
+                  </tr>
+                }
+              </tbody>
+              <tfoot class="bg-slate-100">
+                <tr>
+                  <th class="p-1" colspan="2" scope="row">Daily Total</th>
+                  <td class="p-1 text-right">{{ formatDuration(day.minutes) }}</td>
+                  <td class="p-1 text-right">{{ day.assessments }}</td>
+                </tr>
+              </tfoot>
+            </table>
+          }
+        </div>
+      }
+    }
+  }
+</section>

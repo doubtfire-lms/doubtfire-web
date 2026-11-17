@@ -1,5 +1,5 @@
 <main class="w-full max-w-225 text-center">
-  <h1 class="m-0 mb-2 text-[28px] font-medium">Unit dashboard</h1>
+  <h1 class="m-0 mb-2 text-[28px] font-medium">Unit Dashboard</h1>
   @if (unitRole) {
     <div class="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm">
       <span class="font-medium">Your roles:</span>
@@ -17,9 +17,15 @@
     >
       <mat-icon aria-hidden="true" class="text-formatif-blue">thumb_up_off_alt</mat-icon>
       <h2 class="m-0 text-lg font-medium">Ready for feedback</h2>
-      <span class="min-h-11 text-[44px] leading-none font-medium tabular-nums">{{
-        readyForFeedbackCount
-      }}</span>
+      @if (readyForFeedbackCount === null) {
+        <span class="flex min-h-11 items-center text-sm">{{
+          loading ? 'Loading…' : 'Unavailable'
+        }}</span>
+      } @else {
+        <span class="min-h-11 text-[44px] leading-none font-medium tabular-nums">{{
+          readyForFeedbackCount
+        }}</span>
+      }
     </a>
     <a
       class="box-border flex min-h-32 w-full flex-col items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white p-5 text-slate-800 no-underline hover:border-formatif-blue hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue sm:w-70"
@@ -28,9 +34,15 @@
     >
       <mat-icon aria-hidden="true" class="text-formatif-blue">help_outline</mat-icon>
       <h2 class="m-0 text-lg font-medium">Needs help</h2>
-      <span class="min-h-11 text-[44px] leading-none font-medium tabular-nums">{{
-        needsHelpCount
-      }}</span>
+      @if (needsHelpCount === null) {
+        <span class="flex min-h-11 items-center text-sm">{{
+          loading ? 'Loading…' : 'Unavailable'
+        }}</span>
+      } @else {
+        <span class="min-h-11 text-[44px] leading-none font-medium tabular-nums">{{
+          needsHelpCount
+        }}</span>
+      }
     </a>
     <a
       class="box-border flex min-h-32 w-full flex-col items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white p-5 text-slate-800 no-underline hover:border-formatif-blue hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue sm:w-70"
@@ -39,9 +51,15 @@
     >
       <mat-icon aria-hidden="true" class="text-formatif-blue">schedule</mat-icon>
       <h2 class="m-0 text-lg font-medium">Feedback overdue</h2>
-      <span class="min-h-11 text-[44px] leading-none font-medium tabular-nums">{{
-        feedbackOverdueCount
-      }}</span>
+      @if (feedbackOverdueCount === null) {
+        <span class="flex min-h-11 items-center text-sm">{{
+          loading ? 'Loading…' : 'Unavailable'
+        }}</span>
+      } @else {
+        <span class="min-h-11 text-[44px] leading-none font-medium tabular-nums">{{
+          feedbackOverdueCount
+        }}</span>
+      }
     </a>
   </div>
   @if (queues.length) {
@@ -72,7 +90,7 @@
   }
   <p class="my-6 flex items-center justify-center gap-2">
     <mat-icon aria-hidden="true">mail_outline</mat-icon>
-    {{ unreadMessagesCount }} unread messages
+    {{ unreadMessagesCount ?? (loading ? '...' : '—') }} unread messages
   </p>
   <a [routerLink]="['../tasks/inbox']">
     <button
@@ -82,13 +100,20 @@
       Open inbox
     </button>
   </a>
-  <section class="mx-auto mt-8 rounded-xl border border-slate-300 bg-white p-5">
-    <h2 class="m-0 text-lg font-medium">Latest weekly summary</h2>
+  <section
+    aria-labelledby="weekly-summary-heading"
+    class="mx-auto mt-8 rounded-xl border border-slate-300 bg-white p-5 text-left"
+  >
+    <header>
+      <h2 class="m-0 text-lg font-medium" id="weekly-summary-heading">Latest Weekly Summary</h2>
+      @if (weeklySummary; as summary) {
+        <p class="mt-1 mb-0 text-sm text-slate-600">
+          {{ summary.weekStart | date: 'd MMM' }} - {{ summary.weekEnd | date: 'd MMM y' }}
+        </p>
+      }
+    </header>
     @if (weeklySummary; as summary) {
-      <p class="mt-1 text-sm text-slate-600">
-        {{ summary.weekStart | date: 'd MMM' }} - {{ summary.weekEnd | date: 'd MMM y' }}
-      </p>
-      <dl class="mb-0 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <dl class="mt-4 mb-0 grid grid-cols-1 gap-3 text-center sm:grid-cols-2 lg:grid-cols-4">
         <div class="rounded-lg bg-slate-100 p-3">
           <dt class="text-sm">Tasks assessed</dt>
           <dd class="m-0 text-2xl font-medium tabular-nums">{{ summary.assessedTasks ?? '—' }}</dd>
@@ -107,11 +132,18 @@
         </div>
       </dl>
     } @else if (weeklySummaryLoading) {
-      <p class="mb-0 text-sm text-slate-600" role="status">Loading weekly summary…</p>
+      <p class="mt-4 mb-0 text-sm text-slate-600" role="status">Loading weekly summary…</p>
     } @else if (weeklySummaryUnavailable) {
-      <p class="mb-0 text-sm text-slate-600" role="status">Could not load the weekly summary.</p>
+      <p class="mt-4 mb-0 text-sm text-slate-600" role="alert">
+        Could not load the weekly summary.
+      </p>
     } @else {
-      <p class="mb-0 text-sm text-slate-600">No weekly summary available for this unit.</p>
+      <p class="mt-4 mb-0 text-sm text-slate-600" role="status">
+        No weekly summary available for this unit.
+      </p>
     }
   </section>
+  @if (timesheetUnit; as unit) {
+    <f-weekly-timesheet [unit]="unit" />
+  }
 </main>
