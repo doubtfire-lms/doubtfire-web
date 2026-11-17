@@ -62,6 +62,11 @@ export class ProjectSkillsComponent implements OnInit {
   progress = signal<SkillProgressDto | null>(null);
   error = signal('');
   selectedStamp = signal<SelectedStamp | null>(null);
+  visibleTasks = computed<SkillTask[]>(() =>
+    (this.progress()?.tasks ?? []).filter(
+      (task) => this.taskGradeFor(task) <= this.project.targetGrade,
+    ),
+  );
   skillColumns = computed<SkillColumn[]>(() => {
     const progress = this.progress();
     if (!progress) {
@@ -77,7 +82,7 @@ export class ProjectSkillsComponent implements OnInit {
         target,
       });
     }
-    for (const task of progress.tasks) {
+    for (const task of this.visibleTasks()) {
       for (const level of [...task.skills, ...task.evidence]) {
         if (!columns.has(level.skill_id)) {
           columns.set(level.skill_id, {
@@ -105,7 +110,7 @@ export class ProjectSkillsComponent implements OnInit {
         continue;
       }
 
-      const opportunities = progress.tasks.filter(
+      const opportunities = this.visibleTasks().filter(
         (task) =>
           task.skills.some((level) => level.skill_id === column.skillId) ||
           task.evidence.some((evidence) => evidence.skill_id === column.skillId),
@@ -167,10 +172,7 @@ export class ProjectSkillsComponent implements OnInit {
   }
 
   sortedTasks = computed<SkillTask[]>(() => {
-    const tasks = this.progress()?.tasks.slice();
-    if (!tasks) {
-      return [];
-    }
+    const tasks = this.visibleTasks().slice();
 
     this.project?.calcTopTasks();
     return tasks.sort(
@@ -197,7 +199,11 @@ export class ProjectSkillsComponent implements OnInit {
   }
 
   private taskGradeFor(task: SkillTask): number {
-    return this.projectTaskFor(task)?.definition?.targetGrade ?? Number.MAX_SAFE_INTEGER;
+    return (
+      this.project?.unit?.taskDefinitions.find(
+        (definition) => definition.id === task.task_definition_id,
+      )?.targetGrade ?? Number.MAX_SAFE_INTEGER
+    );
   }
 
   private countEvidence(tasks: SkillTask[], skillId: number): EvidenceProgress {
@@ -249,7 +255,7 @@ export class ProjectSkillsComponent implements OnInit {
   }
 
   hasEndorsedEvidenceAtLevel(skillId: number, rank: number): boolean {
-    return !!this.progress()?.tasks.some((task) =>
+    return this.visibleTasks().some((task) =>
       task.evidence.some(
         (evidence) =>
           evidence.skill_id === skillId && evidence.rank >= rank && !!evidence.endorsed_at,
