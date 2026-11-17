@@ -10,11 +10,11 @@
       class="markdown-to-pdf"
       [innerHTML]="$safeNavigationMigration(taskDef?.description) | marked"
     ></div>
-    @if (task) {
+    <!-- @if (task) {
       <f-task-date-slider [task]="task" />
-    }
+    } -->
     <ul>
-      <li class="mb-3">{{ grades.names[taskDef?.targetGrade] }} Task</li>
+      <li class="my-3">{{ grades.names[taskDef?.targetGrade] }} Task</li>
 
       @if (unit?.allowFlexibleDates ?? taskDef?.unit?.allowFlexibleDates) {
         <li>
@@ -23,24 +23,11 @@
           } @else {
             This task is <b>due</b>
           }
-          {{ targetGradeDueDate() | date: 'EEE d MMM' }}.
+          {{ dateWithOrdinal(targetGradeDueDate()) }}.
         </li>
         <li>
-          I'm planning to <b>start</b> this task
-          @if (daysFromTargetDueDate(startDate()) < 0) {
-            {{ -daysFromTargetDueDate(startDate()) }} day{{
-              daysFromTargetDueDate(startDate()) === -1 ? '' : 's'
-            }}
-            before it is due on
-          } @else if (daysFromTargetDueDate(startDate()) > 0) {
-            {{ daysFromTargetDueDate(startDate()) }} day{{
-              daysFromTargetDueDate(startDate()) === 1 ? '' : 's'
-            }}
-            after it is due on
-          } @else {
-            on its due date,
-          }
-          {{ startDate() | date: 'EEE d MMM' }}.
+          I'm planning to <b>start</b> this task on {{ dateWithOrdinal(startDate())
+          }}{{ dateRelativeToDueDate(startDate()) }}.
         </li>
         <li [hidden]="!task?.extensions || task?.extensions <= 0">
           The due date has been <b>extended</b> by {{ task?.extensions }} week{{
@@ -52,37 +39,9 @@
           [class.bg-red-50]="daysFromTargetDueDate(dueDate()) > 0"
           [class.text-red-800]="daysFromTargetDueDate(dueDate()) > 0"
         >
-          I'm aiming to <b>submit</b> this task
-          @if (daysFromTargetDueDate(dueDate()) > 0) {
-            <b
-              >{{ daysFromTargetDueDate(dueDate()) }} day{{
-                daysFromTargetDueDate(dueDate()) === 1 ? '' : 's'
-              }}
-              after its due date</b
-            >, on
-          } @else if (daysFromTargetDueDate(dueDate()) < 0) {
-            {{ -daysFromTargetDueDate(dueDate()) }} day{{
-              daysFromTargetDueDate(dueDate()) === -1 ? '' : 's'
-            }}
-            before its due date, on
-          } @else {
-            on its due date,
-          }
-          {{ dueDate() | date: 'EEE d MMM' }}.
+          I'm aiming to <b>submit</b> this task on {{ dateWithOrdinal(dueDate())
+          }}{{ dateRelativeToDueDate(dueDate()) }}.
         </li>
-        @if (plannedSubmissionIsAfterFeedbackDeadline()) {
-          <li class="text-red-800">
-            If I submit as indicated, I will <b>not receive feedback</b> on my submission. To
-            receive feedback, I need to submit by {{ feedbackDate() | date: 'EEE d MMM' }}.
-          </li>
-        } @else {
-          <li>
-            If I submit as indicated, I will receive feedback on my submission.
-            @if (daysFromTargetDueDate(dueDate()) > 0) {
-              I don't need to request an extension to submit after the due date.
-            }
-          </li>
-        }
       } @else {
         <li>
           Start Date &mdash; I'm aiming to <b>start</b> this task by
@@ -98,6 +57,60 @@
         </li>
       }
     </ul>
+    @if ((unit?.allowFlexibleDates ?? taskDef?.unit?.allowFlexibleDates) && hasNotSubmitted()) {
+      <div
+        class="mt-3 flex items-center gap-2 rounded-md bg-gray-50 p-3"
+        [class.text-amber-800]="discussionTiming() === 'tight'"
+        [class.text-red-800]="
+          plannedSubmissionIsAfterFeedbackDeadline() || discussionTiming() === 'past'
+        "
+      >
+        @if (plannedSubmissionIsAfterFeedbackDeadline()) {
+          <mat-icon aria-hidden="true" class="shrink-0">error_outline</mat-icon>
+        } @else if (discussionTiming() === 'tight' || discussionTiming() === 'past') {
+          <mat-icon aria-hidden="true" class="shrink-0">warning_amber</mat-icon>
+        } @else {
+          <mat-icon aria-hidden="true" class="shrink-0 text-green-700">check_circle</mat-icon>
+        }
+        <span>
+          @if (plannedSubmissionIsAfterFeedbackDeadline()) {
+            I won't receive tutor feedback or have time to discuss this task if I submit on this
+            date. To receive feedback, I need to submit by {{ dateWithOrdinal(feedbackDate()) }}.
+          } @else if (discussionTiming() === 'past') {
+            I can still receive tutor feedback, but teaching ends before I plan to submit. Marking
+            may take up to 7 days, so I won't have time to discuss this task with my tutor.
+          } @else if (discussionTiming() === 'tight') {
+            @if (daysUntilDiscussionCutoff() === 0) {
+              @if (discussionCutoffIsLastTeachingDay()) {
+                I can submit for tutor feedback, but teaching ends on this date. Marking may take up
+                to 7 days, so I won't have time to discuss the task with my tutor.
+              } @else {
+                I can submit for tutor feedback, but the feedback period ends on this date. Marking
+                may take up to 7 days, so I won't have time to discuss the task with my tutor.
+              }
+            } @else if (discussionCutoffIsLastTeachingDay()) {
+              I can submit for tutor feedback, but teaching ends only
+              {{ daysUntilDiscussionCutoff() }} day{{
+                daysUntilDiscussionCutoff() === 1 ? '' : 's'
+              }}
+              later. Marking may take up to 7 days, so I may not have time to discuss the task with
+              my tutor.
+            } @else {
+              I can submit for tutor feedback, but the feedback period ends only
+              {{ daysUntilDiscussionCutoff() }} day{{
+                daysUntilDiscussionCutoff() === 1 ? '' : 's'
+              }}
+              later. Marking may take up to 7 days, so I may not have time to discuss the task with
+              my tutor.
+            }
+          } @else if (discussionTiming() === 'enough') {
+            I will have enough time to receive tutor feedback and discuss this task with my tutor.
+          } @else {
+            I can receive tutor feedback. I should check with my tutor about discussion timing.
+          }
+        </span>
+      </div>
+    }
   </mat-card-content>
   @if (taskDef?.hasTaskSheet || taskDef?.hasTaskResources) {
     <mat-card-actions class="space-x-1">

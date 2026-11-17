@@ -1,9 +1,11 @@
+import {formatDate} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Inject,
   Input,
+  LOCALE_ID,
   Output,
 } from '@angular/core';
 import {Task, TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
@@ -18,6 +20,8 @@ import {GradeService} from 'src/app/common/services/grade.service';
   standalone: false,
 })
 export class TaskDescriptionCardComponent {
+  private readonly markingDays = 7;
+
   @Output() switchView$: EventEmitter<string> = new EventEmitter();
 
   @Input() task: Task;
@@ -32,6 +36,7 @@ export class TaskDescriptionCardComponent {
   constructor(
     private GradeService: GradeService,
     @Inject(FileDownloaderService) private fileDownloader: FileDownloaderService,
+    @Inject(LOCALE_ID) private readonly locale: string,
   ) {
     this.grades = {
       names: GradeService.grades,
@@ -100,6 +105,17 @@ export class TaskDescriptionCardComponent {
     );
   }
 
+  public dateRelativeToDueDate(date: Date): string {
+    const days = this.daysFromTargetDueDate(date);
+    if (days === 0) {
+      return ' (its due date)';
+    }
+
+    const count = Math.abs(days);
+    const direction = days < 0 ? 'before' : 'after';
+    return `, ${count} day${count === 1 ? '' : 's'} ${direction} its due date`;
+  }
+
   public plannedSubmissionIsAfterFeedbackDeadline(): boolean {
     const plannedDate = this.dueDate();
     const feedbackDate = this.feedbackDate();
@@ -108,6 +124,77 @@ export class TaskDescriptionCardComponent {
     }
 
     return this.calendarDayTimestamp(plannedDate) > this.calendarDayTimestamp(feedbackDate);
+  }
+
+  public hasNotSubmitted(): boolean {
+    return !this.task || !this.task.inSubmittedState();
+  }
+
+  public discussionTiming(): 'enough' | 'tight' | 'past' | null {
+    if (!this.hasNotSubmitted()) {
+      return null;
+    }
+
+    const plannedDate = this.dueDate();
+    const cutoff = this.discussionCutoffDate();
+    if (!plannedDate || !cutoff) {
+      return null;
+    }
+
+    const daysRemaining = this.daysUntilDiscussionCutoff();
+    if (daysRemaining < 0) {
+      return 'past';
+    }
+
+    return daysRemaining <= this.markingDays ? 'tight' : 'enough';
+  }
+
+  public daysUntilDiscussionCutoff(): number {
+    const plannedDate = this.dueDate();
+    const cutoff = this.discussionCutoffDate();
+    if (!plannedDate || !cutoff) {
+      return 0;
+    }
+
+    return (
+      (this.calendarDayTimestamp(cutoff) - this.calendarDayTimestamp(plannedDate)) /
+      (24 * 60 * 60 * 1000)
+    );
+  }
+
+  public discussionCutoffDate(): Date {
+    const feedbackDate = this.feedbackDate();
+    const lastTeachingDate = this.unit?.lastTeachingDate ?? this.taskDef?.unit?.lastTeachingDate;
+    if (!feedbackDate) {
+      return lastTeachingDate;
+    }
+    if (!lastTeachingDate) {
+      return feedbackDate;
+    }
+
+    return this.calendarDayTimestamp(lastTeachingDate) < this.calendarDayTimestamp(feedbackDate)
+      ? lastTeachingDate
+      : feedbackDate;
+  }
+
+  public discussionCutoffIsLastTeachingDay(): boolean {
+    const lastTeachingDate = this.unit?.lastTeachingDate ?? this.taskDef?.unit?.lastTeachingDate;
+    const feedbackDate = this.feedbackDate();
+    return (
+      !!lastTeachingDate &&
+      (!feedbackDate ||
+        this.calendarDayTimestamp(lastTeachingDate) < this.calendarDayTimestamp(feedbackDate))
+    );
+  }
+
+  public dateWithOrdinal(date: Date): string {
+    if (!date) {
+      return '';
+    }
+
+    const day = date.getDate();
+    const suffix = day >= 11 && day <= 13 ? 'th' : (['th', 'st', 'nd', 'rd'][day % 10] ?? 'th');
+    return `${formatDate(date, 'EEE d', this.locale)}${suffix} ${formatDate(date, 'MMM', this.locale)}`;
   }
 
   private calendarDayTimestamp(date: Date): number {
