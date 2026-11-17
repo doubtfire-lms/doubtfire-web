@@ -64,6 +64,7 @@ export class Task extends Entity {
   similarityFlag: boolean = false;
   numNewComments: number = 0;
   hasExtensions: boolean;
+  hasSubmissionRequests: boolean;
 
   moderationType: 'random_sample' | 'escalation' | 'first_feedback';
 
@@ -77,6 +78,18 @@ export class Task extends Entity {
   claimedByUnitRoleId: number | null;
 
   loadingSubmissionDetails: boolean = false;
+  submissionAccessGranted: boolean = false;
+  submissionAccessRequestError: string | null = null;
+
+  public get submissionsNotOpen(): boolean {
+    const opensOn = this.definition?.submissionOpensOn;
+    if (!opensOn || this.submissionAccessGranted) {
+      return false;
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today < opensOn;
+  }
 
   pinned: boolean = false;
   hover?: boolean;
@@ -236,6 +249,7 @@ export class Task extends Entity {
       this.definition.abbreviation.toLowerCase().indexOf(matchText) >= 0 ||
       this.definition.name.toLowerCase().indexOf(matchText) >= 0 ||
       (this.hasExtensions && 'extension'.indexOf(matchText) == 0) ||
+      (this.hasSubmissionRequests && 'submission'.indexOf(matchText) == 0) ||
       (this.similarityFlag && 'similarity'.indexOf(matchText) == 0) ||
       this.project.matches(matchText)
     );
@@ -929,7 +943,11 @@ export class Task extends Entity {
     taskService.notifyStatusChange(this);
   }
 
-  public async markAsDiscussed(reasonText?: string, onSuccess?: () => void) {
+  public async markAsDiscussed(
+    reasonText?: string,
+    onSuccess?: () => void,
+    onFailure?: () => void,
+  ) {
     const alerts: AlertService = AppInjector.get(AlertService);
     const taskService: TaskService = AppInjector.get(TaskService);
 
@@ -958,6 +976,7 @@ export class Task extends Entity {
           },
           error: (error) => {
             alerts.error(error, 6000);
+            onFailure?.();
           },
         });
     };
@@ -978,6 +997,7 @@ export class Task extends Entity {
           'Unable to find your staff role, so the tutor note could not be recorded.',
           6000,
         );
+        onFailure?.();
         return;
       }
 
@@ -989,6 +1009,7 @@ export class Task extends Entity {
           },
           error: (error) => {
             alerts.error(`Unable to save the required tutor note: ${error}`, 6000);
+            onFailure?.();
           },
         });
       return;
@@ -1002,6 +1023,7 @@ export class Task extends Entity {
     markAsDiscussed?: boolean,
     triggerRecursiveFix?: boolean,
     onSuccess?: () => void,
+    onFailure?: () => void,
   ) {
     const oldStatus = this.status;
     const oldGrade = this.grade;
@@ -1010,6 +1032,7 @@ export class Task extends Entity {
 
     if (status === 'complete' && !this.canMarkComplete && markAsDiscussed !== true) {
       alerts.error('This task must be discussed in class before it can marked complete.', 6000);
+      onFailure?.();
       return;
     }
 
@@ -1052,9 +1075,10 @@ export class Task extends Entity {
               this.project.taskCache.add(this);
             }
             this.processTaskStatusChange(status, alerts);
-            taskService.notifyStatusChange(this);
             if (this.status === status) {
               onSuccess?.();
+            } else {
+              onFailure?.();
             }
           },
           error: (error) => {
@@ -1062,6 +1086,7 @@ export class Task extends Entity {
             this.grade = oldGrade;
             this.qualityPts = oldQualityPts;
             alerts.error(error, 6000);
+            onFailure?.();
           },
         });
     }; // end update function
@@ -1082,6 +1107,7 @@ export class Task extends Entity {
         () => {
           this.status = oldStatus;
           alerts.message('Status reverted, as no grade was specified', 6000);
+          onFailure?.();
         },
       );
     } else {
@@ -1163,6 +1189,15 @@ export class Task extends Entity {
       this.inStateThatAllowsExtension() &&
       (!this.isPastDeadline() || this.wasSubmittedOnTime()) &&
       this.maxWeeksCanExtend() > 0
+    );
+  }
+
+  public canApplyForSubmissionAccess(): boolean {
+    return (
+      !this.definition.staffManagedTask &&
+      this.submissionsNotOpen &&
+      !this.blockedByPrerequisiteTasks() &&
+      !this.submissionAccessRequestError
     );
   }
 

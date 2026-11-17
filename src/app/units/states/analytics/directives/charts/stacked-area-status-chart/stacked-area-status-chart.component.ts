@@ -11,7 +11,7 @@ import {
 import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskService} from 'src/app/api/services/task.service';
-import {getLastSnapshotByWeek, getTaskStats, statusMapping} from '../chart-data-helpers';
+import {getLastSnapshotByWeek, getTaskPopulationStats, statusMapping} from '../chart-data-helpers';
 
 @Component({
   selector: 'f-stacked-area-status-chart',
@@ -65,7 +65,7 @@ export class StackedAreaStatusChartComponent implements OnChanges {
     const weeks = [...getLastSnapshotByWeek(this.unit, this.snapshots).entries()].map(
       ([name, snapshot]) => ({
         name,
-        taskStats: getTaskStats(
+        taskStats: getTaskPopulationStats(
           snapshot,
           this.campusFilter,
           this.tutorialFilter,

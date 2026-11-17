@@ -4,7 +4,12 @@
     <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
   </div>
 
-  @if (!notEnrolled && projects?.length === 0 && unitRoles?.length === 0) {
+  @if (
+    !notEnrolled &&
+    !currentUser.observeAllUnits &&
+    projects?.length === 0 &&
+    unitRoles?.length === 0
+  ) {
     <div class="text-center">
       <h1 class="mat-headline-5">You are not enrolled in any {{ externalName.value }} units.</h1>
       <p class="mat-lead">Contact your unit convenor or tutor to enrol you in a subject.</p>
@@ -85,6 +90,46 @@
       </a>
     </div>
   </div>
+  @if (currentUser.observeAllUnits) {
+    <div class="my-5">
+      <h2>Units you observe</h2>
+      @if (loadingObservedUnits) {
+        <mat-spinner color="accent" diameter="40"></mat-spinner>
+      } @else {
+        <div class="flex flex-row flex-wrap items-center">
+          @for (unit of observedUnits; track unit.id) {
+            <div class="removeStyle" [routerLink]="['/units', unit.id, 'tasks', 'inbox']">
+              <mat-card class="unit-card">
+                <mat-card-header>
+                  <mat-card-title class="f-card-title">{{ unit.name }}</mat-card-title>
+                  <mat-card-subtitle>{{ unit.code }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content><mat-divider></mat-divider></mat-card-content>
+                <mat-card-actions>
+                  <f-chip>{{ unit.teachingPeriod?.name || showDate(unit.startDate) }}</f-chip>
+                  <f-chip>Observer</f-chip>
+                </mat-card-actions>
+                <mat-card-footer
+                  matTooltip="{{ unit.teachingPeriodProgress }}% through the teaching period."
+                >
+                  <mat-progress-bar
+                    class="unit-progress-slider"
+                    mode="determinate"
+                    [value]="unit.teachingPeriodProgress"
+                  ></mat-progress-bar>
+                </mat-card-footer>
+              </mat-card>
+            </div>
+          }
+          <a routerLink="/observe/units">
+            <button aria-label="view all observed units" color="primary" extended mat-fab>
+              <mat-icon>history</mat-icon>View all
+            </button>
+          </a>
+        </div>
+      }
+    </div>
+  }
   <div [hidden]="notEnrolled">
     @if (unitRoles.length && projects?.length) {
       <mat-divider class="my-5"></mat-divider>

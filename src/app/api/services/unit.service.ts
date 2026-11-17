@@ -105,7 +105,9 @@ export class UnitService extends CachedEntityService<Unit> {
           // Add staff
           entity.staffCache.clear();
           data[key]?.forEach((staff) => {
-            entity.staffCache.add(unitRoleService.buildInstance(staff));
+            entity.staffCache.add(
+              unitRoleService.buildInstance(staff, {constructorParams: entity}),
+            );
           });
         },
       },
@@ -193,6 +195,7 @@ export class UnitService extends CachedEntityService<Unit> {
       },
       'autoApplyExtensionBeforeDeadline',
       'sendNotifications',
+      'generateWeeklySummaries',
       'enableSyncEnrolments',
       'enableSyncTimetable',
       'allowStudentExtensionRequests',
@@ -336,6 +339,7 @@ export class UnitService extends CachedEntityService<Unit> {
       'autoApplyExtensionBeforeDeadline',
       'markLateSubmissionsAsAssessInPortfolio',
       'sendNotifications',
+      'generateWeeklySummaries',
       'enableSyncEnrolments',
       'enableSyncTimetable',
 

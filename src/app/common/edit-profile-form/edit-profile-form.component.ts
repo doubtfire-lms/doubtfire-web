@@ -4,7 +4,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {User} from 'src/app/api/models/user/user';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
-import {UserService} from 'src/app/api/services/user.service';
+import {UserService, UserUnitMembership} from 'src/app/api/services/user.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
@@ -23,7 +23,12 @@ export class EditProfileFormComponent implements OnInit {
     private authService: AuthenticationService,
     @Optional()
     @Inject(MAT_DIALOG_DATA)
-    public data: {user: User; mode: 'edit' | 'create' | 'new'; modal: boolean},
+    public data: {
+      user: User;
+      mode: 'edit' | 'create' | 'new';
+      modal: boolean;
+      showUnitMemberships?: boolean;
+    },
     private _snackBar: MatSnackBar,
     private alertService: AlertService,
   ) {
@@ -43,6 +48,11 @@ export class EditProfileFormComponent implements OnInit {
   public externalName = this.constants.ExternalName;
   public initialFirstName: string;
   public formPronouns = {pronouns: ''};
+  public unitMemberships: UserUnitMembership[] = [];
+  public activeUnitMemberships: UserUnitMembership[] = [];
+  public showAllUnitMemberships = false;
+  public unitMembershipsLoading = false;
+  public unitMembershipsError = false;
   public get customPronouns(): boolean {
     return this.formPronouns.pronouns === '__customPronouns';
   }
@@ -55,10 +65,36 @@ export class EditProfileFormComponent implements OnInit {
       this.modal = this.data.modal;
     }
 
-    this.user.optInToResearch = false;
-    this.user.receiveFeedbackNotifications = true;
-    this.user.receivePortfolioNotifications = true;
-    this.user.receiveTaskNotifications = true;
+    // Only a new account starts opted out, so editing keeps the user's choice.
+    if (this.mode !== 'edit') {
+      this.user.optInToResearch = false;
+    }
+
+    if (this.data?.showUnitMemberships && this.user.id) {
+      this.unitMembershipsLoading = true;
+      this.userService.getUnitMemberships(this.user.id).subscribe({
+        next: (memberships) => {
+          this.unitMemberships = memberships;
+          this.activeUnitMemberships = memberships.filter((membership) => membership.active);
+          this.unitMembershipsLoading = false;
+        },
+        error: () => {
+          this.unitMembershipsError = true;
+          this.unitMembershipsLoading = false;
+        },
+      });
+    }
+  }
+
+  public unitMembershipLink(membership: UserUnitMembership): (string | number)[] {
+    if (membership.kind === 'staff') {
+      return ['/units', membership.unitId, 'tasks', 'inbox'];
+    }
+    return ['/projects', membership.projectId!, 'dashboard'];
+  }
+
+  public get visibleUnitMemberships(): UserUnitMembership[] {
+    return this.showAllUnitMemberships ? this.unitMemberships : this.activeUnitMemberships;
   }
 
   public signOut(): void {
@@ -69,6 +105,10 @@ export class EditProfileFormComponent implements OnInit {
     return this.mode === 'new';
   }
 
+  public get isCurrentUser(): boolean {
+    return this.user.id === this.userService.currentUser.id;
+  }
+
   public get canEditSystemRole(): boolean {
     return !(this.user.id === this.userService.currentUser.id);
   }
@@ -77,6 +117,14 @@ export class EditProfileFormComponent implements OnInit {
     return (
       this.userService.currentUser.systemRole === 'Admin' ||
       this.userService.currentUser.systemRole === 'Convenor'
+    );
+  }
+
+  public get canEditObserveAllUnits(): boolean {
+    return (
+      this.mode === 'edit' &&
+      !this.isCurrentUser &&
+      this.userService.currentUser.systemRole === 'Admin'
     );
   }
 

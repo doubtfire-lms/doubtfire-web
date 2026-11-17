@@ -157,6 +157,8 @@ import {FeedbackTemplateService} from './api/services/feedback-template.service'
 import {GroupService} from './api/services/group.service';
 import {LtiService} from './api/services/lti.service';
 import {MarkingSessionService} from './api/services/marking-session.service';
+import {NotificationSettingsService} from './api/services/notification-settings.service';
+import {NotificationService} from './api/services/notification.service';
 import {OverseerStepResultService} from './api/services/overseer-step-result.service';
 import {OverseerStepService} from './api/services/overseer-step.service';
 import {ScormAdapterService} from './api/services/scorm-adapter.service';
@@ -195,6 +197,7 @@ import {TasksOfTaskDefinitionPipe} from './common/filters/tasks-of-task-definiti
 import {FooterComponent} from './common/footer/footer.component';
 import {GradeIconComponent} from './common/grade-icon/grade-icon.component';
 import {HeaderComponent} from './common/header/header.component';
+import {NotificationDropdownComponent} from './common/header/notification-dropdown/notification-dropdown.component';
 import {TaskDropdownComponent} from './common/header/task-dropdown/task-dropdown.component';
 import {UnitDropdownComponent} from './common/header/unit-dropdown/unit-dropdown.component';
 import {HeroSidebarComponent} from './common/hero-sidebar/hero-sidebar.component';
@@ -217,6 +220,7 @@ import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/side
 import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.component';
 import {SpecConModalComponent} from './common/modals/spec-con-modal/spec-con-modal.component';
 import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal.service';
+import {SubmissionAccessModalComponent} from './common/modals/submission-access-modal/submission-access-modal.component';
 import {TaskAssessmentModalComponent} from './common/modals/task-assessment-modal/task-assessment-modal.component';
 import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
 import {ObjectSelectComponent} from './common/obect-select/object-select.component';
@@ -234,6 +238,7 @@ import {EmojiService} from './common/services/emoji.service';
 import {GradeService} from './common/services/grade.service';
 import {HttpAuthenticationInterceptor} from './common/services/http-authentication.interceptor';
 import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
+import {SettingCheckboxComponent} from './common/setting-checkbox/setting-checkbox.component';
 import {SettingToggleComponent} from './common/setting-toggle/setting-toggle.component';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
@@ -256,6 +261,8 @@ import {HomeComponent} from './home/states/home/home.component';
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {LegacyRoutePlaceholderComponent} from './legacy-route-placeholder.component';
+import {NotificationSettingsComponent} from './notifications/notification-settings/notification-settings.component';
+import {NotificationsComponent} from './notifications/notifications.component';
 import {ProjectProgressDashboardComponent} from './projects/project-progress-dashboard/project-progress-dashboard.component';
 import {UnitContentViewerComponent} from './projects/states/content/unit-content-viewer.component';
 import {AddEngagementDialogComponent} from './projects/states/dashboard/directives/progress-dashboard/engagement-passport-card/add-engagement-dialog/add-engagement-dialog.component';
@@ -327,9 +334,11 @@ import {IntelligentDiscussionRecorderComponent} from './tasks/task-comments-view
 import {PdfImageCommentComponent} from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
+import {SubmissionCommentComponent} from './tasks/task-comments-viewer/submission-comment/submission-comment.component';
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
+import {UnitTutorialModalComponent} from './units/modals/unit-tutorial-modal/unit-tutorial-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
 import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
 import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
@@ -369,6 +378,7 @@ import {TaskDefinitionOverseerComponent} from './units/states/edit/directives/un
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
 import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
+import {TaskDefinitionSubmissionDateComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-submission-date/task-definition-submission-date.component';
 import {TaskDefinitionUploadComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
 import {TaskDefinitionWhoComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
@@ -481,6 +491,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     EngagementDetailDialogComponent,
     ProgressDashboardComponent,
     UnitStudentEnrolmentModalComponent,
+    UnitTutorialModalComponent,
     AboutDoubtfireModalContent,
     D2lUnitDetailsFormComponent,
     D2lTransferComponent,
@@ -498,6 +509,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     IntelligentDiscussionRecorderComponent,
     DiscussTimeoutCommentComponent,
     ExtensionCommentComponent,
+    SubmissionCommentComponent,
+    SubmissionAccessModalComponent,
     PdfImageCommentComponent,
     CampusListComponent,
     ActivityTypeListComponent,
@@ -523,6 +536,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskDefinitionEditorComponent,
     TaskDefinitionGeneralComponent,
     TaskDefinitionWhoComponent,
+    TaskDefinitionSubmissionDateComponent,
     TaskDefinitionDatesComponent,
     TaskDefinitionUploadComponent,
     TaskDefinitionOptionsComponent,
@@ -561,6 +575,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskAssessmentModalComponent,
     GradeIconComponent,
     HeaderComponent,
+    NotificationDropdownComponent,
     UnitDropdownComponent,
     TaskDropdownComponent,
     SplashScreenComponent,
@@ -590,6 +605,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     CreateNewUnitModalContentComponent,
     TiiActionLogComponent,
     FChipComponent,
+    SettingCheckboxComponent,
     SettingToggleComponent,
     UnitCodeComponent,
     NewTeachingPeriodDialogComponent,
@@ -708,6 +724,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     UnitGroupSetEditorComponent,
     UnitTaskInboxStateComponent,
     LegacyRoutePlaceholderComponent,
+    NotificationsComponent,
+    NotificationSettingsComponent,
   ],
   providers: [
     // Services we provide
@@ -786,6 +804,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     LtiService,
     TaskPrerequisiteService,
     MarkingSessionService,
+    NotificationService,
+    NotificationSettingsService,
     DiscussionPromptService,
     GANTT_CHART_LOCALE_CONFIG,
     GANTT_CHART_CONFIG,

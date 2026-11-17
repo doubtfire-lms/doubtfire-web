@@ -46,7 +46,8 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     new BehaviorSubject<TaskDefinition>(null);
 
   subs$: Observable<unknown> = of(true);
-  readonly skeletonRows = Array.from({length: 10}, (_, index) => index);
+  readonly skeletonRows = Array.from({length: 20}, (_, index) => index);
+  readonly skeletonWeeks = Array.from({length: 14}, (_, index) => index);
   private readonly projectSubject: BehaviorSubject<Project> = new BehaviorSubject(null);
 
   private readonly destroy$: Subject<void> = new Subject();

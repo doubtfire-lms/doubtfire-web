@@ -4,11 +4,11 @@
     <p>This attachment is ready to post as a {{ destination }}.</p>
 
     <div
-      class="mx-auto flex min-h-[180px] w-full max-w-[520px] items-center justify-center overflow-hidden rounded-xl bg-black/5"
+      class="mx-auto flex min-h-45 w-full max-w-130 items-center justify-center overflow-hidden rounded-xl bg-black/5"
     >
       @if (isImage) {
         <img
-          class="aspect-square w-full max-w-[520px] object-contain object-center"
+          class="aspect-square w-full max-w-130 object-contain object-center"
           [alt]="file.name"
           [src]="previewUrl"
         />

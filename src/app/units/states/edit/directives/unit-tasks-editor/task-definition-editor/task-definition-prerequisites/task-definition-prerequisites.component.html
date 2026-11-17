@@ -1,5 +1,5 @@
 <div class="flex flex-col">
-  <div class="flex flex-grow flex-row">
+  <div class="flex grow flex-row">
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="task-definition">
         <th *matHeaderCellDef mat-header-cell>Task</th>
@@ -87,7 +87,7 @@
   </div>
 
   @if (staffView) {
-    <div class="flex flex-grow flex-row items-center">
+    <div class="flex grow flex-row items-center">
       <mat-form-field appearance="outline" class="mt-[22px] w-full">
         <input
           matInput

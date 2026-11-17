@@ -193,7 +193,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public get isTutorDiscussionRoute(): boolean {
-    return this.router.url.split('?')[0].endsWith('/discussion');
+    const path = this.router.url.split('?')[0];
+    return path === '/tutor-discussion' || path.endsWith('/discussion');
   }
 
   public get isContentRoute(): boolean {

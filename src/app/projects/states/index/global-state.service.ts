@@ -13,6 +13,7 @@ import {
   UnitRole,
   UnitRoleService,
   UnitService,
+  User,
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {AuthenticationService} from 'src/app/api/services/authentication.service';
@@ -118,9 +119,17 @@ export class GlobalStateService implements OnDestroy {
     this.loadedUnitRoles = this.unitRoleService.cache;
     this.loadedUnits = this.unitService.cache;
     this.currentUserProjects = this.projectService.cache;
+    const returningWithLoginToken =
+      window.location.pathname === '/sign_in' &&
+      new URLSearchParams(window.location.search).has('authToken');
 
     // Use timeout to ensure everything is loaded before we try to login
     setTimeout(() => {
+      if (returningWithLoginToken) {
+        this.isLoadingSubject.next(false);
+        return;
+      }
+
       // LTI launch errors are shown to users who have no OnTrack session
       const isLtiLaunchError =
         window.location.pathname === '/lti' &&
@@ -245,6 +254,17 @@ export class GlobalStateService implements OnDestroy {
     this.authenticationService.signOut();
   }
 
+  // Keeps notification times local for students who travel, unless they picked a timezone themselves.
+  private syncBrowserTimezone(): void {
+    const user = this.userService.currentUser;
+    const timezone = User.browserTimezone;
+    if (!user.autoTimezone || !timezone || user.timezone === timezone) {
+      return;
+    }
+
+    user.updateTimezone(timezone, true).subscribe({error: () => undefined});
+  }
+
   public ngOnDestroy(): void {
     this.isLoadingSubject.complete();
     this.showHideHeader.complete();
@@ -252,6 +272,8 @@ export class GlobalStateService implements OnDestroy {
   }
 
   public loadGlobals(): void {
+    this.syncBrowserTimezone();
+
     let loaded = 0;
     // Indicate we are loading data...
     this.isLoadingSubject.next(true);

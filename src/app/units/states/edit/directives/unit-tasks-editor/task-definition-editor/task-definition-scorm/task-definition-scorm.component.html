@@ -12,13 +12,13 @@
     />
     @if (taskDefinition.hasScormData) {
       <div class="flex flex-row gap-2.5 pt-2.5">
-        <button class="me-4 flex-grow" color="warn" mat-flat-button (click)="removeScormData()">
+        <button class="me-4 grow" color="warn" mat-flat-button (click)="removeScormData()">
           Delete SCORM Zip
         </button>
-        <button class="mx-4 flex-grow" color="accent" mat-flat-button (click)="downloadScormData()">
+        <button class="mx-4 grow" color="accent" mat-flat-button (click)="downloadScormData()">
           Download SCORM Zip
         </button>
-        <button class="me-4 flex-grow" color="accent" mat-flat-button (click)="previewScormTest()">
+        <button class="me-4 grow" color="accent" mat-flat-button (click)="previewScormTest()">
           Preview SCORM Test
         </button>
       </div>

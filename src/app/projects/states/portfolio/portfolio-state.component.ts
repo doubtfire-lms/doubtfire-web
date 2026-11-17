@@ -65,6 +65,10 @@ export class PortfolioStateComponent implements OnInit, OnDestroy {
     return Math.max(0, (this.activeTab?.seq ?? 1) - 1);
   }
 
+  public get isPortfolioLocked(): boolean {
+    return Boolean(this.project?.portfolioAvailable || this.project?.compilePortfolio);
+  }
+
   public get hasSubmittedGrade(): boolean {
     return this.project?.submittedGrade !== null && this.project?.submittedGrade !== undefined;
   }
@@ -129,6 +133,24 @@ export class PortfolioStateComponent implements OnInit, OnDestroy {
 
     // Once grade + learning summary requirements are met, allow review before compilation.
     return false;
+  }
+
+  public isStepCompleted(tab: PortfolioStepTab): boolean {
+    if (this.project?.portfolioAvailable || this.project?.compilePortfolio) {
+      return tab.seq < this.tabs.reviewStep.seq;
+    }
+
+    switch (tab.seq) {
+      case 1:
+        return true;
+      case 2:
+        return this.hasSubmittedGrade;
+      case 3:
+      case 4:
+        return this.hasLearningSummaryReport;
+      default:
+        return false;
+    }
   }
 
   public setActiveTab(tab: PortfolioStepTab): void {

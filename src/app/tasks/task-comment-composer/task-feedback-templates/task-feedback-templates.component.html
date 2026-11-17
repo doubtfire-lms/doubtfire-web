@@ -16,7 +16,7 @@
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 
-  <div class="flex-grow overflow-y-auto px-2.5 pt-0 pb-3">
+  <div class="grow overflow-y-auto px-2.5 pt-0 pb-3">
     <div class="template-category my-1">
       <div class="template-grid mt-3 flex flex-wrap gap-1">
         @for (template of genTemplates$ | async; track template) {
@@ -150,7 +150,7 @@
   </div>
 
   <div class="flex items-center border-t border-gray-300 p-3">
-    <mat-icon class="mr-2 flex-shrink-0 text-2xl">{{
+    <mat-icon class="mr-2 shrink-0 text-2xl">{{
       hoveredTemplate?.type === 'group' ? 'folder' : 'description'
     }}</mat-icon>
     <div class="flex flex-col">

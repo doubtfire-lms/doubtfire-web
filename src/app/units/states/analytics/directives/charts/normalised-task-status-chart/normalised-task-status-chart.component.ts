@@ -15,7 +15,9 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {
   countStudentsFromSnapshot,
   formatSnapshotLabel,
+  getEmptySnapshotTaskStats,
   getTaskPopulationStats,
+  isEmptySnapshot,
   statusMapping,
 } from '../chart-data-helpers';
 
@@ -59,40 +61,21 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
   }
 
   get snapshotStudentCount(): number {
-    if (!this.selectedSnapshot || this.selectedSnapshot.placeholder) {
+    const snapshot = this.selectedSnapshot;
+    if (!snapshot || snapshot.placeholder) {
       return 0;
     }
 
     if (this.tutorialFilter !== 'all' || this.studentTargetGradeFilter.length > 0) {
-      if (this.tutorialFilter === 'all' && this.studentTargetGradeFilter.length > 0) {
-        if (this.campusFilter === 'all' && this.selectedSnapshot.target_grade_student_counts) {
-          return this.studentTargetGradeFilter.reduce(
-            (total, targetGrade) =>
-              total +
-              (this.selectedSnapshot.target_grade_student_counts?.[targetGrade.toString()] ?? 0),
-            0,
-          );
-        }
-
-        if (
-          this.campusFilter !== 'all' &&
-          this.selectedSnapshot.target_grade_campus_student_counts
-        ) {
-          return this.studentTargetGradeFilter.reduce(
-            (total, targetGrade) =>
-              total +
-              (this.selectedSnapshot.target_grade_campus_student_counts?.[targetGrade.toString()]?.[
-                this.campusFilter
-              ] ?? 0),
-            0,
-          );
-        }
+      const targetGradeCount = this.targetGradeStudentCount(snapshot);
+      if (targetGradeCount !== undefined) {
+        return targetGradeCount;
       }
 
       return countStudentsFromSnapshot({
         filtered: {
           selected: getTaskPopulationStats(
-            this.selectedSnapshot,
+            snapshot,
             this.campusFilter,
             this.tutorialFilter,
             [],
@@ -105,18 +88,45 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
 
     const exactCount =
       this.campusFilter === 'all'
-        ? this.selectedSnapshot.student_count
-        : this.selectedSnapshot.campus_student_counts?.[this.campusFilter];
+        ? snapshot.student_count
+        : snapshot.campus_student_counts?.[this.campusFilter];
     if (exactCount !== undefined) {
       return exactCount;
     }
 
     const snapshotData =
-      this.campusFilter !== 'all' && this.selectedSnapshot.stats[this.campusFilter]
-        ? {[this.campusFilter]: this.selectedSnapshot.stats[this.campusFilter]}
-        : this.selectedSnapshot.stats;
+      this.campusFilter !== 'all' && snapshot.stats[this.campusFilter]
+        ? {[this.campusFilter]: snapshot.stats[this.campusFilter]}
+        : snapshot.stats;
 
     return countStudentsFromSnapshot(snapshotData);
+  }
+
+  private targetGradeStudentCount(snapshot: TaskCompletionSnapshot): number | undefined {
+    if (this.tutorialFilter !== 'all' || this.studentTargetGradeFilter.length === 0) {
+      return undefined;
+    }
+
+    if (this.campusFilter === 'all' && snapshot.target_grade_student_counts) {
+      return this.studentTargetGradeFilter.reduce(
+        (total, targetGrade) =>
+          total + (snapshot.target_grade_student_counts?.[targetGrade.toString()] ?? 0),
+        0,
+      );
+    }
+
+    if (this.campusFilter !== 'all' && snapshot.target_grade_campus_student_counts) {
+      return this.studentTargetGradeFilter.reduce(
+        (total, targetGrade) =>
+          total +
+          (snapshot.target_grade_campus_student_counts?.[targetGrade.toString()]?.[
+            this.campusFilter
+          ] ?? 0),
+        0,
+      );
+    }
+
+    return undefined;
   }
 
   ngOnInit(): void {
@@ -156,26 +166,27 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
       return;
     }
 
-    this.data =
-      this.unit && selectedSnapshot
-        ? this.buildChartData(
-            getTaskPopulationStats(
-              selectedSnapshot,
-              this.campusFilter,
-              this.tutorialFilter,
-              this.taskGradeFilter,
-              this.studentTargetGradeFilter,
-              this.unit,
-            ),
-          )
-        : [];
+    const emptySnapshot = isEmptySnapshot(selectedSnapshot);
+    this.data = this.unit
+      ? this.buildChartData(
+          emptySnapshot
+            ? getEmptySnapshotTaskStats(this.unit, this.taskGradeFilter)
+            : getTaskPopulationStats(
+                selectedSnapshot,
+                this.campusFilter,
+                this.tutorialFilter,
+                this.taskGradeFilter,
+                this.studentTargetGradeFilter,
+                this.unit,
+              ),
+          emptySnapshot,
+        )
+      : [];
 
-    // Padded week 0 days carry no stats - show the chart empty rather than falling back
-    // to the loading spinner.
     this.hasChartData = !!this.unit && this.snapshots.length > 0;
   }
 
-  private buildChartData(taskStats: TaskCodeStats): MultiSeries {
+  private buildChartData(taskStats: TaskCodeStats, emptySnapshot: boolean): MultiSeries {
     const orderByCode = new Map(
       this.unit.taskDefinitions.map((taskDefinition) => [
         taskDefinition.abbreviation,
@@ -205,7 +216,10 @@ export class NormalisedTaskStatusChartComponent implements OnChanges, OnInit {
             return {
               name: this.taskService.statusLabels.get(status) || status,
               value,
-              extra: {percentage: total > 0 ? ((value / total) * 100).toFixed(2) : '0.00'},
+              extra: {
+                percentage: total > 0 ? ((value / total) * 100).toFixed(2) : '0.00',
+                emptySnapshot,
+              },
             };
           }),
         };

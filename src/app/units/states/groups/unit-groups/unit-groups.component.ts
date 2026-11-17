@@ -75,13 +75,16 @@ export class UnitGroupsComponent implements OnInit, OnDestroy {
     if (
       !unitRole &&
       (this.userService.currentUser.role === 'Admin' ||
-        this.userService.currentUser.role === 'Auditor')
+        this.userService.currentUser.role === 'Auditor' ||
+        this.userService.currentUser.observeAllUnits)
     ) {
-      unitRole = this.userService.adminOrAuditorRoleFor(
-        this.userService.currentUser.role,
-        unitId,
-        this.userService.currentUser,
-      );
+      const role =
+        this.userService.currentUser.role === 'Admin'
+          ? 'Admin'
+          : this.userService.currentUser.observeAllUnits
+            ? 'Convenor'
+            : 'Auditor';
+      unitRole = this.userService.adminOrAuditorRoleFor(role, unitId, this.userService.currentUser);
     }
 
     return unitRole;

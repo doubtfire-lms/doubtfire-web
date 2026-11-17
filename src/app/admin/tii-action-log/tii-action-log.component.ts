@@ -2,6 +2,7 @@ import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@ang
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {finalize} from 'rxjs';
 import {TiiAction} from 'src/app/api/models/doubtfire-model';
 import {TiiActionService} from 'src/app/api/services/tii-action.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -18,7 +19,10 @@ export class TiiActionLogComponent implements AfterViewInit {
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
-  public tiiActionsSource: MatTableDataSource<TiiAction>;
+  public tiiActionsSource: MatTableDataSource<TiiAction> = new MatTableDataSource([]);
+  public loadingActions = true;
+  public loadError = false;
+  public readonly skeletonRows = Array.from({length: 6}, (_, index) => index);
   public selectedTaskDefinition: TiiAction | null = null;
   public columns: string[] = [
     'type',
@@ -36,15 +40,23 @@ export class TiiActionLogComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.tiiActionService.query().subscribe((actions) => {
-      this.tiiActionsSource = new MatTableDataSource<TiiAction>(actions);
-      this.tiiActionsSource.paginator = this.paginator;
-      this.tiiActionsSource.sort = this.sort;
-      this.tiiActionsSource.filterPredicate = (
-        data: TiiAction & {matches(filter: string): boolean},
-        filter: string,
-      ) => data.matches(filter);
-    });
+    this.tiiActionsSource.paginator = this.paginator;
+    this.tiiActionsSource.sort = this.sort;
+    this.tiiActionsSource.filterPredicate = (
+      data: TiiAction & {matches(filter: string): boolean},
+      filter: string,
+    ) => data.matches(filter);
+    this.tiiActionService
+      .query()
+      .pipe(finalize(() => (this.loadingActions = false)))
+      .subscribe({
+        next: (actions) => {
+          this.tiiActionsSource.data = actions;
+        },
+        error: () => {
+          this.loadError = true;
+        },
+      });
   }
 
   public sortData(sort: Sort) {

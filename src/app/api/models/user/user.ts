@@ -16,6 +16,7 @@ export class User extends Entity {
   public username: string;
   public nickname: string;
   public systemRole: 'Admin' | 'Convenor' | 'Tutor' | 'Student' | 'Auditor';
+  public observeAllUnits: boolean;
   public receiveTaskNotifications: boolean;
   public receivePortfolioNotifications: boolean;
   public receiveFeedbackNotifications: boolean;
@@ -24,6 +25,12 @@ export class User extends Entity {
   public authenticationTokenExpiry: string;
   public pronouns: string | null;
   public acceptedTiiEula: boolean;
+  public timezone: string | null;
+  public autoTimezone: boolean;
+
+  public static get browserTimezone(): string {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  }
 
   public override toJson<T extends Entity>(
     mappingData: EntityMapping<T>,
@@ -74,6 +81,19 @@ export class User extends Entity {
       this.nickname,
       this.username,
     ].some((value) => value?.toLowerCase().includes(text));
+  }
+
+  /** Saves the timezone notifications are scheduled in. */
+  public updateTimezone(timezone: string, autoTimezone: boolean): Observable<User> {
+    const httpClient = AppInjector.get(HttpClient);
+    const uri = `${AppInjector.get(DoubtfireConstants).API_URL}/users/${this.id}`;
+    return httpClient.put(uri, {user: {timezone, auto_timezone: autoTimezone}}).pipe(
+      map(() => {
+        this.timezone = timezone;
+        this.autoTimezone = autoTimezone;
+        return this;
+      }),
+    );
   }
 
   public acceptTiiEula(): Observable<boolean> {

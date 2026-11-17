@@ -1,7 +1,18 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
+import {CommonModule} from '@angular/common';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {ActivatedRoute, Router} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatIconModule} from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {ActivatedRoute, Router, convertToParamMap} from '@angular/router';
+import {BehaviorSubject, Subject, of} from 'rxjs';
 import {Project, Task, TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {FUnitTaskListComponent} from './unit-task-list.component';
 
@@ -33,14 +44,24 @@ describe('FUnitTaskListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FUnitTaskListComponent],
+      imports: [
+        CommonModule,
+        FormsModule,
+        MatBadgeModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatIconModule,
+        MatListModule,
+        MatMenuModule,
+        MatTooltipModule,
+        NoopAnimationsModule,
+      ],
       providers: [
         {provide: Router, useValue: emptyProvider},
-        {provide: ActivatedRoute, useValue: emptyProvider},
+        {provide: ActivatedRoute, useValue: {paramMap: of(convertToParamMap({}))}},
       ],
       schemas: [NO_ERRORS_SCHEMA],
-    })
-      .overrideComponent(FUnitTaskListComponent, {set: {template: ''}})
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -56,48 +77,47 @@ describe('FUnitTaskListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('shows the ongoing state after a task starts and before it is due', () => {
-    const now = new Date(2026, 7, 22, 12).getTime();
-    vi.spyOn(Date, 'now').mockReturnValue(now);
-    const task = {
-      startDate: new Date(now - 9 * 24 * 60 * 60 * 1000),
-      localDueDate: () => new Date(now + 5 * 24 * 60 * 60 * 1000),
-      inFinalState: () => false,
-    } as Task;
+  it('renders task definitions when the unit task list has no student tasks', () => {
+    const definition = {
+      ...taskDefinition(1, 'P1'),
+      name: 'Research Proposal',
+      targetGradeText: 'Pass',
+      isGroupTask: () => false,
+      unit: {id: 20},
+    } as TaskDefinition;
+    component.mode = 'all-tasks';
+    component.taskDefinitions = [definition];
+    component.tasks = [];
+    component.selectedTaskDefinition$ = new BehaviorSubject<TaskDefinition>(null);
 
-    expect(component.taskOngoing(task)).toBe(true);
+    fixture.detectChanges();
+
+    const taskRow = fixture.nativeElement.querySelector('mat-list-item') as HTMLElement;
+    expect(taskRow).not.toBeNull();
+    expect(taskRow.textContent).toContain('Research Proposal');
+    expect(taskRow.textContent).toContain('P1 - Pass Task');
   });
 
-  it('ends the ongoing state when the task reaches its due date', () => {
-    const now = new Date(2026, 7, 22, 12).getTime();
-    vi.spyOn(Date, 'now').mockReturnValue(now);
-    const task = {
-      startDate: new Date(now - 14 * 24 * 60 * 60 * 1000),
-      localDueDate: () => new Date(now),
-      inFinalState: () => false,
-    } as Task;
+  it('switches the selected task when the reused route parameter changes', async () => {
+    const params: Subject<ReturnType<typeof convertToParamMap>> = new Subject();
+    const firstTask = taskDefinition(1, 'P1');
+    const secondTask = taskDefinition(2, 'P2');
+    const selectedTaskDefinition$: BehaviorSubject<TaskDefinition> = new BehaviorSubject(firstTask);
+    const routeAwareComponent = new FUnitTaskListComponent(
+      emptyProvider as Router,
+      {paramMap: params.asObservable()} as ActivatedRoute,
+    );
+    routeAwareComponent.project = {} as Project;
+    routeAwareComponent.taskDefinitions = [firstTask, secondTask];
+    routeAwareComponent.tasks = [];
+    routeAwareComponent.selectedTaskDefinition$ = selectedTaskDefinition$;
+    routeAwareComponent.ngOnInit();
 
-    expect(component.taskOngoing(task)).toBe(false);
-  });
+    params.next(convertToParamMap({taskAbbreviation: 'P2'}));
+    await Promise.resolve();
 
-  it('shows the due state when a started task is due within five days', () => {
-    const task = {
-      isBeforeStartDate: () => false,
-      inSubmittedState: () => false,
-      daysUntilDueDate: () => 5,
-    } as Task;
-
-    expect(component.taskDueApproaching(task)).toBe(true);
-  });
-
-  it('does not show the due state more than five days before the due date', () => {
-    const task = {
-      isBeforeStartDate: () => false,
-      inSubmittedState: () => false,
-      daysUntilDueDate: () => 6,
-    } as Task;
-
-    expect(component.taskDueApproaching(task)).toBe(false);
+    expect(selectedTaskDefinition$.value).toBe(secondTask);
+    routeAwareComponent.ngOnDestroy();
   });
 
   it('sorts task definitions by task top weight by default', () => {

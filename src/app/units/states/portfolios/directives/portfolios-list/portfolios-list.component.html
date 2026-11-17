@@ -107,7 +107,7 @@
   </div>
   @if (loading) {
     <div aria-busy="true" aria-label="Loading student portfolios" class="overflow-x-auto">
-      <div class="min-w-[1600px]">
+      <div class="min-w-400">
         <div class="flex h-14 items-center gap-6 border-b border-gray-300 px-4">
           @for (
             column of [
@@ -248,7 +248,7 @@
     <ng-container matColumnDef="stats" sticky>
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Stats</th>
       <td *matCellDef="let project" mat-cell>
-        <div class="flex h-[25px] w-[400px] overflow-hidden rounded">
+        <div class="flex h-[25px] w-100 overflow-hidden rounded">
           @for (bar of project.taskStats; track bar) {
             <div
               class="flex h-[25px] items-center justify-center overflow-hidden"

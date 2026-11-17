@@ -13,18 +13,18 @@
     <input matInput required [(ngModel)]="taskDefinition.abbreviation" />
   </mat-form-field>
 
-  <mat-form-field appearance="outline" class="flex-grow">
+  <mat-form-field appearance="outline" class="grow">
     <mat-label>Weight - Effort relative to other tasks.</mat-label>
     <input matInput required type="number" [(ngModel)]="taskDefinition.weighting" />
   </mat-form-field>
 </div>
 
-<mat-form-field appearance="outline" class="flex flex-grow">
+<mat-form-field appearance="outline" class="flex grow">
   <mat-label>Descriptive task name</mat-label>
   <input matInput required [(ngModel)]="taskDefinition.name" />
 </mat-form-field>
 
-<mat-form-field appearance="outline" class="flex flex-grow">
+<mat-form-field appearance="outline" class="flex grow">
   <mat-label>Task description</mat-label>
   <textarea matInput required [(ngModel)]="taskDefinition.description"> </textarea>
 </mat-form-field>

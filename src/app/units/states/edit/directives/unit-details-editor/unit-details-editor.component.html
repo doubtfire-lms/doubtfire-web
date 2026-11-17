@@ -3,7 +3,7 @@
     <h3>Unit Details</h3>
     <p>Edit and configure all details and settings for this unit.</p>
   </div>
-  <mat-card appearance="outlined" class="gap-1 p-[16px]">
+  <mat-card appearance="outlined" class="gap-1 p-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Code</mat-label>
       <input matInput required [(ngModel)]="unit.code" />
@@ -20,7 +20,7 @@
     </mat-form-field>
   </mat-card>
 
-  <mat-card appearance="outlined" class="gap-1 p-[16px]">
+  <mat-card appearance="outlined" class="gap-1 p-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Teaching Period</mat-label>
       <mat-select placeholder="Select Teaching Period" [(ngModel)]="unit.teachingPeriod">
@@ -363,8 +363,8 @@
       label="Discuss timeout"
       [(checked)]="unit.discussTimeoutEnabled"
     >
-      When enabled, students are warned when tasks stay in Discuss too long, then overdue tasks are
-      moved to Fix and Resubmit.
+      Warn students before and after the Discuss deadline, including by email if enabled in their
+      notification settings. Overdue tasks move to Fix and Resubmit.
     </f-setting-toggle>
 
     @if (unit.discussTimeoutEnabled) {
@@ -397,11 +397,21 @@
 
     <f-setting-toggle
       class="border-t border-gray-200"
-      label="Send notification emails"
+      label="Send notification email digests"
       [(checked)]="unit.sendNotifications"
     >
-      When true, emails will be set to students each week to indicate progress and suggest future
-      tasks for them to work on.
+      Include this unit's notifications in email digests to staff and students. In-app notifications
+      and separate alert emails are unaffected.
+    </f-setting-toggle>
+
+    <f-setting-toggle
+      class="border-t border-gray-200"
+      label="Generate weekly summary notifications"
+      [(checked)]="unit.generateWeeklySummaries"
+    >
+      Each Monday, create a summary of the past week's progress and activity for students and staff.
+      It appears in-app straight away and in their next email digest, according to their
+      notification settings.
     </f-setting-toggle>
 
     <f-setting-toggle
@@ -426,7 +436,7 @@
   </mat-card>
 
   @if (overseerEnabled.value) {
-    <mat-card class="gap-1 p-[16px]">
+    <mat-card class="gap-1 p-4">
       <f-setting-toggle
         class="-mx-2 mb-2"
         label="Overseer assessment"

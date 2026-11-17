@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-5">
   <table
     #outcomeTable
-    class="f-table selectable flex-grow"
+    class="f-table selectable grow"
     mat-table
     matSort
     [dataSource]="outcomeSource"
@@ -94,7 +94,7 @@
       </mat-form-field>
     </div>
     <mat-paginator class="mat-elevation-z0" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-    <span class="flex-grow"></span>
+    <span class="grow"></span>
     @if (abbreviationPrefix !== 'GLO') {
       <label>Outcomes CSV</label>
       <button mat-icon-button (click)="downloadCsv('Learning Outcomes')">
@@ -103,7 +103,7 @@
       <button mat-icon-button (click)="uploadCsv('Learning Outcomes')">
         <mat-icon>upload_file</mat-icon>
       </button>
-      <span class="flex-grow"></span>
+      <span class="grow"></span>
     }
     <label>Feedback CSV</label>
     <button mat-icon-button (click)="downloadCsv('Feedback Templates')">
@@ -112,7 +112,7 @@
     <button mat-icon-button (click)="uploadCsv('Feedback Templates')">
       <mat-icon>upload_file</mat-icon>
     </button>
-    <span class="flex-grow"></span>
+    <span class="grow"></span>
     <button color="primary" mat-raised-button (click)="createLearningOutcome()">Add Outcome</button>
   </span>
 
@@ -133,7 +133,7 @@
             />
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="flex-grow">
+          <mat-form-field appearance="outline" class="grow">
             <mat-label>Short Description</mat-label>
             <input
               matInput
@@ -144,7 +144,7 @@
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="outline" class="flex flex-grow">
+        <mat-form-field appearance="outline" class="flex grow">
           <mat-label>Full Outcome Description</mat-label>
           <textarea
             matInput
@@ -156,7 +156,7 @@
         </mat-form-field>
 
         @if (abbreviationPrefix !== 'GLO') {
-          <mat-form-field appearance="outline" class="flex flex-grow">
+          <mat-form-field appearance="outline" class="flex grow">
             <mat-label>Connected Learning Outcomes</mat-label>
             <mat-chip-grid #chipGrid aria-label="Outcome selection">
               @for (outcome of selectedConnectedOutcomes(); track outcome.abbreviation) {
@@ -190,7 +190,7 @@
         }
 
         <div class="flex">
-          <span class="flex-grow"></span>
+          <span class="grow"></span>
           <button color="primary" mat-raised-button (click)="saveLearningOutcome(selectedOutcome)">
             Save Outcome
           </button>

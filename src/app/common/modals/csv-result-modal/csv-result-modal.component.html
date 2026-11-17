@@ -37,7 +37,7 @@
         <ng-container matColumnDef="message">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>Message</th>
           <td *matCellDef="let row" mat-cell>
-            <div class="max-w-[500px] break-words whitespace-pre-wrap">
+            <div class="max-w-125 wrap-break-word whitespace-pre-wrap">
               {{ displayMessage(row.item) }}
             </div>
           </td>
@@ -49,7 +49,7 @@
               {{ headerForColumn(columnId) }}
             </th>
             <td *matCellDef="let row" mat-cell>
-              <div class="max-w-[500px] break-words whitespace-pre-wrap">
+              <div class="max-w-125 wrap-break-word whitespace-pre-wrap">
                 {{ rowValueForColumn(row.rowObject, columnId) }}
               </div>
             </td>
@@ -59,7 +59,7 @@
         <ng-container matColumnDef="other">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>Other</th>
           <td *matCellDef="let row" mat-cell>
-            <div class="max-w-[500px] break-words whitespace-pre-wrap">
+            <div class="max-w-125 wrap-break-word whitespace-pre-wrap">
               {{ row.otherData || '-' }}
             </div>
           </td>

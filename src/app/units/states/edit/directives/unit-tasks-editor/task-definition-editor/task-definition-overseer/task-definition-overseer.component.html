@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-5">
-  <mat-form-field appearance="outline" class="flex-grow">
+  <mat-form-field appearance="outline" class="grow">
     <mat-label>Docker Image</mat-label>
     <mat-select [disabled]="!overseerEnabled" [(value)]="taskDefinition.overseerImageId">
       <mat-option [value]="null">None</mat-option>
@@ -48,12 +48,12 @@
         @if (showOverseerResourcesEditor) {
           <div class="mt-2.5 rounded border border-slate-200 p-1">
             @if (isLoadingOverseerResourcesArchive) {
-              <div class="flex h-[32rem] items-center justify-center text-slate-600">
+              <div class="flex h-128 items-center justify-center text-slate-600">
                 Loading Overseer Resources archive...
               </div>
             } @else if (overseerResourcesArchive) {
               <f-archive-viewer
-                class="block h-[400px] w-full overflow-hidden"
+                class="block h-100 w-full overflow-hidden"
                 navigationMode="tree"
                 [archiveFile]="overseerResourcesArchive"
                 [readOnly]="false"
@@ -63,7 +63,7 @@
                 (saveSuccess)="onOverseerResourcesArchiveSaved($event)"
               ></f-archive-viewer>
             } @else {
-              <div class="flex h-[32rem] items-center justify-center text-slate-600">
+              <div class="flex h-128 items-center justify-center text-slate-600">
                 Unable to load Overseer Resources archive.
               </div>
             }
@@ -93,9 +93,9 @@
       </div>
 
       <mat-drawer-container>
-        <mat-drawer class="min-w-[300px] border border-gray-300" mode="side" opened>
+        <mat-drawer class="min-w-75 border border-gray-300" mode="side" opened>
           <div
-            class="sticky top-0 z-10 flex min-h-[48px] items-center justify-between gap-2 border-b border-gray-200 bg-gray-50 py-1 pr-2 pl-4"
+            class="sticky top-0 z-10 flex min-h-12 items-center justify-between gap-2 border-b border-gray-200 bg-gray-50 py-1 pr-2 pl-4"
           >
             <span class="text-sm font-bold text-gray-900">Overseer Steps</span>
             @if (!newOverseerStep) {
@@ -487,7 +487,7 @@
 
       <div class="flex flex-row gap-2.5 pt-2.5">
         <button
-          class="me-4 flex-grow"
+          class="me-4 grow"
           color="primary"
           mat-flat-button
           [disabled]="!taskDefinition.id || taskDefinitionDirty || overseerStepsDirty"
@@ -496,7 +496,7 @@
           <mat-icon>upload_file</mat-icon> Test Submission
         </button>
         <button
-          class="ms-4 flex-grow"
+          class="ms-4 grow"
           color="accent"
           mat-flat-button
           [disabled]="!this.currentUserTask?.project"

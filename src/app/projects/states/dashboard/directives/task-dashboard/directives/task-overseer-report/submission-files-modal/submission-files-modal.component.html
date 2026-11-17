@@ -18,11 +18,11 @@
 
 <div class="flex min-h-0 flex-1 overflow-hidden p-6">
   @if (isLoading) {
-    <div class="flex size-full min-h-[300px] items-center justify-center">
+    <div class="flex size-full min-h-75 items-center justify-center">
       <mat-spinner [diameter]="56"></mat-spinner>
     </div>
   } @else if (errorMessage) {
-    <div class="flex size-full min-h-[300px] items-center justify-center text-xs text-red-700">
+    <div class="flex size-full min-h-75 items-center justify-center text-xs text-red-700">
       {{ errorMessage }}
     </div>
   } @else if (compareMode) {
@@ -71,7 +71,7 @@
                 (selectedFileChanged)="onComparedSelectionChange($event)"
               ></f-archive-viewer>
             } @else {
-              <div class="flex h-full min-h-[240px] items-center justify-center text-slate-500">
+              <div class="flex h-full min-h-60 items-center justify-center text-slate-500">
                 Loading archive...
               </div>
             }
@@ -121,7 +121,7 @@
         </div>
       </div>
     } @else {
-      <div class="flex size-full min-h-[300px] items-center justify-center text-xs text-slate-500">
+      <div class="flex size-full min-h-75 items-center justify-center text-xs text-slate-500">
         Unable to load one or both submission archives.
       </div>
     }
@@ -143,7 +143,7 @@
       ></f-archive-viewer>
     </div>
   } @else {
-    <div class="flex size-full min-h-[300px] items-center justify-center text-xs text-slate-500">
+    <div class="flex size-full min-h-75 items-center justify-center text-xs text-slate-500">
       Unable to load submission files.
     </div>
   }

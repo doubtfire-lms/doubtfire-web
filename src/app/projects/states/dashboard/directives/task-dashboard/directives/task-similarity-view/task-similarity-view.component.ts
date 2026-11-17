@@ -3,11 +3,12 @@ import {
   Component,
   Input,
   OnChanges,
+  OnDestroy,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {MatAccordion} from '@angular/material/expansion';
-import {finalize} from 'rxjs';
+import {Subscription, finalize} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskSimilarity} from 'src/app/api/models/task-similarity';
 import {TaskSimilarityService} from 'src/app/api/services/task-similarity.service';
@@ -23,14 +24,16 @@ import {SelectedTaskService} from '../../../../selected-task.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class TaskSimilarityViewComponent implements OnChanges {
+export class TaskSimilarityViewComponent implements OnChanges, OnDestroy {
   @Input() task: Task;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @ViewChild('jplagViewer') jplagViewer!: JplagReportViewerComponent;
   panelOpenState = false;
   jplagOpenState = false;
   loadingSimilarities = false;
+  similaritiesLoadError = false;
   loadingJplagReportFor: TaskSimilarity | null = null;
+  private similaritiesSubscription?: Subscription;
 
   constructor(
     private taskSimilarityService: TaskSimilarityService,
@@ -40,14 +43,28 @@ export class TaskSimilarityViewComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.task && changes.task.currentValue && this.task?.id) {
-      this.jplagOpenState = false;
-      this.loadingSimilarities = true;
-      this.task
-        ?.fetchSimilarities()
-        .pipe(finalize(() => (this.loadingSimilarities = false)))
-        .subscribe();
+    if (!changes.task) {
+      return;
     }
+
+    this.similaritiesSubscription?.unsubscribe();
+    this.jplagOpenState = false;
+    this.similaritiesLoadError = false;
+    this.loadingSimilarities = !!this.task?.id;
+    if (this.task?.id) {
+      this.similaritiesSubscription = this.task
+        .fetchSimilarities()
+        .pipe(finalize(() => (this.loadingSimilarities = false)))
+        .subscribe({
+          error: () => {
+            this.similaritiesLoadError = true;
+          },
+        });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.similaritiesSubscription?.unsubscribe();
   }
 
   toggleFlag(e: Event, similarity: TaskSimilarity) {
@@ -91,12 +108,18 @@ export class TaskSimilarityViewComponent implements OnChanges {
           .then((response) => response.blob())
           .then((report) => {
             this.fileDownloaderService.releaseBlob(url);
-            this.jplagViewer.openComparison(
+            return this.jplagViewer.openComparison(
               report,
               similarity.task.project.student.username,
               similarity.otherStudent.username,
             );
+          })
+          .then(() => {
             this.jplagOpenState = true;
+            this.loadingJplagReportFor = null;
+          })
+          .catch((error) => {
+            console.error(error);
             this.loadingJplagReportFor = null;
           });
       },

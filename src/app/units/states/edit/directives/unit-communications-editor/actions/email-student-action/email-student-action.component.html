@@ -1,5 +1,5 @@
 @if (mode === 'edit') {
-  <div class="flex w-full min-w-[520px] flex-col gap-3">
+  <div class="flex w-full min-w-130 flex-col gap-3">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Subject</mat-label>
       <input #subjectInput matInput [(ngModel)]="editor.actionFor(rule).subject" />
@@ -73,7 +73,7 @@
     <div class="text-sm text-black/50">Sent from the main convenor.</div>
   </div>
 } @else {
-  <div class="flex w-full min-w-[520px] flex-col gap-3">
+  <div class="flex w-full min-w-130 flex-col gap-3">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Subject</mat-label>
       <input #subjectInputView matInput [(ngModel)]="editor.actionFor(rule).subject" />

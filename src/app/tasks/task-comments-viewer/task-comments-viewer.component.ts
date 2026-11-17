@@ -21,6 +21,7 @@ import {
   UserService,
 } from 'src/app/api/models/doubtfire-model';
 import {ExtensionComment} from 'src/app/api/models/task-comment/extension-comment';
+import {SubmissionComment} from 'src/app/api/models/task-comment/submission-comment';
 import {FeedbackTemplateService} from 'src/app/api/services/feedback-template.service';
 import {CommentsModalService} from 'src/app/common/modals/comments-modal/comments-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -70,7 +71,13 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
     });
 
     this.taskStatusSub = this.taskService.taskStatusUpdated$.subscribe((task) => {
-      if (task && task.project && this.project && task.project.id === this.project.id) {
+      if (
+        task &&
+        task.project &&
+        this.project &&
+        task.project.id === this.project.id &&
+        task.definition.id === this.task?.definition.id
+      ) {
         this.fetchComments(task, false);
       }
     });
@@ -93,6 +100,10 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
 
   public asExtensionComment(comment: TaskComment): ExtensionComment | null {
     return comment.commentType === 'extension' ? (comment as ExtensionComment) : null;
+  }
+
+  public asSubmissionComment(comment: TaskComment): SubmissionComment | null {
+    return comment.commentType === 'submission' ? (comment as SubmissionComment) : null;
   }
 
   public asScormExtensionComment(comment: TaskComment): ScormExtensionComment | null {
@@ -155,7 +166,12 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
           task.commentCache.add(comment);
         } else if (
           existingComment.recipientReadTime !== comment.recipientReadTime ||
-          existingComment.text !== comment.text
+          existingComment.text !== comment.text ||
+          (comment.commentType === 'submission' &&
+            ((existingComment as SubmissionComment).submissionAssessedAt !==
+              (comment as SubmissionComment).submissionAssessedAt ||
+              (existingComment as SubmissionComment).submissionGranted !==
+                (comment as SubmissionComment).submissionGranted))
         ) {
           // Update cached read receipts or edited messages
           task.commentCache.set(comment.id, comment);
@@ -167,6 +183,23 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
           // This comment is in cache but not in the latest comments list
           task.commentCache.delete(cachedComment.id);
         }
+      }
+
+      const submissionRequests = comments.filter(
+        (comment) =>
+          comment.commentType === 'submission' && comment.author.id === task.project.student.id,
+      ) as SubmissionComment[];
+
+      if (submissionRequests.some((request) => request.assessed && request.submissionGranted)) {
+        task.submissionAccessGranted = true;
+      }
+
+      if (submissionRequests.length > 0) {
+        task.submissionAccessRequestError = !task.submissionsNotOpen
+          ? 'Submissions are already open for this task.'
+          : submissionRequests.some((request) => !request.assessed)
+            ? 'A submission access request is already awaiting assessment.'
+            : null;
       }
 
       task.refreshCommentData();
@@ -279,6 +312,7 @@ export class TaskCommentsViewerComponent implements OnChanges, OnDestroy {
   shouldShowAuthorIcon(commentType: string) {
     return !(
       commentType === 'extension' ||
+      commentType === 'submission' ||
       commentType === 'status' ||
       commentType == 'assessment' ||
       commentType === 'scorm' ||

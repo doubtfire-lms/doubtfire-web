@@ -5,7 +5,7 @@
     <div class="flex flex-col gap-5">
       <table
         #templateTable
-        class="f-table selectable flex-grow"
+        class="f-table selectable grow"
         mat-table
         matSort
         [dataSource]="templateSource"
@@ -140,7 +140,7 @@
           class="mat-elevation-z0"
           [pageSizeOptions]="[5, 10, 25, 100]"
         ></mat-paginator>
-        <span class="flex-grow"></span>
+        <span class="grow"></span>
         @if (context) {
           <label>Feedback CSV</label>
           <button mat-icon-button (click)="downloadCsv()">
@@ -149,7 +149,7 @@
           <button mat-icon-button (click)="uploadCsv()">
             <mat-icon>upload_file</mat-icon>
           </button>
-          <span class="flex-grow"></span>
+          <span class="grow"></span>
         }
         <button color="primary" mat-raised-button (click)="createFeedbackTemplate()">
           Add Template
@@ -198,7 +198,7 @@
               />
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="flex-grow">
+            <mat-form-field appearance="outline" class="grow">
               <mat-label>Description</mat-label>
               <input
                 matInput
@@ -212,7 +212,7 @@
           </div>
 
           @if (selectedTemplate.type === 'template') {
-            <mat-form-field appearance="outline" class="flex flex-grow">
+            <mat-form-field appearance="outline" class="flex grow">
               <mat-label>Comment Text</mat-label>
               <textarea
                 matInput
@@ -225,7 +225,7 @@
             </mat-form-field>
 
             <div class="flex flex-row gap-2.5">
-              <mat-form-field appearance="outline" class="flex-grow">
+              <mat-form-field appearance="outline" class="grow">
                 <mat-label>Summary Text</mat-label>
                 <input
                   matInput
@@ -251,7 +251,7 @@
           }
 
           <div class="flex">
-            <span class="flex-grow"></span>
+            <span class="grow"></span>
             <button
               color="primary"
               mat-raised-button

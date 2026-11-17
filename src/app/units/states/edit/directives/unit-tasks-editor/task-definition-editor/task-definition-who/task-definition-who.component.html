@@ -1,5 +1,5 @@
 @if (unit.hasGroupwork()) {
-  <mat-form-field appearance="outline" class="flex flex-grow">
+  <mat-form-field appearance="outline" class="flex grow">
     <mat-label>Is this an individual or group task? Select group that submits</mat-label>
     <mat-select required [(value)]="taskDefinition.groupSet">
       @for (gs of unit.groupSets; track gs) {
@@ -24,7 +24,7 @@
     </mat-select>
   </mat-form-field>
 
-  <span class="flex-grow">
+  <span class="grow">
     <strong class="">Related tutorials</strong>
     <ul>
       @for (

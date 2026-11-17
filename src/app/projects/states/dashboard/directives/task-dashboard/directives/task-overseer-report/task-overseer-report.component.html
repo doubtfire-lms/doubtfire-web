@@ -2,7 +2,7 @@
   <button mat-stroked-button (click)="loadHistory(true)">Refresh</button>
 </div>
 @if (loading) {
-  <div class="flex min-h-[240px] items-center justify-center">
+  <div class="flex min-h-60 items-center justify-center">
     <mat-spinner [diameter]="48"></mat-spinner>
   </div>
 } @else {
@@ -223,7 +223,7 @@
                     }
                   } @else if (result.stdout) {
                     <pre
-                      class="max-h-64 max-w-full scrollbar-gutter-stable overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed break-words whitespace-pre-wrap text-gray-800 shadow-inner"
+                      class="max-h-64 max-w-full scrollbar-gutter-stable overflow-auto rounded-md border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed wrap-break-word whitespace-pre-wrap text-gray-800 shadow-inner"
                     ><code [innerHTML]="renderOutput(result.stdout)"></code></pre>
                   } @else if (result.pass) {
                     <div class="w-full text-center tracking-wide text-gray-400 uppercase">

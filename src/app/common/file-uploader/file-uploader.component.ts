@@ -9,9 +9,11 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {UploadEvent} from 'src/app/common/services/resumable-upload.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {SubmissionRequestDeniedModalComponent} from 'src/app/tasks/modals/submission-request-denied-modal/submission-request-denied-modal.component';
 
 export interface FileData {
   name: string;
@@ -98,6 +100,7 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   @Input() onBeforeUpload?: () => void;
   @Input() onSuccess?: (response) => void;
   @Input() onFailure?: (response) => void;
+  @Input() onRequestDenied?: (supportId: string) => void;
   @Input() onComplete?: () => void;
   @Input() onClickFailureCancel?: () => void;
 
@@ -126,10 +129,12 @@ export class FileUploaderComponent implements OnInit, OnChanges {
   public shownUploadZones: UploadZone[] = [];
   public uploadZones: UploadZone[] = [];
   public dropSupported: boolean = true;
+  private uploadRequestedAt: Date | null = null;
 
   constructor(
     private httpClient: HttpClient,
     private constants: DoubtfireConstants,
+    private dialog: MatDialog,
   ) {}
 
   private externalName: string = 'OnTrack';
@@ -250,6 +255,8 @@ export class FileUploaderComponent implements OnInit, OnChanges {
       this.onBeforeUpload();
     }
 
+    this.uploadRequestedAt = new Date();
+
     this.uploadingInfo = {
       progress: 5,
       success: null,
@@ -335,8 +342,29 @@ export class FileUploaderComponent implements OnInit, OnChanges {
     setTimeout(() => {
       this.uploadingInfo.complete = true;
       const response = this.parseUploadResponse(status, responseBody);
+      const supportId = this.extractWafSupportId(response);
 
-      if (status >= 200 && status < 300) {
+      if (supportId) {
+        this.uploadingInfo.success = false;
+        this.uploadingInfo.error =
+          'A network security service blocked the upload. Copy the support ID from the dialog and contact your tutor or support team.';
+        if (this.onRequestDenied) {
+          this.onRequestDenied(supportId);
+        } else {
+          this.dialog.open(SubmissionRequestDeniedModalComponent, {
+            autoFocus: false,
+            width: '100%',
+            maxWidth: '640px',
+            data: {
+              requestedAt: this.uploadRequestedAt ?? new Date(),
+              supportId,
+            },
+          });
+        }
+        return;
+      }
+
+      if (status >= 200 && status < 300 && typeof response !== 'string') {
         this.onSuccess?.(response);
         this.uploadingInfo.success = true;
         setTimeout(() => {
@@ -348,7 +376,10 @@ export class FileUploaderComponent implements OnInit, OnChanges {
       } else {
         this.onFailure?.(response);
         this.uploadingInfo.success = false;
-        this.uploadingInfo.error = this.extractUploadError(response);
+        this.uploadingInfo.error =
+          status >= 200 && status < 300
+            ? 'The server returned an invalid upload response. Please try again.'
+            : this.extractUploadError(response);
       }
     }, 2000);
   }
@@ -364,10 +395,21 @@ export class FileUploaderComponent implements OnInit, OnChanges {
 
     try {
       return JSON.parse(responseBody);
-    } catch (error) {
-      console.error(error);
+    } catch {
       return responseBody;
     }
+  }
+
+  private extractWafSupportId(response: unknown): string | null {
+    if (
+      typeof response !== 'string' ||
+      !/Request Rejected/i.test(response) ||
+      !/requested URL was rejected/i.test(response)
+    ) {
+      return null;
+    }
+
+    return response.match(/Your support ID is\s*([^<\r\n]+)/i)?.[1]?.trim() || null;
   }
 
   private extractUploadError(response: unknown): string {

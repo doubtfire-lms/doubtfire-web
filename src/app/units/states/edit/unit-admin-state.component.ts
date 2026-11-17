@@ -106,7 +106,15 @@ export class UnitAdminStateComponent
   }
 
   public override get visibleTabs(): UnitAdminTab[] {
-    return this.tabs.filter((tab) => tab.routeSegment !== 'lms' || this.ltiEnabled);
+    return this.tabs.filter((tab) => tab.routeSegment !== 'lms' || this.canManageLms);
+  }
+
+  public get canManageLms(): boolean {
+    return (
+      this.ltiEnabled &&
+      (this.userService.currentUser.role === 'Admin' ||
+        this.unit?.mainConvenor?.user?.id === this.userService.currentUser.id)
+    );
   }
 
   private findUnitRole(unitId: number): UnitRole | null {
@@ -126,13 +134,16 @@ export class UnitAdminStateComponent
     if (
       !unitRole &&
       (this.userService.currentUser.role === 'Admin' ||
-        this.userService.currentUser.role === 'Auditor')
+        this.userService.currentUser.role === 'Auditor' ||
+        this.userService.currentUser.observeAllUnits)
     ) {
-      unitRole = this.userService.adminOrAuditorRoleFor(
-        this.userService.currentUser.role,
-        unitId,
-        this.userService.currentUser,
-      );
+      const role =
+        this.userService.currentUser.role === 'Admin'
+          ? 'Admin'
+          : this.userService.currentUser.observeAllUnits
+            ? 'Convenor'
+            : 'Auditor';
+      unitRole = this.userService.adminOrAuditorRoleFor(role, unitId, this.userService.currentUser);
     }
 
     return unitRole ?? null;
@@ -152,6 +163,7 @@ export class UnitAdminStateComponent
       this.unitService.loadDetails(unitId).subscribe({
         next: (unit) => {
           this.unit = unit;
+          this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'));
 
           if (this.assessingUnitRole) {
             this.assessingUnitRole.unit = unit;

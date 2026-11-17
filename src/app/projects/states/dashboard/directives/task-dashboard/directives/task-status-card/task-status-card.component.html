@@ -4,7 +4,8 @@
       <mat-select
         [disabled]="
           (task?.blockedByPrerequisiteTasks() && !isTutor) ||
-          (task?.definition.staffManagedTask && !canManageStaffTask)
+          (task?.definition.staffManagedTask && !canManageStaffTask) ||
+          (task?.submissionsNotOpen && !isTutor)
         "
         [value]="$safeNavigationMigration(task?.status)"
         (selectionChange)="triggerTransition($event)"
@@ -49,6 +50,12 @@
       </p>
     } @else {
       <p>{{ task?.statusHelp().reason }} {{ task?.statusHelp().action }}</p>
+      @if (!isTutor && task?.submissionsNotOpen) {
+        <p>
+          Submissions open on {{ task.definition.submissionOpensOn | date: 'mediumDate' }}. You can
+          request early access once the prerequisites are satisfied.
+        </p>
+      }
       @if (task?.blockedByPrerequisiteTasks()) {
         <p>
           To submit this task, you must first complete all tasks that are listed as prerequisites.
@@ -63,6 +70,7 @@
         mat-stroked-button
         [disabled]="
           isReadyForFeedback() ||
+          (task?.submissionsNotOpen && !isTutor) ||
           (task?.blockedByPrerequisiteTasks() && !isTutor) ||
           (isSubmittedForPortfolio() && !isTutor) ||
           (task?.definition.staffManagedTask && !canManageStaffTask)
@@ -72,6 +80,17 @@
         Upload Submission
       </button>
 
+      @if (
+        !isTutor &&
+        task?.submissionsNotOpen &&
+        !task?.definition.staffManagedTask &&
+        task?.canApplyForSubmissionAccess()
+      ) {
+        <button mat-stroked-button (click)="applyForSubmissionAccess()">
+          Request submission access
+        </button>
+      }
+
       @if (task?.canApplyForExtension()) {
         <button mat-stroked-button (click)="applyForExtension()">Request extension</button>
       }
@@ -80,7 +99,13 @@
         task?.requiresFileUpload() &&
         (!task?.definition.staffManagedTask || canManageStaffTask)
       ) {
-        <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
+        <button
+          mat-stroked-button
+          [disabled]="task?.submissionsNotOpen && !isTutor"
+          (click)="updateFilesInSubmission()"
+        >
+          Upload new files
+        </button>
       }
     </div>
 

@@ -77,6 +77,7 @@ export class TaskDefinition extends Entity {
   contentLink?: UnitContentLink;
   taskResourceLink?: UnitContentLink;
   overseerResourceFiles: string[] = [];
+  submissionOpensOn: Date | null;
 
   gradeDueDates: TaskDefinitionGradeDueDate[] = [];
 

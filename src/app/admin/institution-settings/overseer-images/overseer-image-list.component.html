@@ -1,5 +1,5 @@
 <ng-template #textDialog let-data>
-  <mat-card class="max-w-[600px] p-2.5">
+  <mat-card class="max-w-150 p-2.5">
     <pre>{{ data.text }}</pre>
   </mat-card>
 </ng-template>
@@ -27,7 +27,7 @@
       </div>
 
       @for (row of skeletonRows; track row) {
-        <div class="flex h-[72px] items-center gap-6 border-b border-y-gray-300 px-4">
+        <div class="flex h-18 items-center gap-6 border-b border-y-gray-300 px-4">
           <ngx-skeleton-loader
             class="w-[28%]"
             [theme]="{width: '35%', height: '12px', 'border-radius': '999px', margin: '0'}"

@@ -4,7 +4,7 @@
 </div>
 
 <div class="flex flex-col items-start gap-2.5 md:flex-row">
-  <aside class="sticky top-0 z-[9] w-full self-start md:top-12 md:w-[200px] md:shrink-0">
+  <aside class="sticky top-0 z-9 w-full self-start md:top-12 md:w-50 md:shrink-0">
     <div class="flex flex-col gap-0.5 overflow-x-hidden overflow-y-auto rounded-xl bg-white p-1">
       @for (section of visibleSections; track section.id) {
         <button
@@ -59,6 +59,22 @@
         Who assesses {{ unit.hasGroupwork() ? 'and submits ' : '' }}this task?
       </p>
       <f-task-definition-who [taskDefinition]="taskDefinition"></f-task-definition-who>
+    </section>
+    <mat-divider class="my-[25px]"></mat-divider>
+
+    <section
+      #sectionElement
+      class="mb-0 scroll-mt-28 rounded-xl bg-white p-2.5"
+      data-section-id="submission-open-date"
+    >
+      <h3>Submission Open Date</h3>
+      <p class="pb-1 font-normal text-gray-500">
+        Set the earliest date students can submit this task. Students cannot submit before this
+        date, preventing submissions too early in the semester.
+      </p>
+      <f-task-definition-submission-date
+        [taskDefinition]="taskDefinition"
+      ></f-task-definition-submission-date>
     </section>
     <mat-divider class="my-[25px]"></mat-divider>
 

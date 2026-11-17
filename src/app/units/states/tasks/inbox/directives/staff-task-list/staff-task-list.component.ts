@@ -563,7 +563,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   applyFilters() {
-    let filteredTasks = this.definedTasksPipe.transform(this.tasks, this.filters.taskDefinition);
+    const tasksForDefinition = this.definedTasksPipe.transform(
+      this.tasks,
+      this.filters.taskDefinition,
+    );
+    let filteredTasks = tasksForDefinition;
     if (this.filters.tutorials) {
       filteredTasks = this.tasksInTutorialsPipe.transform(
         filteredTasks,
@@ -577,6 +581,14 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
         this.unitRole,
         filteredTasks,
         this.filters.unitRoleIdSelected,
+      );
+    }
+
+    if (this.viewType === 'moderation' && this.unitRole?.role === 'Convenor' && filteredTasks) {
+      // Escalations are shared across convenors, regardless of tutor or tutorial scope.
+      const scopedTasks = new Set(filteredTasks);
+      filteredTasks = tasksForDefinition.filter(
+        (task) => task?.moderationType === 'escalation' || scopedTasks.has(task),
       );
     }
 
@@ -788,19 +800,27 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private scrollToTaskInList(task: Task) {
-    const taskEl = document.querySelector(`#${task.taskKeyToIdString()}`) as
-      | (HTMLElement & {
-          scrollIntoViewIfNeeded?: (options?: ScrollIntoViewOptions) => void;
-        })
-      | null;
-    if (!taskEl) {
-      return;
-    }
-    if (taskEl.scrollIntoViewIfNeeded) {
-      taskEl.scrollIntoViewIfNeeded({behavior: 'smooth'});
-    } else {
-      taskEl.scrollIntoView({behavior: 'smooth'});
-    }
+    // Defer so the viewport has rendered after loading flips to false.
+    setTimeout(() => {
+      const taskEl = document.getElementById(task.taskKeyToIdString()) as
+        | (HTMLElement & {
+            scrollIntoViewIfNeeded?: (options?: ScrollIntoViewOptions) => void;
+          })
+        | null;
+      if (taskEl) {
+        if (taskEl.scrollIntoViewIfNeeded) {
+          taskEl.scrollIntoViewIfNeeded({behavior: 'smooth'});
+        } else {
+          taskEl.scrollIntoView({behavior: 'smooth'});
+        }
+        return;
+      }
+      // Virtual scroll doesn't render off-screen rows, so scroll by index instead.
+      const index = this.filteredTasks?.findIndex((t) => t?.hasTaskKey(task.taskKey())) ?? -1;
+      if (index >= 0) {
+        this.viewport?.scrollToIndex(index);
+      }
+    });
   }
 
   isSelectedTask(task: Task) {
@@ -1086,7 +1106,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private dateTime(date: Date): number {
-    const time = date ? new Date(date).getTime() : NaN;
+    const time = date ? new Date(date).getTime() : Number.NaN;
     return Number.isFinite(time) ? time : Number.MAX_SAFE_INTEGER;
   }
 

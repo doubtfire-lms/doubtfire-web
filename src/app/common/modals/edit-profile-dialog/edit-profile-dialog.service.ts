@@ -9,11 +9,11 @@ import {EditProfileFormComponent} from '../../edit-profile-form/edit-profile-for
 export class EditProfileDialogService {
   constructor(public dialog: MatDialog) {}
 
-  openDialog(user: User, mode: 'edit' | 'create' | 'new'): void {
+  openDialog(user: User, mode: 'edit' | 'create' | 'new', showUnitMemberships = false): void {
     this.dialog.open(EditProfileFormComponent, {
       width: '100%',
       maxWidth: '800px',
-      data: {user, mode: mode, modal: true},
+      data: {user, mode: mode, modal: true, showUnitMemberships},
       panelClass: 'overflow-y-auto',
     });
   }
