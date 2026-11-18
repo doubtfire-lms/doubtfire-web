@@ -1,4 +1,40 @@
 <div>
+  <div class="mb-2 flex flex-wrap items-center justify-end gap-3">
+    <div class="flex items-center">
+      <label>Streams CSV</label>
+      <div class="flex items-center">
+        <button
+          aria-label="Download tutorial streams CSV"
+          mat-icon-button
+          (click)="unit.downloadTutorialStreamsCsv()"
+        >
+          <mat-icon>download</mat-icon>
+        </button>
+        <button
+          aria-label="Upload tutorial streams CSV"
+          mat-icon-button
+          (click)="uploadTutorialStreamsCsv()"
+        >
+          <mat-icon>upload_file</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="flex items-center">
+      <label>Tutorials CSV</label>
+      <div class="flex items-center">
+        <button
+          aria-label="Download tutorials CSV"
+          mat-icon-button
+          (click)="unit.downloadTutorialsCsv()"
+        >
+          <mat-icon>download</mat-icon>
+        </button>
+        <button aria-label="Upload tutorials CSV" mat-icon-button (click)="uploadTutorialsCsv()">
+          <mat-icon>upload_file</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
   <!-- <df-unit-tutorials-list [unit]="unit"></df-unit-tutorials-list> -->
   @for (stream of unit.tutorialStreams; track stream) {
     <df-unit-tutorials-list [stream]="stream" [unit]="unit"></df-unit-tutorials-list>
