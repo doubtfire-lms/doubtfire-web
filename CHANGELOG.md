@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [10.0.2](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1...v10.0.2) (2026-11-19)
+
+
+### Bug Fixes
+
+* backport sign-in token and task mapping fixes to 10.0.x ([#1764](https://github.com/b0ink/doubtfire-deploy/issues/1764)) ([fb8a718](https://github.com/b0ink/doubtfire-deploy/commit/fb8a718764fe4e51c1755a048b279837571c8bf9))
+
 ### [10.0.1](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-41...v10.0.1) (2026-07-14)
 
 ### [10.0.1-41](https://github.com/b0ink/doubtfire-deploy/compare/v10.0.1-40...v10.0.1-41) (2026-06-24)
