@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.3](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.2...v11.0.3) (2026-11-19)
+
+
+### Bug Fixes
+
+* handle firewall rejections in shared filed uploader ([080dcd8](https://github.com/b0ink/doubtfire-deploy/commit/080dcd8724ff450a351953e6a5cb1ae0228819c7))
+* show task snapshots before tutorial enrolment ([da9f22c](https://github.com/b0ink/doubtfire-deploy/commit/da9f22c1b71783f8ddaa7d707564397b2fe38139))
+* sort teaching periods by newest start date by default ([b483b28](https://github.com/b0ink/doubtfire-deploy/commit/b483b280822b13cb8660369ff2e73c1c7fe60a91))
+
 ### [11.0.2](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.1...v11.0.2) (2026-11-02)
 
 
