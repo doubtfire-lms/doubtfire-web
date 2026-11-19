@@ -1099,6 +1099,54 @@ export class UnitCommunicationsEditorComponent implements OnInit, OnChanges, OnD
     return rendered.replace(/\n/g, '<br />');
   }
 
+  exportPreviewCsv(rule: CommunicationRule): void {
+    const header = [
+      'Full Name',
+      'Preferred Name',
+      'Username',
+      'Student ID',
+      'Email',
+      'Tutorials',
+      'Campus',
+      'Target Grade',
+      'Portfolio',
+      'Spec Con Days',
+      'Last Sign In',
+      'Last Unit View',
+    ];
+    const rows = this.studentsFor(rule).map((student) => [
+      student.full_name,
+      student.preferred_name,
+      student.username,
+      student.student_id,
+      student.email,
+      (student.tutorials || []).join('; '),
+      student.campus,
+      student.target_grade !== null && student.target_grade !== undefined
+        ? this.targetGradeName(student.target_grade)
+        : '',
+      student.has_portfolio ? 'Yes' : 'No',
+      student.spec_con_days,
+      student.last_sign_in_at,
+      student.last_viewed_at,
+    ]);
+    const escape = (value: unknown): string => {
+      const text = value === null || value === undefined ? '' : String(value);
+      return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+    };
+    const csv = [header, ...rows].map((row) => row.map(escape).join(',')).join('\r\n');
+
+    const url = URL.createObjectURL(new Blob([csv], {type: 'text/csv;charset=utf-8'}));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${this.unit?.code || 'unit'}-${rule.name || 'rule'}-students.csv`.replace(
+      /[^\w.-]+/g,
+      '_',
+    );
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   /** Refetches one rule; the rest of the set is recomputed from cache. */
   refreshPreview(rule: CommunicationRule): void {
     if (!this.unit) {

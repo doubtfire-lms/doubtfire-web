@@ -106,7 +106,15 @@ export class UnitAdminStateComponent
   }
 
   public override get visibleTabs(): UnitAdminTab[] {
-    return this.tabs.filter((tab) => tab.routeSegment !== 'lms' || this.ltiEnabled);
+    return this.tabs.filter((tab) => tab.routeSegment !== 'lms' || this.canManageLms);
+  }
+
+  public get canManageLms(): boolean {
+    return (
+      this.ltiEnabled &&
+      (this.userService.currentUser.role === 'Admin' ||
+        this.unit?.mainConvenor?.user?.id === this.userService.currentUser.id)
+    );
   }
 
   private findUnitRole(unitId: number): UnitRole | null {
@@ -155,6 +163,7 @@ export class UnitAdminStateComponent
       this.unitService.loadDetails(unitId).subscribe({
         next: (unit) => {
           this.unit = unit;
+          this.updateCurrentTabFromState(this.route.snapshot.paramMap.get('tab'));
 
           if (this.assessingUnitRole) {
             this.assessingUnitRole.unit = unit;

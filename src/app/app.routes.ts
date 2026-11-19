@@ -107,6 +107,11 @@ export const routes: Routes = [
     path: 'projects/:projectId/task_def_id/:taskDefId/submission_files/download',
     component: SubmissionFilesDownloadComponent,
   },
+  {
+    path: 'projects/:projectId/portfolio/additional_files/download',
+    component: SubmissionFilesDownloadComponent,
+    data: {portfolioAdditionalFiles: true},
+  },
   {path: 'view-all-units', component: FUnitsComponent, data: {mode: 'tutor'}},
   {
     path: 'observe/units',

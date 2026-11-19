@@ -1,0 +1,23 @@
+@if (isLoading) {
+  <div class="flex size-full min-h-80 flex-col items-center justify-center gap-2 text-slate-600">
+    <mat-spinner diameter="40" strokeWidth="3"></mat-spinner>
+    <span>Loading submitted files...</span>
+  </div>
+} @else if (errorMessage) {
+  <div class="flex size-full min-h-80 flex-col items-center justify-center gap-2 text-red-700">
+    <mat-icon>error_outline</mat-icon>
+    <span>{{ errorMessage }}</span>
+  </div>
+} @else if (hasNoFiles || !archiveBlob) {
+  <div class="flex size-full min-h-80 flex-col items-center justify-center gap-2 text-slate-600">
+    <mat-icon>folder_off</mat-icon>
+    <span>No submitted files available.</span>
+  </div>
+} @else {
+  <f-archive-viewer
+    class="block size-full min-h-0 overflow-hidden"
+    [archiveFile]="archiveBlob"
+    [readOnly]="true"
+    [uploadRequirementNames]="uploadRequirementNames"
+  ></f-archive-viewer>
+}

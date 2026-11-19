@@ -73,6 +73,18 @@ export class SignInComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const currentUrl = new URL(window.location.href);
+    const oneTimeToken = currentUrl.searchParams.get('authToken');
+    if (oneTimeToken !== null) {
+      this.authToken = oneTimeToken;
+      currentUrl.searchParams.delete('authToken');
+      window.history.replaceState(
+        window.history.state,
+        '',
+        `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`,
+      );
+    }
+
     this.authService.afterAuthCall((result) => {
       if (result) {
         const params = getUrlParams(document.location.href);
@@ -119,7 +131,7 @@ export class SignInComponent implements OnInit {
     const params = getUrlParams(document.location.href);
     if (!this.username) {
       this.username = queryParams.username || params.username;
-      this.authToken = queryParams.authToken || params.authToken;
+      this.authToken = this.authToken || queryParams.authToken || params.authToken;
     }
 
     this.isLtiLogin =
@@ -129,8 +141,6 @@ export class SignInComponent implements OnInit {
     const wait = new Promise((resolve) => setTimeout(resolve, 3000));
     this.http.get(`${this.constants.API_URL}/auth/method`).subscribe({
       next: (response: {redirect_to?: string}) => {
-        this.isLoading = false;
-
         // if there is a string in response.data.redirect_to
         this.SSOLoginUrl = response.redirect_to || '';
 
@@ -141,7 +151,10 @@ export class SignInComponent implements OnInit {
             username: this.username,
             remember: this.authService.rememberMe,
           });
-        } else if (this.SSOLoginUrl) {
+        }
+
+        this.isLoading = false;
+        if (this.SSOLoginUrl) {
           if (this.autoLogin) {
             this.redirectingSSO = true;
             return wait.then(() => {
@@ -167,6 +180,7 @@ export class SignInComponent implements OnInit {
       },
       error: (_err) => {
         this.authMethodFailed = true;
+        this.isLoading = false;
         // this.error = err;
 
         // return after waiting with the wait promise
@@ -251,6 +265,7 @@ export class SignInComponent implements OnInit {
       },
       error: (err) => {
         this.signingIn = false;
+        this.isLoading = false;
         this.formData.password = '';
         this.invalidCredentials = true;
         this.alerts.error(err, 6000);

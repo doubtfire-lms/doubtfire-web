@@ -174,10 +174,15 @@ export class UnitTutorialsListComponent
 
   // Handle the removal of a tutorial
   public deleteTutorial(tutorial: Tutorial): void {
-    this.tutorialService.delete(tutorial, this.optionsOnRequest('delete')).subscribe((_result) => {
-      this.cancelEdit();
-      this.filterTutorials();
-      this.renderTable();
+    this.tutorialService.delete(tutorial, this.optionsOnRequest('delete')).subscribe({
+      next: () => {
+        this.cancelEdit();
+        this.filterTutorials();
+        this.renderTable();
+      },
+      error: (message: string) => {
+        this.alerts.error(message || 'Unable to delete tutorial', 8000);
+      },
     });
   }
 

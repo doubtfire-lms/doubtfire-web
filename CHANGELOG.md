@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-21](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-20...v11.1.0-21) (2026-11-12)
+
+
+### Bug Fixes
+
+* show tutorial deletion errors in alert ([5fe25a9](https://github.com/b0ink/doubtfire-deploy/commit/5fe25a9cfca22c0b596dbe7a0953aa2abc1ccfbf))
+
+## [11.1.0-20](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-19...v11.1.0-20) (2026-11-12)
+
+
+### Bug Fixes
+
+* prevent overlapping Sidekiq progress polls ([d73f011](https://github.com/b0ink/doubtfire-deploy/commit/d73f0116638c8288043b9d9db9051cde3f917c59))
+* prevent tutors from calling d2l requests ([f0803d7](https://github.com/b0ink/doubtfire-deploy/commit/f0803d71efaacde45c3c4c8e712135c92b6c6099))
+
+## [11.1.0-19](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-18...v11.1.0-19) (2026-11-12)
+
+## [11.1.0-18](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-17...v11.1.0-18) (2026-11-12)
+
+
+### Features
+
+* hide login ui when redirecting via auth token ([e16d3e7](https://github.com/b0ink/doubtfire-deploy/commit/e16d3e7fcaba5317db6bd4a955041993fe2c4983))
+
+
+### Bug Fixes
+
+* keep confirmation button checkmark vertically aligned ([4957902](https://github.com/b0ink/doubtfire-deploy/commit/495790265f56b1bf479a64aacb56e99a59db8cc8))
+
+## [11.1.0-17](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-16...v11.1.0-17) (2026-11-11)
+
+
+### Bug Fixes
+
+* remove one-time auth tokens from browser history ([4a61ca8](https://github.com/b0ink/doubtfire-deploy/commit/4a61ca836dc460fc4c96617f6ebad07d94ce0152))
+
+## [11.1.0-16](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-15...v11.1.0-16) (2026-11-11)
+
 ## [11.1.0-15](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-14...v11.1.0-15) (2026-11-09)
 
 

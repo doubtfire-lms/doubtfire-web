@@ -280,7 +280,20 @@
                   </ng-template>
 
                   <div class="flex flex-col gap-4 p-6">
-                    <div class="flex justify-end">
+                    <div class="flex justify-end gap-2">
+                      <button
+                        color="primary"
+                        mat-stroked-button
+                        [disabled]="
+                          isPreviewLoading(rule) ||
+                          !hasPreview(rule) ||
+                          studentsFor(rule).length === 0
+                        "
+                        (click)="exportPreviewCsv(rule)"
+                      >
+                        <mat-icon>download</mat-icon>
+                        Export CSV
+                      </button>
                       <button
                         color="primary"
                         mat-stroked-button

@@ -220,6 +220,7 @@ import {SidekiqJobsModalComponent} from './common/modals/sidekiq-jobs-modal/side
 import {SidekiqProgressModalComponent} from './common/modals/sidekiq-progress-modal/sidekiq-progress-modal.component';
 import {SpecConModalComponent} from './common/modals/spec-con-modal/spec-con-modal.component';
 import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal.service';
+import {SubmissionAccessModalComponent} from './common/modals/submission-access-modal/submission-access-modal.component';
 import {TaskAssessmentModalComponent} from './common/modals/task-assessment-modal/task-assessment-modal.component';
 import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
 import {ObjectSelectComponent} from './common/obect-select/object-select.component';
@@ -242,6 +243,7 @@ import {SettingToggleComponent} from './common/setting-toggle/setting-toggle.com
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
 import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
+import {TaskFileViewerComponent} from './common/task-file-viewer/task-file-viewer.component';
 import {UnitCodeComponent} from './common/unit-code/unit-code.component';
 import {UserBadgeComponent} from './common/user-badge/user-badge.component';
 import {UserIconComponent} from './common/user-icon/user-icon.component';
@@ -333,6 +335,7 @@ import {IntelligentDiscussionRecorderComponent} from './tasks/task-comments-view
 import {PdfImageCommentComponent} from './tasks/task-comments-viewer/pdf-image-comment/pdf-image-comment.component';
 import {ScormCommentComponent} from './tasks/task-comments-viewer/scorm-comment/scorm-comment.component';
 import {ScormExtensionCommentComponent} from './tasks/task-comments-viewer/scorm-extension-comment/scorm-extension-comment.component';
+import {SubmissionCommentComponent} from './tasks/task-comments-viewer/submission-comment/submission-comment.component';
 import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-assessment-comment/task-assessment-comment.component';
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
@@ -377,6 +380,7 @@ import {TaskDefinitionOverseerComponent} from './units/states/edit/directives/un
 import {TaskDefinitionPrerequisitesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-prerequisites/task-definition-prerequisites.component';
 import {TaskDefinitionResourcesComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-resources/task-definition-resources.component';
 import {TaskDefinitionScormComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-scorm/task-definition-scorm.component';
+import {TaskDefinitionSubmissionDateComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-submission-date/task-definition-submission-date.component';
 import {TaskDefinitionUploadComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-upload/task-definition-upload.component';
 import {TaskDefinitionWhoComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-who/task-definition-who.component';
 import {UnitTaskEditorComponent} from './units/states/edit/directives/unit-tasks-editor/unit-task-editor.component';
@@ -507,6 +511,8 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     IntelligentDiscussionRecorderComponent,
     DiscussTimeoutCommentComponent,
     ExtensionCommentComponent,
+    SubmissionCommentComponent,
+    SubmissionAccessModalComponent,
     PdfImageCommentComponent,
     CampusListComponent,
     ActivityTypeListComponent,
@@ -532,6 +538,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     TaskDefinitionEditorComponent,
     TaskDefinitionGeneralComponent,
     TaskDefinitionWhoComponent,
+    TaskDefinitionSubmissionDateComponent,
     TaskDefinitionDatesComponent,
     TaskDefinitionUploadComponent,
     TaskDefinitionOptionsComponent,
@@ -606,6 +613,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
     ArchiveViewerComponent,
+    TaskFileViewerComponent,
     AlertComponent,
     FUnitTaskListComponent,
     FTaskDetailsViewComponent,

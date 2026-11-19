@@ -1,6 +1,6 @@
 {
   "name": "doubtfire",
-  "version": "11.1.0-15",
+  "version": "11.1.0-21",
   "homepage": "http://github.com/doubtfire-lms/",
   "description": "Learning and feedback tool.",
   "license": "AGPL-3.0",
@@ -52,13 +52,13 @@
     "angular-calendar": "^0.32.2",
     "ansi-to-html": "^0.7.2",
     "canvas-confetti": "^1.9",
-    "d3": "^7.9.0",
+    "d3": "^7.9.2",
     "date-fns": "^4.4.0",
     "dompurify": "^3.4.17",
     "html2canvas": "^1.0.0-rc.7",
     "html5-qrcode": "^2.3.8",
     "jszip": "^3.10.2",
-    "marked": "^18.1.1",
+    "marked": "^18.2.0",
     "moment": "^2.31",
     "monaco-editor": "^0.56.0",
     "ng-flex-layout": "^17.3.7-beta.1",
@@ -68,7 +68,7 @@
     "ngx-skeleton-loader": "^14.0.0",
     "qrcode": "^1.5.4",
     "rxjs": "~7.8.2",
-    "tslib": "^2.8.1",
+    "tslib": "^2.9.1",
     "typescript-eslint": "^8.72.0",
     "zone.js": "~0.16.3"
   },
@@ -90,7 +90,7 @@
     "@types/dompurify": "^3.2.0",
     "@types/node": "^26.6.6",
     "@typescript-eslint/eslint-plugin": "^8.68.0",
-    "@typescript-eslint/parser": "^8.71.2",
+    "@typescript-eslint/parser": "^8.72.2",
     "angular-eslint": "^22.6.0",
     "autoprefixer": "^10.6.1",
     "concurrently": "^10.0.6",
@@ -112,12 +112,12 @@
     "vitest": "^5.1.0"
   },
   "optionalDependencies": {
-    "@nx/nx-darwin-arm64": "^24.0.3",
+    "@nx/nx-darwin-arm64": "^24.0.6",
     "@nx/nx-darwin-x64": "^24.0.3",
-    "@nx/nx-linux-arm64-gnu": "^24.0.3",
-    "@nx/nx-linux-x64-gnu": "^24.0.2",
-    "@nx/nx-win32-x64-msvc": "^24.0.3",
-    "@rollup/rollup-linux-arm64-gnu": "^4.67.4",
-    "@rollup/rollup-linux-x64-gnu": "^4.67.4"
+    "@nx/nx-linux-arm64-gnu": "^24.0.6",
+    "@nx/nx-linux-x64-gnu": "^24.0.5",
+    "@nx/nx-win32-x64-msvc": "^24.0.6",
+    "@rollup/rollup-linux-arm64-gnu": "^4.68.2",
+    "@rollup/rollup-linux-x64-gnu": "^4.68.2"
   }
 }

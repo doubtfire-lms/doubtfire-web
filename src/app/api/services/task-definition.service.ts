@@ -227,6 +227,15 @@ export class TaskDefinitionService extends CachedEntityService<TaskDefinition> {
           }));
         },
       },
+      {
+        keys: ['submissionOpensOn', 'submission_opens_on'],
+        toEntityFn: (data: object, key: string) =>
+          data[key] ? MappingFunctions.mapDateToDay(data, key, null) : null,
+        toJsonFn: (taskDefinition: TaskDefinition, key: string) =>
+          taskDefinition.submissionOpensOn === null
+            ? null
+            : MappingFunctions.mapDayToJson(taskDefinition, key),
+      },
     );
 
     this.mapping.mapAllKeysToJsonExcept(
