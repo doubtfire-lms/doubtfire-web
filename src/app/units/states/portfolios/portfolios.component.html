@@ -34,7 +34,7 @@
           }
         }
         @case ('staff-notes') {
-          @if (selectedProject) {
+          @if (selectedProject?.student) {
             <div class="h-[calc(100vh-250px)] p-3">
               <h2>Staff Notes for {{ selectedProject.student.name }}</h2>
               <p>
@@ -52,7 +52,7 @@
           }
         }
         @case ('assessment') {
-          @if (selectedProject) {
+          @if (selectedProject?.student) {
             <f-portfolios-assessment
               [project]="selectedProject"
               [unit]="unit"
