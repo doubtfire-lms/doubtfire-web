@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.4](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.3...v11.0.4) (2026-11-19)
+
+
+### Bug Fixes
+
+* handle jplag comparison open failures ([ca42b1e](https://github.com/b0ink/doubtfire-deploy/commit/ca42b1e726b831a5b33d4722b034b2569823f4cc))
+* remove one-time auth tokens from browser history ([4acfd67](https://github.com/b0ink/doubtfire-deploy/commit/4acfd670c8795c29e1dddb2354ddede07d75fe08))
+* resolve task definition via task unit when mapping tasks ([6c3521d](https://github.com/b0ink/doubtfire-deploy/commit/6c3521de34807d624f5256643d7b76208935b95a))
+* wait for student before rendering assessment ([d8c365c](https://github.com/b0ink/doubtfire-deploy/commit/d8c365c54989b43a29b5b9cae196d7e80028f728))
+
 ### [11.0.3](https://github.com/b0ink/doubtfire-deploy/compare/v11.0.2...v11.0.3) (2026-11-19)
 
 
