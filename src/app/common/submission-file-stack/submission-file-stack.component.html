@@ -118,11 +118,8 @@
               </div>
             } @else if (card.entry.kind === 'image' && card.entry.blobUrl) {
               <img class="block h-auto w-full" [alt]="card.entry.name" [src]="card.entry.blobUrl" />
-            } @else if (card.entry.kind === 'pdf') {
-              <div class="flex items-center gap-2 p-4 text-sm text-slate-600">
-                <mat-icon>picture_as_pdf</mat-icon>
-                <span>PDF preview is coming soon. Use the download button to open it.</span>
-              </div>
+            } @else if (card.entry.kind === 'pdf' && card.entry.blobUrl) {
+              <f-submission-pdf [pdfUrl]="card.entry.blobUrl"></f-submission-pdf>
             } @else {
               <div class="flex items-center gap-2 p-4 text-sm text-slate-600">
                 <mat-icon>insert_drive_file</mat-icon>
