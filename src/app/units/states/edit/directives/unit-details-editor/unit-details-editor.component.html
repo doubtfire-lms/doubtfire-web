@@ -21,6 +21,35 @@
   </mat-card>
 
   <mat-card appearance="outlined" class="gap-1 p-4">
+    <div>
+      <h4 class="mb-1">Unit definition</h4>
+      <p class="text-sm text-gray-600">
+        The curriculum version this offering teaches. Its required skill levels, and those of the
+        courses that include it, are suggested when mapping skills to tasks.
+      </p>
+    </div>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Unit definition version</mat-label>
+      <mat-select [ngModel]="unitDefinitionId" (ngModelChange)="setUnitDefinition($event)">
+        <mat-option [value]="null">None</mat-option>
+        @for (option of unitDefinitionOptions; track option.id) {
+          <mat-option [value]="option.id">
+            {{ option.version }} · {{ option.name }} · {{ option.required_skill_count }} skill
+            levels
+          </mat-option>
+        }
+      </mat-select>
+      <mat-hint>
+        @if (unitDefinitionOptions.length) {
+          Changes apply immediately. Only versions with the code {{ unit.code }} are listed.
+        } @else {
+          No unit definition versions exist for {{ unit.code }} yet.
+        }
+      </mat-hint>
+    </mat-form-field>
+  </mat-card>
+
+  <mat-card appearance="outlined" class="gap-1 p-4">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Teaching Period</mat-label>
       <mat-select placeholder="Select Teaching Period" [(ngModel)]="unit.teachingPeriod">

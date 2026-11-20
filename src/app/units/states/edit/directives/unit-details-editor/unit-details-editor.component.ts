@@ -4,6 +4,7 @@ import {OverseerImage, UnitService} from 'src/app/api/models/doubtfire-model';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {TeachingPeriod} from 'src/app/api/models/teaching-period';
 import {GradeDefinition, Unit} from 'src/app/api/models/unit';
+import {CompetencyService, UnitDefinitionOptionsDto} from 'src/app/api/services/competency.service';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {TeachingPeriodService} from 'src/app/api/services/teaching-period.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
@@ -31,11 +32,14 @@ export class UnitDetailsEditorComponent implements OnInit {
     private unitService: UnitService,
     private alertsService: AlertService,
     private confirmationModal: ConfirmationModalService,
+    private competencies: CompetencyService,
   ) {}
 
   public teachingPeriods: TeachingPeriod[];
   public taskDefinitions: TaskDefinition[];
   public dockerImages: OverseerImage[];
+  public unitDefinitionId: number | null = null;
+  public unitDefinitionOptions: UnitDefinitionOptionsDto['options'] = [];
   public editingGradeId: string | null = null;
   public readonly gradeDefinitionColumns = ['index', 'label', 'abbreviation', 'order', 'actions'];
   private editingGradeDefinitions: GradeDefinition[] | null = null;
@@ -212,6 +216,33 @@ export class UnitDetailsEditorComponent implements OnInit {
 
     this.taskSubmissionService.getDockerImagesAsPromise().then((images) => {
       this.dockerImages = images;
+    });
+
+    this.competencies.unitDefinitionOptions(this.unit.id).subscribe((result) => {
+      this.unitDefinitionId = result.unit_definition_id;
+      this.unitDefinitionOptions = result.options;
+    });
+  }
+
+  setUnitDefinition(definitionId: number | null): void {
+    const previousId = this.unitDefinitionId;
+    this.unitDefinitionId = definitionId;
+    const request = definitionId
+      ? this.competencies.assignUnit(this.unit.id, definitionId)
+      : this.competencies.unassignUnit(this.unit.id);
+    request.subscribe({
+      next: (assignment) => {
+        this.unitDefinitionId = assignment.unit_definition_id;
+        if (assignment.unit_definition_id === definitionId) {
+          this.alertsService.success('Unit definition updated.', 2000);
+        } else {
+          this.alertsService.error('The selected unit definition was not saved.', 6000);
+        }
+      },
+      error: (response) => {
+        this.unitDefinitionId = previousId;
+        this.alertsService.error(`Failed to update unit definition. ${response}`, 6000);
+      },
     });
   }
 
