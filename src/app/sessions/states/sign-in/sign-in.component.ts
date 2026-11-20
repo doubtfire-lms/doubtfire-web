@@ -22,6 +22,9 @@ const paramReducer = (params: IParams, pair: string): IParams => {
 const getUrlParams = (search: string): IParams =>
   `${search}?`.split('?')[1].split('&').reduce<IParams>(paramReducer, {});
 
+// Avoid submitting a one-time token twice when sign-in initialises more than once.
+const attemptedOneTimeTokens = new Set<string>();
+
 type signInData =
   | {
       username: string;
@@ -252,6 +255,13 @@ export class SignInComponent implements OnInit {
    * refreshes the page / returns to the app / etc.
    */
   public signIn(signInCredentials: signInData): void {
+    if (signInCredentials.auth_token) {
+      if (attemptedOneTimeTokens.has(signInCredentials.auth_token)) {
+        return;
+      }
+      attemptedOneTimeTokens.add(signInCredentials.auth_token);
+    }
+
     // Redirect to SSO if we do not have an auth token already (from SSO callback)
     if (this.SSOLoginUrl && !signInCredentials.auth_token) {
       return this.redirectToSSO();
