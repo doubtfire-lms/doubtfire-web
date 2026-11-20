@@ -49,7 +49,7 @@ RUN CSP_SCRIPT_HASHES="$(node scripts/csp-inline-script-hashes.mjs dist/browser/
 
 
 ## STAGE 2: Host ###
-FROM nginx:1.29.0-alpine
+FROM nginx:1.30.7-alpine
 
 # Remove the default Nginx configuration file
 RUN rm -v /etc/nginx/nginx.conf
