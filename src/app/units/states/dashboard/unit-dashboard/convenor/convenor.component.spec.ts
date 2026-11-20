@@ -12,6 +12,7 @@ describe('ConvenorComponent', () => {
   beforeEach(async () => {
     getOverflowAvailableToClaimCount.mockClear();
     const unit = Object.assign(new Unit(), {id: 1});
+    vi.spyOn(unit, 'getUserMarkingSessions').mockReturnValue(of([]));
 
     await TestBed.configureTestingModule({
       imports: [ConvenorComponent],
@@ -44,6 +45,7 @@ describe('ConvenorComponent', () => {
     expect(dashboard.textContent).toMatch(/Moderation queue\s*2/);
     expect(dashboard.textContent).toMatch(/Overflow tasks available to claim\s*3/);
     expect(dashboard.querySelector('a')).toBeNull();
+    expect(dashboard.querySelector('f-ta-workload-overview')).not.toBeNull();
   });
 
   it('shows zero when no overflow tasks are available to claim', () => {
