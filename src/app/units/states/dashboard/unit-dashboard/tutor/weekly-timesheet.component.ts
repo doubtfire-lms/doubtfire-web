@@ -1,4 +1,4 @@
-import {addDays, isSameDay, startOfWeek} from 'date-fns';
+import {addDays, isSameDay} from 'date-fns';
 import {AsyncPipe, DatePipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnChanges, inject} from '@angular/core';
 import {ReplaySubject, catchError, map, of, startWith, switchMap} from 'rxjs';
@@ -6,12 +6,8 @@ import {MarkingSession} from 'src/app/api/models/marking-session';
 import {Unit} from 'src/app/api/models/unit';
 import {User} from 'src/app/api/models/user/user';
 import {UserService} from 'src/app/api/services/user.service';
+import {calendarDate, formatDuration, mondayOf, weekLabel} from '../timesheet-week';
 
-const calendarDate = new Intl.DateTimeFormat('en-AU', {
-  day: 'numeric',
-  month: 'short',
-  year: 'numeric',
-});
 const weekday = new Intl.DateTimeFormat('en-AU', {weekday: 'short'});
 
 interface TimesheetDay {
@@ -20,10 +16,6 @@ interface TimesheetDay {
   sessions: MarkingSession[];
   minutes: number;
   assessments: number;
-}
-
-function mondayOf(date: Date): Date {
-  return startOfWeek(date, {weekStartsOn: 1});
 }
 
 @Component({
@@ -61,7 +53,7 @@ export class WeeklyTimesheetComponent implements OnChanges {
   }
 
   public get weekLabel(): string {
-    return `${calendarDate.format(this.monday)} – ${calendarDate.format(addDays(this.monday, 6))}`;
+    return weekLabel(this.monday);
   }
 
   public get isCurrentWeek(): boolean {
@@ -83,9 +75,7 @@ export class WeeklyTimesheetComponent implements OnChanges {
     this.openDay = this.openDay === day ? null : day;
   }
 
-  public formatDuration(minutes: number): string {
-    return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
-  }
+  public readonly formatDuration = formatDuration;
 
   public formatDate(day: Date): string {
     return calendarDate.format(day);

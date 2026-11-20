@@ -6,7 +6,7 @@
       >
         <mat-icon aria-hidden="true" class="text-formatif-blue">{{ card.icon }}</mat-icon>
         <h2 class="m-0 text-lg font-medium">{{ card.title }}</h2>
-        @let count = workload[card.key];
+        @let count = workload.counts[card.key];
         @if (count === null || count === 'Unavailable') {
           <span class="flex min-h-11 items-center text-sm">{{ count ?? 'Loading…' }}</span>
         } @else {
@@ -17,4 +17,5 @@
       </div>
     }
   </div>
+  <f-ta-workload-overview [unit]="workload.unit" />
 }

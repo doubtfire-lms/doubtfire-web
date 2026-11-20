@@ -4,12 +4,13 @@ import {MatIconModule} from '@angular/material/icon';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, catchError, combineLatest, map, of, startWith, switchMap} from 'rxjs';
 import {ProjectService, TaskService, Unit} from 'src/app/api/models/doubtfire-model';
+import {TaWorkloadOverviewComponent} from './ta-workload-overview.component';
 
 type WorkloadCount = number | 'Unavailable' | null;
 
 @Component({
   selector: 'f-convenor',
-  imports: [AsyncPipe, MatIconModule],
+  imports: [AsyncPipe, MatIconModule, TaWorkloadOverviewComponent],
   host: {class: 'block'},
   styleUrl: './convenor.component.css',
   templateUrl: './convenor.component.html',
@@ -27,7 +28,9 @@ export class ConvenorComponent {
   ] as const;
 
   protected readonly workload$ = this.route.parent.data.pipe(
-    switchMap(({unit}: {unit?: Unit}) => (unit ? this.loadWorkload(unit) : of(null))),
+    switchMap(({unit}: {unit?: Unit}) =>
+      unit ? this.loadWorkload(unit).pipe(map((counts) => ({unit, counts}))) : of(null),
+    ),
   );
 
   private loadWorkload(unit: Unit) {
