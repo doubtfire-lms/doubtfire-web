@@ -22,8 +22,6 @@ enum InboxDashboardTab {
   tutorNotes = 5,
 }
 
-type SubmissionViewMode = 'pdf' | 'files';
-
 @Component({
   selector: 'f-inbox-dashboard',
   templateUrl: './inbox-dashboard.component.html',
@@ -39,7 +37,6 @@ export class InboxDashboardComponent implements OnChanges {
   public readonly InboxDashboardTab = InboxDashboardTab;
   public currentTab: InboxDashboardTab = InboxDashboardTab.submission;
   public currentIndex = InboxDashboardTab.submission;
-  public submissionViewMode: SubmissionViewMode = 'pdf';
 
   constructor(
     private fileDownloader: FileDownloaderService,
@@ -48,18 +45,12 @@ export class InboxDashboardComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.task) {
-      this.submissionViewMode = 'pdf';
       this.selectDefaultTab();
     }
   }
 
   onTabChange(event: MatTabChangeEvent): void {
     this.setSelectedTab(event.index as InboxDashboardTab);
-  }
-
-  setSubmissionViewMode(mode: SubmissionViewMode): void {
-    this.submissionViewMode = mode;
-    this.visiblePdfUrlChange.emit(this.pdfUrlForTab(this.currentTab));
   }
 
   downloadSubmission(): void {
@@ -104,11 +95,6 @@ export class InboxDashboardComponent implements OnChanges {
     }
 
     switch (tab) {
-      case InboxDashboardTab.submission:
-        // No PDF is visible while the submitted files are shown instead
-        return this.task.hasPdf && this.submissionViewMode === 'pdf'
-          ? this.task.submissionUrl()
-          : null;
       case InboxDashboardTab.taskSheet:
         if (this.task.definition?.hasContentLink) {
           return null;
