@@ -1,0 +1,35 @@
+<button mat-icon-button (click)="toggleNotifications()" aria-label="Notifications" class="notification-button">
+  <mat-icon>notifications</mat-icon>
+  <span *ngIf="notifications.length > 0" class="notification-badge">{{ notifications.length }}</span>
+</button>
+
+<!-- Notification List Panel -->
+<div *ngIf="showNotifications" class="notification-panel" #panel>
+  <mat-list>
+    <mat-list-item *ngFor="let note of notifications">
+      <div class="notification-content">
+        <span class="mat-body-2">{{ note.message }}</span>
+        <button mat-icon-button aria-label="Dismiss notification" (click)="dismissNotification(note.id)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </mat-list-item>
+
+    <!-- If no notifications -->
+    <mat-list-item *ngIf="notifications.length === 0">
+      <span class="mat-body-2">No notifications</span>
+    </mat-list-item>
+  </mat-list>
+
+  <div *ngIf="notifications.length > 0" class="delete-all-container">
+    <button mat-button color="warn" (click)="deleteAllNotifications()">Delete All</button>
+  </div>
+
+  <div class="close-container">
+    <button mat-button (click)="toggleNotifications()">Close</button>
+  </div>
+</div>
+
+
+
+

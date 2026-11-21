@@ -32,6 +32,7 @@ export class TaskDropdownComponent {
     'Tutorial List': 'Tutorials',
     'Unit Administration': 'Admin',
     'Unit Analytics': 'Analytics',
+    'Staff Grant Extension': 'Extension',
   };
 
   taskDropdownData: {title: string; target: string; visible: any}[];

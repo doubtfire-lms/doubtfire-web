@@ -58,6 +58,11 @@
         <mat-icon>qr_code_scanner</mat-icon>
       </button>
     }
+
+    @if (currentUser.role === 'Student') {
+      <f-notifications-button></f-notifications-button>
+    }
+
     @if (currentUser.role === 'Admin' || currentUser.role === 'Convenor') {
       <button
         #menuState="matMenuTrigger"

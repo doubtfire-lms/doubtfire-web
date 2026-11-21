@@ -15,9 +15,9 @@
         @for (trigger of triggers; track trigger) {
           <mat-option [value]="trigger.status">
             <status-icon [status]="trigger.status" [showTooltip]="false"></status-icon>
-            <span style="display: inline-flex; margin-left: 10px"
-              ><h5>{{ trigger.label }}</h5></span
-            >
+            <span style="display: inline-flex; margin-left: 10px">
+              <h5>{{ trigger.label }}</h5>
+            </span>
           </mat-option>
         }
       </mat-select>
@@ -41,6 +41,10 @@
     }
   </mat-card-content>
 
+  @if (
+    task?.unit.currentUserIsStaff || task?.canApplyForExtension() ||
+    (task?.inSubmittedState() && task?.requiresFileUpload())
+  ) {
   <mat-card-actions class="justify-between w-full">
     <div class="space-x-2">
       <button
@@ -62,15 +66,21 @@
         <button mat-stroked-button (click)="updateFilesInSubmission()">Upload new files</button>
       }
     </div>
-
     <div>
       <button mat-icon-button aria-label="More task options" [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
       <div fxFlex></div>
       <mat-menu #menu="matMenu">
+        @if (currentUser?.role === 'Admin' || currentUser?.role === 'Convenor') {
+          <button mat-menu-item (click)="openGrantExtensionDialog()">
+            Grant Extension
+          </button>
+        }
         <button mat-menu-item (click)="openFeedbackAppealModal()">Request Feedback Review</button>
       </mat-menu>
     </div>
+
   </mat-card-actions>
+}
 </mat-card>

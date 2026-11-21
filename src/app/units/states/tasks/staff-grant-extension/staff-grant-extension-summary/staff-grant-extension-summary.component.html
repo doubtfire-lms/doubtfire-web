@@ -1,0 +1,33 @@
+<div class="summary-card panel-container">
+  <div class="summary-header">
+    <h3>Extension Granted</h3>
+    <p>
+      Extension has been granted for
+      <strong>{{ successCount }}</strong> student<span *ngIf="successCount !== 1">s</span>
+      until <span class="summary-date">{{ expiryFormatted }}</span>
+    </p>
+  </div>
+
+  <div class="summary-body">
+    <div class="stats">
+      <div class="stat stat-success">
+        <div class="count-number">{{ successCount }}</div>
+        <div class="count-label">Successful</div>
+      </div>
+      <div class="stat stat-failed">
+        <div class="count-number">{{ failedCount }}</div>
+        <div class="count-label">Failed</div>
+      </div>
+      <div class="stat stat-skipped">
+        <div class="count-number">{{ skippedCount }}</div>
+        <div class="count-label">Skipped</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-actions">
+    <button mat-stroked-button color="primary" (click)="dismiss()">Dismiss</button>
+  </div>
+</div>
+
+

@@ -1,0 +1,56 @@
+<div fxLayout="row" fxFill class="main-content">
+  <!-- Left Panel - Task List -->
+  <div fxFlex="35" class="task-list-panel">
+    <div class="panel-container">
+      <div class="panel-header">
+        <h3>Tasks</h3>
+        <p class="text-muted">Click on a task to select it for extension granting</p>
+      </div>
+
+      <div class="task-list-container">
+        <f-unit-task-list
+          *ngIf="unit"
+          [unitTasks]="unit.taskDefinitions"
+          mode="all-tasks"
+        ></f-unit-task-list>
+        <div *ngIf="!unit" class="no-unit-message">
+          <mat-icon>info</mat-icon>
+          <p>Please select a unit to view tasks</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel - Grant Extension Form -->
+  <div fxFlex="65" class="form-panel">
+    <div class="panel-container" [class.disabled]="!isFormActive">
+      <div class="panel-header">
+        <h3>Grant Extension</h3>
+        <p *ngIf="selectedTaskDefinition" class="text-muted">Granting extension for: {{ selectedTaskDefinition.name }}</p>
+        <p *ngIf="!selectedTaskDefinition" class="text-muted">Select a task from the left to enable the form</p>
+      </div>
+
+      <div class="form-container">
+        <f-staff-grant-extension-summary
+          *ngIf="showSummary && extensionSummary"
+          [summary]="extensionSummary"
+          (dismissed)="onSummaryDismissed()"
+          class="mb-4"
+        ></f-staff-grant-extension-summary>
+
+        <div *ngIf="isFormActive && selectedTaskDefinition" class="form-content">
+          <f-staff-grant-extension-form
+            (extensionResult)="onExtensionResult($event)"
+            [unitId]="unitId"
+            [taskDefinitionId]="taskDefinitionId">
+          </f-staff-grant-extension-form>
+        </div>
+        <div *ngIf="!isFormActive || !selectedTaskDefinition" class="form-disabled-message">
+          <mat-icon>lock</mat-icon>
+          <h4>Form Disabled</h4>
+          <p>Please select a task from the left panel to enable the grant extension form.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
