@@ -90,12 +90,14 @@ export class PortfolioReviewStepComponent implements OnInit {
     this.project.compilePortfolio = !this.project.compilePortfolio;
 
     this.projectService.update(this.project).subscribe({
-      next: () => {
+      next: (updatedProject) => {
         this.project.compilePortfolio = true;
+        this.project.portfolioLocked = updatedProject.portfolioLocked;
         this.project.portfolioStatus = 0.5;
       },
       error: (error) => {
         this.project.compilePortfolio = false;
+        this.project.portfolioLocked = false;
         this.alertService.error(`Could not create portfolio: ${error}`, 6000);
       },
     });
@@ -109,6 +111,7 @@ export class PortfolioReviewStepComponent implements OnInit {
         this.project.deletePortfolio().subscribe({
           next: () => {
             this.project.portfolioAvailable = false;
+            this.project.portfolioLocked = false;
             this.project.portfolioStatus = 0;
             this.alertService.message('Portfolio has been deleted!', 5000);
           },
