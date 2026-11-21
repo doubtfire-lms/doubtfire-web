@@ -40,6 +40,7 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import type {DashboardInboxPreset} from '../../unit-task-inbox-state.component';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 
 type StaffTaskListViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
@@ -48,7 +49,8 @@ type StaffTaskListSortOption = 'default' | 'feedbackDeadline';
 
 type StaffTaskListSortDirection = 'asc' | 'desc';
 
-type StaffTaskListFilterKey = 'awaitingFeedback' | 'similaritiesDetected' | 'showWithdrawnStudents';
+type StaffTaskListFilterKey =
+  'awaitingFeedback' | 'feedbackOverdue' | 'similaritiesDetected' | 'showWithdrawnStudents';
 
 interface StaffTaskListViewPreferences {
   sortBy: StaffTaskListSortOption;
@@ -83,6 +85,7 @@ const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
   sortDirection: 'asc',
   filters: {
     awaitingFeedback: false,
+    feedbackOverdue: false,
     similaritiesDetected: false,
     showWithdrawnStudents: false,
   },
@@ -142,6 +145,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   };
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
+  @Input() dashboardInboxPreset: DashboardInboxPreset | null = null;
   @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
@@ -221,6 +225,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   ];
 
   statusOptions: StaffTaskListStatusOptionView[] = [];
+  feedbackOverdueCount = 0;
 
   filtersExpanded = false;
 
@@ -304,6 +309,17 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.fetchedAllTasks = false;
     this.viewPreferences = this.defaultViewPreferences();
     this.viewAsUnitRoleId = VIEW_AS_SELF;
+
+    // Apply the card's selection after defaults and before the first task fetch.
+    switch (this.dashboardInboxPreset) {
+      case 'ready_for_feedback':
+      case 'need_help':
+        this.viewPreferences.statuses = [this.dashboardInboxPreset];
+        break;
+      case 'feedback_overdue':
+        this.viewPreferences.filters.feedbackOverdue = true;
+        break;
+    }
 
     // Does the current user have any tutorials?
     this.userHasTutorials = this.unit.tutorialsForUserName(this.inboxUserName)?.length > 0;
@@ -598,9 +614,17 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     // the statuses you could switch to.
     const beforeStatusFilter = filteredTasks?.filter((task) => this.matchesQuickFilters(task));
     this.statusOptions = this.buildStatusOptions(beforeStatusFilter);
+    this.feedbackOverdueCount =
+      beforeStatusFilter?.filter((task) => task && this.getWarningIcon(task) === 'overflow')
+        .length ?? 0;
 
     filteredTasks = this.sortTasks(
-      beforeStatusFilter?.filter((task) => this.matchesStatusFilter(task)),
+      beforeStatusFilter?.filter(
+        (task) =>
+          this.matchesStatusFilter(task) &&
+          (!this.isFilterActive('feedbackOverdue') ||
+            (task && this.getWarningIcon(task) === 'overflow')),
+      ),
     );
     this.filteredTasks = filteredTasks;
 
@@ -958,7 +982,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public clearStatusFilter(): void {
-    this.viewPreferences = {...this.viewPreferences, statuses: []};
+    this.viewPreferences = {
+      ...this.viewPreferences,
+      statuses: [],
+      filters: {...this.viewPreferences.filters, feedbackOverdue: false},
+    };
     this.viewPreferencesChanged();
   }
 
@@ -974,7 +1002,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   // A lone status is not worth a filter row -- everything in the list already has it
   public get showStatusFilter(): boolean {
-    return this.statusOptions.length > 1 || this.viewPreferences.statuses.length > 0;
+    return (
+      this.statusOptions.length > 1 ||
+      this.viewPreferences.statuses.length > 0 ||
+      this.feedbackOverdueCount > 0 ||
+      this.isFilterActive('feedbackOverdue')
+    );
   }
 
   public get activeFilterCount(): number {

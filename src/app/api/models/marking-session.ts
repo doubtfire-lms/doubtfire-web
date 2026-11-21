@@ -18,6 +18,7 @@ export class MarkingSession extends Entity {
   // Aggregated session activities count
   commentsAdded: number;
   assessments: number;
+  assessedProjectIds?: number[];
   submissionsOpened: number;
 
   constructor(data?: Unit) {
