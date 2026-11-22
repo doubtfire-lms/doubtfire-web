@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-24](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-23...v11.1.0-24) (2026-11-20)
+
+## [11.1.0-23](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-22...v11.1.0-23) (2026-11-20)
+
+## [11.1.0-22](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-21...v11.1.0-22) (2026-11-19)
+
+
+### Features
+
+* add task file viewer component ([#1741](https://github.com/b0ink/doubtfire-deploy/issues/1741)) ([592c117](https://github.com/b0ink/doubtfire-deploy/commit/592c11750b5540b6fdbf958a4a49165b7bc3b58e))
+* export student preview for communication set as csv ([7c66714](https://github.com/b0ink/doubtfire-deploy/commit/7c667144161e37ce28252358a7103c7d7c4c609a))
+* prevent submissions until specified date ([#1730](https://github.com/b0ink/doubtfire-deploy/issues/1730)) ([34814e7](https://github.com/b0ink/doubtfire-deploy/commit/34814e713f9afeba877ec6572b9125508956a030))
+
+
+### Bug Fixes
+
+* allow main convenors to manage lms ([4bd7859](https://github.com/b0ink/doubtfire-deploy/commit/4bd7859142319bc79f1b41b67cc44be0bcd4e175))
+* high priority sonarqube issues ([#1743](https://github.com/b0ink/doubtfire-deploy/issues/1743)) ([f7e1b76](https://github.com/b0ink/doubtfire-deploy/commit/f7e1b7648477a6ff74fcee6f76534ad88679e346))
+* make SonarQube reliability controls keyboard accessible ([f440b8c](https://github.com/b0ink/doubtfire-deploy/commit/f440b8ca377c5865ae6ac95c41888b73e84901f5))
+* show base dates under each tasks minimum grade ([#1742](https://github.com/b0ink/doubtfire-deploy/issues/1742)) ([84a40cc](https://github.com/b0ink/doubtfire-deploy/commit/84a40cc12a0feb1b235dbce3099eabfd19ffdc12))
+
 ## [11.1.0-21](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-20...v11.1.0-21) (2026-11-12)
 
 
