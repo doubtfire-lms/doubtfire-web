@@ -5,6 +5,8 @@ name: Node.js CI
 
 on:
   push:
+    branches-ignore:
+      - 'dependabot/**'
   pull_request:
 
 jobs:
