@@ -76,6 +76,18 @@
           >
             {{ card.entry.name }}{{ card.sizeLabel ? ' · ' + card.sizeLabel : '' }}
           </span>
+          @if (card.entry.kind === 'pdf') {
+            <button
+              aria-label="Open in browser viewer"
+              class="flex! size-8! shrink-0 items-center justify-center p-0!"
+              mat-icon-button
+              matTooltip="Open in browser viewer"
+              [disabled]="!card.entry.blob"
+              (click)="openInBrowserViewer(card, $event)"
+            >
+              <mat-icon class="size-5! text-[20px]! leading-5!">open_in_new</mat-icon>
+            </button>
+          }
           <button
             aria-label="Download file"
             class="flex! size-8! shrink-0 items-center justify-center p-0!"

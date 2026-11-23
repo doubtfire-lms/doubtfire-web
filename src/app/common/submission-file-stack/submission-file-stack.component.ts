@@ -130,6 +130,16 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
     URL.revokeObjectURL(url);
   }
 
+  // Opens a PDF in a new tab, in the browser's own viewer (zoom, search, print)
+  public openInBrowserViewer(card: SubmissionFileCard, event: Event): void {
+    event.stopPropagation();
+
+    const pdfUrl = card.entry.blobUrl;
+    if (pdfUrl) {
+      window.open(pdfUrl, '_blank');
+    }
+  }
+
   private async loadArchive(): Promise<void> {
     const requestedArchive = this.archiveFile;
 
