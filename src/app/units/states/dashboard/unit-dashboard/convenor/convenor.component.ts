@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Observable, catchError, combineLatest, map, of, startWith, switchMap} from 'rxjs';
 import {ProjectService, TaskService, Unit} from 'src/app/api/models/doubtfire-model';
 import {OpenInboxButtonComponent} from '../open-inbox-button.component';
+import {OrphanedStudentsComponent} from './orphaned-students.component';
 import {TaWorkloadOverviewComponent} from './ta-workload-overview.component';
 import {TaskTurnaroundComponent} from './task-turnaround.component';
 
@@ -16,6 +17,7 @@ type WorkloadCount = number | 'Unavailable' | null;
     AsyncPipe,
     MatIconModule,
     OpenInboxButtonComponent,
+    OrphanedStudentsComponent,
     TaWorkloadOverviewComponent,
     TaskTurnaroundComponent,
   ],
@@ -37,15 +39,16 @@ export class ConvenorComponent {
 
   protected readonly workload$ = this.route.parent.data.pipe(
     switchMap(({unit}: {unit?: Unit}) =>
-      unit ? this.loadWorkload(unit).pipe(map((counts) => ({unit, counts}))) : of(null),
+      unit ? this.loadWorkload(unit).pipe(map((workload) => ({unit, ...workload}))) : of(null),
     ),
   );
 
   private loadWorkload(unit: Unit) {
     // TaskService maps the returned tasks to projects in the unit's student cache.
     const inboxCounts$ = this.projectService.loadStudents(unit).pipe(
-      switchMap(() =>
+      switchMap((students) =>
         combineLatest({
+          students: of(students),
           feedback: this.loadCount(
             this.taskService
               .queryTasksForTaskInbox(unit, undefined, false)
@@ -65,13 +68,20 @@ export class ConvenorComponent {
           ),
         }),
       ),
-      catchError(() => of({feedback: 'Unavailable', moderation: 'Unavailable'} as const)),
-      startWith({feedback: null, moderation: null} as const),
+      catchError(() =>
+        of({feedback: 'Unavailable', moderation: 'Unavailable', students: 'Unavailable'} as const),
+      ),
+      startWith({feedback: null, moderation: null, students: null} as const),
     );
     return combineLatest({
       inbox: inboxCounts$,
       overflow: this.loadCount(this.taskService.getOverflowAvailableToClaimCount(unit)),
-    }).pipe(map(({inbox, overflow}) => ({...inbox, overflow})));
+    }).pipe(
+      map(({inbox: {students, feedback, moderation}, overflow}) => ({
+        students,
+        counts: {feedback, moderation, overflow},
+      })),
+    );
   }
 
   private loadCount(count$: Observable<number>): Observable<WorkloadCount> {
