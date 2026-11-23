@@ -1,4 +1,26 @@
-.notebook-search {
+.notebook-action-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.notebook-view-actions {
+  padding-top: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+
+  button {
+    margin-bottom: 28px;
+  }
+}
+
+.notebook-actions {
+  padding-top: 1rem;
+  padding-right: 1rem;
+  margin-left: auto;
+
   ::ng-deep .mdc-notched-outline__leading {
     min-width: 28px !important;
     border-top-left-radius: 28px !important;
@@ -13,8 +35,13 @@
     border-radius: 0 28px 28px 0 !important;
   }
 
+  ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 28px 28px 0 !important;
+  }
+
   ::ng-deep .mat-mdc-form-field-flex {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
   }

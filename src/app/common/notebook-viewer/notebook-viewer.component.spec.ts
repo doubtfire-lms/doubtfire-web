@@ -6,7 +6,6 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
-import {MatMenuModule} from '@angular/material/menu';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {classifyArchiveFile} from 'src/app/common/archive-viewer/archive-viewer.helpers';
@@ -191,7 +190,6 @@ describe('NotebookViewerComponent security', () => {
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
-        MatMenuModule,
         MatProgressSpinnerModule,
         NoopAnimationsModule,
       ],

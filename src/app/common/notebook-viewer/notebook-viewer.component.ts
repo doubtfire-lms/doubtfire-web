@@ -105,6 +105,10 @@ export class NotebookViewerComponent implements AfterViewInit, OnChanges, OnDest
     this.scrollToMatch();
   }
 
+  public toggleView(): void {
+    this.viewMode = this.viewMode === 'rendered' ? 'raw' : 'rendered';
+  }
+
   public zoomIn(): void {
     this.setZoom(this.zoomValue + 0.1);
   }

@@ -1,8 +1,17 @@
 <div class="flex size-full min-h-[350px] flex-col bg-white">
-  <div class="flex shrink-0 items-center justify-end gap-2 px-2.5 py-1 text-slate-700">
-    @if (viewMode === 'rendered') {
-      <form class="notebook-search w-80 max-w-[60%]" (ngSubmit)="findNextMatch()">
-        <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+  <div class="notebook-action-bar">
+    <div class="notebook-view-actions">
+      <button aria-label="Switch notebook view" mat-icon-button (click)="toggleView()">
+        @if (viewMode === 'raw') {
+          <mat-icon>toggle_on</mat-icon>
+        } @else {
+          <mat-icon>toggle_off</mat-icon>
+        }
+      </button>
+    </div>
+    <div class="notebook-actions" [hidden]="viewMode === 'raw'">
+      <form (ngSubmit)="findNextMatch()">
+        <mat-form-field appearance="outline" class="notebook-form-field" floatLabel="auto">
           <mat-icon matPrefix>search</mat-icon>
           <input
             aria-label="Search notebook"
@@ -33,22 +42,7 @@
           </button>
         </mat-form-field>
       </form>
-    }
-    <button
-      aria-label="Notebook view options"
-      mat-icon-button
-      type="button"
-      [matMenuTriggerFor]="notebookViewMenu"
-    >
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #notebookViewMenu="matMenu">
-      @if (viewMode === 'rendered') {
-        <button mat-menu-item (click)="viewMode = 'raw'">View raw</button>
-      } @else {
-        <button mat-menu-item (click)="viewMode = 'rendered'">View rendered</button>
-      }
-    </mat-menu>
+    </div>
   </div>
 
   @if (viewMode === 'raw') {
