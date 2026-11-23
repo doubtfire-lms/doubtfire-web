@@ -66,12 +66,5 @@
   flex: 1 1 auto;
   overflow-x: hidden;
   overflow-y: auto;
-}
-
-:host ::ng-deep .docx-preview-container ::highlight(docx-search) {
-  background-color: #ffe066;
-}
-
-:host ::ng-deep .docx-preview-container ::highlight(docx-search-current) {
-  background-color: #ffb74d;
+  contain: paint;
 }

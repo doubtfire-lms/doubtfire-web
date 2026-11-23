@@ -1,4 +1,5 @@
 import {renderAsync} from 'docx-preview';
+import DOMPurify from 'dompurify';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -15,6 +16,10 @@ import {
 
 const SEARCH_HIGHLIGHT = 'docx-search';
 const CURRENT_SEARCH_HIGHLIGHT = 'docx-search-current';
+const SEARCH_HIGHLIGHT_STYLES = `
+  ::highlight(docx-search) { background-color: #ffe066; }
+  ::highlight(docx-search-current) { background-color: #ffb74d; }
+`;
 
 @Component({
   selector: 'f-docx-viewer',
@@ -32,6 +37,7 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
   @Output() downloadRequested: EventEmitter<void> = new EventEmitter();
   @ViewChild('documentContainer', {static: true})
   private documentContainer: ElementRef<HTMLElement>;
+  private documentRoot?: ShadowRoot;
 
   public isLoading = false;
   public errorMessage: string | null = null;
@@ -45,6 +51,7 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
   private currentSearchMatch: Range | null = null;
 
   public ngOnInit(): void {
+    this.isLoading = !!this.documentBlob;
     const storedZoom = Number.parseFloat(localStorage.getItem('docxViewerZoom') ?? '');
     if (Number.isFinite(storedZoom)) {
       this.zoomValue = Math.min(Math.max(storedZoom, this.ZOOM_MIN), this.ZOOM_MAX);
@@ -53,6 +60,7 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
   }
 
   public ngAfterViewInit(): void {
+    this.documentRoot = this.documentContainer.nativeElement.attachShadow({mode: 'open'});
     void this.renderDocument();
   }
 
@@ -80,14 +88,11 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
     this.searchMatchIndex = -1;
 
     const term = query.trim().toLocaleLowerCase();
-    if (!term) {
+    if (!term || !this.documentRoot) {
       return;
     }
 
-    const walker = document.createTreeWalker(
-      this.documentContainer.nativeElement,
-      NodeFilter.SHOW_TEXT,
-    );
+    const walker = document.createTreeWalker(this.documentRoot, NodeFilter.SHOW_TEXT);
     let node: Node | null;
     while ((node = walker.nextNode())) {
       if (node.parentElement?.closest('style, script')) {
@@ -140,7 +145,7 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
   }
 
   public ngOnChanges(): void {
-    if (this.documentContainer) {
+    if (this.documentRoot) {
       void this.renderDocument();
     }
   }
@@ -148,7 +153,7 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
   public ngOnDestroy(): void {
     this.renderToken++;
     this.clearSearchHighlights();
-    this.documentContainer?.nativeElement.replaceChildren();
+    this.documentRoot?.replaceChildren();
   }
 
   private highlightRegistry(): HighlightRegistry | null {
@@ -187,12 +192,17 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
   }
 
   private async renderDocument(): Promise<void> {
+    const root = this.documentRoot;
+    if (!root) {
+      return;
+    }
+
     const token = ++this.renderToken;
     const documentBlob = this.documentBlob;
     this.clearSearchHighlights();
     this.searchMatches = [];
     this.searchMatchIndex = -1;
-    this.documentContainer.nativeElement.replaceChildren();
+    root.replaceChildren();
     this.errorMessage = null;
 
     if (!documentBlob) {
@@ -213,7 +223,27 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
       });
 
       if (token === this.renderToken) {
-        this.documentContainer.nativeElement.replaceChildren(...Array.from(rendered.childNodes));
+        // The document is untrusted. Sanitize its DOM before attaching it, then
+        // keep its generated CSS inside a shadow root so it cannot style the app.
+        DOMPurify.sanitize(rendered, {
+          IN_PLACE: true,
+          ADD_TAGS: ['style'],
+          FORBID_TAGS: ['iframe', 'object', 'embed', 'script'],
+          SANITIZE_NAMED_PROPS: true,
+        });
+        for (const link of rendered.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+          const href = link.getAttribute('href')?.trim() ?? '';
+          if (!/^(https?:\/\/|\/\/|mailto:|tel:|#)/i.test(href)) {
+            link.removeAttribute('href');
+          } else if (/^(https?:\/\/|\/\/)/i.test(href)) {
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+          }
+        }
+
+        const highlightStyles = document.createElement('style');
+        highlightStyles.textContent = SEARCH_HIGHLIGHT_STYLES;
+        root.replaceChildren(highlightStyles, ...Array.from(rendered.childNodes));
         if (this.docxSearchString) {
           this.searchDocx(this.docxSearchString);
         }
