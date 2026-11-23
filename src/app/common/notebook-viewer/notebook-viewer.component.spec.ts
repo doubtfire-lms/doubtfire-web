@@ -8,19 +8,21 @@ import {NotebookViewerComponent} from './notebook-viewer.component';
 
 describe('NotebookViewerComponent security', () => {
   it('classifies notebook JSON containing SVG output as a notebook', () => {
-    const data = new TextEncoder().encode(
-      JSON.stringify({
-        nbformat: 4,
-        cells: [
-          {
-            cell_type: 'code',
-            outputs: [{data: {'image/svg+xml': '<svg onload="alert(1)"></svg>'}}],
-          },
-        ],
-      }),
-    );
+    const source = JSON.stringify({
+      nbformat: 4,
+      cells: [
+        {
+          cell_type: 'code',
+          outputs: [{data: {'image/svg+xml': '<svg onload="alert(1)"></svg>'}}],
+        },
+      ],
+    });
+    const data = new TextEncoder().encode(source);
 
-    expect(classifyArchiveFile('submission/probe.ipynb', data).kind).toBe('notebook');
+    const classification = classifyArchiveFile('submission/probe.ipynb', data);
+    expect(classification.kind).toBe('notebook');
+    expect(classification.textContent).toBe(source);
+    expect(classification.language).toBe('json');
   });
 
   it('renders untrusted notebook content without active markup', () => {

@@ -121,7 +121,12 @@ export function createArchiveFileEntry(
 
 export function classifyArchiveFile(path: string, data: Uint8Array): ArchiveFileClassification {
   if (path.toLowerCase().endsWith('.ipynb')) {
-    return {kind: 'notebook', mimeType: 'application/x-ipynb+json'};
+    return {
+      kind: 'notebook',
+      mimeType: 'application/x-ipynb+json',
+      textContent: new TextDecoder().decode(data),
+      language: 'json',
+    };
   }
 
   const detectedMimeType = detectMimeType(data);

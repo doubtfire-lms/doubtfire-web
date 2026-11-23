@@ -135,14 +135,36 @@
           </div>
         } @else if (isArchiveNotebookFile(file)) {
           <div class="flex min-h-[350px] w-full flex-1 flex-col">
-            <ng-container
-              [ngTemplateOutlet]="filePathLabel"
-              [ngTemplateOutletContext]="{$implicit: file.path}"
-            ></ng-container>
-            <f-notebook-viewer
-              class="block min-h-0 flex-1"
-              [notebookBlob]="file.blob"
-            ></f-notebook-viewer>
+            <div class="flex shrink-0 items-center gap-2 px-2.5 py-1 text-slate-700">
+              <span class="min-w-0 flex-1 truncate" [title]="file.path">{{ file.path }}</span>
+              <button
+                aria-label="Notebook view options"
+                mat-icon-button
+                type="button"
+                [matMenuTriggerFor]="notebookViewMenu"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #notebookViewMenu="matMenu">
+                @if (notebookView === 'rendered') {
+                  <button mat-menu-item (click)="notebookView = 'raw'">View raw</button>
+                } @else {
+                  <button mat-menu-item (click)="notebookView = 'rendered'">View rendered</button>
+                }
+              </mat-menu>
+            </div>
+            @if (notebookView === 'raw') {
+              <ngx-monaco-editor
+                class="archive-monaco block min-h-0 w-full flex-1"
+                [ngModel]="file.textContent ?? ''"
+                [options]="notebookEditorOptions"
+              ></ngx-monaco-editor>
+            } @else {
+              <f-notebook-viewer
+                class="block min-h-0 flex-1"
+                [notebookBlob]="file.blob"
+              ></f-notebook-viewer>
+            }
           </div>
         } @else {
           <div
