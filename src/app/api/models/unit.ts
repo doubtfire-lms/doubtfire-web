@@ -715,6 +715,34 @@ export class Unit extends Entity {
     );
   }
 
+  public get tutorialStreamsCsvUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/tutorial_streams/csv`;
+  }
+
+  public get tutorialsCsvUrl(): string {
+    return `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/tutorials/csv`;
+  }
+
+  /**
+   * Download all of the tutorial streams in a csv
+   */
+  public downloadTutorialStreamsCsv(): void {
+    AppInjector.get(FileDownloaderService).downloadFile(
+      this.tutorialStreamsCsvUrl,
+      `${this.name}-tutorial-streams.csv`,
+    );
+  }
+
+  /**
+   * Download all of the tutorials in a csv
+   */
+  public downloadTutorialsCsv(): void {
+    AppInjector.get(FileDownloaderService).downloadFile(
+      this.tutorialsCsvUrl,
+      `${this.name}-tutorials.csv`,
+    );
+  }
+
   /**
    * Download all of the task resources in a zip.
    */
