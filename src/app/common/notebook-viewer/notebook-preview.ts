@@ -37,6 +37,11 @@ const FRAME_STYLES = `
   .notice { color: #64748b; font-style: italic; }
   .raw-cell { color: #475569; }
   .katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+  @media (max-width: 640px) {
+    :root { --gutter: 0px; }
+    .code-cell { display: block; }
+    .prompt { display: none; }
+  }
 `;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
