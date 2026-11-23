@@ -27,11 +27,11 @@ const FRAME_STYLES = `
   th, td { border: 1px solid #cbd5e1; padding: 5px 9px; text-align: left; }
   blockquote { border-left: 3px solid #cbd5e1; margin-left: 0; padding-left: 14px; color: #475569; }
   .cell { margin: 0 0 16px; }
-  .code-cell { display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 10px; }
-  .prompt { color: #64748b; text-align: right; padding-top: 10px; white-space: nowrap; }
+  .code-cell { display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 10px; }
+  .prompt { color: #64748b; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; text-align: right; padding-top: 10px; white-space: nowrap; }
   .source { margin: 0; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 5px; }
-  .outputs { grid-column: 2; min-width: 0; }
-  .output { margin: 8px 0 14px; overflow-x: auto; }
+  .output { min-width: 0; margin-top: 10px; overflow-x: auto; }
+  .output > :first-child { margin-top: 0; }
   .output pre { margin: 0; }
   .stderr, .error { color: #b91c1c; }
   .notice { color: #64748b; font-style: italic; }
@@ -276,9 +276,15 @@ function cellHtml(cell: unknown, math?: NotebookMath): string {
   if (cell['cell_type'] === 'code') {
     const count = Number.isInteger(cell['execution_count']) ? cell['execution_count'] : ' ';
     const outputs = Array.isArray(cell['outputs'])
-      ? cell['outputs'].map((output) => outputHtml(output, math)).join('')
+      ? cell['outputs']
+          .map((output) => {
+            const html = outputHtml(output, math);
+            const isResult = isRecord(output) && output['output_type'] === 'execute_result';
+            return html && `<div class="prompt">${isResult ? `Out[${count}]:` : ''}</div>${html}`;
+          })
+          .join('')
       : '';
-    return `<section class="cell code-cell"><div class="prompt">[${count}]:</div><pre class="source"><code>${escapeHtml(source)}</code></pre><div class="outputs">${outputs}</div></section>`;
+    return `<section class="cell code-cell"><div class="prompt">In [${count}]:</div><pre class="source"><code>${escapeHtml(source)}</code></pre>${outputs}</section>`;
   }
   return '';
 }
