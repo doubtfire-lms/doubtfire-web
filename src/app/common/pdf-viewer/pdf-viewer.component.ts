@@ -1,13 +1,13 @@
 import {PDFDocumentProxy, PdfViewerComponent} from 'ng2-pdf-viewer';
 import {HttpResponse} from '@angular/common/http';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   Inject,
   Input,
   OnChanges,
   OnDestroy,
+  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -21,7 +21,7 @@ import {AlertService} from '../services/alert.service';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit {
+export class fPdfViewerComponent implements OnDestroy, OnChanges, OnInit {
   private readonly ZOOM_MIN = 0.5;
   private readonly ZOOM_MAX = 2.5;
 
@@ -53,7 +53,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
     }
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.useNativePdfViewer = localStorage.getItem('useNativePdfViewer') === 'true';
     const storedZoomValue = parseFloat(localStorage.getItem('pdfViewerZoom')) || 1;
     // Clamp zoom value between ZOOM_MIN and ZOOM_MAX
