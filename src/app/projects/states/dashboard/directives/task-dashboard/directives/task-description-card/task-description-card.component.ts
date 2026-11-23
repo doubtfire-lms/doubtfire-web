@@ -177,16 +177,6 @@ export class TaskDescriptionCardComponent {
       : feedbackDate;
   }
 
-  public discussionCutoffIsLastTeachingDay(): boolean {
-    const lastTeachingDate = this.unit?.lastTeachingDate ?? this.taskDef?.unit?.lastTeachingDate;
-    const feedbackDate = this.feedbackDate();
-    return (
-      !!lastTeachingDate &&
-      (!feedbackDate ||
-        this.calendarDayTimestamp(lastTeachingDate) < this.calendarDayTimestamp(feedbackDate))
-    );
-  }
-
   public dateWithOrdinal(date: Date): string {
     if (!date) {
       return '';

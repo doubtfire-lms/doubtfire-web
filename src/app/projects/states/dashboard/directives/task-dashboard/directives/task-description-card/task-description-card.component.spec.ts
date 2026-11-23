@@ -54,7 +54,6 @@ describe('TaskDescriptionCardComponent', () => {
     unit.lastTeachingDate = new Date(2026, 10, 28);
 
     expect(component.discussionCutoffDate()).toBe(unit.lastTeachingDate);
-    expect(component.discussionCutoffIsLastTeachingDay()).toBe(true);
     expect(component.discussionTiming()).toBe('tight');
   });
 
