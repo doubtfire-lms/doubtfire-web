@@ -8,6 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {sanitizeDocxInlineStyles, sanitizeDocxStyles} from './docx-css-sanitizer';
 import {DocxViewerComponent} from './docx-viewer.component';
 
 const relationshipNamespace = 'http://schemas.openxmlformats.org/package/2006/relationships';
@@ -52,7 +53,7 @@ async function maliciousDocument(): Promise<Blob> {
     'word/styles.xml',
     `<w:styles xmlns:w="${wordNamespace}">
       <w:docDefaults><w:rPrDefault><w:rPr>
-        <w:rFonts w:ascii="x;}body{display:none}span{font-family:y"/>
+        <w:rFonts w:ascii="x;}body{display:none;background-image:url(https://example.invalid/probe)}span{font-family:y"/>
       </w:rPr></w:rPrDefault></w:docDefaults>
     </w:styles>`,
   );
@@ -61,6 +62,28 @@ async function maliciousDocument(): Promise<Blob> {
 }
 
 describe('DocxViewerComponent security', () => {
+  it('drops resource-loading CSS while preserving ordinary formatting', () => {
+    const [css] = sanitizeDocxStyles([
+      '.docx { color: red; background-image: url(https://example.invalid/a) }' +
+        '@import url(https://example.invalid/b);' +
+        '@font-face { font-family: probe; src: url(https://example.invalid/font) }' +
+        '.docx p { background-image: image-set("https://example.invalid/c"); ' +
+        'font-size: 12pt; cursor: u\\72l(https://example.invalid/d) }',
+    ]);
+    expect(css).toContain('color: red');
+    expect(css).toContain('font-size: 12pt');
+    expect(css).not.toContain('example.invalid');
+    expect(css).not.toContain('@import');
+    expect(css).not.toContain('@font-face');
+
+    const root = document.createElement('div');
+    root.innerHTML =
+      '<span style="color: red; background-image: url(https://example.invalid/e)">Text</span>';
+    sanitizeDocxInlineStyles(root);
+    expect(root.querySelector('span')?.getAttribute('style')).toContain('color: red');
+    expect(root.querySelector('span')?.getAttribute('style')).not.toContain('example.invalid');
+  });
+
   it('removes active links and HTML while containing document CSS', async () => {
     await TestBed.configureTestingModule({
       declarations: [DocxViewerComponent],
@@ -90,9 +113,10 @@ describe('DocxViewerComponent security', () => {
       expect(root?.querySelector('iframe')).toBeNull();
       expect(
         [...(root?.querySelectorAll('style') ?? [])].some((style) =>
-          style.textContent?.includes('body{display:none}'),
+          /body\s*\{\s*display:\s*none/.test(style.textContent ?? ''),
         ),
       ).toBe(true);
+      expect(root?.textContent).not.toContain('example.invalid');
       expect(getComputedStyle(document.body).display).not.toBe('none');
     });
   });

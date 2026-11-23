@@ -13,6 +13,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import {sanitizeDocxInlineStyles, sanitizeDocxStyles} from './docx-css-sanitizer';
 
 const SEARCH_HIGHLIGHT = 'docx-search';
 const CURRENT_SEARCH_HIGHLIGHT = 'docx-search-current';
@@ -223,14 +224,20 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
       });
 
       if (token === this.renderToken) {
-        // The document is untrusted. Sanitize its DOM before attaching it, then
-        // keep its generated CSS inside a shadow root so it cannot style the app.
+        const documentStyles = sanitizeDocxStyles(
+          Array.from(rendered.children)
+            .filter((element): element is HTMLStyleElement => element.tagName === 'STYLE')
+            .map((style) => style.textContent ?? ''),
+        );
+
+        // The document is untrusted. Strip its style elements and sanitize
+        // generated CSS separately before attaching anything to the page.
         DOMPurify.sanitize(rendered, {
           IN_PLACE: true,
-          ADD_TAGS: ['style'],
-          FORBID_TAGS: ['iframe', 'object', 'embed', 'script'],
+          FORBID_TAGS: ['style', 'iframe', 'object', 'embed', 'script'],
           SANITIZE_NAMED_PROPS: true,
         });
+        sanitizeDocxInlineStyles(rendered);
         for (const link of rendered.querySelectorAll<HTMLAnchorElement>('a[href]')) {
           const href = link.getAttribute('href')?.trim() ?? '';
           if (!/^(https?:\/\/|\/\/|mailto:|tel:|#)/i.test(href)) {
@@ -243,7 +250,12 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
 
         const highlightStyles = document.createElement('style');
         highlightStyles.textContent = SEARCH_HIGHLIGHT_STYLES;
-        root.replaceChildren(highlightStyles, ...Array.from(rendered.childNodes));
+        const safeStyles = documentStyles.map((css) => {
+          const style = document.createElement('style');
+          style.textContent = css;
+          return style;
+        });
+        root.replaceChildren(...safeStyles, highlightStyles, ...Array.from(rendered.childNodes));
         if (this.docxSearchString) {
           this.searchDocx(this.docxSearchString);
         }
