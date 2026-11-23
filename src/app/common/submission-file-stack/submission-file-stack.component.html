@@ -12,10 +12,6 @@
   <div
     class="sticky top-0 z-20 flex h-12 items-center gap-1 border-b border-slate-200 bg-white px-2"
   >
-    <span class="mr-auto pl-2 text-sm whitespace-nowrap text-slate-600">
-      {{ cards.length }} {{ cards.length === 1 ? 'file' : 'files' }}
-    </span>
-
     <button #jumpTrigger="matMenuTrigger" mat-button [matMenuTriggerFor]="jumpMenu">
       <mat-icon>list</mat-icon>
       <span>Jump to file</span>
@@ -23,6 +19,10 @@
         {{ jumpTrigger.menuOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}
       </mat-icon>
     </button>
+    <span class="mr-auto pl-2 text-sm whitespace-nowrap text-slate-600">
+      {{ cards.length }} {{ cards.length === 1 ? 'file' : 'files' }}
+    </span>
+
     <button mat-button [disabled]="allExpanded" (click)="setAllExpanded(true)">
       <mat-icon>open_in_full</mat-icon>
       <span>Expand all</span>
@@ -32,7 +32,7 @@
       <span>Collapse all</span>
     </button>
 
-    <mat-menu #jumpMenu="matMenu" xPosition="before">
+    <mat-menu #jumpMenu="matMenu" xPosition="after">
       @for (card of cards; track card.entry.path; let i = $index) {
         <button mat-menu-item [title]="card.entry.path" (click)="jumpToCard(i)">
           <mat-icon>{{ iconFor(card) }}</mat-icon>
