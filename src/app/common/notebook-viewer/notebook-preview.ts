@@ -13,10 +13,10 @@ const BLOCK_MATH = new RegExp(String.raw`^ {0,3}(?:${DISPLAY_MATH})[ \t]*(?:\n+|
 const INLINE_MATH = new RegExp(String.raw`^(?:${DISPLAY_MATH}|\$((?:\\[\s\S]|[^\\$])+?)\$)`, 'i');
 
 const FRAME_STYLES = `
-  :root { color-scheme: light; font: 14px/1.55 system-ui, sans-serif; color: #1e293b; }
+  :root { color-scheme: light; font: 14px/1.55 system-ui, sans-serif; color: #1e293b; --gutter: 82px; }
   * { box-sizing: border-box; }
   body { margin: 0; padding: 24px; background: #fff; }
-  main { max-width: 1100px; margin: 0 auto; }
+  main { max-width: 1100px; margin: 0 auto; padding: 0 var(--gutter); }
   h1, h2, h3, h4 { line-height: 1.3; margin: 1.1em 0 .5em; }
   p { margin: .65em 0; }
   a { color: #1d4ed8; }
@@ -27,8 +27,8 @@ const FRAME_STYLES = `
   th, td { border: 1px solid #cbd5e1; padding: 5px 9px; text-align: left; }
   blockquote { border-left: 3px solid #cbd5e1; margin-left: 0; padding-left: 14px; color: #475569; }
   .cell { margin: 0 0 16px; }
-  .code-cell { display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 10px; }
-  .prompt { color: #64748b; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; text-align: right; padding-top: 10px; white-space: nowrap; }
+  .code-cell { display: grid; grid-template-columns: var(--gutter) minmax(0, 1fr); margin-left: calc(-1 * var(--gutter)); }
+  .prompt { color: #64748b; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; text-align: right; padding: 10px 10px 0 0; white-space: nowrap; }
   .source { margin: 0; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 5px; }
   .output { min-width: 0; margin-top: 10px; overflow-x: auto; }
   .output > :first-child { margin-top: 0; }
