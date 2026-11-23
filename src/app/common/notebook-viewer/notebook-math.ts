@@ -6,8 +6,26 @@ export interface NotebookMath {
 }
 
 const KATEX_FONT_URL = /url\(fonts\/([\w-]+\.woff2)\)[^;}]*/g;
+const MAX_TEX_LENGTH = 8192;
 
 let stylesPromise: Promise<string | null> | undefined;
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (char) => {
+    switch (char) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      case '"':
+        return '&quot;';
+      default:
+        return '&#39;';
+    }
+  });
+}
 
 async function fetchAsset(path: string): Promise<Blob> {
   const response = await fetch(new URL(`assets/katex/${path}`, document.baseURI));
@@ -55,16 +73,24 @@ export async function loadNotebookMath(): Promise<NotebookMath> {
   const styles = await stylesPromise;
   return {
     styles,
-    render: (tex, displayMode) =>
-      katex.renderToString(tex, {
-        displayMode,
-        // Without KaTeX's stylesheet, fall back to the browser's native MathML rendering.
-        output: styles ? 'htmlAndMathml' : 'mathml',
-        throwOnError: false,
-        strict: 'ignore',
-        trust: false,
-        maxSize: 20,
-        maxExpand: 1000,
-      }),
+    render: (tex, displayMode) => {
+      if (tex.length > MAX_TEX_LENGTH) {
+        return `<code>${escapeHtml(tex)}</code>`;
+      }
+      try {
+        return katex.renderToString(tex, {
+          displayMode,
+          // Without KaTeX's stylesheet, fall back to the browser's native MathML rendering.
+          output: styles ? 'htmlAndMathml' : 'mathml',
+          throwOnError: false,
+          strict: 'ignore',
+          trust: false,
+          maxSize: 20,
+          maxExpand: 1000,
+        });
+      } catch {
+        return `<code>${escapeHtml(tex)}</code>`;
+      }
+    },
   };
 }

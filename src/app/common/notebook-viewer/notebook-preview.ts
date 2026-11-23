@@ -250,15 +250,26 @@ function outputHtml(output: unknown, math?: NotebookMath): string {
   }
   const svg = notebookText(data['image/svg+xml']);
   if (svg && svg.length <= MAX_IMAGE_BASE64_LENGTH) {
-    // Browsers render SVG loaded as an image without scripts or external requests.
-    return `<div class="output"><img alt="Notebook output" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}"></div>`;
+    try {
+      // Browsers render SVG loaded as an image without scripts or external requests.
+      return `<div class="output"><img alt="Notebook output" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}"></div>`;
+    } catch {
+      return '<div class="output notice">SVG output omitted.</div>';
+    }
   }
   if (svg) {
     return '<div class="output notice">SVG output omitted.</div>';
   }
   const latex = notebookText(data['text/latex']);
-  if (math && MATH_HINT.test(latex)) {
-    return `<div class="output">${markdownHtml(latex, undefined, math)}</div>`;
+  if (math && latex) {
+    const trimmed = latex.trim();
+    if (trimmed.startsWith('\\[') && trimmed.endsWith('\\]')) {
+      return `<div class="output">${math.render(trimmed.slice(2, -2), true)}</div>`;
+    }
+    if (trimmed.startsWith('\\(') && trimmed.endsWith('\\)')) {
+      return `<div class="output">${math.render(trimmed.slice(2, -2), false)}</div>`;
+    }
+    return `<div class="output">${MATH_HINT.test(latex) ? markdownHtml(latex, undefined, math) : math.render(trimmed, true)}</div>`;
   }
   const text = notebookText(data['text/latex'] ?? data['text/plain']);
   if (text) {
@@ -308,10 +319,8 @@ function hasMath(cells: unknown[]): boolean {
         (output) =>
           isRecord(output) &&
           isRecord(output['data']) &&
-          MATH_HINT.test(
-            notebookText(output['data']['text/latex']) +
-              notebookText(output['data']['text/markdown']),
-          ),
+          (notebookText(output['data']['text/latex']).length > 0 ||
+            MATH_HINT.test(notebookText(output['data']['text/markdown']))),
       )
     );
   });

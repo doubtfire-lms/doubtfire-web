@@ -93,15 +93,37 @@ describe('NotebookViewerComponent security', () => {
               output_type: 'execute_result',
               data: {'text/latex': '$\\displaystyle P{\\left(t \\right)}$', 'text/plain': 'P(t)'},
             },
+            {
+              output_type: 'display_data',
+              data: {'text/latex': '\\frac{1}{2}'},
+            },
           ],
         },
       ],
     });
 
     const document = new DOMParser().parseFromString(html, 'text/html');
-    expect(document.querySelectorAll('.katex').length).toBeGreaterThanOrEqual(3);
+    expect(document.querySelectorAll('.katex').length).toBeGreaterThanOrEqual(4);
+    expect(document.querySelectorAll('.output .katex')).toHaveLength(2);
     expect(document.querySelector('[data-notebook-math], script, a[href]')).toBeNull();
     expect(document.body.textContent).not.toContain('$');
+  });
+
+  it('omits malformed SVG output without losing the notebook', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      cells: [
+        {cell_type: 'markdown', source: 'Keep this cell'},
+        {
+          cell_type: 'code',
+          outputs: [{output_type: 'display_data', data: {'image/svg+xml': '<svg>\ud800</svg>'}}],
+        },
+      ],
+    });
+
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.body.textContent).toContain('Keep this cell');
+    expect(document.body.textContent).toContain('SVG output omitted.');
   });
 
   it('keeps the preview iframe scriptless and isolated', async () => {
