@@ -37,11 +37,19 @@
         </li>
         <li
           class="mb-3"
-          [class.bg-red-50]="daysFromTargetDueDate(dueDate()) > 0"
-          [class.text-red-800]="daysFromTargetDueDate(dueDate()) > 0"
+          [class.bg-red-50]="
+            daysFromTargetDueDate(hasNotSubmitted() ? effectiveSubmissionDate() : dueDate()) > 0
+          "
+          [class.text-red-800]="
+            daysFromTargetDueDate(hasNotSubmitted() ? effectiveSubmissionDate() : dueDate()) > 0
+          "
         >
-          I'm aiming to <b>submit</b> this task on {{ dateWithOrdinal(dueDate())
-          }}{{ dateRelativeToDueDate(dueDate()) }}.
+          @if (hasNotSubmitted() && plannedSubmissionDateHasPassed()) {
+            I'm aiming to <b>submit</b> this task today{{ todayRelativeToDueDate() }}.
+          } @else {
+            I'm aiming to <b>submit</b> this task on {{ dateWithOrdinal(dueDate())
+            }}{{ dateRelativeToDueDate(dueDate()) }}.
+          }
         </li>
       } @else {
         <li>
@@ -64,39 +72,49 @@
         [class.text-amber-800]="
           discussionTiming() !== 'tight' &&
           discussionTiming() !== 'past' &&
-          !plannedSubmissionIsAfterFeedbackDeadline() &&
-          daysFromTargetDueDate(dueDate()) > 0
+          !effectiveSubmissionIsAfterFeedbackDeadline() &&
+          daysFromTargetDueDate(effectiveSubmissionDate()) > 0
         "
         [class.text-red-800]="
-          plannedSubmissionIsAfterFeedbackDeadline() ||
+          effectiveSubmissionIsAfterFeedbackDeadline() ||
           discussionTiming() === 'tight' ||
           discussionTiming() === 'past'
         "
       >
         @if (
-          plannedSubmissionIsAfterFeedbackDeadline() ||
+          effectiveSubmissionIsAfterFeedbackDeadline() ||
           discussionTiming() === 'tight' ||
           discussionTiming() === 'past'
         ) {
           <mat-icon aria-hidden="true" class="shrink-0">error</mat-icon>
-        } @else if (daysFromTargetDueDate(dueDate()) > 0) {
+        } @else if (daysFromTargetDueDate(effectiveSubmissionDate()) > 0) {
           <mat-icon aria-hidden="true" class="shrink-0">warning_amber</mat-icon>
         } @else {
           <mat-icon aria-hidden="true" class="shrink-0 text-green-700">check_circle</mat-icon>
         }
         <span>
-          @if (plannedSubmissionIsAfterFeedbackDeadline()) {
-            I won't receive tutor feedback or have time to discuss this task if I submit on this
-            date. To receive feedback, I need to submit by {{ dateWithOrdinal(feedbackDate()) }}.
+          @if (effectiveSubmissionIsAfterFeedbackDeadline()) {
+            I won't receive tutor feedback or have time to discuss this task if I submit
+            {{ plannedSubmissionDateHasPassed() ? 'today' : 'on this date' }}.
+            @if (plannedSubmissionDateHasPassed()) {
+              The last day to submit for feedback was {{ dateWithOrdinal(feedbackDate()) }}.
+            } @else {
+              To receive feedback, I need to submit by {{ dateWithOrdinal(feedbackDate()) }}.
+            }
           } @else if (discussionTiming() === 'past') {
-            I can still receive tutor feedback, but teaching ends before I plan to submit. Marking
-            may take up to 7 days, so I won't have time to discuss this task with my tutor.
+            @if (plannedSubmissionDateHasPassed()) {
+              I can still receive tutor feedback, but teaching has ended, so I won't have time to
+              discuss this task with my tutor.
+            } @else {
+              I can still receive tutor feedback, but teaching ends before I plan to submit. Marking
+              may take up to 7 days, so I won't have time to discuss this task with my tutor.
+            }
           } @else if (discussionTiming() === 'tight') {
             I can still receive tutor feedback on this submission, but if I need to fix and
             resubmit, I may miss out on further feedback and a chance to discuss the task with my
             tutor.
           } @else if (discussionTiming() === 'enough') {
-            @if (daysFromTargetDueDate(dueDate()) > 0) {
+            @if (daysFromTargetDueDate(effectiveSubmissionDate()) > 0) {
               I should make sure I'm not falling behind. I should still have enough time to receive
               tutor feedback and discuss this task with my tutor.
             } @else {

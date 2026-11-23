@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {Task, TaskDefinition, Unit} from 'src/app/api/models/doubtfire-model';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {GradeService} from 'src/app/common/services/grade.service';
@@ -13,6 +13,8 @@ describe('TaskDescriptionCardComponent', () => {
   let feedbackDate: Date;
 
   beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 10, 20, 12));
     plannedDate = new Date(2026, 10, 23, 12);
     feedbackDate = new Date(2026, 10, 30, 23, 59);
     unit = {lastTeachingDate: new Date(2026, 11, 10)} as Unit;
@@ -37,6 +39,10 @@ describe('TaskDescriptionCardComponent', () => {
     component.task = task;
     component.taskDef = taskDef;
     component.unit = unit;
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('warns when seven or fewer days remain to receive feedback and discuss', () => {
@@ -78,9 +84,28 @@ describe('TaskDescriptionCardComponent', () => {
 
   it('treats submission on the feedback deadline as eligible', () => {
     plannedDate = new Date(2026, 10, 30, 12);
-    expect(component.plannedSubmissionIsAfterFeedbackDeadline()).toBe(false);
+    expect(component.effectiveSubmissionIsAfterFeedbackDeadline()).toBe(false);
 
     plannedDate = new Date(2026, 11, 1, 12);
-    expect(component.plannedSubmissionIsAfterFeedbackDeadline()).toBe(true);
+    expect(component.effectiveSubmissionIsAfterFeedbackDeadline()).toBe(true);
+  });
+
+  it('uses today once an unsubmitted planned date has passed', () => {
+    plannedDate = new Date(2026, 10, 13, 12);
+    expect(component.plannedSubmissionDateHasPassed()).toBe(true);
+    expect(component.discussionTiming()).toBe('enough');
+
+    vi.setSystemTime(new Date(2026, 10, 23, 12));
+    expect(component.daysUntilDiscussionCutoff()).toBe(7);
+    expect(component.discussionTiming()).toBe('tight');
+    expect(component.daysFromTargetDueDate(component.effectiveSubmissionDate())).toBe(3);
+    expect(component.todayRelativeToDueDate()).toBe(' (3 days late)');
+
+    vi.setSystemTime(new Date(2026, 10, 30, 12));
+    expect(component.effectiveSubmissionIsAfterFeedbackDeadline()).toBe(false);
+
+    vi.setSystemTime(new Date(2026, 11, 1, 12));
+    expect(component.effectiveSubmissionIsAfterFeedbackDeadline()).toBe(true);
+    expect(component.discussionTiming()).toBe('past');
   });
 });

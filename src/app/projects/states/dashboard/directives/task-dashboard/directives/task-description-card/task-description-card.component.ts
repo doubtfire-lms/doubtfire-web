@@ -116,14 +116,46 @@ export class TaskDescriptionCardComponent {
     return `, ${count} day${count === 1 ? '' : 's'} ${direction} its due date`;
   }
 
-  public plannedSubmissionIsAfterFeedbackDeadline(): boolean {
+  public todayRelativeToDueDate(): string {
+    const days = this.daysFromTargetDueDate(new Date());
+    if (days > 0) {
+      return ` (${days} day${days === 1 ? '' : 's'} late)`;
+    }
+    if (days < 0) {
+      const count = Math.abs(days);
+      return ` (${count} day${count === 1 ? '' : 's'} before its due date)`;
+    }
+    return ' (its due date)';
+  }
+
+  public effectiveSubmissionDate(): Date {
     const plannedDate = this.dueDate();
+    if (!plannedDate) {
+      return undefined;
+    }
+
+    const today = new Date();
+    return this.calendarDayTimestamp(today) > this.calendarDayTimestamp(plannedDate)
+      ? today
+      : plannedDate;
+  }
+
+  public plannedSubmissionDateHasPassed(): boolean {
+    const plannedDate = this.dueDate();
+    return (
+      !!plannedDate &&
+      this.calendarDayTimestamp(new Date()) > this.calendarDayTimestamp(plannedDate)
+    );
+  }
+
+  public effectiveSubmissionIsAfterFeedbackDeadline(): boolean {
+    const submissionDate = this.effectiveSubmissionDate();
     const feedbackDate = this.feedbackDate();
-    if (!plannedDate || !feedbackDate) {
+    if (!submissionDate || !feedbackDate) {
       return false;
     }
 
-    return this.calendarDayTimestamp(plannedDate) > this.calendarDayTimestamp(feedbackDate);
+    return this.calendarDayTimestamp(submissionDate) > this.calendarDayTimestamp(feedbackDate);
   }
 
   public hasNotSubmitted(): boolean {
@@ -135,9 +167,9 @@ export class TaskDescriptionCardComponent {
       return null;
     }
 
-    const plannedDate = this.dueDate();
+    const submissionDate = this.effectiveSubmissionDate();
     const cutoff = this.discussionCutoffDate();
-    if (!plannedDate || !cutoff) {
+    if (!submissionDate || !cutoff) {
       return null;
     }
 
@@ -150,14 +182,14 @@ export class TaskDescriptionCardComponent {
   }
 
   public daysUntilDiscussionCutoff(): number {
-    const plannedDate = this.dueDate();
+    const submissionDate = this.effectiveSubmissionDate();
     const cutoff = this.discussionCutoffDate();
-    if (!plannedDate || !cutoff) {
+    if (!submissionDate || !cutoff) {
       return 0;
     }
 
     return (
-      (this.calendarDayTimestamp(cutoff) - this.calendarDayTimestamp(plannedDate)) /
+      (this.calendarDayTimestamp(cutoff) - this.calendarDayTimestamp(submissionDate)) /
       (24 * 60 * 60 * 1000)
     );
   }
