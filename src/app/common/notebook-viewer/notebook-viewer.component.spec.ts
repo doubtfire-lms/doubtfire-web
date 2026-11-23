@@ -68,9 +68,9 @@ describe('NotebookViewerComponent security', () => {
     expect(document.querySelector('a[href^="javascript:"]')).toBeNull();
     expect(document.querySelector('a[href="https://example.org/"]')).toBeTruthy();
     expect(document.querySelector('img[src^="data:image/png;base64,"]')).toBeTruthy();
-    expect(document.querySelector('img[src^="data:image/svg+xml"]')).toBeNull();
+    expect(document.querySelectorAll('img[src^="data:image/svg+xml"]')).toHaveLength(1);
+    expect(document.querySelector('.markdown-cell img[src^="data:image/svg+xml"]')).toBeNull();
     expect(document.body.textContent).toContain('Interactive JavaScript output omitted.');
-    expect(document.body.textContent).toContain('SVG output omitted.');
     expect(document.body.textContent).toContain('<img src="x" onerror="alert(8)">');
     expect(
       document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute('content'),

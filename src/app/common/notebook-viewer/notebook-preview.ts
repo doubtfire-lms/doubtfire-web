@@ -243,7 +243,12 @@ function outputHtml(output: unknown, math?: NotebookMath): string {
   if (data['text/markdown']) {
     return `<div class="output">${markdownHtml(notebookText(data['text/markdown']), undefined, math)}</div>`;
   }
-  if (data['image/svg+xml']) {
+  const svg = notebookText(data['image/svg+xml']);
+  if (svg && svg.length <= MAX_IMAGE_BASE64_LENGTH) {
+    // Browsers render SVG loaded as an image without scripts or external requests.
+    return `<div class="output"><img alt="Notebook output" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}"></div>`;
+  }
+  if (svg) {
     return '<div class="output notice">SVG output omitted.</div>';
   }
   const latex = notebookText(data['text/latex']);
