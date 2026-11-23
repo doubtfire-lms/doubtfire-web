@@ -87,7 +87,7 @@ export class NotebookViewerComponent implements AfterViewInit, OnChanges, OnDest
 
     try {
       const notebook: unknown = JSON.parse(await blob.text());
-      const html = renderNotebookPreview(notebook);
+      const html = await renderNotebookPreview(notebook);
       if (token === this.loadToken) {
         this.pendingFrameLoad = true;
         this.frame.nativeElement.srcdoc = html;

@@ -25,8 +25,8 @@ describe('NotebookViewerComponent security', () => {
     expect(classification.language).toBe('json');
   });
 
-  it('renders untrusted notebook content without active markup', () => {
-    const html = renderNotebookPreview({
+  it('renders untrusted notebook content without active markup', async () => {
+    const html = await renderNotebookPreview({
       nbformat: 4,
       cells: [
         {
@@ -75,6 +75,33 @@ describe('NotebookViewerComponent security', () => {
     expect(
       document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute('content'),
     ).toContain("script-src 'none'");
+  });
+
+  it('renders TeX in markdown cells and LaTeX outputs', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      cells: [
+        {
+          cell_type: 'markdown',
+          source: 'Inline $x_1$, display $$\\frac{a}{b}$$ and $\\href{javascript:alert(1)}{y}$',
+        },
+        {
+          cell_type: 'code',
+          source: 'P',
+          outputs: [
+            {
+              output_type: 'execute_result',
+              data: {'text/latex': '$\\displaystyle P{\\left(t \\right)}$', 'text/plain': 'P(t)'},
+            },
+          ],
+        },
+      ],
+    });
+
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.querySelectorAll('.katex').length).toBeGreaterThanOrEqual(3);
+    expect(document.querySelector('[data-notebook-math], script, a[href]')).toBeNull();
+    expect(document.body.textContent).not.toContain('$');
   });
 
   it('keeps the preview iframe scriptless and isolated', async () => {

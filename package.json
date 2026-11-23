@@ -59,6 +59,7 @@
     "html2canvas": "^1.0.0-rc.7",
     "html5-qrcode": "^2.3.8",
     "jszip": "^3.10.2",
+    "katex": "^0.19.1",
     "marked": "^18.2.0",
     "moment": "^2.31",
     "monaco-editor": "^0.56.0",
