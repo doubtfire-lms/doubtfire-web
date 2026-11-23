@@ -211,6 +211,96 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
     localStorage.setItem('docxViewerZoom', this.zoomValue.toString());
   }
 
+  private previewBlobFor(documentBlob: Blob): Promise<Blob> {
+    let previewPromise = this.legacyPreviewCache.get(documentBlob);
+    if (!previewPromise) {
+      previewPromise = docxWithLegacyHyperlinks(documentBlob);
+      this.legacyPreviewCache.set(documentBlob, previewPromise);
+    }
+    return previewPromise;
+  }
+
+  private findBookmark(href: string, bookmarks: Map<string, HTMLElement>): HTMLElement | undefined {
+    const bookmarkName = href.includes('#') ? href.slice(href.lastIndexOf('#') + 1) : '';
+    try {
+      return bookmarks.get(decodeURIComponent(bookmarkName));
+    } catch {
+      return undefined;
+    }
+  }
+
+  private sanitizeLink(
+    link: HTMLAnchorElement,
+    rendered: HTMLElement,
+    bookmarks: Map<string, HTMLElement>,
+    pageUrls: URL[],
+  ): void {
+    const href = link.getAttribute('href')?.trim() ?? '';
+    let url: URL;
+    try {
+      url = new URL(href, document.baseURI);
+    } catch {
+      link.removeAttribute('href');
+      return;
+    }
+
+    const bookmark = this.findBookmark(href, bookmarks);
+    const isViewerPage = pageUrls.some(
+      (page) =>
+        url.origin === page.origin && url.pathname === page.pathname && url.search === page.search,
+    );
+    if (isViewerPage && bookmark && rendered.contains(bookmark)) {
+      link.href = `#${encodeURIComponent(bookmark.id)}`;
+      link.dataset.docxBookmarkId = bookmark.id;
+      link.removeAttribute('target');
+    } else if (url.protocol === 'http:' || url.protocol === 'https:') {
+      link.href = url.href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+    } else if (url.protocol !== 'mailto:' && url.protocol !== 'tel:') {
+      link.removeAttribute('href');
+    }
+  }
+
+  private attachRenderedDocument(root: ShadowRoot, rendered: HTMLElement): void {
+    const bookmarks: Map<string, HTMLElement> = new Map(
+      Array.from(rendered.querySelectorAll<HTMLElement>('span[id]')).map((element) => [
+        element.id,
+        element,
+      ]),
+    );
+    const documentStyles = sanitizeDocxStyles(
+      Array.from(rendered.children)
+        .filter((element): element is HTMLStyleElement => element.tagName === 'STYLE')
+        .map((style) => style.textContent ?? ''),
+    );
+
+    // The document is untrusted. Strip its style elements and sanitize
+    // generated CSS separately before attaching anything to the page.
+    DOMPurify.sanitize(rendered, {
+      IN_PLACE: true,
+      FORBID_TAGS: ['style', 'iframe', 'object', 'embed', 'script'],
+      SANITIZE_NAMED_PROPS: true,
+    });
+    sanitizeDocxInlineStyles(rendered);
+    const pageUrls = [new URL(document.baseURI), new URL(document.URL)];
+    for (const link of rendered.querySelectorAll<HTMLAnchorElement>('a[href]')) {
+      this.sanitizeLink(link, rendered, bookmarks, pageUrls);
+    }
+
+    const highlightStyles = document.createElement('style');
+    highlightStyles.textContent = SEARCH_HIGHLIGHT_STYLES;
+    const safeStyles = documentStyles.map((css) => {
+      const style = document.createElement('style');
+      style.textContent = css;
+      return style;
+    });
+    root.replaceChildren(...safeStyles, highlightStyles, ...Array.from(rendered.childNodes));
+    if (this.docxSearchString) {
+      this.searchDocx(this.docxSearchString);
+    }
+  }
+
   private async renderDocument(): Promise<void> {
     const root = this.documentRoot;
     if (!root) {
@@ -234,12 +324,7 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
 
     try {
       const rendered = document.createElement('div');
-      let previewPromise = this.legacyPreviewCache.get(documentBlob);
-      if (!previewPromise) {
-        previewPromise = docxWithLegacyHyperlinks(documentBlob);
-        this.legacyPreviewCache.set(documentBlob, previewPromise);
-      }
-      const previewBlob = await previewPromise;
+      const previewBlob = await this.previewBlobFor(documentBlob);
       if (token !== this.renderToken) {
         return;
       }
@@ -252,74 +337,7 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
       });
 
       if (token === this.renderToken) {
-        const bookmarks = new Map(
-          Array.from(rendered.querySelectorAll<HTMLElement>('span[id]')).map((element) => [
-            element.id,
-            element,
-          ]),
-        );
-        const documentStyles = sanitizeDocxStyles(
-          Array.from(rendered.children)
-            .filter((element): element is HTMLStyleElement => element.tagName === 'STYLE')
-            .map((style) => style.textContent ?? ''),
-        );
-
-        // The document is untrusted. Strip its style elements and sanitize
-        // generated CSS separately before attaching anything to the page.
-        DOMPurify.sanitize(rendered, {
-          IN_PLACE: true,
-          FORBID_TAGS: ['style', 'iframe', 'object', 'embed', 'script'],
-          SANITIZE_NAMED_PROPS: true,
-        });
-        sanitizeDocxInlineStyles(rendered);
-        const pageUrls = [new URL(document.baseURI), new URL(document.URL)];
-        for (const link of rendered.querySelectorAll<HTMLAnchorElement>('a[href]')) {
-          const href = link.getAttribute('href')?.trim() ?? '';
-          let url: URL;
-          try {
-            url = new URL(href, document.baseURI);
-          } catch {
-            link.removeAttribute('href');
-            continue;
-          }
-
-          const bookmarkName = href.includes('#') ? href.slice(href.lastIndexOf('#') + 1) : '';
-          let bookmark: HTMLElement | undefined;
-          try {
-            bookmark = bookmarks.get(decodeURIComponent(bookmarkName));
-          } catch {
-            // Invalid fragments are treated as ordinary URLs below.
-          }
-          const isViewerPage = pageUrls.some(
-            (page) =>
-              url.origin === page.origin &&
-              url.pathname === page.pathname &&
-              url.search === page.search,
-          );
-          if (isViewerPage && bookmark && rendered.contains(bookmark)) {
-            link.href = `#${encodeURIComponent(bookmark.id)}`;
-            link.dataset.docxBookmarkId = bookmark.id;
-            link.removeAttribute('target');
-          } else if (url.protocol === 'http:' || url.protocol === 'https:') {
-            link.href = url.href;
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-          } else if (url.protocol !== 'mailto:' && url.protocol !== 'tel:') {
-            link.removeAttribute('href');
-          }
-        }
-
-        const highlightStyles = document.createElement('style');
-        highlightStyles.textContent = SEARCH_HIGHLIGHT_STYLES;
-        const safeStyles = documentStyles.map((css) => {
-          const style = document.createElement('style');
-          style.textContent = css;
-          return style;
-        });
-        root.replaceChildren(...safeStyles, highlightStyles, ...Array.from(rendered.childNodes));
-        if (this.docxSearchString) {
-          this.searchDocx(this.docxSearchString);
-        }
+        this.attachRenderedDocument(root, rendered);
       }
     } catch {
       if (token === this.renderToken) {

@@ -3,12 +3,18 @@ import postcss from 'postcss';
 // DOCX styles are user-controlled. Keep ordinary formatting, but reject CSS
 // constructs that can fetch resources or create rules outside the parsed rule.
 const SAFE_PROPERTY = /^(?:--docx-[a-z0-9-]+|-?[a-z][a-z0-9-]*)$/i;
-const UNSAFE_VALUE =
-  /\\|\/\*|@|(?:url|image(?:-set)?|cross-fade|element|paint|expression|attr)\s*\(|https?:|javascript:|data:|blob:|\/\//i;
+const UNSAFE_CSS_SYNTAX = /\\|\/\*|@/;
+const RESOURCE_FUNCTION = /(?:url|image(?:-set)?|cross-fade|element|paint|expression|attr)\s*\(/i;
+const RESOURCE_SCHEME = /https?:|javascript:|data:|blob:|\/\//i;
 const UNSAFE_SELECTOR = /\\|:host\b|::part\b|::slotted\b/i;
 
 function safeDeclaration(property: string, value: string): boolean {
-  return SAFE_PROPERTY.test(property) && !UNSAFE_VALUE.test(value);
+  return (
+    SAFE_PROPERTY.test(property) &&
+    !UNSAFE_CSS_SYNTAX.test(value) &&
+    !RESOURCE_FUNCTION.test(value) &&
+    !RESOURCE_SCHEME.test(value)
+  );
 }
 
 export function sanitizeDocxStyles(styles: string[]): string[] {
