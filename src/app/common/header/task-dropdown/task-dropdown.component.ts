@@ -62,6 +62,10 @@ export class TaskDropdownComponent {
     return this.currentUnit.staff.some((ur) => ur.mentorId === this.unitRole.id);
   }
 
+  public get isAdmin(): boolean {
+    return this.userService.currentUser?.systemRole === 'Admin';
+  }
+
   public get canAdministerUnit(): boolean {
     return (
       this.userService.currentUser.role === 'Admin' ||

@@ -83,7 +83,7 @@ export class FooterComponent implements OnInit {
       return false;
     }
 
-    if (!this.currentUnitRole) {
+    if (!this.currentUnitRole && this.userService.currentUser?.systemRole !== 'Admin') {
       return false;
     }
 
@@ -91,9 +91,9 @@ export class FooterComponent implements OnInit {
     tutor.unit = this.selectedTask.unit;
 
     const canAccess =
-      this.currentUnitRole.role === 'Convenor' ||
-      this.currentUnitRole.role === 'Admin' ||
-      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id);
+      this.userService.currentUser?.systemRole === 'Admin' ||
+      this.currentUnitRole?.role === 'Convenor' ||
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole?.id);
 
     return canAccess;
   }
