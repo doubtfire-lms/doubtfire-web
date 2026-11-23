@@ -1,0 +1,24 @@
+<div class="relative size-full min-h-[350px] bg-white">
+  <iframe
+    #notebookFrame
+    class="absolute inset-0 size-full border-0 bg-white"
+    referrerpolicy="no-referrer"
+    sandbox="allow-popups allow-popups-to-escape-sandbox"
+    title="Jupyter notebook"
+    [attr.aria-hidden]="isLoading || errorMessage ? 'true' : null"
+    [attr.tabindex]="isLoading || errorMessage ? -1 : 0"
+    [style.pointerEvents]="isLoading || errorMessage ? 'none' : 'auto'"
+    (load)="onFrameLoad()"
+  ></iframe>
+  @if (isLoading) {
+    <div class="absolute inset-0 z-10 flex items-center justify-center bg-white">
+      <mat-spinner diameter="40" strokeWidth="3"></mat-spinner>
+    </div>
+  } @else if (errorMessage) {
+    <div
+      class="absolute inset-0 z-10 flex items-center justify-center bg-white px-4 text-slate-600"
+    >
+      {{ errorMessage }}
+    </div>
+  }
+</div>

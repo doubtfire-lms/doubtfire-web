@@ -1,7 +1,7 @@
 import JSZip from 'jszip';
 import * as monaco from 'monaco-editor';
 
-export type ArchiveFileKind = 'code' | 'docx' | 'image' | 'pdf' | 'text' | 'binary';
+export type ArchiveFileKind = 'code' | 'docx' | 'image' | 'notebook' | 'pdf' | 'text' | 'binary';
 
 export interface ArchiveFileClassification {
   kind: ArchiveFileKind;
@@ -46,6 +46,10 @@ export function isArchivePdfFile(file: ArchiveFilePreviewLike): boolean {
 
 export function isArchiveDocxFile(file: ArchiveDocumentPreviewLike): boolean {
   return file?.kind === 'docx' && !!file.blob;
+}
+
+export function isArchiveNotebookFile(file: ArchiveDocumentPreviewLike): boolean {
+  return file?.kind === 'notebook' && !!file.blob;
 }
 
 export function createArchiveFilePlaceholder(
@@ -96,6 +100,7 @@ export function createArchiveFileEntry(
     classification.kind === 'image' ||
     classification.kind === 'pdf' ||
     classification.kind === 'docx' ||
+    classification.kind === 'notebook' ||
     classification.kind === 'binary';
 
   return {
@@ -115,6 +120,10 @@ export function createArchiveFileEntry(
 }
 
 export function classifyArchiveFile(path: string, data: Uint8Array): ArchiveFileClassification {
+  if (path.toLowerCase().endsWith('.ipynb')) {
+    return {kind: 'notebook', mimeType: 'application/x-ipynb+json'};
+  }
+
   const detectedMimeType = detectMimeType(data);
   if (detectedMimeType === 'application/pdf') {
     return {kind: 'pdf', mimeType: detectedMimeType};

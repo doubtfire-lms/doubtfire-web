@@ -22,6 +22,7 @@ import {
   isArchiveCodeOrTextFile,
   isArchiveDocxFile,
   isArchiveImageFile,
+  isArchiveNotebookFile,
   isArchivePathHidden,
   isArchivePdfFile,
 } from './archive-viewer.helpers';
@@ -71,6 +72,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   public readonly isArchiveCodeOrTextFile = isArchiveCodeOrTextFile;
   public readonly isArchiveDocxFile = isArchiveDocxFile;
   public readonly isArchiveImageFile = isArchiveImageFile;
+  public readonly isArchiveNotebookFile = isArchiveNotebookFile;
   public readonly isArchivePdfFile = isArchivePdfFile;
 
   public readonly editorOptions = {
