@@ -77,18 +77,9 @@
     </strong>
   </p>
 }
-<p class="my-6 flex items-center justify-center gap-2">
-  <mat-icon aria-hidden="true">mail_outline</mat-icon>
-  {{ unreadMessagesCount ?? (loading ? '...' : '—') }} unread messages
-</p>
-<a [routerLink]="['../tasks/inbox']">
-  <button
-    class="inline-block cursor-pointer rounded-md bg-formatif-blue px-7 py-3 text-white no-underline hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
-    type="button"
-  >
-    Open inbox
-  </button>
-</a>
+<f-open-inbox-button
+  [unreadMessagesCount]="unreadMessagesCount ?? (loading ? null : 'Unavailable')"
+/>
 <section
   aria-labelledby="weekly-summary-heading"
   class="mx-auto mt-8 rounded-xl border border-slate-300 bg-white p-5 text-left"

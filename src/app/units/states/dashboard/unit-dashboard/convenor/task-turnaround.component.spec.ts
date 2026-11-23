@@ -1,6 +1,6 @@
+import {beforeEach, describe, expect, it} from 'vitest';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {Subject, of} from 'rxjs';
-import {beforeEach, describe, expect, it} from 'vitest';
 import {TaskTurnaroundComponent} from './task-turnaround.component';
 
 describe('TaskTurnaroundComponent', () => {
@@ -32,7 +32,10 @@ describe('TaskTurnaroundComponent', () => {
 
   it('orders task codes by grade, then naturally within each grade', () => {
     const codes = ['HD1', 'Case study', 'P10', 'D2', 'P2', 'Other'];
-    show(codes.map((abbreviation, id) => ({...task(id, 60, null), abbreviation})), [3, 1, 0, 2, 0]);
+    show(
+      codes.map((abbreviation, id) => ({...task(id, 60, null), abbreviation})),
+      [3, 1, 0, 2, 0],
+    );
     const labels = Array.from(page.querySelectorAll('tbody th'), (cell) => cell.textContent.trim());
     expect(labels).toEqual(['P2', 'P10', 'Case study', 'D2', 'HD1', 'Other']);
   });

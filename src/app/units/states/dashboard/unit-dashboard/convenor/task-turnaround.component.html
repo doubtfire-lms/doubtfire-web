@@ -13,7 +13,12 @@
       }
       @case ('ready') {
         @if (report.rows.length) {
-          <div aria-label="Task turnaround by task definition" class="mt-4 max-h-60 overflow-auto" role="region" tabindex="0">
+          <div
+            aria-label="Task turnaround by task definition"
+            class="mt-4 max-h-60 overflow-auto"
+            role="region"
+            tabindex="0"
+          >
             <table class="w-full border-collapse text-sm whitespace-nowrap tabular-nums">
               <thead class="sticky top-0 bg-white">
                 <tr class="h-10 border-b border-slate-300">
@@ -26,7 +31,9 @@
                 @for (row of report.rows; track row.task_definition_id) {
                   <tr class="h-10 border-b border-slate-200">
                     <th class="px-2 font-normal" scope="row">{{ row.abbreviation }}</th>
-                    <td class="px-2 text-right">{{ duration(row.feedback_wait.average_seconds) }}</td>
+                    <td class="px-2 text-right">
+                      {{ duration(row.feedback_wait.average_seconds) }}
+                    </td>
                     <td class="px-2 text-right">
                       @let seconds = row.estimated_marking_time.average_seconds;
                       @if (seconds !== null) {

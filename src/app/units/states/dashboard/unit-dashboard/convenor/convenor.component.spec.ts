@@ -1,6 +1,6 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, provideRouter} from '@angular/router';
 import {of} from 'rxjs';
 import {ProjectService, TaskService, Unit} from 'src/app/api/models/doubtfire-model';
 import {ConvenorComponent} from './convenor.component';
@@ -18,6 +18,7 @@ describe('ConvenorComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ConvenorComponent],
       providers: [
+        provideRouter([]),
         {provide: ActivatedRoute, useValue: {parent: {data: of({unit})}}},
         {provide: ProjectService, useValue: {loadStudents: () => of([])}},
         {
@@ -38,14 +39,17 @@ describe('ConvenorComponent', () => {
     fixture = TestBed.createComponent(ConvenorComponent);
   });
 
-  it('shows distinct tasks awaiting feedback and the moderation count without inbox links', () => {
+  it('shows workload counts and the inbox link', () => {
     fixture.detectChanges();
 
     const dashboard: HTMLElement = fixture.nativeElement;
     expect(dashboard.textContent).toMatch(/Ready for feedback\s*1/);
     expect(dashboard.textContent).toMatch(/Moderation queue\s*2/);
+    expect(dashboard.querySelector('f-open-inbox-button')?.textContent).not.toContain('unread');
     expect(dashboard.textContent).toMatch(/Overflow tasks available to claim\s*3/);
-    expect(dashboard.querySelector('a')).toBeNull();
+    expect(dashboard.querySelector('f-open-inbox-button a[href]')?.textContent).toContain(
+      'Open inbox',
+    );
     expect(dashboard.querySelector('f-ta-workload-overview')).not.toBeNull();
     expect(dashboard.querySelector('f-task-turnaround')).not.toBeNull();
   });

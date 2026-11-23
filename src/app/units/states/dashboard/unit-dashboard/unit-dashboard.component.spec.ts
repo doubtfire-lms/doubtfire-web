@@ -23,7 +23,7 @@ describe('UnitDashboardComponent', () => {
         provideRouter([]),
         {provide: ActivatedRoute, useValue: {parent: {data: routeData}}},
         {provide: ProjectService, useValue: {loadStudents: () => NEVER}},
-        {provide: TaskService, useValue: {}},
+        {provide: TaskService, useValue: {getOverflowAvailableToClaimCount: () => NEVER}},
         {provide: NotificationService, useValue: {getNotifications: () => NEVER}},
         {provide: AlertService, useValue: {}},
         {provide: GlobalStateService, useValue: {currentViewAndEntitySubject$: currentView}},
@@ -50,7 +50,7 @@ describe('UnitDashboardComponent', () => {
     expect(page.textContent).toContain('Feedback overdue');
     expect(page.textContent).toContain('... unread messages');
     expect(page.querySelector('[role="status"]')?.textContent).toContain('Loading weekly summary');
-    expect(page.querySelector('a[href] button')?.textContent).toContain('Open inbox');
+    expect(page.querySelector('f-open-inbox-button a[href]')?.textContent).toContain('Open inbox');
   });
 
   it('renders the convenor view and a plain moderator badge for a convenor', () => {
@@ -59,7 +59,7 @@ describe('UnitDashboardComponent', () => {
     expect(page.querySelector('a[href$="#convenor-dashboard"]')?.textContent).toContain('Convenor');
     expect(page.querySelector('f-convenor#convenor-dashboard')).not.toBeNull();
     expect(page.textContent).toContain('Moderator');
-    expect(page.querySelectorAll('a')).toHaveLength(1);
+    expect(page.querySelectorAll('a')).toHaveLength(2);
     expect(page.querySelector('f-tutor-dashboard')).toBeNull();
   });
 });

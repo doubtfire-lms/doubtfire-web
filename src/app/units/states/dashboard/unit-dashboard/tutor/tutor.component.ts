@@ -28,11 +28,18 @@ import {WeeklySummary} from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DashboardQueue} from '../dashboard-queue';
+import {OpenInboxButtonComponent} from '../open-inbox-button.component';
 import {WeeklyTimesheetComponent} from './weekly-timesheet.component';
 
 @Component({
   selector: 'f-tutor-dashboard',
-  imports: [DatePipe, MatIconModule, RouterLink, WeeklyTimesheetComponent],
+  imports: [
+    DatePipe,
+    MatIconModule,
+    OpenInboxButtonComponent,
+    RouterLink,
+    WeeklyTimesheetComponent,
+  ],
   host: {class: 'block'},
   templateUrl: './tutor.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

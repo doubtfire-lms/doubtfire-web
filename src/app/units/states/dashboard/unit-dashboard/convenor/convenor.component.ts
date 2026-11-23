@@ -4,6 +4,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, catchError, combineLatest, map, of, startWith, switchMap} from 'rxjs';
 import {ProjectService, TaskService, Unit} from 'src/app/api/models/doubtfire-model';
+import {OpenInboxButtonComponent} from '../open-inbox-button.component';
 import {TaWorkloadOverviewComponent} from './ta-workload-overview.component';
 import {TaskTurnaroundComponent} from './task-turnaround.component';
 
@@ -11,7 +12,13 @@ type WorkloadCount = number | 'Unavailable' | null;
 
 @Component({
   selector: 'f-convenor',
-  imports: [AsyncPipe, MatIconModule, TaWorkloadOverviewComponent, TaskTurnaroundComponent],
+  imports: [
+    AsyncPipe,
+    MatIconModule,
+    OpenInboxButtonComponent,
+    TaWorkloadOverviewComponent,
+    TaskTurnaroundComponent,
+  ],
   host: {class: 'block'},
   styleUrl: './convenor.component.css',
   templateUrl: './convenor.component.html',
