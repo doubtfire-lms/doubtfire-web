@@ -6,6 +6,9 @@ import {classifyArchiveFile} from 'src/app/common/archive-viewer/archive-viewer.
 import {renderNotebookPreview} from './notebook-preview';
 import {NotebookViewerComponent} from './notebook-viewer.component';
 
+// Archive classification imports Monaco, whose clipboard module needs browser APIs absent in jsdom.
+vi.mock('monaco-editor', () => ({languages: {getLanguages: () => []}}));
+
 describe('NotebookViewerComponent security', () => {
   it('highlights code using notebook language metadata and escapes source markup', async () => {
     const html = await renderNotebookPreview({
