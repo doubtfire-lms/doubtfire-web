@@ -34,6 +34,7 @@ describe('UnitDashboardComponent', () => {
 
   function openDashboard(role: string): HTMLElement {
     const unit = Object.assign(new Unit(), {id: 1, getUserMarkingSessions: () => of([])});
+    unit.getTaskTurnaround = () => of({unit_id: 1, task_definitions: []});
     currentView.next({entity: Object.assign(new UnitRole(), {id: 1, unit, role})});
     routeData.next({unit});
     fixture.detectChanges();

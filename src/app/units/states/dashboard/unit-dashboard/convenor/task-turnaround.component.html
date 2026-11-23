@@ -1,0 +1,49 @@
+<section
+  aria-labelledby="task-turnaround-heading"
+  class="mx-auto mt-8 rounded-xl border border-slate-300 bg-white p-5 text-left"
+>
+  <h2 class="m-0 text-lg font-medium" id="task-turnaround-heading">Task turnaround</h2>
+  @if (report$ | async; as report) {
+    @switch (report.status) {
+      @case ('loading') {
+        <p class="mt-4 text-sm" role="status">Loading task turnaround…</p>
+      }
+      @case ('error') {
+        <p class="mt-4 text-sm" role="alert">Could not load task turnaround.</p>
+      }
+      @case ('ready') {
+        @if (report.rows.length) {
+          <div aria-label="Task turnaround by task definition" class="mt-4 max-h-60 overflow-auto" role="region" tabindex="0">
+            <table class="w-full border-collapse text-sm whitespace-nowrap tabular-nums">
+              <thead class="sticky top-0 bg-white">
+                <tr class="h-10 border-b border-slate-300">
+                  <th class="px-2" scope="col">Task</th>
+                  <th class="px-2 text-right" scope="col">Avg feedback wait</th>
+                  <th class="px-2 text-right" scope="col">Avg estimated marking time</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of report.rows; track row.task_definition_id) {
+                  <tr class="h-10 border-b border-slate-200">
+                    <th class="px-2 font-normal" scope="row">{{ row.abbreviation }}</th>
+                    <td class="px-2 text-right">{{ duration(row.feedback_wait.average_seconds) }}</td>
+                    <td class="px-2 text-right">
+                      @let seconds = row.estimated_marking_time.average_seconds;
+                      @if (seconds !== null) {
+                        {{ seconds / 60 | number: '1.0-1' }} min
+                      } @else {
+                        —
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <p class="mt-4 text-sm">No task turnaround data yet.</p>
+        }
+      }
+    }
+  }
+</section>

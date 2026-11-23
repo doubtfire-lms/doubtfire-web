@@ -56,6 +56,16 @@ export interface GradeDefinition {
   abbreviation: string;
 }
 
+interface TaskTurnaroundReport {
+  unit_id: number;
+  task_definitions: {
+    task_definition_id: number;
+    abbreviation: string;
+    feedback_wait: {average_seconds: number | null; assessed_attempt_count: number};
+    estimated_marking_time: {average_seconds: number | null; measured_attempt_count: number};
+  }[];
+}
+
 export class Unit extends Entity {
   id: number;
   code: string;
@@ -788,6 +798,12 @@ export class Unit extends Entity {
   public downloadTutorAssessmentCsv(): Observable<SidekiqJob> {
     return AppInjector.get(HttpClient).get<SidekiqJob>(
       `${AppInjector.get(DoubtfireConstants).API_URL}/csv/units/${this.id}/tutor_assessments`,
+    );
+  }
+
+  public getTaskTurnaround(): Observable<TaskTurnaroundReport> {
+    return AppInjector.get(HttpClient).get<TaskTurnaroundReport>(
+      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/task_turnaround`,
     );
   }
 
