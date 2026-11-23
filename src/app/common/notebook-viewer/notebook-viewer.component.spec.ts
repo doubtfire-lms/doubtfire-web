@@ -1,15 +1,39 @@
 import {describe, expect, it, vi} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TestBed} from '@angular/core/testing';
+import {FormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatMenuModule} from '@angular/material/menu';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {classifyArchiveFile} from 'src/app/common/archive-viewer/archive-viewer.helpers';
-import {renderNotebookPreview} from './notebook-preview';
+import {markNotebookMatches, renderNotebookPreview} from './notebook-preview';
 import {NotebookViewerComponent} from './notebook-viewer.component';
 
 // Archive classification imports Monaco, whose clipboard module needs browser APIs absent in jsdom.
 vi.mock('monaco-editor', () => ({languages: {getLanguages: () => []}}));
 
 describe('NotebookViewerComponent security', () => {
+  it('highlights notebook text without turning search input into markup', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      cells: [{cell_type: 'markdown', source: 'Safe text and safe links'}],
+    });
+    const result = markNotebookMatches(html, 'safe');
+    const document = new DOMParser().parseFromString(result.html, 'text/html');
+    expect(result.count).toBe(2);
+    expect(document.querySelectorAll('mark.notebook-search')).toHaveLength(2);
+    expect(document.querySelector('#notebook-search-0')?.textContent).toBe('Safe');
+    expect(document.querySelector('meta[http-equiv="Content-Security-Policy"]')).toBeTruthy();
+
+    const malicious = markNotebookMatches(html, '<script>alert(1)</script>');
+    expect(malicious.count).toBe(0);
+    expect(malicious.html).not.toContain('<script>');
+  });
+
   it('highlights code using notebook language metadata and escapes source markup', async () => {
     const html = await renderNotebookPreview({
       nbformat: 4,
@@ -161,7 +185,17 @@ describe('NotebookViewerComponent security', () => {
   it('keeps the preview iframe scriptless and isolated', async () => {
     await TestBed.configureTestingModule({
       declarations: [NotebookViewerComponent],
-      imports: [MatProgressSpinnerModule, NoopAnimationsModule],
+      imports: [
+        FormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatMenuModule,
+        MatProgressSpinnerModule,
+        NoopAnimationsModule,
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
     const fixture = TestBed.createComponent(NotebookViewerComponent);
     fixture.componentRef.setInput(

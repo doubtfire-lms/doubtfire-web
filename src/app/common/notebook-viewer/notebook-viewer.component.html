@@ -1,24 +1,89 @@
-<div class="relative size-full min-h-[350px] bg-white">
-  <iframe
-    #notebookFrame
-    class="absolute inset-0 size-full border-0 bg-white"
-    referrerpolicy="no-referrer"
-    sandbox="allow-popups allow-popups-to-escape-sandbox"
-    title="Jupyter notebook"
-    [attr.aria-hidden]="isLoading || errorMessage ? 'true' : null"
-    [attr.tabindex]="isLoading || errorMessage ? -1 : 0"
-    [style.pointerEvents]="isLoading || errorMessage ? 'none' : 'auto'"
-    (load)="onFrameLoad()"
-  ></iframe>
-  @if (isLoading) {
-    <div class="absolute inset-0 z-10 flex items-center justify-center bg-white">
-      <mat-spinner diameter="40" strokeWidth="3"></mat-spinner>
-    </div>
-  } @else if (errorMessage) {
-    <div
-      class="absolute inset-0 z-10 flex items-center justify-center bg-white px-4 text-slate-600"
+<div class="flex size-full min-h-[350px] flex-col bg-white">
+  <div class="flex shrink-0 items-center justify-end gap-2 px-2.5 py-1 text-slate-700">
+    @if (viewMode === 'rendered') {
+      <form class="notebook-search w-80 max-w-[60%]" (ngSubmit)="findNextMatch()">
+        <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+          <mat-icon matPrefix>search</mat-icon>
+          <input
+            aria-label="Search notebook"
+            matInput
+            name="notebookSearchString"
+            placeholder="Search notebook"
+            type="search"
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="scheduleSearch()"
+          />
+          <button
+            aria-label="Zoom out notebook"
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="zoomOut()"
+          >
+            <mat-icon>zoom_out</mat-icon>
+          </button>
+          <button
+            aria-label="Zoom in notebook"
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="zoomIn()"
+          >
+            <mat-icon>zoom_in</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    }
+    <button
+      aria-label="Notebook view options"
+      mat-icon-button
+      type="button"
+      [matMenuTriggerFor]="notebookViewMenu"
     >
-      {{ errorMessage }}
-    </div>
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #notebookViewMenu="matMenu">
+      @if (viewMode === 'rendered') {
+        <button mat-menu-item (click)="viewMode = 'raw'">View raw</button>
+      } @else {
+        <button mat-menu-item (click)="viewMode = 'rendered'">View rendered</button>
+      }
+    </mat-menu>
+  </div>
+
+  @if (viewMode === 'raw') {
+    <ngx-monaco-editor
+      class="notebook-monaco block min-h-0 w-full flex-1"
+      [ngModel]="notebookText"
+      [options]="rawEditorOptions"
+    ></ngx-monaco-editor>
   }
+
+  <div class="relative min-h-0 flex-1 overflow-hidden bg-white" [class.hidden]="viewMode === 'raw'">
+    <iframe
+      #notebookFrame
+      class="absolute top-0 left-0 origin-top-left border-0 bg-white"
+      referrerpolicy="no-referrer"
+      sandbox="allow-popups allow-popups-to-escape-sandbox"
+      title="Jupyter notebook"
+      [attr.aria-hidden]="isLoading || errorMessage || viewMode === 'raw' ? 'true' : null"
+      [attr.tabindex]="isLoading || errorMessage || viewMode === 'raw' ? -1 : 0"
+      [style.height.%]="100 / zoomValue"
+      [style.pointerEvents]="isLoading || errorMessage || viewMode === 'raw' ? 'none' : 'auto'"
+      [style.transform]="'scale(' + zoomValue + ')'"
+      [style.width.%]="100 / zoomValue"
+      (load)="onFrameLoad()"
+    ></iframe>
+    @if (isLoading) {
+      <div class="absolute inset-0 z-10 flex items-center justify-center bg-white">
+        <mat-spinner diameter="40" strokeWidth="3"></mat-spinner>
+      </div>
+    } @else if (errorMessage) {
+      <div
+        class="absolute inset-0 z-10 flex items-center justify-center bg-white px-4 text-slate-600"
+      >
+        {{ errorMessage }}
+      </div>
+    }
+  </div>
 </div>

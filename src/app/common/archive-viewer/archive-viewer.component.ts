@@ -64,7 +64,6 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
 
   public files: ArchiveFileEntry[] = [];
   public selectedTab = 0;
-  public notebookView: 'rendered' | 'raw' = 'rendered';
   public isLoading = false;
   public isSaving = false;
   public errorMessage: string | null = null;
@@ -94,13 +93,6 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
     ...this.editorOptions,
     language: 'plaintext',
     readOnly: true,
-  };
-
-  public readonly notebookEditorOptions = {
-    ...this.editorOptions,
-    language: 'json',
-    readOnly: true,
-    domReadOnly: true,
   };
 
   constructor(
@@ -165,7 +157,6 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
 
   public selectTab(index: number): void {
     this.selectedTab = index;
-    this.notebookView = 'rendered';
     this.updateEditorOptions();
     void this.loadAndPrepareSelectedFile();
   }
@@ -267,7 +258,6 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
 
     this.errorMessage = null;
     this.selectedTab = 0;
-    this.notebookView = 'rendered';
     this.clearFiles();
 
     if (!requestedArchive) {

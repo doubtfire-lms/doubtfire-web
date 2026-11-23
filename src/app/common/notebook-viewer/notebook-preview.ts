@@ -45,6 +45,8 @@ const FRAME_STYLES = `
   .notice { color: #64748b; font-style: italic; }
   .raw-cell { color: #475569; }
   .katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+  mark.notebook-search { background: #ffe066; color: inherit; }
+  mark.notebook-search:target { background: #ffb74d; scroll-margin-block: 80px; }
   @media (max-width: 640px) {
     :root { --gutter: 0px; }
     .code-cell { display: block; }
@@ -356,4 +358,53 @@ export async function renderNotebookPreview(notebook: unknown): Promise<string> 
   ]);
   const cells = notebook['cells'].map((cell) => cellHtml(cell, math, highlight)).join('');
   return `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; connect-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:; frame-src 'none'; form-action 'none'; base-uri 'none'"><style>${FRAME_STYLES}${math?.styles ?? ''}</style></head><body><main>${cells}</main></body></html>`;
+}
+
+export function markNotebookMatches(html: string, query: string): {html: string; count: number} {
+  const term = query.trim();
+  if (!term) {
+    return {html, count: 0};
+  }
+
+  const document = new DOMParser().parseFromString(html, 'text/html');
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const textNodes: Text[] = [];
+  const needle = term.toLowerCase();
+  while (walker.nextNode()) {
+    const node = walker.currentNode as Text;
+    if (node.parentElement?.closest('style, script, .katex-mathml, annotation')) {
+      continue;
+    }
+    textNodes.push(node);
+  }
+
+  let count = 0;
+  for (const node of textNodes) {
+    const text = node.textContent ?? '';
+    const lower = text.toLowerCase();
+    let start = lower.indexOf(needle);
+    if (start < 0) {
+      continue;
+    }
+
+    const fragment = document.createDocumentFragment();
+    let offset = 0;
+    while (start >= 0 && count < 500) {
+      fragment.append(document.createTextNode(text.slice(offset, start)));
+      const mark = document.createElement('mark');
+      mark.className = 'notebook-search';
+      mark.id = `notebook-search-${count++}`;
+      mark.textContent = text.slice(start, start + term.length);
+      fragment.append(mark);
+      offset = start + term.length;
+      start = lower.indexOf(needle, offset);
+    }
+    fragment.append(document.createTextNode(text.slice(offset)));
+    node.replaceWith(fragment);
+    if (count === 500) {
+      break;
+    }
+  }
+
+  return {html: `<!doctype html>${document.documentElement.outerHTML}`, count};
 }
