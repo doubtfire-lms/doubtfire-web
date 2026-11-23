@@ -20,6 +20,7 @@ import {
   getMonacoLanguageForPath,
   getOrderedUploadFileIndex,
   isArchiveCodeOrTextFile,
+  isArchiveDocxFile,
   isArchiveImageFile,
   isArchivePathHidden,
   isArchivePdfFile,
@@ -68,6 +69,7 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   public fileTreeNodes: ArchiveFileTreeNode[] = [];
 
   public readonly isArchiveCodeOrTextFile = isArchiveCodeOrTextFile;
+  public readonly isArchiveDocxFile = isArchiveDocxFile;
   public readonly isArchiveImageFile = isArchiveImageFile;
   public readonly isArchivePdfFile = isArchivePdfFile;
 
