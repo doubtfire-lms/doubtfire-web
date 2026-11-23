@@ -7,6 +7,35 @@ import {renderNotebookPreview} from './notebook-preview';
 import {NotebookViewerComponent} from './notebook-viewer.component';
 
 describe('NotebookViewerComponent security', () => {
+  it('highlights code using notebook language metadata and escapes source markup', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      metadata: {language_info: {name: 'python'}},
+      cells: [{cell_type: 'code', source: 'if True:\n    print("<script>alert(1)</script>")'}],
+    });
+
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.querySelector('.source .hljs-keyword')?.textContent).toBe('if');
+    expect(document.querySelector('.source script')).toBeNull();
+    expect(document.querySelector('.source code')?.textContent).toContain(
+      '<script>alert(1)</script>',
+    );
+  });
+
+  it('shows unknown notebook languages as plain escaped code', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      metadata: {language_info: {name: 'unknown-language'}},
+      cells: [{cell_type: 'code', source: '<img src=x onerror=alert(1)>'}],
+    });
+
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.querySelector('.source img, .source .hljs-keyword')).toBeNull();
+    expect(document.querySelector('.source code')?.textContent).toBe(
+      '<img src=x onerror=alert(1)>',
+    );
+  });
+
   it('classifies notebook JSON containing SVG output as a notebook', () => {
     const source = JSON.stringify({
       nbformat: 4,

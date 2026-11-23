@@ -1,5 +1,6 @@
 import DOMPurify from 'dompurify';
 import * as marked from 'marked';
+import type {NotebookHighlighter} from './notebook-highlight';
 import type {NotebookMath} from './notebook-math';
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'] as const;
@@ -30,6 +31,13 @@ const FRAME_STYLES = `
   .code-cell { display: grid; grid-template-columns: var(--gutter) minmax(0, 1fr); margin-left: calc(-1 * var(--gutter)); }
   .prompt { color: #64748b; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; text-align: right; padding: 10px 10px 0 0; white-space: nowrap; }
   .source { margin: 0; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 5px; }
+  .source .hljs-comment, .source .hljs-quote { color: #6a737d; font-style: italic; }
+  .source .hljs-keyword, .source .hljs-selector-tag, .source .hljs-literal { color: #d73a49; }
+  .source .hljs-string, .source .hljs-regexp, .source .hljs-addition { color: #032f62; }
+  .source .hljs-number, .source .hljs-symbol, .source .hljs-bullet { color: #005cc5; }
+  .source .hljs-title, .source .hljs-function, .source .hljs-section { color: #6f42c1; }
+  .source .hljs-built_in, .source .hljs-type, .source .hljs-attribute { color: #e36209; }
+  .source .hljs-meta, .source .hljs-doctag { color: #22863a; }
   .output { min-width: 0; margin-top: 10px; overflow-x: auto; }
   .output > :first-child { margin-top: 0; }
   .output pre { margin: 0; }
@@ -278,7 +286,7 @@ function outputHtml(output: unknown, math?: NotebookMath): string {
   return '<div class="output notice">Unsupported output omitted.</div>';
 }
 
-function cellHtml(cell: unknown, math?: NotebookMath): string {
+function cellHtml(cell: unknown, math?: NotebookMath, highlight?: NotebookHighlighter): string {
   if (!isRecord(cell)) {
     return '';
   }
@@ -291,6 +299,7 @@ function cellHtml(cell: unknown, math?: NotebookMath): string {
   }
   if (cell['cell_type'] === 'code') {
     const count = Number.isInteger(cell['execution_count']) ? cell['execution_count'] : ' ';
+    const highlightedSource = highlight?.(source) ?? escapeHtml(source);
     const outputs = Array.isArray(cell['outputs'])
       ? cell['outputs']
           .map((output) => {
@@ -300,7 +309,7 @@ function cellHtml(cell: unknown, math?: NotebookMath): string {
           })
           .join('')
       : '';
-    return `<section class="cell code-cell"><div class="prompt">In [${count}]:</div><pre class="source"><code>${escapeHtml(source)}</code></pre>${outputs}</section>`;
+    return `<section class="cell code-cell"><div class="prompt">In [${count}]:</div><pre class="source"><code>${highlightedSource}</code></pre>${outputs}</section>`;
   }
   return '';
 }
@@ -333,10 +342,18 @@ export async function renderNotebookPreview(notebook: unknown): Promise<string> 
   if (notebook['cells'].length > 2000) {
     throw new Error('Notebook has too many cells to preview');
   }
-  // KaTeX is only downloaded for notebooks that look like they contain math.
-  const math = hasMath(notebook['cells'])
-    ? await import('./notebook-math').then((m) => m.loadNotebookMath()).catch(() => undefined)
-    : undefined;
-  const cells = notebook['cells'].map((cell) => cellHtml(cell, math)).join('');
+  const hasCode = notebook['cells'].some((cell) => isRecord(cell) && cell['cell_type'] === 'code');
+  const [math, highlight] = await Promise.all([
+    // Load KaTeX only for notebooks that look like they contain math.
+    hasMath(notebook['cells'])
+      ? import('./notebook-math').then((m) => m.loadNotebookMath()).catch(() => undefined)
+      : undefined,
+    hasCode
+      ? import('./notebook-highlight')
+          .then((m) => m.createNotebookHighlighter(notebook['metadata']))
+          .catch(() => undefined)
+      : undefined,
+  ]);
+  const cells = notebook['cells'].map((cell) => cellHtml(cell, math, highlight)).join('');
   return `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; connect-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:; frame-src 'none'; form-action 'none'; base-uri 'none'"><style>${FRAME_STYLES}${math?.styles ?? ''}</style></head><body><main>${cells}</main></body></html>`;
 }
