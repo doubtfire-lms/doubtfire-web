@@ -36,6 +36,7 @@ async function maliciousDocument(): Promise<Blob> {
     'word/_rels/document.xml.rels',
     `<Relationships xmlns="${relationshipNamespace}">
       <Relationship Id="rIdLink" Type="${officeRelationshipNamespace}/hyperlink" Target="javascript:window.__docx_xss=1" TargetMode="External"/>
+      <Relationship Id="rIdSafeLink" Type="${officeRelationshipNamespace}/hyperlink" Target="https://example.org/resource" TargetMode="External"/>
       <Relationship Id="rIdStyles" Type="${officeRelationshipNamespace}/styles" Target="styles.xml"/>
       <Relationship Id="rIdAlt" Type="${officeRelationshipNamespace}/aFChunk" Target="chunk1.html"/>
     </Relationships>`,
@@ -45,6 +46,23 @@ async function maliciousDocument(): Promise<Blob> {
     `<w:document xmlns:w="${wordNamespace}" xmlns:r="${officeRelationshipNamespace}">
       <w:body>
         <w:p><w:hyperlink r:id="rIdLink"><w:r><w:t>Click marker</w:t></w:r></w:hyperlink></w:p>
+        <w:p><w:hyperlink r:id="rIdSafeLink"><w:r><w:t>Safe link</w:t></w:r></w:hyperlink></w:p>
+        <w:p>
+          <w:r><w:fldChar w:fldCharType="begin"/></w:r>
+          <w:r><w:instrText> HYPERLINK "https://example.org/legacy" \\h </w:instrText></w:r>
+          <w:r><w:fldChar w:fldCharType="separate"/></w:r>
+          <w:r><w:t>Legacy link</w:t></w:r>
+          <w:r><w:fldChar w:fldCharType="end"/></w:r>
+        </w:p>
+        <w:p>
+          <w:r><w:fldChar w:fldCharType="begin"/></w:r>
+          <w:r><w:instrText> HYPERLINK "javascript:window.__docx_xss=2" </w:instrText></w:r>
+          <w:r><w:fldChar w:fldCharType="separate"/></w:r>
+          <w:r><w:t>Unsafe field</w:t></w:r>
+          <w:r><w:fldChar w:fldCharType="end"/></w:r>
+        </w:p>
+        <w:p><w:bookmarkStart w:id="1" w:name="Intro"/><w:r><w:t>Introduction</w:t></w:r><w:bookmarkEnd w:id="1"/></w:p>
+        <w:p><w:hyperlink w:anchor="Intro"><w:r><w:t>Jump to introduction</w:t></w:r></w:hyperlink></w:p>
         <w:altChunk r:id="rIdAlt"/>
       </w:body>
     </w:document>`,
@@ -110,6 +128,30 @@ describe('DocxViewerComponent security', () => {
       const root = host.shadowRoot;
       expect(root?.querySelector('a')).toBeTruthy();
       expect(root?.querySelector('a')?.getAttribute('href')).toBeNull();
+      const safeLink = [...(root?.querySelectorAll('a') ?? [])].find(
+        (link) => link.textContent === 'Safe link',
+      );
+      expect(safeLink?.href).toBe('https://example.org/resource');
+      expect(safeLink?.target).toBe('_blank');
+      expect(safeLink?.rel).toBe('noopener noreferrer');
+      const legacyLink = [...(root?.querySelectorAll('a') ?? [])].find(
+        (link) => link.textContent === 'Legacy link',
+      );
+      expect(legacyLink?.href).toBe('https://example.org/legacy');
+      expect(legacyLink?.target).toBe('_blank');
+      expect(root?.textContent).toContain('Unsafe field');
+      expect(
+        [...(root?.querySelectorAll('a') ?? [])].some(
+          (link) => link.textContent === 'Unsafe field',
+        ),
+      ).toBe(false);
+      const bookmark = root?.querySelector<HTMLElement>('span[id$="Intro"]');
+      const internalLink = [...(root?.querySelectorAll('a') ?? [])].find(
+        (link) => link.textContent === 'Jump to introduction',
+      );
+      expect(bookmark).toBeTruthy();
+      expect(internalLink?.dataset.docxBookmarkId).toBe(bookmark?.id);
+      expect(internalLink?.getAttribute('href')).toBe(`#${encodeURIComponent(bookmark?.id ?? '')}`);
       expect(root?.querySelector('iframe')).toBeNull();
       expect(
         [...(root?.querySelectorAll('style') ?? [])].some((style) =>
@@ -119,5 +161,19 @@ describe('DocxViewerComponent security', () => {
       expect(root?.textContent).not.toContain('example.invalid');
       expect(getComputedStyle(document.body).display).not.toBe('none');
     });
+
+    const root = (
+      fixture.nativeElement.querySelector('.docx-preview-container > div') as HTMLElement
+    ).shadowRoot;
+    const bookmark = root?.querySelector<HTMLElement>('span[id$="Intro"]');
+    const internalLink = [...(root?.querySelectorAll('a') ?? [])].find(
+      (link) => link.textContent === 'Jump to introduction',
+    );
+    const scrollIntoView = vi.fn();
+    if (bookmark) {
+      bookmark.scrollIntoView = scrollIntoView;
+    }
+    internalLink?.click();
+    expect(scrollIntoView).toHaveBeenCalledOnce();
   });
 });
