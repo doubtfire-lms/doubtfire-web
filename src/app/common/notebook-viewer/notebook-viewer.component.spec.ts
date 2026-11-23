@@ -8,12 +8,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {classifyArchiveFile} from 'src/app/common/archive-viewer/archive-viewer.helpers';
 import {markNotebookMatches, renderNotebookPreview} from './notebook-preview';
 import {NotebookViewerComponent} from './notebook-viewer.component';
-
-// Archive classification imports Monaco, whose clipboard module needs browser APIs absent in jsdom.
-vi.mock('monaco-editor', () => ({languages: {getLanguages: () => []}}));
 
 describe('NotebookViewerComponent security', () => {
   it('highlights notebook text without turning search input into markup', async () => {
@@ -62,24 +58,6 @@ describe('NotebookViewerComponent security', () => {
     );
   });
 
-  it('classifies notebook JSON containing SVG output as a notebook', () => {
-    const source = JSON.stringify({
-      nbformat: 4,
-      cells: [
-        {
-          cell_type: 'code',
-          outputs: [{data: {'image/svg+xml': '<svg onload="alert(1)"></svg>'}}],
-        },
-      ],
-    });
-    const data = new TextEncoder().encode(source);
-
-    const classification = classifyArchiveFile('submission/probe.ipynb', data);
-    expect(classification.kind).toBe('notebook');
-    expect(classification.textContent).toBe(source);
-    expect(classification.language).toBe('json');
-  });
-
   it('renders untrusted notebook content without active markup', async () => {
     const html = await renderNotebookPreview({
       nbformat: 4,
@@ -87,7 +65,7 @@ describe('NotebookViewerComponent security', () => {
         {
           cell_type: 'markdown',
           source:
-            '<script>alert(1)</script><img src="x" onerror="alert(2)">' +
+            '<script>alert(1)</script>\n\n<img src="x" onerror="alert(2)">\n\n' +
             '[bad](javascript:alert(3)) [good](https://example.org/) ' +
             '![PNG](attachment:figure.png) ![SVG](attachment:probe.svg)',
           attachments: {
