@@ -1,4 +1,3 @@
-import {DatePipe} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +10,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {RouterLink} from '@angular/router';
 import {
   EMPTY,
-  Observable,
   ReplaySubject,
   Subject,
   catchError,
@@ -30,17 +28,16 @@ import {
   Unit,
   UnitRole,
 } from 'src/app/api/models/doubtfire-model';
-import {WeeklySummary} from 'src/app/api/models/notification';
-import {NotificationService} from 'src/app/api/services/notification.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DashboardQueue} from '../dashboard-queue';
+import {LatestWeeklySummaryComponent} from '../latest-weekly-summary.component';
 import {OpenInboxButtonComponent} from '../open-inbox-button.component';
 import {WeeklyTimesheetComponent} from './weekly-timesheet.component';
 
 @Component({
   selector: 'f-tutor-dashboard',
   imports: [
-    DatePipe,
+    LatestWeeklySummaryComponent,
     MatIconModule,
     OpenInboxButtonComponent,
     RouterLink,
@@ -71,15 +68,11 @@ export class TutorComponent implements OnChanges, OnInit, OnDestroy {
   public oldestSubmissionAgeDays: number | null = null;
   public unreadMessagesCount: number | null = null;
   public queues: (DashboardQueue & {count: number | 'Unavailable' | null})[] = [];
-  public weeklySummary: WeeklySummary | null = null;
-  public weeklySummaryLoading = true;
-  public weeklySummaryUnavailable = false;
 
   constructor(
     private projectService: ProjectService,
     private taskService: TaskService,
     private alertService: AlertService,
-    private notificationService: NotificationService,
   ) {}
 
   ngOnChanges(): void {
@@ -100,13 +93,10 @@ export class TutorComponent implements OnChanges, OnInit, OnDestroy {
           this.feedbackOverdueCount = null;
           this.oldestSubmissionAgeDays = null;
           this.unreadMessagesCount = null;
-          this.weeklySummary = null;
-          this.weeklySummaryLoading = true;
-          this.weeklySummaryUnavailable = false;
           this.queues = queues.map((queue) => ({...queue, count: null}));
 
           // TaskService maps queue and inbox tasks to projects in the unit's student cache.
-          const workload$ = this.projectService.loadStudents(unit).pipe(
+          return this.projectService.loadStudents(unit).pipe(
             switchMap(() => {
               const inbox$ = this.taskService
                 .queryTasksForTaskInbox(unit, undefined, true, viewAsUnitRoleId)
@@ -138,20 +128,6 @@ export class TutorComponent implements OnChanges, OnInit, OnDestroy {
             }),
             finalize(() => (this.loading = false)),
           );
-          const summarySource$ =
-            viewAsUnitRoleId == null
-              ? this.loadWeeklySummary(unit.id)
-              : this.notificationService.getStaffWeeklySummary(unit.id, viewAsUnitRoleId);
-          const weeklySummary$ = summarySource$.pipe(
-            tap((summary) => (this.weeklySummary = summary)),
-            catchError(() => {
-              this.weeklySummaryUnavailable = true;
-              return EMPTY;
-            }),
-            finalize(() => (this.weeklySummaryLoading = false)),
-          );
-
-          return merge(workload$, weeklySummary$);
         }),
         takeUntil(this.destroy$),
       )
@@ -161,22 +137,6 @@ export class TutorComponent implements OnChanges, OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  private loadWeeklySummary(unitId: number, page = 1): Observable<WeeklySummary | null> {
-    return this.notificationService
-      .getNotifications({unitId, kinds: ['weekly_summary'], state: 'all', page})
-      .pipe(
-        switchMap(({groups, perPage, total}) => {
-          const summary = groups.find(
-            (group) => group.weeklySummary?.audience === 'staff',
-          )?.weeklySummary;
-          if (summary || page * perPage >= total) {
-            return of(summary ?? null);
-          }
-          return this.loadWeeklySummary(unitId, page + 1);
-        }),
-      );
   }
 
   private calculateMetrics(tasks: Task[]): void {
