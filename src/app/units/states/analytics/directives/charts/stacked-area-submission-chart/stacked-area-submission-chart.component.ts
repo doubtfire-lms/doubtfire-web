@@ -33,6 +33,19 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   XAxisLabel: string = 'Date';
   YAxisLabel: string = 'Tasks';
 
+  xAxisTickFormatting = (val: string): string => {
+    const [week, count] = String(val).split('-');
+    const countNum = Number(count);
+
+    if (countNum === 0) {
+      return `Week ${week}`;
+    }
+    if (countNum > 0 && countNum % 7 === 0) {
+      return 'Break';
+    }
+    return '';
+  };
+
   constructor(
     private readonly taskService: TaskService,
     private readonly chartToolTipService: TooltipService,
@@ -64,22 +77,35 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   }
 
   private buildChartData(): MultiSeries {
-    //console.log(this.snapshots);
+    console.log(this.snapshots);
 
-    const days = [...this.snapshots.entries()].map(([name, snapshot]) => ({
-      name: snapshot.snapshot_date,
-      taskStats: getTaskStats(
-        snapshot,
-        this.campusFilter,
-        this.tutorialFilter,
-        this.taskGradeFilter,
-        this.studentTargetGradeFilter,
-        this.unit,
-      ),
-      submittedCounts: snapshot.submitted_task_count_student_counts ?? {},
-    }));
+    let lastWeek: number | string | null = null;
+    let weekCounter = 0;
 
-    // Collect all unique task count keys across snapshots (e.g., "0", "1", "2", ...)
+    const days = this.snapshots.map((snapshot) => {
+      const week = this.unit.weekNumber(snapshot.snapshot_date);
+
+      if (week === lastWeek) {
+        weekCounter++;
+      } else {
+        lastWeek = week;
+        weekCounter = 0;
+      }
+
+      return {
+        name: `${week}-${weekCounter}`,
+        taskStats: getTaskStats(
+          snapshot,
+          this.campusFilter,
+          this.tutorialFilter,
+          this.taskGradeFilter,
+          this.studentTargetGradeFilter,
+          this.unit,
+        ),
+        submittedCounts: snapshot.submitted_task_count_student_counts ?? {},
+      };
+    });
+
     const taskCountKeys = Array.from(
       new Set(days.flatMap((day) => Object.keys(day.submittedCounts))),
     ).sort((a, b) => Number(b) - Number(a));
