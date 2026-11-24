@@ -34,9 +34,15 @@
 
     <mat-menu #jumpMenu="matMenu" xPosition="after">
       @for (card of cards; track card.entry.path; let i = $index) {
-        <button mat-menu-item [title]="card.entry.path" (click)="jumpToCard(i)">
+        <button
+          mat-menu-item
+          matTooltipPosition="right"
+          [matTooltip]="card.requirementName"
+          (click)="jumpToCard(i)"
+        >
           <mat-icon>{{ iconFor(card) }}</mat-icon>
-          <span>{{ card.requirementName }}</span>
+          <!-- One line; long names end in "…" and show in full in the tooltip -->
+          <span class="block max-w-52 truncate">{{ card.requirementName }}</span>
         </button>
       }
     </mat-menu>
@@ -67,7 +73,10 @@
           <mat-icon class="size-4.5! shrink-0 text-[18px]! leading-[18px]! text-slate-500">
             {{ iconFor(card) }}
           </mat-icon>
-          <span class="mr-auto min-w-0 truncate text-sm leading-5 font-medium text-slate-800">
+          <span
+            class="mr-auto min-w-0 truncate text-sm leading-5 font-medium text-slate-800"
+            [matTooltip]="card.requirementName"
+          >
             {{ card.requirementName }}
           </span>
           @if (card.entry.kind === 'pdf') {
