@@ -27,13 +27,13 @@ import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor
 import {TutorialsComponent} from './projects/states/tutorials/tutorials.component';
 import {SignInComponent} from './sessions/states/sign-in/sign-in.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
-import {UnitDashboardComponent} from './units/states/dashboard/unit-dashboard/unit-dashboard.component';
 import {UnitAdminStateComponent} from './units/states/edit/unit-admin-state.component';
 import {UnitGroupsComponent} from './units/states/groups/unit-groups/unit-groups.component';
 import {PortfoliosComponent} from './units/states/portfolios/portfolios.component';
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {StudentsListComponent} from './units/states/students-list/students-list.component';
 import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
+import {UnitDashboardComponent} from './units/states/unit-dashboard/unit-dashboard.component';
 import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
 import {resolveUnitCodeContent} from './units/unit-code-content.guard';
 import {UnitRootStateComponent} from './units/unit-root-state.component';

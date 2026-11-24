@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {RouterLink} from '@angular/router';
-import type {DashboardInboxPreset} from '../../tasks/inbox/unit-task-inbox-state.component';
+import type {DashboardInboxPreset} from '../tasks/inbox/unit-task-inbox-state.component';
 
 @Component({
   selector: 'f-open-inbox-button',
