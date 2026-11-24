@@ -89,15 +89,15 @@ describe('UnitDashboardComponent', () => {
     {kind: 'assigned', assigned: true},
     {kind: 'synthetic', assigned: false},
   ])(
-    'lets a convenor view a tutor’s dashboard and inbox links, then return to their own',
+    'lets a $kind convenor view a tutor’s dashboard and inbox links, then return to their own',
     async ({assigned}) => {
       const page = openDashboard('Convenor', assigned);
       const selector = await TestbedHarnessEnvironment.loader(fixture).getHarness(MatSelectHarness);
-      expect(await selector.getValueText()).toBe('Alex Lee (You)');
+      expect(await selector.getValueText()).toBe('Myself');
       await selector.open();
       const options = await selector.getOptions();
       expect(await Promise.all(options.map((option) => option.getText()))).toEqual([
-        'Alex Lee (You)',
+        'Myself',
         'Sam Wu',
       ]);
       await options[1].click();
@@ -115,8 +115,8 @@ describe('UnitDashboardComponent', () => {
         expect(params.get('students')).toBe('mine');
       }
 
-      await selector.clickOptions({text: 'Alex Lee (You)'});
-      expect(await selector.getValueText()).toBe('Alex Lee (You)');
+      await selector.clickOptions({text: 'Myself'});
+      expect(await selector.getValueText()).toBe('Myself');
       expect(page.querySelector('button[aria-pressed="true"]')?.textContent).toContain('Convenor');
       expect(page.querySelector('f-convenor')).not.toBeNull();
       expect(page.textContent).toContain('Your roles');
