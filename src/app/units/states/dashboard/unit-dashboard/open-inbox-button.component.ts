@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {RouterLink} from '@angular/router';
+import type {DashboardInboxPreset} from '../../tasks/inbox/unit-task-inbox-state.component';
 
 @Component({
   selector: 'f-open-inbox-button',
@@ -17,6 +18,8 @@ import {RouterLink} from '@angular/router';
     <a
       class="inline-block cursor-pointer rounded-md bg-formatif-blue px-7 py-3 text-white no-underline hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
       routerLink="../tasks/inbox"
+      [queryParams]="viewAsUnitRoleId === null ? null : {viewAsUnitRoleId, students: 'mine'}"
+      [state]="dashboardInboxPreset ? {dashboardInboxPreset} : undefined"
     >
       Open inbox
     </a>
@@ -25,4 +28,6 @@ import {RouterLink} from '@angular/router';
 })
 export class OpenInboxButtonComponent {
   @Input() unreadMessagesCount?: number | 'Unavailable' | null;
+  @Input() viewAsUnitRoleId?: number;
+  @Input() dashboardInboxPreset?: DashboardInboxPreset;
 }

@@ -27,9 +27,11 @@ interface TimesheetDay {
 })
 export class WeeklyTimesheetComponent implements OnChanges {
   @Input({required: true}) unit: Unit;
+  @Input() userId?: number;
 
   private readonly userService = inject(UserService);
-  private readonly selection$: ReplaySubject<{unit: Unit; monday: Date}> = new ReplaySubject(1);
+  private readonly selection$: ReplaySubject<{unit: Unit; monday: Date; userId: number}> =
+    new ReplaySubject(1);
 
   public get browserTimezone(): string {
     return User.browserTimezone;
@@ -39,9 +41,9 @@ export class WeeklyTimesheetComponent implements OnChanges {
   public openDay: TimesheetDay | null = null;
 
   public readonly timesheet$ = this.selection$.pipe(
-    switchMap(({unit, monday}) =>
+    switchMap(({unit, monday, userId}) =>
       unit.getUserMarkingSessions(monday, addDays(monday, 6), this.browserTimezone).pipe(
-        map((sessions) => this.summariseWeek(monday, sessions)),
+        map((sessions) => this.summariseWeek(monday, sessions, userId)),
         catchError(() => of({status: 'error' as const})),
         startWith({status: 'loading' as const}),
       ),
@@ -84,15 +86,18 @@ export class WeeklyTimesheetComponent implements OnChanges {
   private selectWeek(monday: Date): void {
     this.monday = monday;
     this.openDay = null;
-    this.selection$.next({unit: this.unit, monday});
+    this.selection$.next({
+      unit: this.unit,
+      monday,
+      userId: this.userId ?? this.userService.currentUser.id,
+    });
   }
 
-  private summariseWeek(monday: Date, sessions: MarkingSession[]) {
+  private summariseWeek(monday: Date, sessions: MarkingSession[], userId: number) {
     const days = Array.from({length: 7}, (_, index): TimesheetDay => {
       const date = addDays(monday, index);
       return {date, label: weekday.format(date), sessions: [], minutes: 0, assessments: 0};
     });
-    const userId = this.userService.currentUser.id;
     const ownSessions = sessions
       .filter(
         (session) =>

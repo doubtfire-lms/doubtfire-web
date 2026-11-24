@@ -23,7 +23,13 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import {ProjectService, Task, TaskService, Unit} from 'src/app/api/models/doubtfire-model';
+import {
+  ProjectService,
+  Task,
+  TaskService,
+  Unit,
+  UnitRole,
+} from 'src/app/api/models/doubtfire-model';
 import {WeeklySummary} from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -49,8 +55,13 @@ export class TutorComponent implements OnChanges, OnInit, OnDestroy {
   @Input({required: true}) dashboardQueues: readonly DashboardQueue[];
   @Input({required: true}) showTimesheet: boolean;
 
-  private readonly context$: ReplaySubject<{unit: Unit; queues: readonly DashboardQueue[]}> =
-    new ReplaySubject(1);
+  @Input() viewAsStaff?: UnitRole;
+
+  private readonly context$: ReplaySubject<{
+    unit: Unit;
+    queues: readonly DashboardQueue[];
+    viewAsUnitRoleId?: number;
+  }> = new ReplaySubject(1);
   private readonly destroy$: Subject<void> = new Subject();
 
   public loading = true;
@@ -72,13 +83,17 @@ export class TutorComponent implements OnChanges, OnInit, OnDestroy {
   ) {}
 
   ngOnChanges(): void {
-    this.context$.next({unit: this.unit, queues: this.dashboardQueues});
+    this.context$.next({
+      unit: this.unit,
+      queues: this.dashboardQueues,
+      viewAsUnitRoleId: this.viewAsStaff?.id,
+    });
   }
 
   ngOnInit(): void {
     this.context$
       .pipe(
-        switchMap(({unit, queues}) => {
+        switchMap(({unit, queues, viewAsUnitRoleId}) => {
           this.loading = true;
           this.readyForFeedbackCount = null;
           this.needsHelpCount = null;
@@ -90,25 +105,18 @@ export class TutorComponent implements OnChanges, OnInit, OnDestroy {
           this.weeklySummaryUnavailable = false;
           this.queues = queues.map((queue) => ({...queue, count: null}));
 
-          const weeklySummary$ = this.loadWeeklySummary(unit.id).pipe(
-            tap((summary) => (this.weeklySummary = summary)),
-            catchError(() => {
-              this.weeklySummaryUnavailable = true;
-              return EMPTY;
-            }),
-            finalize(() => (this.weeklySummaryLoading = false)),
-          );
-
           // TaskService maps queue and inbox tasks to projects in the unit's student cache.
           const workload$ = this.projectService.loadStudents(unit).pipe(
             switchMap(() => {
-              const inbox$ = this.taskService.queryTasksForTaskInbox(unit, undefined, true).pipe(
-                tap((tasks) => this.calculateMetrics(tasks)),
-                catchError(() => {
-                  this.alertService.error('Error loading tutor dashboard.', 6000);
-                  return EMPTY;
-                }),
-              );
+              const inbox$ = this.taskService
+                .queryTasksForTaskInbox(unit, undefined, true, viewAsUnitRoleId)
+                .pipe(
+                  tap((tasks) => this.calculateMetrics(tasks)),
+                  catchError(() => {
+                    this.alertService.error('Error loading tutor dashboard.', 6000);
+                    return EMPTY;
+                  }),
+                );
               const queues$ = this.queues.map((queue) => {
                 const tasks$ =
                   queue.path === 'moderation'
@@ -130,6 +138,19 @@ export class TutorComponent implements OnChanges, OnInit, OnDestroy {
             }),
             finalize(() => (this.loading = false)),
           );
+          const summarySource$ =
+            viewAsUnitRoleId == null
+              ? this.loadWeeklySummary(unit.id)
+              : this.notificationService.getStaffWeeklySummary(unit.id, viewAsUnitRoleId);
+          const weeklySummary$ = summarySource$.pipe(
+            tap((summary) => (this.weeklySummary = summary)),
+            catchError(() => {
+              this.weeklySummaryUnavailable = true;
+              return EMPTY;
+            }),
+            finalize(() => (this.weeklySummaryLoading = false)),
+          );
+
           return merge(workload$, weeklySummary$);
         }),
         takeUntil(this.destroy$),

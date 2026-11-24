@@ -1,5 +1,8 @@
 import {AsyncPipe, Location} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 import {ActivatedRoute} from '@angular/router';
 import {map} from 'rxjs';
 import {Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
@@ -9,7 +12,14 @@ import {DashboardQueue} from './dashboard-queue';
 import {TutorComponent} from './tutor/tutor.component';
 
 @Component({
-  imports: [AsyncPipe, ConvenorComponent, TutorComponent],
+  imports: [
+    AsyncPipe,
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    ConvenorComponent,
+    TutorComponent,
+  ],
   selector: 'f-unit-dashboard',
   host: {
     class:
@@ -20,8 +30,11 @@ import {TutorComponent} from './tutor/tutor.component';
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class UnitDashboardComponent {
+  protected selectedStaff: UnitRole | null = null;
+
   public readonly dashboard$ = this.route.parent.data.pipe(
     map(({unit}: {unit?: Unit}) => {
+      this.selectedStaff = null;
       if (!unit) {
         return null;
       }
@@ -33,6 +46,13 @@ export class UnitDashboardComponent {
       return {
         unit,
         unitRole: role?.role,
+        ownName: staffRole?.user?.name ?? role?.user?.name,
+        otherStaff:
+          role?.role === 'Convenor'
+            ? unit.staff
+                .filter((staff) => staff.id !== role.id)
+                .sort((a, b) => a.user.name.localeCompare(b.user.name))
+            : [],
         queues: this.dashboardQueues(unit, role),
         showTimesheet: !!staffRole && role.role === 'Tutor',
       };
@@ -49,7 +69,7 @@ export class UnitDashboardComponent {
     return this.location.prepareExternalUrl(this.location.path());
   }
 
-  private dashboardQueues(unit: Unit, role: UnitRole | null): DashboardQueue[] {
+  protected dashboardQueues(unit: Unit, role: UnitRole | null): DashboardQueue[] {
     const queues: DashboardQueue[] = [];
 
     if (role?.role === 'Convenor' || (role?.id && unit.staff.some((s) => s.mentorId === role.id))) {

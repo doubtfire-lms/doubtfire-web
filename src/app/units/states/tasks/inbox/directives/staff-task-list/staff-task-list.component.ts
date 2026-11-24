@@ -308,7 +308,13 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.filteredTasks = null;
     this.fetchedAllTasks = false;
     this.viewPreferences = this.defaultViewPreferences();
-    this.viewAsUnitRoleId = VIEW_AS_SELF;
+    const requestedRoleId = this.canViewInboxAs
+      ? Number(this.route.snapshot.queryParamMap.get('viewAsUnitRoleId'))
+      : null;
+    const requestedRole = this.unit.staff.find(
+      (staff) => staff.id === requestedRoleId && staff.id !== this.unitRole.id,
+    );
+    this.viewAsUnitRoleId = requestedRole?.id ?? VIEW_AS_SELF;
 
     // Apply the card's selection after defaults and before the first task fetch.
     switch (this.dashboardInboxPreset) {
@@ -322,7 +328,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     // Does the current user have any tutorials?
-    this.userHasTutorials = this.unit.tutorialsForUserName(this.inboxUserName)?.length > 0;
+    this.userHasTutorials =
+      this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
 
     const staff = this.unit.staff.slice();
 
@@ -340,7 +347,9 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
     this.viewAsOptions = [
       {id: VIEW_AS_SELF, name: 'Myself'},
-      ...allTutors
+      ...staff
+        .filter((ur) => tutorUserIds.has(ur.user?.id) || ur === requestedRole)
+        .sort(byName)
         .filter((ur) => ur.id !== this.unitRole.id)
         .map((ur) => ({id: ur.id, name: ur.user?.name})),
     ];
@@ -361,6 +370,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       },
       this.filters,
     );
+
+    if (requestedRole) {
+      this.filters.tutorialIdSelected = 'mine';
+    }
 
     // mat-select skips options with a null value, so the "all" entry needs a real one to match
     this.filters.taskDefinitionIdSelected ??= ALL_TASK_DEFINITIONS;
@@ -450,7 +463,14 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.fetchedAllTasks = false;
     // Another tutor's inbox is only their own students
     const defaultTutorialId = this.userHasTutorials ? 'mine' : 'all';
-    this.tutorialIdChanged(false, this.isViewingAsOther ? 'mine' : defaultTutorialId);
+    const students = this.isViewingAsOther ? 'mine' : defaultTutorialId;
+    this.tutorialIdChanged(false, students);
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {viewAsUnitRoleId: this.viewAsUnitRole?.id ?? null, students},
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
     this.refreshData();
   }
 
