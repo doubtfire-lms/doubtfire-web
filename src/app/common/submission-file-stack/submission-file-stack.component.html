@@ -67,14 +67,8 @@
           <mat-icon class="size-4.5! shrink-0 text-[18px]! leading-[18px]! text-slate-500">
             {{ iconFor(card) }}
           </mat-icon>
-          <span class="shrink truncate text-sm leading-5 font-medium text-slate-800">
+          <span class="mr-auto min-w-0 truncate text-sm leading-5 font-medium text-slate-800">
             {{ card.requirementName }}
-          </span>
-          <span
-            class="min-w-0 flex-1 truncate text-xs leading-5 text-slate-500"
-            [title]="card.entry.path"
-          >
-            {{ card.entry.name }}{{ card.sizeLabel ? ' · ' + card.sizeLabel : '' }}
           </span>
           @if (card.entry.kind === 'pdf') {
             <button

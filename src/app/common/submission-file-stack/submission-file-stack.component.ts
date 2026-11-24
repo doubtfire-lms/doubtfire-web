@@ -26,7 +26,6 @@ interface SubmissionFileCard {
   entry: ArchiveFileEntry;
   requirementName: string;
   expanded: boolean;
-  sizeLabel: string;
   // Highlighted html for each line of a code or text file
   codeLines: string[] | null;
   loadFailed: boolean;
@@ -167,7 +166,6 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
           entry: createArchiveFilePlaceholder(path, zipFile),
           requirementName: '',
           expanded: true,
-          sizeLabel: '',
           codeLines: null,
           loadFailed: false,
         });
@@ -207,7 +205,6 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
       const data = await entry.zipObject.async('uint8array');
       const classification = classifyArchiveFile(entry.path, data);
       Object.assign(entry, createArchiveFileEntry(entry, classification, data));
-      card.sizeLabel = this.formatSize(data.length);
 
       if (isArchiveCodeOrTextFile(entry)) {
         card.codeLines = await this.highlightLines(entry.textContent ?? '', entry.language);
@@ -251,16 +248,6 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
       }
     }
     this.cards = [];
-  }
-
-  private formatSize(bytes: number): string {
-    if (bytes < 1024) {
-      return `${bytes} B`;
-    }
-    if (bytes < 1024 * 1024) {
-      return `${(bytes / 1024).toFixed(1)} KB`;
-    }
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   }
 
   private escapeHtml(text: string): string {
