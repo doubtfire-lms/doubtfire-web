@@ -179,6 +179,7 @@ import {AudioCommentRecorderComponent} from './common/audio-recorder/audio/audio
 import {MicrophoneTesterComponent} from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import {ChartBaseComponent} from './common/chart-base/chart-base-component/chart-base-component.component';
 import {DragDropDirective} from './common/directives/drag-drop.directive';
+import {DocxViewerComponent} from './common/docx-viewer/docx-viewer.component';
 import {EditProfileFormComponent} from './common/edit-profile-form/edit-profile-form.component';
 import {FChipComponent} from './common/f-chip/chip.component';
 import {FeedbackTemplateEditorComponent} from './common/feedback-template-editor/feedback-template-editor.component';
@@ -614,6 +615,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
     ArchiveViewerComponent,
+    DocxViewerComponent,
     TaskFileViewerComponent,
     SubmissionFileStackComponent,
     SubmissionPdfComponent,

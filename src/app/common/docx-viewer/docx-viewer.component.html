@@ -1,0 +1,60 @@
+<div id="docxContainer">
+  <div id="docxActionBar">
+    <div id="docxViewActions" [hidden]="!documentBlob">
+      <button aria-label="Switch viewer" mat-icon-button (click)="toggleReadingView()">
+        @if (useReadingView) {
+          <mat-icon>toggle_on</mat-icon>
+        } @else {
+          <mat-icon>toggle_off</mat-icon>
+        }
+      </button>
+      <button aria-label="Download Word document" mat-icon-button (click)="downloadDocument()">
+        <mat-icon>download</mat-icon>
+      </button>
+    </div>
+    <div id="docxActions" [hidden]="isLoading || errorMessage || useReadingView">
+      <form (ngSubmit)="findNextDocxMatch()">
+        <mat-form-field appearance="outline" class="docx-form-field" floatLabel="auto" ngSubmit>
+          <mat-icon matPrefix>search</mat-icon>
+          <input
+            matInput
+            name="docxSearchString"
+            placeholder="Search DOCX"
+            type="text"
+            [(ngModel)]="docxSearchString"
+            (ngModelChange)="searchDocx(docxSearchString)"
+          />
+
+          <button
+            aria-label="Zoom out Word document"
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="zoomOut()"
+          >
+            <mat-icon>zoom_out</mat-icon>
+          </button>
+          <button
+            aria-label="Zoom in Word document"
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="zoomIn()"
+          >
+            <mat-icon>zoom_in</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+  @if (errorMessage) {
+    <div class="flex min-h-[350px] w-full flex-1 items-center justify-center px-4 text-slate-600">
+      {{ errorMessage }}
+    </div>
+  } @else if (isLoading) {
+    <mat-spinner color="accent" diameter="100" strokeWidth="2"></mat-spinner>
+  }
+  <div class="docx-preview-container" [hidden]="isLoading || errorMessage">
+    <div #documentContainer [style.zoom]="zoomValue"></div>
+  </div>
+</div>

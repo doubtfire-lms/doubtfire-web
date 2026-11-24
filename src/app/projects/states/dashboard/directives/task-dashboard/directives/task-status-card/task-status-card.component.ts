@@ -217,6 +217,10 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit, OnDest
   }
 
   public get canManageStaffTask(): boolean {
-    return this.currentUnitRole?.role === 'Convenor' || this.currentUnitRole?.role === 'Tutor';
+    return (
+      this.currentUnitRole?.role === 'Convenor' ||
+      this.currentUnitRole?.role === 'Tutor' ||
+      this.userService.currentUser?.systemRole === 'Admin'
+    );
   }
 }

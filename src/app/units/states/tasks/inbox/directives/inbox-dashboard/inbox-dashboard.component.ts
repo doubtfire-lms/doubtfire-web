@@ -117,7 +117,7 @@ export class InboxDashboardComponent implements OnChanges {
       return false;
     }
 
-    if (!this.currentUnitRole) {
+    if (!this.currentUnitRole && this.userService.currentUser?.systemRole !== 'Admin') {
       return false;
     }
 
@@ -125,9 +125,9 @@ export class InboxDashboardComponent implements OnChanges {
     tutor.unit = this.task.unit;
 
     const canAccess =
-      this.currentUnitRole.role === 'Convenor' ||
-      this.currentUnitRole.role === 'Admin' ||
-      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id);
+      this.userService.currentUser?.systemRole === 'Admin' ||
+      this.currentUnitRole?.role === 'Convenor' ||
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole?.id);
 
     return canAccess;
   }

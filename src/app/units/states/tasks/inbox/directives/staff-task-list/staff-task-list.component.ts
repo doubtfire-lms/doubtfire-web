@@ -314,7 +314,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       (a.user?.name ?? '').localeCompare(b.user?.name ?? '');
 
     const mentored = staff
-      .filter((ur) => ur.mentorId === this.unitRole.id)
+      .filter((ur) => !this.isAdmin && ur.mentorId === this.unitRole.id)
       .slice()
       .sort(byName);
 
@@ -411,7 +411,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public get canViewInboxAs(): boolean {
-    return this.viewType === 'inbox' && this.unitRole?.role === 'Convenor';
+    return this.viewType === 'inbox' && (this.unitRole?.role === 'Convenor' || this.isAdmin);
+  }
+
+  public get isAdmin(): boolean {
+    return this.userService.currentUser?.systemRole === 'Admin';
   }
 
   public get isViewingAsOther(): boolean {
@@ -584,7 +588,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       );
     }
 
-    if (this.viewType === 'moderation' && this.unitRole?.role === 'Convenor' && filteredTasks) {
+    if (
+      this.viewType === 'moderation' &&
+      (this.unitRole?.role === 'Convenor' || this.isAdmin) &&
+      filteredTasks
+    ) {
       // Escalations are shared across convenors, regardless of tutor or tutorial scope.
       const scopedTasks = new Set(filteredTasks);
       filteredTasks = tasksForDefinition.filter(
