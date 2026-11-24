@@ -3,6 +3,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ActivatedRoute, provideRouter} from '@angular/router';
 import {of} from 'rxjs';
 import {ProjectService, TaskService, Unit} from 'src/app/api/models/doubtfire-model';
+import {NotificationService} from 'src/app/api/services/notification.service';
 import {ConvenorComponent} from './convenor.component';
 
 describe('ConvenorComponent', () => {
@@ -19,6 +20,10 @@ describe('ConvenorComponent', () => {
       imports: [ConvenorComponent],
       providers: [
         provideRouter([]),
+        {
+          provide: NotificationService,
+          useValue: {getNotifications: () => of({groups: [], total: 0, perPage: 20})},
+        },
         {provide: ActivatedRoute, useValue: {parent: {data: of({unit})}}},
         {provide: ProjectService, useValue: {loadStudents: () => of([])}},
         {
@@ -50,6 +55,7 @@ describe('ConvenorComponent', () => {
     expect(dashboard.querySelector('f-open-inbox-button a[href]')?.textContent).toContain(
       'Open inbox',
     );
+    expect(dashboard.querySelector('f-latest-weekly-summary section')).toBeNull();
     expect(dashboard.querySelector('f-ta-workload-overview')).not.toBeNull();
     expect(dashboard.querySelector('f-task-turnaround')).not.toBeNull();
   });

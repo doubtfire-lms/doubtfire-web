@@ -18,6 +18,7 @@
     }
   </div>
   <f-open-inbox-button />
+  <f-latest-weekly-summary [unitId]="workload.unit.id" />
   <f-ta-workload-overview [unit]="workload.unit" />
   <f-task-turnaround [unit]="workload.unit" />
   <f-orphaned-students [students]="workload.students" />

@@ -4,6 +4,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, catchError, combineLatest, map, of, startWith, switchMap} from 'rxjs';
 import {ProjectService, TaskService, Unit} from 'src/app/api/models/doubtfire-model';
+import {LatestWeeklySummaryComponent} from '../latest-weekly-summary.component';
 import {OpenInboxButtonComponent} from '../open-inbox-button.component';
 import {OrphanedStudentsComponent} from './orphaned-students.component';
 import {TaWorkloadOverviewComponent} from './ta-workload-overview.component';
@@ -16,6 +17,7 @@ type WorkloadCount = number | 'Unavailable' | null;
   imports: [
     AsyncPipe,
     MatIconModule,
+    LatestWeeklySummaryComponent,
     OpenInboxButtonComponent,
     OrphanedStudentsComponent,
     TaWorkloadOverviewComponent,
