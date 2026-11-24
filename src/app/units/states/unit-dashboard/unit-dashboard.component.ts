@@ -1,25 +1,20 @@
 import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
 import {ActivatedRoute} from '@angular/router';
 import {map} from 'rxjs';
 import {Unit, UnitRole} from 'src/app/api/models/doubtfire-model';
 import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+import {
+  StaffViewAsId,
+  StaffViewAsSelectorComponent,
+  VIEW_AS_SELF,
+} from '../../staff-view-as-selector.component';
 import {ConvenorComponent} from './convenor/convenor.component';
 import {DashboardQueue} from './dashboard-queue';
 import {TutorComponent} from './tutor/tutor.component';
 
 @Component({
-  imports: [
-    AsyncPipe,
-    FormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    ConvenorComponent,
-    TutorComponent,
-  ],
+  imports: [AsyncPipe, StaffViewAsSelectorComponent, ConvenorComponent, TutorComponent],
   selector: 'f-unit-dashboard',
   host: {
     class:
@@ -30,12 +25,13 @@ import {TutorComponent} from './tutor/tutor.component';
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class UnitDashboardComponent {
+  protected readonly self = VIEW_AS_SELF;
   protected selectedStaff: UnitRole | null = null;
 
   protected activeView: 'Convenor' | 'Tutor' | null = null;
 
-  protected selectStaff(staff: UnitRole | null): void {
-    this.selectedStaff = staff;
+  protected selectStaff(id: StaffViewAsId, staff: UnitRole[]): void {
+    this.selectedStaff = staff.find((role) => role.id === id) ?? null;
     this.activeView = null;
   }
 
@@ -47,7 +43,7 @@ export class UnitDashboardComponent {
 
   public readonly dashboard$ = this.route.parent.data.pipe(
     map(({unit}: {unit?: Unit}) => {
-      this.selectStaff(null);
+      this.selectStaff(VIEW_AS_SELF, []);
       if (!unit) {
         return null;
       }
@@ -60,7 +56,6 @@ export class UnitDashboardComponent {
         unit,
         unitRole: role?.role,
         staffRole,
-        ownName: staffRole?.user?.name ?? role?.user?.name,
         otherStaff:
           role?.role === 'Convenor'
             ? unit.staff

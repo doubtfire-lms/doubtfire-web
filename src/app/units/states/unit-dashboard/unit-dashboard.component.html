@@ -2,19 +2,13 @@
   <h1 class="m-0 mb-2 text-[28px] font-medium">Unit Dashboard</h1>
   @if (dashboard$ | async; as dashboard) {
     @if (dashboard.unitRole === 'Convenor') {
-      <mat-form-field appearance="outline" class="mt-3 w-full max-w-80" subscriptSizing="dynamic">
-        <mat-label>View as</mat-label>
-        <mat-select
-          [canSelectNullableOptions]="true"
-          [ngModel]="selectedStaff"
-          (ngModelChange)="selectStaff($event)"
-        >
-          <mat-option [value]="null">{{ dashboard.ownName }} (You)</mat-option>
-          @for (staff of dashboard.otherStaff; track staff.id) {
-            <mat-option [value]="staff">{{ staff.user.name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+      <f-staff-view-as-selector
+        class="mt-3 inline-block w-full max-w-80"
+        label="View as"
+        [staff]="dashboard.otherStaff"
+        [value]="selectedStaff?.id ?? self"
+        (valueChange)="selectStaff($event, dashboard.otherStaff)"
+      />
     }
     @let primaryRole = selectedStaff?.role ?? dashboard.unitRole;
     @let view = activeView ?? primaryRole;

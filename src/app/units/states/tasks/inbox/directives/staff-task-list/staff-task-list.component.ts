@@ -40,6 +40,7 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {StaffViewAsId, VIEW_AS_SELF} from 'src/app/units/staff-view-as-selector.component';
 import type {DashboardInboxPreset} from '../../unit-task-inbox-state.component';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 
@@ -93,8 +94,6 @@ const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
 };
 
 const ALL_TASK_DEFINITIONS = '';
-
-const VIEW_AS_SELF = 'self';
 
 // The inbox and overflow queue lead with the longest-waiting task, so their default
 // is really a date sort and can be reversed. The other views have no ordering worth
@@ -176,8 +175,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     options: {id: string | number; inboxDescription: string | undefined}[];
   }[] = [];
 
-  viewAsOptions: {id: number | typeof VIEW_AS_SELF; name: string}[] = [];
-  viewAsUnitRoleId: number | typeof VIEW_AS_SELF = VIEW_AS_SELF;
+  viewAsOptions: UnitRole[] = [];
+  viewAsUnitRoleId: StaffViewAsId = VIEW_AS_SELF;
 
   tasks: Task[] = null;
 
@@ -345,14 +344,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     const tutorUserIds = new Set(this.unit.tutorials.map((t) => t.tutor?.id).filter(Boolean));
     const allTutors = staff.filter((ur) => tutorUserIds.has(ur.user?.id)).sort(byName);
 
-    this.viewAsOptions = [
-      {id: VIEW_AS_SELF, name: 'Myself'},
-      ...staff
-        .filter((ur) => tutorUserIds.has(ur.user?.id) || ur === requestedRole)
-        .sort(byName)
-        .filter((ur) => ur.id !== this.unitRole.id)
-        .map((ur) => ({id: ur.id, name: ur.user?.name})),
-    ];
+    this.viewAsOptions = staff
+      .filter((ur) => tutorUserIds.has(ur.user?.id) || ur === requestedRole)
+      .filter((ur) => ur.id !== this.unitRole.id)
+      .sort(byName);
     const shouldDefaultToMyStudents =
       (this.unitRole.role === 'Tutor' || this.unitRole.role === 'Convenor') &&
       this.userHasTutorials;

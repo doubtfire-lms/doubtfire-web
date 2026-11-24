@@ -340,6 +340,7 @@ import {TaskAssessmentCommentComponent} from './tasks/task-comments-viewer/task-
 import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-comments-viewer.component';
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {UnitTutorialModalComponent} from './units/modals/unit-tutorial-modal/unit-tutorial-modal.component';
+import {StaffViewAsSelectorComponent} from './units/staff-view-as-selector.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
 import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
 import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
@@ -848,6 +849,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
       initialNavigation: 'enabledNonBlocking',
     }),
     FormsModule,
+    StaffViewAsSelectorComponent,
     HttpClientModule,
     ClipboardModule,
     DragDropModule,

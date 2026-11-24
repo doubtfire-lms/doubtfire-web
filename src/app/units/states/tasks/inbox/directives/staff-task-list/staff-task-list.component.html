@@ -105,20 +105,12 @@
         <div class="my-2 text-xs font-bold tracking-normal text-gray-500 uppercase">Show</div>
         <div class="mb-3 flex flex-col gap-3">
           @if (canViewInboxAs) {
-            <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>View inbox as</mat-label>
-              <mat-select
-                name="viewAs"
-                [(ngModel)]="viewAsUnitRoleId"
-                (selectionChange)="viewAsChanged()"
-              >
-                @for (option of viewAsOptions; track option.id) {
-                  <mat-option [value]="option.id">
-                    <span class="truncate">{{ option.name }}</span>
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+            <f-staff-view-as-selector
+              label="View inbox as"
+              [staff]="viewAsOptions"
+              [value]="viewAsUnitRoleId"
+              (valueChange)="viewAsUnitRoleId = $event; viewAsChanged()"
+            />
           }
 
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
