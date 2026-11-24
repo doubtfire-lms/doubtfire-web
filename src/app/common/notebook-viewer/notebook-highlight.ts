@@ -70,7 +70,10 @@ function notebookLanguage(metadata: unknown, sourceSample: string): string | nul
   return result.relevance >= 3 ? (result.language ?? null) : null;
 }
 
-export function createNotebookHighlighter(metadata: unknown, sourceSample = ''): NotebookHighlighter {
+export function createNotebookHighlighter(
+  metadata: unknown,
+  sourceSample = '',
+): NotebookHighlighter {
   const language = notebookLanguage(metadata, sourceSample);
   return (source) => {
     if (!language || source.length > MAX_HIGHLIGHT_CHARS) {
