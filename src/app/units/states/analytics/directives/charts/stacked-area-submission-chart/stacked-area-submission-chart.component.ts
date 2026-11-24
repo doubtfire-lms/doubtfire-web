@@ -64,8 +64,10 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   }
 
   private buildChartData(): MultiSeries {
+    //console.log(this.snapshots);
+
     const days = [...this.snapshots.entries()].map(([name, snapshot]) => ({
-      name,
+      name: snapshot.snapshot_date,
       taskStats: getTaskStats(
         snapshot,
         this.campusFilter,
@@ -74,36 +76,22 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
         this.studentTargetGradeFilter,
         this.unit,
       ),
+      submittedCounts: snapshot.submitted_task_count_student_counts ?? {},
     }));
 
-    const CurrentUnitTaskDefinitions = this.unit.taskDefinitionCache.currentValues;
+    // Collect all unique task count keys across snapshots (e.g., "0", "1", "2", ...)
+    const taskCountKeys = Array.from(
+      new Set(days.flatMap((day) => Object.keys(day.submittedCounts))),
+    ).sort((a, b) => Number(b) - Number(a));
 
-    const SubmittedStatuses = [
-      'complete',
-      'assess_in_portfolio',
-      'discuss',
-      'demonstrate',
-      'redo',
-      'fix_and_resubmit',
-      'ready_for_feedback',
-      //'working_on_it',
-      'need_help',
-      'attention_required',
-      'time_exceeded',
-      'feedback_exceeded',
-      'fail',
-      //'not_started',
-    ];
+    //above, swap Number(b) - Number(a)) to flip y axis
 
-    //currently shows what tasks are in a submitted status over time. (This is not what has been asked for, just learning how this works)
-    return CurrentUnitTaskDefinitions.map((TaskDefinition) => ({
-      name: TaskDefinition.abbreviation,
-      series: days.map((day) => {
-        const taskCounts = day.taskStats?.[TaskDefinition.abbreviation] || {};
-        const value = SubmittedStatuses.reduce((sum, abbr) => sum + (taskCounts[abbr] || 0), 0);
-
-        return {name: day.name, value};
-      }),
+    return taskCountKeys.map((countKey) => ({
+      name: `${countKey} tasks`,
+      series: days.map((day) => ({
+        name: day.name,
+        value: day.submittedCounts[countKey] ?? 0,
+      })),
     }));
   }
 }

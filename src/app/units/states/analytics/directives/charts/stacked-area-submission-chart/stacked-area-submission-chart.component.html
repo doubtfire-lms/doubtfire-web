@@ -1,5 +1,8 @@
 <div class="px-4 pt-8 text-slate-600">
-  <p>stacked-area-submission-chart works!</p>
+  <p>
+    View the number of submitted tasks across all students over time, filtered by campus and/or
+    tutorial.
+  </p>
 </div>
 
 @if (snapshots.length) {
@@ -21,7 +24,6 @@
     >
     </ng-charts-area-chart-stacked>
   </div>
-
 } @else {
   <div class="flex h-full items-center justify-center">
     <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>

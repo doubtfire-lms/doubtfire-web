@@ -16,6 +16,7 @@ export type TaskCompletionSnapshot = {
    * Never sent by the API.
    */
   placeholder?: boolean;
+  submitted_task_count_student_counts?: Record<string, number>;
 };
 
 export type TaskStatusCounts = {
