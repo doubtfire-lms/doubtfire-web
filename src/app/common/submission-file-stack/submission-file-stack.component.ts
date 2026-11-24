@@ -165,10 +165,16 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
         cards.push({
           entry: createArchiveFilePlaceholder(path, zipFile),
           requirementName: '',
-          expanded: true,
+          // Cards start collapsed, so long submissions open as a short list
+          expanded: false,
           codeLines: null,
           loadFailed: false,
         });
+      }
+
+      // A single file is opened straight away, to save a click
+      if (cards.length === 1) {
+        cards[0].expanded = true;
       }
 
       if (requestedArchive !== this.archiveFile) {
