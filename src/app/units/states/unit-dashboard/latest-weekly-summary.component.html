@@ -1,7 +1,10 @@
 @let result = result$ | async;
 @let summary = result?.summary;
 @let hasActivity =
-  summary?.assessedTasks || summary?.sentComments || summary?.discussedTasks || summary?.studentTaskActivity;
+  summary?.assessedTasks ||
+  summary?.sentComments ||
+  summary?.discussedTasks ||
+  summary?.studentTaskActivity;
 @if (!result || result.unavailable || hasActivity) {
   <section
     aria-labelledby="weekly-summary-heading"
@@ -37,7 +40,9 @@
     } @else if (!result) {
       <p class="mt-4 mb-0 text-sm text-slate-600" role="status">Loading weekly summary…</p>
     } @else if (result.unavailable) {
-      <p class="mt-4 mb-0 text-sm text-slate-600" role="alert">Could not load the weekly summary.</p>
+      <p class="mt-4 mb-0 text-sm text-slate-600" role="alert">
+        Could not load the weekly summary.
+      </p>
     }
   </section>
 }

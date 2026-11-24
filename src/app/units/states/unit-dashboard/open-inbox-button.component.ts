@@ -18,7 +18,11 @@ import type {DashboardInboxPreset} from '../tasks/inbox/unit-task-inbox-state.co
     <a
       class="inline-block cursor-pointer rounded-md bg-formatif-blue px-7 py-3 text-white no-underline hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
       routerLink="../tasks/inbox"
-      [queryParams]="viewAsUnitRoleId === null ? null : {viewAsUnitRoleId, students: 'mine'}"
+      [queryParams]="
+        viewAsUnitRoleId === null
+          ? null
+          : {viewAsUnitRoleId, students: myStudentsOnly ? 'mine' : 'all'}
+      "
       [state]="dashboardInboxPreset ? {dashboardInboxPreset} : undefined"
     >
       Open inbox
@@ -29,5 +33,6 @@ import type {DashboardInboxPreset} from '../tasks/inbox/unit-task-inbox-state.co
 export class OpenInboxButtonComponent {
   @Input() unreadMessagesCount?: number | 'Unavailable' | null;
   @Input() viewAsUnitRoleId?: number;
+  @Input() myStudentsOnly = true;
   @Input() dashboardInboxPreset?: DashboardInboxPreset;
 }

@@ -7,6 +7,7 @@ import {BehaviorSubject, NEVER, of} from 'rxjs';
 import {
   ProjectService,
   TaskService,
+  Tutorial,
   Unit,
   UnitRole,
   UserService,
@@ -75,7 +76,7 @@ describe('UnitDashboardComponent', () => {
   it('renders the tutor dashboard loading state for a tutor', () => {
     const page = openDashboard('Tutor');
 
-    expect(page.querySelector('a[href$="#tutor-dashboard"]')?.textContent).toContain('Tutor');
+    expect(page.querySelector('button[aria-pressed="true"]')?.textContent).toContain('Tutor');
     expect(page.textContent).toContain('Ready for feedback');
     expect(page.textContent).toContain('Needs help');
     expect(page.textContent).toContain('Feedback overdue');
@@ -102,7 +103,7 @@ describe('UnitDashboardComponent', () => {
       await options[1].click();
 
       expect(await selector.getValueText()).toBe('Sam Wu');
-      expect(page.querySelector('a[href$="#tutor-dashboard"]')?.textContent).toContain('Tutor');
+      expect(page.querySelector('button[aria-pressed="true"]')?.textContent).toContain('Tutor');
       expect(page.textContent).toContain('Sam Wu’s roles');
       expect(page.textContent).toContain('Overflow tutor');
       expect(page.querySelector('f-convenor')).toBeNull();
@@ -116,14 +117,38 @@ describe('UnitDashboardComponent', () => {
 
       await selector.clickOptions({text: 'Alex Lee (You)'});
       expect(await selector.getValueText()).toBe('Alex Lee (You)');
-      expect(page.querySelector('a[href$="#convenor-dashboard"]')?.textContent).toContain(
-        'Convenor',
-      );
+      expect(page.querySelector('button[aria-pressed="true"]')?.textContent).toContain('Convenor');
       expect(page.querySelector('f-convenor')).not.toBeNull();
       expect(page.textContent).toContain('Your roles');
       expect(page.querySelector('a[href*="viewAsUnitRoleId"]')).toBeNull();
     },
   );
+
+  it('keeps a teaching convenor selected when switching dashboards', async () => {
+    const page = openDashboard('Convenor');
+    const {unit} = routeData.value;
+    const staff = unit.staff.find((role) => role.id === 7);
+    staff.role = 'Convenor';
+    unit.tutorialsCache.add(Object.assign(new Tutorial(unit), {id: 8, tutor: staff.user}));
+
+    const selector = await TestbedHarnessEnvironment.loader(fixture).getHarness(MatSelectHarness);
+    await selector.clickOptions({text: 'Sam Wu'});
+    expect(page.querySelector('f-convenor')).not.toBeNull();
+    const roleButton = (label: string) =>
+      Array.from(page.querySelectorAll<HTMLButtonElement>('button[aria-pressed]')).find(
+        (button) => button.textContent.trim() === label,
+      );
+    roleButton('Tutor').click();
+    fixture.detectChanges();
+    expect(page.querySelector('f-tutor-dashboard')).not.toBeNull();
+    expect(await selector.getValueText()).toBe('Sam Wu');
+    roleButton('Convenor').click();
+    fixture.detectChanges();
+    expect(page.querySelector('f-convenor')).not.toBeNull();
+    expect(page.querySelector('f-open-inbox-button a')?.getAttribute('href')).toContain(
+      'viewAsUnitRoleId=7',
+    );
+  });
 
   it.each([
     ['Tutor', true],
@@ -138,10 +163,10 @@ describe('UnitDashboardComponent', () => {
   it('renders the convenor view and a plain moderator badge for a convenor', () => {
     const page = openDashboard('Convenor');
 
-    expect(page.querySelector('a[href$="#convenor-dashboard"]')?.textContent).toContain('Convenor');
+    expect(page.querySelector('button[aria-pressed="true"]')?.textContent).toContain('Convenor');
     expect(page.querySelector('f-convenor#convenor-dashboard')).not.toBeNull();
     expect(page.textContent).toContain('Moderator');
-    expect(page.querySelectorAll('a')).toHaveLength(2);
+    expect(page.querySelectorAll('button[aria-pressed]')).toHaveLength(1);
     expect(page.querySelector('f-tutor-dashboard')).toBeNull();
   });
 });

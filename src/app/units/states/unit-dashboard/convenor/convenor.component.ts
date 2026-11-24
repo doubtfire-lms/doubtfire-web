@@ -1,7 +1,6 @@
 import {AsyncPipe} from '@angular/common';
-import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, inject} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
-import {ActivatedRoute} from '@angular/router';
 import {Observable, catchError, combineLatest, map, of, startWith, switchMap} from 'rxjs';
 import {ProjectService, TaskService, Unit} from 'src/app/api/models/doubtfire-model';
 import {LatestWeeklySummaryComponent} from '../latest-weekly-summary.component';
@@ -28,8 +27,10 @@ type WorkloadCount = number | 'Unavailable' | null;
   templateUrl: './convenor.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConvenorComponent {
-  private readonly route = inject(ActivatedRoute);
+export class ConvenorComponent implements OnChanges {
+  @Input({required: true}) unit: Unit;
+  @Input() viewAsUnitRoleId?: number;
+
   private readonly projectService = inject(ProjectService);
   private readonly taskService = inject(TaskService);
 
@@ -39,11 +40,11 @@ export class ConvenorComponent {
     {key: 'overflow', title: 'Overflow tasks available to claim', icon: 'more_time'},
   ] as const;
 
-  protected readonly workload$ = this.route.parent.data.pipe(
-    switchMap(({unit}: {unit?: Unit}) =>
-      unit ? this.loadWorkload(unit).pipe(map((workload) => ({unit, ...workload}))) : of(null),
-    ),
-  );
+  protected workload$: ReturnType<ConvenorComponent['loadWorkload']>;
+
+  ngOnChanges(): void {
+    this.workload$ = this.loadWorkload(this.unit);
+  }
 
   private loadWorkload(unit: Unit) {
     // TaskService maps the returned tasks to projects in the unit's student cache.
@@ -53,7 +54,7 @@ export class ConvenorComponent {
           students: of(students),
           feedback: this.loadCount(
             this.taskService
-              .queryTasksForTaskInbox(unit, undefined, false)
+              .queryTasksForTaskInbox(unit, undefined, false, this.viewAsUnitRoleId)
               .pipe(
                 map(
                   (tasks) =>

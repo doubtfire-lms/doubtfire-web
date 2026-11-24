@@ -1,4 +1,4 @@
-import {AsyncPipe, Location} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -32,9 +32,22 @@ import {TutorComponent} from './tutor/tutor.component';
 export class UnitDashboardComponent {
   protected selectedStaff: UnitRole | null = null;
 
+  protected activeView: 'Convenor' | 'Tutor' | null = null;
+
+  protected selectStaff(staff: UnitRole | null): void {
+    this.selectedStaff = staff;
+    this.activeView = null;
+  }
+
+  protected teachesTutorials(unit: Unit, staff?: UnitRole): boolean {
+    return (
+      !!staff?.user?.id && unit.tutorials.some((tutorial) => tutorial.tutor?.id === staff.user.id)
+    );
+  }
+
   public readonly dashboard$ = this.route.parent.data.pipe(
     map(({unit}: {unit?: Unit}) => {
-      this.selectedStaff = null;
+      this.selectStaff(null);
       if (!unit) {
         return null;
       }
@@ -46,6 +59,7 @@ export class UnitDashboardComponent {
       return {
         unit,
         unitRole: role?.role,
+        staffRole,
         ownName: staffRole?.user?.name ?? role?.user?.name,
         otherStaff:
           role?.role === 'Convenor'
@@ -62,12 +76,7 @@ export class UnitDashboardComponent {
   constructor(
     private route: ActivatedRoute,
     private globalStateService: GlobalStateService,
-    private location: Location,
   ) {}
-
-  public get dashboardUrl(): string {
-    return this.location.prepareExternalUrl(this.location.path());
-  }
 
   protected dashboardQueues(unit: Unit, role: UnitRole | null): DashboardQueue[] {
     const queues: DashboardQueue[] = [];

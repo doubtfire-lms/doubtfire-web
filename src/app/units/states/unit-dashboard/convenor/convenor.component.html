@@ -17,9 +17,9 @@
       </div>
     }
   </div>
-  <f-open-inbox-button />
-  <f-latest-weekly-summary [unitId]="workload.unit.id" />
-  <f-ta-workload-overview [unit]="workload.unit" />
-  <f-task-turnaround [unit]="workload.unit" />
+  <f-open-inbox-button [myStudentsOnly]="false" [viewAsUnitRoleId]="viewAsUnitRoleId" />
+  <f-latest-weekly-summary [unitId]="unit.id" [viewAsUnitRoleId]="viewAsUnitRoleId" />
+  <f-ta-workload-overview [unit]="unit" />
+  <f-task-turnaround [unit]="unit" />
   <f-orphaned-students [students]="workload.students" />
 }

@@ -1,6 +1,6 @@
 import {AsyncPipe, DatePipe} from '@angular/common';
-import {ChangeDetectionStrategy, Component, inject, Input, OnChanges} from '@angular/core';
-import {catchError, map, Observable, of, switchMap} from 'rxjs';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, inject} from '@angular/core';
+import {Observable, catchError, map, of, switchMap} from 'rxjs';
 import {WeeklySummary} from 'src/app/api/models/notification';
 import {NotificationService} from 'src/app/api/services/notification.service';
 

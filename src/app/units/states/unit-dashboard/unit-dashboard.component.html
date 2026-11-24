@@ -4,7 +4,11 @@
     @if (dashboard.unitRole === 'Convenor') {
       <mat-form-field appearance="outline" class="mt-3 w-full max-w-80" subscriptSizing="dynamic">
         <mat-label>View as</mat-label>
-        <mat-select [canSelectNullableOptions]="true" [(ngModel)]="selectedStaff">
+        <mat-select
+          [canSelectNullableOptions]="true"
+          [ngModel]="selectedStaff"
+          (ngModelChange)="selectStaff($event)"
+        >
           <mat-option [value]="null">{{ dashboard.ownName }} (You)</mat-option>
           @for (staff of dashboard.otherStaff; track staff.id) {
             <mat-option [value]="staff">{{ staff.user.name }}</mat-option>
@@ -12,7 +16,12 @@
         </mat-select>
       </mat-form-field>
     }
-    @if (selectedStaff?.role ?? dashboard.unitRole; as unitRole) {
+    @let primaryRole = selectedStaff?.role ?? dashboard.unitRole;
+    @let view = activeView ?? primaryRole;
+    @let teachingConvenor =
+      primaryRole === 'Convenor' &&
+      teachesTutorials(dashboard.unit, selectedStaff ?? dashboard.staffRole);
+    @if (primaryRole; as unitRole) {
       @let queues =
         selectedStaff ? dashboardQueues(dashboard.unit, selectedStaff) : dashboard.queues;
       <div class="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm">
@@ -20,14 +29,16 @@
           {{ selectedStaff ? selectedStaff.user.name + '’s roles' : 'Your roles' }}:
         </span>
         @if (unitRole === 'Convenor' || unitRole === 'Tutor') {
-          <a
-            class="rounded-full bg-slate-100 px-3 py-1 text-slate-800 underline hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-formatif-blue"
-            [href]="
-              dashboardUrl + (unitRole === 'Convenor' ? '#convenor-dashboard' : '#tutor-dashboard')
-            "
-          >
-            {{ unitRole }}
-          </a>
+          @for (role of teachingConvenor ? ['Convenor', 'Tutor'] : [unitRole]; track role) {
+            <button
+              class="cursor-pointer rounded-full bg-slate-100 px-3 py-1 text-slate-800 underline hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-formatif-blue aria-pressed:font-semibold"
+              type="button"
+              [attr.aria-pressed]="view === role"
+              (click)="activeView = role === 'Convenor' ? 'Convenor' : 'Tutor'"
+            >
+              {{ role }}
+            </button>
+          }
         } @else {
           <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-800">{{ unitRole }}</span>
         }
@@ -37,22 +48,21 @@
       </div>
     }
 
-    @if (dashboard.unitRole === 'Convenor' && selectedStaff !== null) {
-      <f-tutor-dashboard
-        [dashboardQueues]="[]"
-        [id]="selectedStaff.role === 'Convenor' ? 'convenor-dashboard' : 'tutor-dashboard'"
-        [showTimesheet]="selectedStaff.role === 'Tutor'"
+    @if (view === 'Convenor') {
+      <f-convenor
+        id="convenor-dashboard"
         [unit]="dashboard.unit"
-        [viewAsStaff]="selectedStaff"
+        [viewAsUnitRoleId]="selectedStaff?.id ?? undefined"
       />
-    } @else if (dashboard.unitRole === 'Convenor') {
-      <f-convenor id="convenor-dashboard" />
     } @else {
       <f-tutor-dashboard
         id="tutor-dashboard"
-        [dashboardQueues]="dashboard.queues"
-        [showTimesheet]="dashboard.showTimesheet"
+        [dashboardQueues]="selectedStaff ? [] : dashboard.queues"
+        [showTimesheet]="
+          teachingConvenor || (selectedStaff ? primaryRole === 'Tutor' : dashboard.showTimesheet)
+        "
         [unit]="dashboard.unit"
+        [viewAsStaff]="selectedStaff ?? undefined"
       />
     }
   }
