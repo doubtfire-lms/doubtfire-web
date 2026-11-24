@@ -83,7 +83,7 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   }
 
   private buildChartData(): MultiSeries {
-    console.log(this.snapshots);
+    //console.log(this.snapshots);
 
     let lastWeek: number | string | null = null;
     let weekCounter = 0;
