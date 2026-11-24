@@ -10,8 +10,19 @@ import {
 } from '@angular/core';
 import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
-import {TaskService} from 'src/app/api/services/task.service';
-import {getTaskStats, statusMapping} from '../chart-data-helpers';
+
+type SubmittedTaskCountDistributions = Record<
+  string, // campus
+  Record<
+    string, // tutorial ('__all__' or tutorial name)
+    Record<string, number> // e.g. "3,1,0,0": studentCount
+  >
+>;
+
+type SubmittedTaskCountStudentCounts = {
+  all: SubmittedTaskCountDistributions;
+  target_grades: Record<string, SubmittedTaskCountDistributions>;
+};
 
 @Component({
   selector: 'f-stacked-area-submission-chart',
@@ -30,8 +41,8 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   data: MultiSeries = [];
   colorScheme = {domain: ['']};
 
-  XAxisLabel: string = 'Date';
-  YAxisLabel: string = 'Tasks';
+  XAxisLabel: string = 'Week';
+  YAxisLabel: string = 'Students';
 
   xAxisTickFormatting = (val: string): string => {
     const [week, count] = String(val).split('-');
@@ -47,7 +58,6 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   };
 
   constructor(
-    private readonly taskService: TaskService,
     private readonly chartToolTipService: TooltipService,
     private readonly viewContainerRef: ViewContainerRef,
     private readonly injectorObj: Injector,
@@ -58,7 +68,6 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
     this.viewContainerRef = this.injectorObj.get(ViewContainerRef);
   }
 
-  //if something changes, build the data
   ngOnChanges(changes: SimpleChanges): void {
     if (
       changes['unit'] ||
@@ -68,9 +77,6 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
       changes['taskGradeFilter'] ||
       changes['studentTargetGradeFilter']
     ) {
-      this.colorScheme.domain = statusMapping.map(
-        (status) => this.taskService.statusColors.get(status) || '#000000',
-      );
       this.data = this.unit && this.snapshots.length ? this.buildChartData() : [];
       this.changeDetectorRef.markForCheck();
     }
@@ -94,15 +100,7 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
 
       return {
         name: `${week}-${weekCounter}`,
-        taskStats: getTaskStats(
-          snapshot,
-          this.campusFilter,
-          this.tutorialFilter,
-          this.taskGradeFilter,
-          this.studentTargetGradeFilter,
-          this.unit,
-        ),
-        submittedCounts: snapshot.submitted_task_count_student_counts ?? {},
+        submittedCounts: this.getFilteredSubmittedCounts(snapshot),
       };
     });
 
@@ -110,7 +108,9 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
       new Set(days.flatMap((day) => Object.keys(day.submittedCounts))),
     ).sort((a, b) => Number(b) - Number(a));
 
-    //above, swap Number(b) - Number(a)) to flip y axis
+    this.colorScheme = {
+      domain: this.generateGradientColors(taskCountKeys.length),
+    };
 
     return taskCountKeys.map((countKey) => ({
       name: `${countKey} tasks`,
@@ -119,5 +119,51 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
         value: day.submittedCounts[countKey] ?? 0,
       })),
     }));
+  }
+
+  private getFilteredSubmittedCounts(snapshot: TaskCompletionSnapshot): Record<string, number> {
+    const raw = snapshot.submitted_task_count_student_counts as unknown as
+      SubmittedTaskCountStudentCounts | undefined;
+    const allScope = raw?.all;
+    if (!allScope) {
+      return {};
+    }
+
+    const campuses = this.campusFilter === 'all' ? Object.keys(allScope) : [this.campusFilter];
+    const tutorialKey = this.tutorialFilter === 'all' ? '__all__' : this.tutorialFilter;
+    const totalsByTaskCount: Record<string, number> = {};
+
+    for (const campus of campuses) {
+      const distribution = allScope[campus]?.[tutorialKey] ?? {};
+
+      for (const [gradeCountsKey, studentCount] of Object.entries(distribution)) {
+        const totalTasks = gradeCountsKey
+          .split(',')
+          .reduce((sum, count) => sum + (Number(count) || 0), 0);
+
+        const bucket = String(totalTasks);
+        totalsByTaskCount[bucket] = (totalsByTaskCount[bucket] ?? 0) + studentCount;
+      }
+    }
+
+    return totalsByTaskCount;
+  }
+
+  private generateGradientColors(count: number): string[] {
+    if (count <= 0) {
+      return ['#000000'];
+    }
+    if (count === 1) {
+      return ['hsl(145, 65%, 45%)'];
+    }
+
+    const startHue = 220;
+    const endHue = 0;
+
+    return Array.from({length: count}, (_, i) => {
+      const ratio = i / (count - 1);
+      const hue = Math.round(startHue + ratio * (endHue - startHue));
+      return `hsl(${hue}, 65%, 50%)`;
+    });
   }
 }
