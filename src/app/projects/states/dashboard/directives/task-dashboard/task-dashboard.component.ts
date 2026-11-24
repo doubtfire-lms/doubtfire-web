@@ -77,7 +77,8 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.tutor = this.currentUnitRole !== undefined;
+    this.tutor =
+      this.currentUnitRole !== undefined || this.userService.currentUser?.systemRole === 'Admin';
     this.setSelectedDashboardView(DashboardViews.details);
 
     // Subscribed rather than read once, because ngOnChanges runs before ngOnInit
@@ -164,11 +165,17 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   }
 
   public get canAccessStaffViews(): boolean {
-    return this.tutor || !!this.currentUnitRole;
+    return (
+      this.tutor || !!this.currentUnitRole || this.userService.currentUser?.systemRole === 'Admin'
+    );
   }
 
   public get canManageStaffTask(): boolean {
-    return this.currentUnitRole?.role === 'Convenor' || this.currentUnitRole?.role === 'Tutor';
+    return (
+      this.currentUnitRole?.role === 'Convenor' ||
+      this.currentUnitRole?.role === 'Tutor' ||
+      this.userService.currentUser?.systemRole === 'Admin'
+    );
   }
 
   public get currentUnitRole(): UnitRole | undefined {
@@ -186,16 +193,16 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
       return false;
     }
 
-    if (!this.currentUnitRole) {
+    if (!this.currentUnitRole && this.userService.currentUser?.systemRole !== 'Admin') {
       return false;
     }
 
     tutor.unit = this.task.unit;
 
     return (
-      this.currentUnitRole.role === 'Convenor' ||
-      this.currentUnitRole.role === 'Admin' ||
-      (tutor.mentor && tutor.mentor.id === this.currentUnitRole.id)
+      this.userService.currentUser?.systemRole === 'Admin' ||
+      this.currentUnitRole?.role === 'Convenor' ||
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole?.id)
     );
   }
 

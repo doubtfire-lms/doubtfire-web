@@ -1,6 +1,8 @@
 <mat-card class="w-140 max-w-[90vw]">
   <mat-card-header class="mb-4">
-    <mat-card-title class="text-2xl">New Tutorial</mat-card-title>
+    <mat-card-title class="text-2xl">
+      {{ isEditing ? 'Edit Tutorial' : 'New Tutorial' }}
+    </mat-card-title>
     <mat-card-subtitle>{{ streamName }}</mat-card-subtitle>
   </mat-card-header>
   <mat-divider></mat-divider>
@@ -72,10 +74,24 @@
     </form>
   </mat-card-content>
   <mat-divider></mat-divider>
-  <mat-card-actions class="mt-2 flex justify-end gap-2">
+  <mat-card-actions class="mt-2 flex gap-2">
+    @if (isEditing) {
+      <button color="warn" mat-button type="button" (click)="deleteTutorial()">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    }
+    <span class="flex-1"></span>
     <button mat-button type="button" (click)="dialogRef.close()">Cancel</button>
-    <button color="primary" mat-raised-button type="button" (click)="submit()">
-      Create Tutorial
-    </button>
+    @if (isEditing) {
+      <button color="primary" mat-raised-button type="button" (click)="submit()">
+        <mat-icon>save</mat-icon>
+        Save
+      </button>
+    } @else {
+      <button color="primary" mat-raised-button type="button" (click)="submit()">
+        Create Tutorial
+      </button>
+    }
   </mat-card-actions>
 </mat-card>

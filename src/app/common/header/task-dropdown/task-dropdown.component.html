@@ -90,7 +90,7 @@
           <mat-icon aria-label="Task Explorer Icon" fontIcon="pageview"></mat-icon> Explorer
         </button>
 
-        @if (isMentor || unitRole.role === 'Convenor') {
+        @if (isMentor || unitRole.role === 'Convenor' || isAdmin) {
           <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'tasks', 'moderation']">
             <mat-icon aria-label="Audit Icon">rate_review</mat-icon> Moderation
           </button>
@@ -111,10 +111,12 @@
           <mat-icon aria-label="Tutor Discussion icon" fontIcon="qr_code_scanner"></mat-icon
           >Discussion
         </button>
-        <button mat-menu-item (click)="openTutorNotes()">
-          <mat-icon aria-label="Tutor Moderation icon" fontIcon="local_library"></mat-icon>My
-          Moderation Notes
-        </button>
+        @if (unitRole.id) {
+          <button mat-menu-item (click)="openTutorNotes()">
+            <mat-icon aria-label="Tutor Moderation icon" fontIcon="local_library"></mat-icon>My
+            Moderation Notes
+          </button>
+        }
         <mat-divider></mat-divider>
         <!-- <p class="task-dropdown-heading">Students</p> -->
         <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'students']">

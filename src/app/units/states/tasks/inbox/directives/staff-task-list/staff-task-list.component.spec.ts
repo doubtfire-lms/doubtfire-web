@@ -50,6 +50,7 @@ const hotkeysServiceStub = {
   removeShortcuts: () => {},
 };
 const emptyProvider = {};
+const userServiceStub = {currentUser: {systemRole: 'Tutor', name: 'Tutor'}};
 const routerStub = {
   navigate: vi.fn(),
 };
@@ -68,7 +69,7 @@ describe('StaffTaskListComponent', () => {
         {provide: MatDialog, useValue: emptyProvider},
         {provide: CsvUploadModalService, useValue: emptyProvider},
         {provide: CsvResultModalService, useValue: emptyProvider},
-        {provide: UserService, useValue: emptyProvider},
+        {provide: UserService, useValue: userServiceStub},
         {provide: HotkeysService, useValue: hotkeysServiceStub},
         {provide: Router, useValue: routerStub},
         {provide: ActivatedRoute, useValue: emptyProvider},
@@ -83,6 +84,7 @@ describe('StaffTaskListComponent', () => {
 
   beforeEach(() => {
     routerStub.navigate.mockReset();
+    userServiceStub.currentUser = {systemRole: 'Tutor', name: 'Tutor'};
     fixture = TestBed.createComponent(StaffTaskListComponent);
     component = fixture.componentInstance;
   });
@@ -147,6 +149,38 @@ describe('StaffTaskListComponent', () => {
 
     expect(source).toHaveBeenLastCalledWith(component.unit, undefined, true, 7, false);
     expect(component.filters.tutorialIdSelected).toBe('mine');
+  });
+
+  it('lets an admin without a unit role view a tutor inbox', () => {
+    userServiceStub.currentUser = {systemRole: 'Admin', name: 'Admin'};
+    const tutorRole = {id: 7, user: {name: 'Tutor'}};
+    const source = vi.fn(() => of([]));
+    component.unit = {
+      id: 20,
+      staff: [tutorRole],
+      tutorials: [],
+      tutorialsForUserName: () => [],
+    } as never;
+    component.unitRole = {role: 'Admin'} as never;
+    component.viewType = 'inbox';
+    component.filters = {tutorialIdSelected: 'all'};
+    component.taskData = {
+      source,
+      selectedTask: null,
+      taskKey: null,
+      onSelectedTaskChange: () => {},
+      taskDefMode: false,
+    };
+    component.studentFilter = [
+      {id: 'all', inboxDescription: 'All Students', abbreviation: '__all', forceStream: false},
+      {id: 'mine', inboxDescription: 'My Students', abbreviation: '__mine', forceStream: true},
+    ];
+
+    expect(component.canViewInboxAs).toBe(true);
+    component.viewAsUnitRoleId = 7;
+    component.viewAsChanged();
+
+    expect(source).toHaveBeenLastCalledWith(component.unit, undefined, true, 7, false);
   });
 
   it('shows every unit escalation to convenors while keeping routine moderation scoped', () => {

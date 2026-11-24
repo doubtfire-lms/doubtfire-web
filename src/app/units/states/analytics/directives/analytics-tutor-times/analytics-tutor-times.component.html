@@ -5,7 +5,7 @@
     </mat-card-title>
 
     <div class="flex gap-1">
-      @if (role === 'Convenor') {
+      @if (role === 'Convenor' || isAdmin) {
         <button
           mat-button
           matTooltip="Download CSV summary for the selected date range"
