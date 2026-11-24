@@ -344,7 +344,17 @@ export async function renderNotebookPreview(notebook: unknown): Promise<string> 
   if (notebook['cells'].length > 2000) {
     throw new Error('Notebook has too many cells to preview');
   }
-  const hasCode = notebook['cells'].some((cell) => isRecord(cell) && cell['cell_type'] === 'code');
+  let hasCode = false;
+  let codeSample = '';
+  for (const cell of notebook['cells']) {
+    if (!isRecord(cell) || cell['cell_type'] !== 'code') {
+      continue;
+    }
+    hasCode = true;
+    if (codeSample.length < 12_000) {
+      codeSample += `\n${notebookText(cell['source']).slice(0, 12_000 - codeSample.length)}`;
+    }
+  }
   const [math, highlight] = await Promise.all([
     // Load KaTeX only for notebooks that look like they contain math.
     hasMath(notebook['cells'])
@@ -352,7 +362,7 @@ export async function renderNotebookPreview(notebook: unknown): Promise<string> 
       : undefined,
     hasCode
       ? import('./notebook-highlight')
-          .then((m) => m.createNotebookHighlighter(notebook['metadata']))
+          .then((m) => m.createNotebookHighlighter(notebook['metadata'], codeSample))
           .catch(() => undefined)
       : undefined,
   ]);
