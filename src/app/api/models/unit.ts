@@ -1,6 +1,6 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable, filter, finalize, of, shareReplay, switchMap, take, tap} from 'rxjs';
+import {Observable, filter, finalize, map, of, shareReplay, switchMap, take, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
@@ -58,8 +58,7 @@ export interface GradeDefinition {
 }
 
 export class Unit extends Entity {
-  private taskCompletionSnapshotRequests: Map<string, Observable<TaskCompletionSnapshot[]>> =
-    new Map();
+  private taskCompletionSnapshotsRequest?: Observable<TaskCompletionSnapshot[]>;
 
   id: number;
   code: string;
@@ -961,38 +960,35 @@ export class Unit extends Entity {
     endDate?: Date,
     limit: number = 365,
   ): Observable<TaskCompletionSnapshot[]> {
-    let params = new HttpParams();
-
-    [startDate, endDate].forEach((date) => {
-      if (date) {
-        params = params.set(
-          date === startDate ? 'start_date' : 'end_date',
-          `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
-        );
-      }
-    });
-
-    params = params.set('limit', limit.toString());
-
-    const key = params.toString();
-    const pending = this.taskCompletionSnapshotRequests.get(key);
-    if (pending) {
-      return pending;
+    // The API sends the whole stored file, so every caller shares one download and filters it here.
+    if (!this.taskCompletionSnapshotsRequest) {
+      this.taskCompletionSnapshotsRequest = this.fetchTaskCompletionSnapshots().pipe(
+        finalize(() => (this.taskCompletionSnapshotsRequest = undefined)),
+        shareReplay({bufferSize: 1, refCount: true}),
+      );
     }
 
-    const request = this.fetchTaskCompletionSnapshots(params).pipe(
-      finalize(() => this.taskCompletionSnapshotRequests.delete(key)),
-      shareReplay({bufferSize: 1, refCount: true}),
+    const start = startDate ? new Date(startDate).setHours(0, 0, 0, 0) / 1000 : undefined;
+    const end = endDate ? new Date(endDate).setHours(23, 59, 59, 999) / 1000 : undefined;
+    return this.taskCompletionSnapshotsRequest.pipe(
+      map((snapshots) =>
+        snapshots
+          .filter((snapshot) => {
+            const timestamp = Number(snapshot.snapshot_timestamp);
+            return (
+              (start === undefined || timestamp >= start) && (end === undefined || timestamp <= end)
+            );
+          })
+          .slice(0, Math.min(limit, 365)),
+      ),
     );
-    this.taskCompletionSnapshotRequests.set(key, request);
-    return request;
   }
 
-  private fetchTaskCompletionSnapshots(params: HttpParams): Observable<TaskCompletionSnapshot[]> {
+  private fetchTaskCompletionSnapshots(): Observable<TaskCompletionSnapshot[]> {
     return AppInjector.get(HttpClient)
       .get<TaskCompletionSnapshot[] | SidekiqJob>(
         `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
-        {params, observe: 'response'},
+        {observe: 'response'},
       )
       .pipe(
         switchMap((response) => {
@@ -1006,7 +1002,7 @@ export class Unit extends Entity {
             .pipe(
               filter((completedJob) => completedJob.status === 'complete'),
               take(1),
-              switchMap(() => this.fetchTaskCompletionSnapshots(params)),
+              switchMap(() => this.fetchTaskCompletionSnapshots()),
             );
         }),
       );
