@@ -137,7 +137,10 @@
             } @else if (card.entry.kind === 'image' && card.entry.blobUrl) {
               <img class="block h-auto w-full" [alt]="card.entry.name" [src]="card.entry.blobUrl" />
             } @else if (card.entry.kind === 'pdf' && card.entry.blobUrl) {
-              <f-submission-pdf [pdfUrl]="card.entry.blobUrl"></f-submission-pdf>
+              <f-pdf-viewer
+                class="block h-[85vh] w-full"
+                [pdfUrl]="card.entry.blobUrl"
+              ></f-pdf-viewer>
             } @else {
               <div class="flex items-center gap-2 p-4 text-sm text-slate-600">
                 <mat-icon>insert_drive_file</mat-icon>
