@@ -1,5 +1,11 @@
 @if (snapshots.length) {
-  <div class="min-h-125">
+  <div
+    class="relative mt-8 min-h-125 cursor-pointer"
+    [fChartDayMarker]="markerIndex"
+    [markerLabel]="markerLabel"
+    [markerPointCount]="snapshots.length"
+    (click)="onChartClick(areaChart.hoveredVertical)"
+  >
     <ng-charts-area-chart-stacked
       #areaChart
       class="reverse-legend-order"

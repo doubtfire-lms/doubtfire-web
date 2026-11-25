@@ -342,6 +342,7 @@ import {TaskCommentsViewerComponent} from './tasks/task-comments-viewer/task-com
 import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-enrolment-modal/unit-student-enrolment-modal.component';
 import {UnitTutorialModalComponent} from './units/modals/unit-tutorial-modal/unit-tutorial-modal.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
+import {ChartDayMarkerDirective} from './units/states/analytics/directives/charts/chart-day-marker.directive';
 import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
 import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
 import {StackedAreaSubmissionChartComponent} from './units/states/analytics/directives/charts/stacked-area-submission-chart/stacked-area-submission-chart.component';
@@ -681,6 +682,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     StackedAreaStatusChartComponent,
     TaskStatusSummaryChartsComponent,
     TargetGradeSankeyComponent,
+    ChartDayMarkerDirective,
     SubmissionFilesModalComponent,
     TutorNotesComponent,
     TutorNotesViewComponent,

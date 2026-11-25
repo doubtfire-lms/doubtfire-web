@@ -152,11 +152,13 @@
     } @else if (chartView === 'timeseries') {
       <f-stacked-area-status-chart
         [campusFilter]="campusFilter"
+        [selectedDate]="markedSnapshotDate"
         [snapshots]="snapshots"
         [studentTargetGradeFilter]="studentTargetGradeFilter"
         [taskGradeFilter]="taskGradeFilter"
         [tutorialFilter]="tutorialFilter"
         [unit]="unit"
+        (daySelect)="selectSnapshotDate($event)"
       />
     }
   </mat-card>
@@ -170,11 +172,13 @@
     </mat-card-header>
     <f-stacked-area-submission-chart
       [campusFilter]="campusFilter"
+      [selectedDate]="markedSnapshotDate"
       [snapshots]="snapshots"
       [studentTargetGradeFilter]="studentTargetGradeFilter"
       [taskGradeFilter]="taskGradeFilter"
       [tutorialFilter]="tutorialFilter"
       [unit]="unit"
+      (daySelect)="selectSnapshotDate($event)"
     />
   </mat-card>
 
