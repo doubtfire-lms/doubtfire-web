@@ -166,11 +166,11 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
       };
     });
     this.xAxisTickLabels = tickLabels;
-    this.xAxisTicks = Object.keys(tickLabels);
-
     const taskCountKeys = Array.from(
       new Set(days.flatMap((day) => Object.keys(day.submittedCounts))),
     ).sort((a, b) => Number(b) - Number(a));
+    // With no series the x scale has no domain, so any tick would render at undefined.
+    this.xAxisTicks = taskCountKeys.length ? Object.keys(tickLabels) : [];
 
     this.colorScheme = {
       domain: this.generateGradientColors(taskCountKeys.length),
