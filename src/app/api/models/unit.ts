@@ -1,8 +1,20 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable, shareReplay, switchMap, tap} from 'rxjs';
+import {
+  Observable,
+  catchError,
+  filter,
+  map,
+  of,
+  shareReplay,
+  switchMap,
+  take,
+  tap,
+  throwError,
+} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {
   ResumableUploadService,
@@ -46,6 +58,7 @@ import {
 import {LearningOutcome} from './learning-outcome';
 import {MarkingSession} from './marking-session';
 import {SidekiqJob} from './sidekiq-job';
+import {expandTaskCompletionSnapshot} from './task-completion-snapshot';
 import {TaskPrerequisite} from './task-prerequisite';
 import {UnitContentLink} from './unit-content-link';
 
@@ -57,6 +70,8 @@ export interface GradeDefinition {
 }
 
 export class Unit extends Entity {
+  private taskCompletionSnapshotsRequest?: Observable<TaskCompletionSnapshot[]>;
+
   id: number;
   code: string;
   name: string;
@@ -957,23 +972,62 @@ export class Unit extends Entity {
     endDate?: Date,
     limit: number = 365,
   ): Observable<TaskCompletionSnapshot[]> {
-    let params = new HttpParams();
+    // The API sends the whole stored file, so it is downloaded once and kept for every caller.
+    if (!this.taskCompletionSnapshotsRequest) {
+      this.taskCompletionSnapshotsRequest = this.fetchTaskCompletionSnapshots().pipe(
+        catchError((error) => {
+          this.taskCompletionSnapshotsRequest = undefined;
+          return throwError(() => error);
+        }),
+        shareReplay({bufferSize: 1, refCount: false}),
+      );
+    }
 
-    [startDate, endDate].forEach((date) => {
-      if (date) {
-        params = params.set(
-          date === startDate ? 'start_date' : 'end_date',
-          `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
-        );
-      }
-    });
-
-    params = params.set('limit', limit.toString());
-
-    return AppInjector.get(HttpClient).get<TaskCompletionSnapshot[]>(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
-      {params},
+    const start = startDate ? new Date(startDate).setHours(0, 0, 0, 0) / 1000 : undefined;
+    const end = endDate ? new Date(endDate).setHours(23, 59, 59, 999) / 1000 : undefined;
+    return this.taskCompletionSnapshotsRequest.pipe(
+      map((snapshots) =>
+        snapshots
+          .filter((snapshot) => {
+            const timestamp = Number(snapshot.snapshot_timestamp);
+            return (
+              (start === undefined || timestamp >= start) && (end === undefined || timestamp <= end)
+            );
+          })
+          .slice(0, Math.min(limit, 365)),
+      ),
     );
+  }
+
+  private fetchTaskCompletionSnapshots(): Observable<TaskCompletionSnapshot[]> {
+    return AppInjector.get(HttpClient)
+      .get<TaskCompletionSnapshot[] | SidekiqJob>(
+        `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
+        {observe: 'response'},
+      )
+      .pipe(
+        switchMap((response) => {
+          if (response.status !== 202) {
+            return of(
+              (response.body as TaskCompletionSnapshot[]).map(expandTaskCompletionSnapshot),
+            );
+          }
+
+          const job = response.body as SidekiqJob;
+          return AppInjector.get(SidekiqProgressModalService)
+            .show(`Rebuilding analytics for ${this.code}`, job.id)
+            .pipe(
+              filter((completedJob) => completedJob.status === 'complete'),
+              take(1),
+              switchMap(() => this.fetchTaskCompletionSnapshots()),
+            );
+        }),
+      );
+  }
+
+  /** Drop the kept snapshots so the next call downloads them again, e.g. after a capture. */
+  public clearTaskCompletionSnapshots(): void {
+    this.taskCompletionSnapshotsRequest = undefined;
   }
 
   public captureTaskCompletionSnapshot(): Observable<SidekiqJob> {

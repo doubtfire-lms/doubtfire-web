@@ -1,12 +1,14 @@
-<div class="px-4 pt-8 text-slate-600">
-  <p>
-    View the number of submitted tasks over time, filtered by campus, tutorial, task grade, and
-    student target grade.
-  </p>
-</div>
-
 @if (snapshots.length) {
-  <div class="min-h-125">
+  <div
+    class="relative mt-8 min-h-125 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
+    tabindex="0"
+    [attr.aria-label]="'Tasks submitted per student chart. Use the left and right arrow keys to pick a day.'"
+    [fChartDayMarker]="markerIndex"
+    [markerLabel]="markerLabel"
+    [markerPointCount]="snapshots.length"
+    (click)="onChartClick(areaChart.hoveredVertical)"
+    (keydown)="onChartKeydown($event)"
+  >
     <ng-charts-area-chart-stacked
       #areaChart
       class="reverse-legend-order"

@@ -78,7 +78,7 @@ const spanStyle = (fraction: number) => `calc(${fraction} * (100% - ${TICK_MARK_
 export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
-  chartView: 'snapshots' | 'timeseries' | 'submissions' = 'snapshots';
+  chartView: 'snapshots' | 'timeseries' = 'snapshots';
 
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
@@ -190,8 +190,27 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
     this.resizeObserver?.disconnect();
   }
 
+  // Only marked once a past day has been picked; it then stays, even back on the latest day.
+  private dayMarkerShown = false;
+
+  get selectedSnapshotDate(): string | undefined {
+    return this.snapshots[this.sliderSelect]?.snapshot_date;
+  }
+
+  get markedSnapshotDate(): string | undefined {
+    return this.dayMarkerShown ? this.selectedSnapshotDate : undefined;
+  }
+
+  selectSnapshotDate(date: string): void {
+    const index = this.snapshots.findIndex((snapshot) => snapshot.snapshot_date === date);
+    if (index !== -1) {
+      this.onSnapshotSliderChange(index);
+    }
+  }
+
   onSnapshotSliderChange(value: number): void {
     this.sliderSelect = Math.min(Math.max(Math.round(Number(value)), 0), this.sliderMax);
+    this.dayMarkerShown ||= this.sliderSelect !== this.sliderMax;
     const snapshot = this.snapshots[this.sliderSelect];
     this.campuses = Object.keys(snapshot?.status_population_stats?.all ?? snapshot?.stats ?? {});
   }
@@ -537,7 +556,7 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Snapshot load failed', error);
         const errorMessage = error
-          ? error.message || error.toString()
+          ? error.error?.error || error.message || error.toString()
           : 'Failed to load task completion snapshot.';
         this.alertService.error(errorMessage, 6000);
       },
@@ -569,6 +588,7 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
           )
           .subscribe((trackedJob) => {
             if (trackedJob.status === 'complete') {
+              this.unit.clearTaskCompletionSnapshots();
               this.loadRecentSnapshot();
             }
           });

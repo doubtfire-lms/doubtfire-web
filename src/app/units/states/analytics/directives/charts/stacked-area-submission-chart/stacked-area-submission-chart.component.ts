@@ -4,15 +4,18 @@ import {enAU} from 'date-fns/locale';
 import {
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Injector,
   Input,
   OnChanges,
+  Output,
   SimpleChanges,
   ViewContainerRef,
 } from '@angular/core';
 import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
-import {displayWeekNumber} from '../chart-data-helpers';
+import {displayWeekNumber, formatSnapshotLabel} from '../chart-data-helpers';
+import {steppedPointIndex} from '../chart-day-marker.directive';
 
 type HoveredSubmissionPoint = {
   dateLabel: string;
@@ -35,6 +38,8 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   @Input() tutorialFilter: string = 'all';
   @Input() taskGradeFilter: number[] = [];
   @Input() studentTargetGradeFilter: number[] = [];
+  @Input() selectedDate?: string;
+  @Output() daySelect: EventEmitter<string> = new EventEmitter();
 
   data: MultiSeries = [];
   colorScheme = {domain: ['']};
@@ -72,6 +77,30 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
       this.hoveredPoint = null;
       this.data = this.unit && this.snapshots.length ? this.buildChartData() : [];
       this.changeDetectorRef.markForCheck();
+    }
+  }
+
+  get markerIndex(): number | null {
+    const index = this.snapshots.findIndex(
+      (snapshot) => snapshot.snapshot_date === this.selectedDate,
+    );
+    return index === -1 ? null : index;
+  }
+
+  get markerLabel(): string {
+    return formatSnapshotLabel(this.unit, this.selectedDate);
+  }
+
+  onChartClick(hoveredDate: string | undefined): void {
+    if (hoveredDate) {
+      this.daySelect.emit(hoveredDate);
+    }
+  }
+
+  onChartKeydown(event: KeyboardEvent): void {
+    const index = steppedPointIndex(event, this.markerIndex, this.snapshots.length);
+    if (index !== null) {
+      this.daySelect.emit(this.snapshots[index].snapshot_date);
     }
   }
 

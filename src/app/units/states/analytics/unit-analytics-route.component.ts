@@ -19,12 +19,7 @@ import {AlertService} from 'src/app/common/services/alert.service';
 import {TabManagementBase} from 'src/app/common/tabs/tab-management';
 
 type AnalyticsTabKey =
-  | 'task-completion'
-  | 'target-grades'
-  | 'tasks-awaiting-feedback'
-  | 'resubmissions'
-  | 'tutor-times'
-  | 'download-data';
+  'progress' | 'tasks-awaiting-feedback' | 'resubmissions' | 'tutor-times' | 'download-data';
 
 interface AnalyticsTab {
   label: string;
@@ -47,8 +42,7 @@ export class UnitAnalyticsComponent
   public unit: Unit;
 
   public readonly tabs: AnalyticsTab[] = [
-    {label: 'Task Completion', routeSegment: 'task-completion'},
-    {label: 'Target Grades', routeSegment: 'target-grades'},
+    {label: 'Progress', routeSegment: 'progress'},
     // {label: 'Tasks Awaiting Feedback', routeSegment: 'tasks-awaiting-feedback'},
     // {label: 'Resubmissions', routeSegment: 'resubmissions'},
     {label: 'Tutor Times', routeSegment: 'tutor-times'},
