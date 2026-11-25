@@ -344,6 +344,7 @@ import {UnitTutorialModalComponent} from './units/modals/unit-tutorial-modal/uni
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
 import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
 import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
+import {StackedAreaSubmissionChartComponent} from './units/states/analytics/directives/charts/stacked-area-submission-chart/stacked-area-submission-chart.component';
 import {TargetGradeSankeyComponent} from './units/states/analytics/directives/charts/target-grade-sankey/target-grade-sankey.component';
 import {TaskStatusSummaryChartsComponent} from './units/states/analytics/directives/charts/task-status-summary-charts/task-status-summary-charts.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
@@ -730,6 +731,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     LegacyRoutePlaceholderComponent,
     NotificationsComponent,
     NotificationSettingsComponent,
+    StackedAreaSubmissionChartComponent,
   ],
   providers: [
     // Services we provide

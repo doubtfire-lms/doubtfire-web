@@ -62,6 +62,7 @@
     <mat-button-toggle-group aria-label="Task status chart view" [(ngModel)]="chartView">
       <mat-button-toggle value="snapshots">Snapshots</mat-button-toggle>
       <mat-button-toggle value="timeseries">Timeseries</mat-button-toggle>
+      <mat-button-toggle value="submissions">Submissions</mat-button-toggle>
     </mat-button-toggle-group>
   </div>
 
@@ -142,8 +143,17 @@
         }
       </div>
     </div>
-  } @else {
+  } @else if (chartView === 'timeseries') {
     <f-stacked-area-status-chart
+      [campusFilter]="campusFilter"
+      [snapshots]="snapshots"
+      [studentTargetGradeFilter]="studentTargetGradeFilter"
+      [taskGradeFilter]="taskGradeFilter"
+      [tutorialFilter]="tutorialFilter"
+      [unit]="unit"
+    />
+  } @else if (chartView === 'submissions') {
+    <f-stacked-area-submission-chart
       [campusFilter]="campusFilter"
       [snapshots]="snapshots"
       [studentTargetGradeFilter]="studentTargetGradeFilter"
