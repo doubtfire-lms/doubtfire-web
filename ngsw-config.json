@@ -3,15 +3,6 @@
   "index": "/index.html",
   "dataGroups": [
     {
-      "name": "api",
-      "urls": ["/api"],
-      "cacheConfig": {
-        "maxSize": 0,
-        "maxAge": "0u",
-        "strategy": "freshness"
-      }
-    },
-    {
       "name": "google-fonts-cache",
       "urls": ["https://fonts.googleapis.com/**", "https://fonts.gstatic.com/**"],
       "cacheConfig": {
@@ -60,6 +51,8 @@
     "!/**/*.*",
     "!/**/*__*",
     "!/**/*__*/**",
+    "!/api/**",
+    "!/api",
     "!/JPlag/**",
     "!/JPlag",
     "!/sidekiq/**",
