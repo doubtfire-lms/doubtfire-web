@@ -23,6 +23,7 @@ export class TaskFileViewerComponent implements OnChanges {
   public hasNoFiles = false;
   public errorMessage: string | null = null;
   public uploadRequirementNames: string[] = [];
+  public uploadRequirementTypes: string[] = [];
 
   // Identifies the latest request, so a slow download for a previous task is ignored.
   private loadToken = 0;
@@ -45,6 +46,8 @@ export class TaskFileViewerComponent implements OnChanges {
     this.uploadRequirementNames =
       task?.definition?.uploadRequirements?.map((requirement) => requirement?.name?.trim() ?? '') ??
       [];
+    this.uploadRequirementTypes =
+      task?.definition?.uploadRequirements?.map((requirement) => requirement?.type ?? '') ?? [];
 
     if (!task) {
       this.isLoading = false;

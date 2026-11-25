@@ -49,6 +49,7 @@ interface SubmissionFileCard {
 export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
   @Input() archiveFile: Blob | null = null;
   @Input() uploadRequirementNames: string[] = [];
+  @Input() uploadRequirementTypes: string[] = [];
 
   public cards: SubmissionFileCard[] = [];
   public isLoading = false;
@@ -59,7 +60,7 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['archiveFile']) {
       void this.loadArchive();
-    } else if (changes['uploadRequirementNames']) {
+    } else if (changes['uploadRequirementNames'] || changes['uploadRequirementTypes']) {
       this.applyRequirementNames();
     }
   }
@@ -278,11 +279,11 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
       const requirementIndex = getOrderedUploadFileIndex(card.entry.path) ?? index;
       const name = this.uploadRequirementNames?.[requirementIndex]?.trim();
       card.requirementName = name || card.entry.name;
+      // Documents are nearly always a PDF or Word file, so their extension isn't worth showing
+      const isDocument = this.uploadRequirementTypes?.[requirementIndex] === 'document';
       const required = name?.match(/\.[a-z0-9]{1,8}$/i)?.[0].toLowerCase();
       const uploaded = card.entry.name.match(/\.[^./]+$/)?.[0].toLowerCase();
-      // Word documents are converted to PDF, so treat .docx and .pdf as the same
-      const sameKind = (ext?: string) => (ext === '.docx' ? '.pdf' : ext);
-      const matches = sameKind(uploaded) === sameKind(required);
+      const matches = isDocument || uploaded === required;
       card.extensionDiffers = !!required && !matches;
       card.uploadedExtension = matches ? null : (uploaded ?? (required ? 'no extension' : null));
     });
