@@ -12,6 +12,7 @@ import {
   User,
 } from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 // Default duration for a new tutorial, in minutes (2 hours).
@@ -41,10 +42,12 @@ export class UnitTutorialModalComponent extends EntityFormComponent<Tutorial> im
 
   constructor(
     public dialogRef: MatDialogRef<UnitTutorialModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {unit: Unit; stream?: TutorialStream},
+    @Inject(MAT_DIALOG_DATA)
+    public data: {unit: Unit; stream?: TutorialStream; tutorial?: Tutorial},
     private tutorialService: TutorialService,
     private campusService: CampusService,
     private alerts: AlertService,
+    private confirmationModal: ConfirmationModalService,
   ) {
     super(
       {
@@ -67,6 +70,9 @@ export class UnitTutorialModalComponent extends EntityFormComponent<Tutorial> im
   ngOnInit(): void {
     this.unit = this.data.unit;
     this.stream = this.data.stream;
+    if (this.data.tutorial) {
+      this.flagEdit(this.data.tutorial);
+    }
 
     this.campusService.query().subscribe((campuses) => {
       this.campuses.push(...campuses);
@@ -77,8 +83,30 @@ export class UnitTutorialModalComponent extends EntityFormComponent<Tutorial> im
     return this.stream ? `${this.stream.name} - ${this.stream.abbreviation}` : 'No stream';
   }
 
+  public get isEditing(): boolean {
+    return !!this.selected;
+  }
+
   submit(): void {
     super.submit(this.tutorialService, this.alerts, () => this.dialogRef.close());
+  }
+
+  deleteTutorial(): void {
+    const tutorial = this.selected;
+    this.confirmationModal.show(
+      `Delete Tutorial ${tutorial.abbreviation}`,
+      'Are you sure you want to delete this tutorial?',
+      () =>
+        this.tutorialService.delete(tutorial, this.optionsOnRequest('delete')).subscribe({
+          next: () => {
+            this.alerts.success('Tutorial deleted', 2000);
+            this.dialogRef.close();
+          },
+          error: (message: string) => {
+            this.alerts.error(message || 'Unable to delete tutorial', 8000);
+          },
+        }),
+    );
   }
 
   protected formDataToNewObject(endPointKey: string): object {

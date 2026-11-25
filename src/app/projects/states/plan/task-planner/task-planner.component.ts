@@ -13,6 +13,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  DoCheck,
   ElementRef,
   Input,
   OnDestroy,
@@ -24,6 +25,7 @@ import {Project} from 'src/app/api/models/project';
 import {Task} from 'src/app/api/models/task';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {TaskPrerequisite} from 'src/app/api/models/task-prerequisite';
+import {TeachingPeriodBreak} from 'src/app/api/models/teaching-period';
 import {TaskPrerequisiteService} from 'src/app/api/services/task-prerequisite.service';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -37,7 +39,16 @@ interface TaskGanttItem extends GanttItem {
   taskDefinition: TaskDefinition;
   task: Task;
   originalLinks: GanttLink[];
+  teachingBreak?: undefined;
 }
+
+interface BreakGanttItem extends GanttItem {
+  start: number;
+  end: number;
+  teachingBreak: TeachingPeriodBreak;
+}
+
+type PlannerGanttItem = TaskGanttItem | BreakGanttItem;
 
 @Component({
   selector: 'f-task-planner',
@@ -47,11 +58,13 @@ interface TaskGanttItem extends GanttItem {
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
-export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TaskPlannerComponent implements OnInit, AfterViewInit, DoCheck, OnDestroy {
   // Show a warning if the task's target end date is within this many days of the feedback deadline
   public readonly CLOSE_TO_FEEDBACK_DEADLINE_THRESHOLD = 7;
   private readonly svgNamespace = 'http://www.w3.org/2000/svg';
+  private readonly breakBandColor = '#e5e7eb';
   private ganttHeaderObserver?: MutationObserver;
+  private shadedTicks?: readonly unknown[];
 
   @Input() project: Project;
   @Input() targetGrade: number;
@@ -64,7 +77,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   public allTaskPrerequisites: TaskPrerequisite[];
   public taskPrerequisites: TaskPrerequisite[];
 
-  public items: TaskGanttItem[] = [];
+  public items: PlannerGanttItem[] = [];
 
   // TaskDefinition default dates for reference
   public baselineItems: GanttBaselineItem[] = [];
@@ -73,6 +86,10 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   public showDatesColumn: boolean = false;
   public showTasksBeyondTargetGrade: boolean = false;
   public overlayLines: boolean = false;
+
+  public get taskItems(): TaskGanttItem[] {
+    return this.items.filter((item): item is TaskGanttItem => !item.teachingBreak);
+  }
 
   public get unit() {
     return this.project?.unit;
@@ -96,6 +113,10 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     setTimeout(() => this.setupGanttHeaderObserver());
+  }
+
+  ngDoCheck(): void {
+    this.shadeTeachingBreakDays();
   }
 
   ngOnDestroy(): void {
@@ -127,13 +148,13 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   setLinkColors(item: TaskGanttItem, active: boolean) {
     this.overlayLines = active;
 
-    const ganttItem = this.items.find((i) => i.id === item.id);
+    const ganttItem = this.taskItems.find((i) => i.id === item.id);
     ganttItem.links.forEach((linkItem) => {
       const link = linkItem as GanttLink;
       this.toggleLinkOpacity(link, active);
     });
 
-    const prerequisites = this.items.filter((i) => {
+    const prerequisites = this.taskItems.filter((i) => {
       const links = i.links;
       if (typeof links === 'string') {
         return false;
@@ -205,7 +226,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
         continue;
       }
 
-      const ganttItem = this.items.find((i) => i.id === ganttLink.link);
+      const ganttItem = this.taskItems.find((i) => i.id === ganttLink.link);
       if (!ganttItem) {
         return false;
       }
@@ -236,7 +257,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isBlockedByPrerequisite(item: TaskGanttItem) {
-    const prerequisites = this.items.filter((i) => {
+    const prerequisites = this.taskItems.filter((i) => {
       const links = i.links;
       if (typeof links === 'string') {
         return false;
@@ -306,7 +327,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   saveTargetDates() {
-    for (const item of this.items) {
+    for (const item of this.taskItems) {
       const td = item.taskDefinition;
       if (!td) {
         continue;
@@ -339,7 +360,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   anyUnsavedChanges() {
-    return this.items.some((i) => this.unsavedChanges(i));
+    return this.taskItems.some((i) => this.unsavedChanges(i));
   }
 
   confirmSaveTargetDates() {
@@ -535,7 +556,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
     return start !== this.normalizeDateUTC(item.start) || end !== this.normalizeDateUTC(item.end);
   }
 
-  getTooltip(item: TaskGanttItem) {
+  getTooltip(item: PlannerGanttItem) {
     return `${this.toDateString(item.start)} — ${this.toDateString(item.end)}`;
   }
 
@@ -784,7 +805,6 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
       const originalItem = {...item};
       item.originalLinks = [...(originalItem.links as GanttLink[])];
 
-      this.items.push(item);
       _items.push(item);
 
       // Create baseline item
@@ -804,7 +824,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
       // }
     }
 
-    this.items = [..._items];
+    this.items = this.withTeachingBreaks(_items);
     setTimeout(() => {
       this.baselineItems = [..._baselineItems];
     });
@@ -815,7 +835,7 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const taskDef = this.route.snapshot.queryParamMap.get('taskDef');
     if (taskDef && scroll) {
-      const taskItem = this.items.find((item) => item.id === taskDef);
+      const taskItem = this.taskItems.find((item) => item.id === taskDef);
       if (taskItem) {
         this.ganttComponent.scrollToDate(taskItem.start);
         taskItem.highlighted = true;
@@ -840,6 +860,56 @@ export class TaskPlannerComponent implements OnInit, AfterViewInit, OnDestroy {
         replaceUrl: true,
       });
     }
+  }
+
+  private get teachingBreaks(): readonly TeachingPeriodBreak[] {
+    return this.unit?.teachingPeriod?.breaksFor(this.project?.campus?.id) ?? [];
+  }
+
+  // The gantt rebuilds its day ticks on view changes, so re-shade whenever the array is replaced
+  private shadeTeachingBreakDays(): void {
+    const ticks = this.ganttComponent?.view?.unitTicks;
+    if (!ticks || ticks === this.shadedTicks) {
+      return;
+    }
+    this.shadedTicks = ticks;
+
+    const breaks = this.teachingBreaks;
+    for (const tick of ticks) {
+      if (breaks.some((teachingBreak) => teachingBreak.covers(tick.date.value))) {
+        tick.rect.background = this.breakBandColor;
+      }
+    }
+  }
+
+  // Locked rows slotted in by start date so they line up with the surrounding tasks
+  private withTeachingBreaks(taskItems: TaskGanttItem[]): PlannerGanttItem[] {
+    const breakItems: BreakGanttItem[] = this.teachingBreaks
+      .filter((teachingBreak) => teachingBreak.endDate)
+      .map((teachingBreak) => ({
+        id: `break-${teachingBreak.id}`,
+        title: teachingBreak.label || 'Teaching break',
+        start: this.normalizeDateUTC(new Date(teachingBreak.startDate).getTime() / 1000),
+        // endDate is the day teaching resumes, so step back into the last break day
+        end: this.normalizeDateUTC(teachingBreak.endDate.getTime() / 1000 - 12 * 60 * 60),
+        draggable: false,
+        linkable: false,
+        expandable: false,
+        links: [],
+        teachingBreak,
+      }))
+      .sort((a, b) => a.start - b.start);
+
+    const result: PlannerGanttItem[] = [];
+    let breakIndex = 0;
+    for (const item of taskItems) {
+      while (breakIndex < breakItems.length && breakItems[breakIndex].start <= item.start) {
+        result.push(breakItems[breakIndex++]);
+      }
+      result.push(item);
+    }
+
+    return [...result, ...breakItems.slice(breakIndex)];
   }
 
   public taskDefs(): TaskDefinition[] {

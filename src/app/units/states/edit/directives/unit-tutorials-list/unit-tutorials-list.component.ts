@@ -1,34 +1,18 @@
-import {RequestOptions} from 'ngx-entity-service';
 import {HttpErrorResponse} from '@angular/common/http';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import {UntypedFormControl, Validators} from '@angular/forms';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import {Subscription} from 'rxjs';
 import {
-  Campus,
-  CampusService,
   Tutorial,
-  TutorialService,
   TutorialStream,
   TutorialStreamService,
   Unit,
-  User,
 } from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {UnitTutorialModalService} from 'src/app/units/modals/unit-tutorial-modal/unit-tutorial-modal.service';
-
-// Default duration for a new tutorial, in minutes (2 hours).
-const DEFAULT_TUTORIAL_DURATION_MINUTES = 120;
 
 @Component({
   selector: 'df-unit-tutorials-list',
@@ -41,23 +25,9 @@ export class UnitTutorialsListComponent
   extends EntityFormComponent<Tutorial>
   implements OnInit, OnDestroy
 {
-  @ViewChild(MatTable, {static: true}) table: MatTable<Tutorial>;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
   @Input() stream: TutorialStream;
   @Input() unit: Unit;
 
-  days: string[] = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-    'Asynchronous',
-  ];
-
-  campuses: Campus[] = new Array<Campus>();
   columns: string[] = [
     'abbreviation',
     'campus',
@@ -82,29 +52,13 @@ export class UnitTutorialsListComponent
   private origName: string;
 
   constructor(
-    private tutorialService: TutorialService,
     private tutorialStreamService: TutorialStreamService,
-    private campusService: CampusService,
     private confirmationModal: ConfirmationModalService,
     private tutorialModal: UnitTutorialModalService,
     private alerts: AlertService,
   ) {
-    super(
-      {
-        meetingDay: new UntypedFormControl('', [Validators.required]),
-        meetingTime: new UntypedFormControl(null, [Validators.required]),
-        meetingLocation: new UntypedFormControl('', [Validators.required]),
-        abbreviation: new UntypedFormControl('', [Validators.required]),
-        campus: new UntypedFormControl(null, []),
-        capacity: new UntypedFormControl('', [Validators.required]),
-        durationMinutes: new UntypedFormControl(DEFAULT_TUTORIAL_DURATION_MINUTES, [
-          Validators.required,
-          Validators.min(1),
-        ]),
-        tutor: new UntypedFormControl(null, [Validators.required]),
-      },
-      'Tutorial',
-    );
+    // Sorting helpers only - editing happens in the tutorial modal.
+    super({}, 'Tutorial');
   }
 
   ngOnInit(): void {
@@ -112,10 +66,6 @@ export class UnitTutorialsListComponent
       this.origStreamAbbr = this.stream.abbreviation;
       this.origName = this.stream.name;
     }
-
-    this.campusService.query().subscribe((campuses) => {
-      this.campuses.push(...campuses);
-    });
 
     this.filterTutorials();
 
@@ -161,60 +111,15 @@ export class UnitTutorialsListComponent
     this.editingStream = value;
   }
 
-  // New tutorials are created through the modal, so this form only ever edits an existing one.
   public newTutorial(): void {
     this.tutorialModal.show(this.unit, this.stream);
   }
 
-  // This method is passed to the submit method on the parent
-  // and is only run when an entity is successfully updated
-  onSuccess(_response: Tutorial, _isNew: boolean): void {
-    this.renderTable();
-  }
-
-  // Handle the removal of a tutorial
-  public deleteTutorial(tutorial: Tutorial): void {
-    this.tutorialService.delete(tutorial, this.optionsOnRequest('delete')).subscribe({
-      next: () => {
-        this.cancelEdit();
-        this.filterTutorials();
-        this.renderTable();
-      },
-      error: (message: string) => {
-        this.alerts.error(message || 'Unable to delete tutorial', 8000);
-      },
-    });
-  }
-
-  private renderTable() {
-    this.dataSource.sort = this.sort;
-    this.table.renderRows();
-  }
-
-  // This method is called when the form is submitted,
-  // which then calls the parent's submit.
-  submit(): void {
-    super.submit(this.tutorialService, this.alerts, this.onSuccess.bind(this));
-  }
-
-  // This comparison function is required to determine what campus or user
-  // to render in the associated mat-select components when editing a
-  // tutorial. The function is bound to the compareFn attribute on the related
-  // mat-selects.
-  // See: https://angular.io/api/forms/SelectControlValueAccessor
-  compareSelection(aEntity: User | Campus | {user_id: number}, bEntity: User | Campus) {
-    if (!aEntity || !bEntity) {
-      return;
-    }
-    if (bEntity instanceof User) {
-      // The form control holds a User, while some payloads supply {user_id} - accept either.
-      if ('user_id' in aEntity) {
-        return aEntity.user_id === bEntity.id;
-      }
-      return aEntity.id === bEntity.id;
-    } else {
-      return 'id' in aEntity && aEntity.id === bEntity.id;
-    }
+  public editTutorial(tutorial: Tutorial): void {
+    this.tutorialModal
+      .show(this.unit, this.stream, tutorial)
+      .afterClosed()
+      .subscribe(() => this.filterTutorials());
   }
 
   // Handle the deletion of a stream
@@ -238,18 +143,6 @@ export class UnitTutorialsListComponent
           },
         }),
     );
-  }
-
-  /**
-   * Ensure that the unit is passed to the Tutorial entity when create it called.
-   */
-  protected override optionsOnRequest(
-    _kind: 'create' | 'update' | 'delete',
-  ): RequestOptions<Tutorial> {
-    return {
-      constructorParams: this.unit,
-      cache: this.unit.tutorialsCache,
-    };
   }
 
   formatDurationShort(minutes: number): string {
