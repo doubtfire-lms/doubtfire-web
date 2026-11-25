@@ -47,6 +47,7 @@ import {
 import {LearningOutcome} from './learning-outcome';
 import {MarkingSession} from './marking-session';
 import {SidekiqJob} from './sidekiq-job';
+import {expandTaskCompletionSnapshot} from './task-completion-snapshot';
 import {TaskPrerequisite} from './task-prerequisite';
 import {UnitContentLink} from './unit-content-link';
 
@@ -993,7 +994,9 @@ export class Unit extends Entity {
       .pipe(
         switchMap((response) => {
           if (response.status !== 202) {
-            return of(response.body as TaskCompletionSnapshot[]);
+            return of(
+              (response.body as TaskCompletionSnapshot[]).map(expandTaskCompletionSnapshot),
+            );
           }
 
           const job = response.body as SidekiqJob;
