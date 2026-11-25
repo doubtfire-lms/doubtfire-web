@@ -1,8 +1,9 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable, shareReplay, switchMap, tap} from 'rxjs';
+import {Observable, filter, finalize, of, shareReplay, switchMap, take, tap} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {
   ResumableUploadService,
@@ -57,6 +58,8 @@ export interface GradeDefinition {
 }
 
 export class Unit extends Entity {
+  private taskCompletionSnapshotRequests = new Map<string, Observable<TaskCompletionSnapshot[]>>();
+
   id: number;
   code: string;
   name: string;
@@ -970,10 +973,42 @@ export class Unit extends Entity {
 
     params = params.set('limit', limit.toString());
 
-    return AppInjector.get(HttpClient).get<TaskCompletionSnapshot[]>(
-      `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
-      {params},
+    const key = params.toString();
+    const pending = this.taskCompletionSnapshotRequests.get(key);
+    if (pending) {
+      return pending;
+    }
+
+    const request = this.fetchTaskCompletionSnapshots(params).pipe(
+      finalize(() => this.taskCompletionSnapshotRequests.delete(key)),
+      shareReplay({bufferSize: 1, refCount: true}),
     );
+    this.taskCompletionSnapshotRequests.set(key, request);
+    return request;
+  }
+
+  private fetchTaskCompletionSnapshots(params: HttpParams): Observable<TaskCompletionSnapshot[]> {
+    return AppInjector.get(HttpClient)
+      .get<TaskCompletionSnapshot[] | SidekiqJob>(
+        `${AppInjector.get(DoubtfireConstants).API_URL}/units/${this.id}/stats/task_completion_snapshots`,
+        {params, observe: 'response'},
+      )
+      .pipe(
+        switchMap((response) => {
+          if (response.status !== 202) {
+            return of(response.body as TaskCompletionSnapshot[]);
+          }
+
+          const job = response.body as SidekiqJob;
+          return AppInjector.get(SidekiqProgressModalService)
+            .show(`Rebuilding analytics for ${this.code}`, job.id)
+            .pipe(
+              filter((completedJob) => completedJob.status === 'complete'),
+              take(1),
+              switchMap(() => this.fetchTaskCompletionSnapshots(params)),
+            );
+        }),
+      );
   }
 
   public captureTaskCompletionSnapshot(): Observable<SidekiqJob> {

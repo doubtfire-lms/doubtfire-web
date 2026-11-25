@@ -47,7 +47,10 @@ export class TargetGradeSankeyComponent implements OnChanges {
         this.changeDetectorRef.markForCheck();
       },
       error: (error) => {
-        this.alertService.error(error?.message || 'Failed to load target grade snapshots.', 6000);
+        this.alertService.error(
+          error?.error?.error || error?.message || 'Failed to load target grade snapshots.',
+          6000,
+        );
       },
     });
   }

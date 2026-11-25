@@ -537,7 +537,7 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Snapshot load failed', error);
         const errorMessage = error
-          ? error.message || error.toString()
+          ? error.error?.error || error.message || error.toString()
           : 'Failed to load task completion snapshot.';
         this.alertService.error(errorMessage, 6000);
       },
