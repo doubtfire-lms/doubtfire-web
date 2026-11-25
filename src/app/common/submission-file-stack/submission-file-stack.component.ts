@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
@@ -42,7 +43,12 @@ interface SubmissionFileCard {
 @Component({
   selector: 'f-submission-file-stack',
   templateUrl: './submission-file-stack.component.html',
-  host: {'class': 'block size-full overflow-y-auto bg-white'},
+  // A size container, so an open file can be capped to the panel's visible height
+  // (less the toolbar, the file header and the gaps around them)
+  host: {
+    'class': 'block size-full overflow-y-auto bg-white [container-type:size]',
+    'style': '--file-body-height: calc(100cqh - 110px)',
+  },
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
@@ -67,6 +73,55 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
 
   public ngOnDestroy(): void {
     this.clearCards();
+  }
+
+  // A wheel over an open file's toolbar, or past the end of its content, would
+  // otherwise scroll the whole panel. Only let it scroll something inside the file.
+  @HostListener('wheel', ['$event'])
+  public onWheel(event: WheelEvent): void {
+    if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+      return;
+    }
+
+    const target = event.target as Element | null;
+    const body = target?.closest('[data-file-body]');
+    if (!body) {
+      return;
+    }
+
+    for (let el: Element | null = target; el; el = el.parentElement) {
+      if (this.canScrollVertically(el, event.deltaY)) {
+        return;
+      }
+      if (el === body) {
+        break;
+      }
+    }
+
+    // Still let the panel scroll while part of the file is hidden, so the file
+    // can be brought fully back into view
+    if (this.isPartlyHidden(body, event.deltaY)) {
+      return;
+    }
+    event.preventDefault();
+  }
+
+  private isPartlyHidden(body: Element, deltaY: number): boolean {
+    const bodyRect = body.getBoundingClientRect();
+    if (deltaY < 0) {
+      const headerBottom =
+        body.previousElementSibling?.getBoundingClientRect().bottom ?? bodyRect.top;
+      return bodyRect.top < headerBottom - 1;
+    }
+    return bodyRect.bottom > this.host.nativeElement.getBoundingClientRect().bottom + 1;
+  }
+
+  private canScrollVertically(el: Element, deltaY: number): boolean {
+    const overflowY = getComputedStyle(el).overflowY;
+    if (overflowY !== 'auto' && overflowY !== 'scroll') {
+      return false;
+    }
+    return deltaY < 0 ? el.scrollTop > 0 : el.scrollTop + el.clientHeight < el.scrollHeight - 1;
   }
 
   public get allExpanded(): boolean {
@@ -100,6 +155,17 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
     for (const card of this.cards) {
       card.expanded = expanded;
     }
+  }
+
+  // Closes the open file and opens the one before or after it
+  public openSiblingCard(index: number, offset: number): void {
+    const target = index + offset;
+    if (!this.cards[target]) {
+      return;
+    }
+
+    this.cards[index].expanded = false;
+    this.jumpToCard(target);
   }
 
   public jumpToCard(index: number): void {

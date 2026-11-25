@@ -16,6 +16,7 @@ const INLINE_MATH = new RegExp(String.raw`^(?:${DISPLAY_MATH}|\$((?:\\[\s\S]|[^\
 const FRAME_STYLES = `
   :root { color-scheme: light; font: 14px/1.55 system-ui, sans-serif; color: #1e293b; --gutter: 82px; }
   * { box-sizing: border-box; }
+  html { overscroll-behavior: contain; }
   body { margin: 0; padding: 24px; background: #fff; }
   main { max-width: 1100px; margin: 0 auto; padding: 0 var(--gutter); }
   h1, h2, h3, h4 { line-height: 1.3; margin: 1.1em 0 .5em; }
