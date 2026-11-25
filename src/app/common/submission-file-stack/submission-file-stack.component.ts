@@ -73,7 +73,22 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
   }
 
   public toggleCard(card: SubmissionFileCard): void {
+    const index = this.cards.indexOf(card);
+    const section = this.cardElement(index);
+    const header = section?.firstElementChild;
+    // A sticky header sits below the top of its card while you scroll through
+    // that file. Closing it then would leave the page somewhere else.
+    const headerWasStuck =
+      !!section &&
+      !!header &&
+      header.getBoundingClientRect().top - section.getBoundingClientRect().top > 1;
+
     card.expanded = !card.expanded;
+
+    // Bring the header to the top when opening, or when closing a stuck header
+    if (card.expanded || headerWasStuck) {
+      this.scrollToCard(index);
+    }
   }
 
   public setAllExpanded(expanded: boolean): void {
@@ -89,11 +104,18 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
     }
 
     card.expanded = true;
-    // Wait for the card to render expanded before scrolling to it
+    this.scrollToCard(index);
+  }
+
+  private scrollToCard(index: number): void {
+    // Wait for the card to render its new state before scrolling to it
     setTimeout(() => {
-      const element = this.host.nativeElement.querySelector(`#submission-file-${index}`);
-      element?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      this.cardElement(index)?.scrollIntoView({behavior: 'smooth', block: 'start'});
     });
+  }
+
+  private cardElement(index: number): HTMLElement | null {
+    return this.host.nativeElement.querySelector<HTMLElement>(`#submission-file-${index}`);
   }
 
   public iconFor(card: SubmissionFileCard): string {
