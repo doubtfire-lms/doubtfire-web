@@ -11,19 +11,6 @@ import {
 import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 
-type SubmittedTaskCountDistributions = Record<
-  string, // campus
-  Record<
-    string, // tutorial ('__all__' or tutorial name)
-    Record<string, number> // e.g. "3,1,0,0": studentCount
-  >
->;
-
-type SubmittedTaskCountStudentCounts = {
-  all: SubmittedTaskCountDistributions;
-  target_grades: Record<string, SubmittedTaskCountDistributions>;
-};
-
 @Component({
   selector: 'f-stacked-area-submission-chart',
   styleUrl: './stacked-area-submission-chart.component.scss',
@@ -83,8 +70,6 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   }
 
   private buildChartData(): MultiSeries {
-    //console.log(this.snapshots);
-
     let lastWeek: number | string | null = null;
     let weekCounter = 0;
 
@@ -122,27 +107,36 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   }
 
   private getFilteredSubmittedCounts(snapshot: TaskCompletionSnapshot): Record<string, number> {
-    const raw = snapshot.submitted_task_count_student_counts as unknown as
-      SubmittedTaskCountStudentCounts | undefined;
-    const allScope = raw?.all;
-    if (!allScope) {
+    const counts = snapshot.submitted_task_count_student_counts;
+    if (!counts) {
       return {};
     }
 
-    const campuses = this.campusFilter === 'all' ? Object.keys(allScope) : [this.campusFilter];
+    const gradeValues = counts.task_grade_values ?? this.unit.gradeValues;
+    const includedGradeIndexes = gradeValues.flatMap((grade, index) =>
+      this.taskGradeFilter.length === 0 || this.taskGradeFilter.includes(grade) ? [index] : [],
+    );
+    const scopes = this.studentTargetGradeFilter.length
+      ? this.studentTargetGradeFilter.map((grade) => counts.target_grades[grade.toString()] ?? {})
+      : [counts.all];
     const tutorialKey = this.tutorialFilter === 'all' ? '__all__' : this.tutorialFilter;
     const totalsByTaskCount: Record<string, number> = {};
 
-    for (const campus of campuses) {
-      const distribution = allScope[campus]?.[tutorialKey] ?? {};
+    for (const scope of scopes) {
+      const campuses = this.campusFilter === 'all' ? Object.keys(scope) : [this.campusFilter];
+      for (const campus of campuses) {
+        const distribution = scope[campus]?.[tutorialKey] ?? {};
 
-      for (const [gradeCountsKey, studentCount] of Object.entries(distribution)) {
-        const totalTasks = gradeCountsKey
-          .split(',')
-          .reduce((sum, count) => sum + (Number(count) || 0), 0);
+        for (const [gradeCountsKey, studentCount] of Object.entries(distribution)) {
+          const gradeCounts = gradeCountsKey.split(',');
+          const totalTasks = includedGradeIndexes.reduce(
+            (sum, index) => sum + (Number(gradeCounts[index]) || 0),
+            0,
+          );
 
-        const bucket = String(totalTasks);
-        totalsByTaskCount[bucket] = (totalsByTaskCount[bucket] ?? 0) + studentCount;
+          const bucket = String(totalTasks);
+          totalsByTaskCount[bucket] = (totalsByTaskCount[bucket] ?? 0) + studentCount;
+        }
       }
     }
 
