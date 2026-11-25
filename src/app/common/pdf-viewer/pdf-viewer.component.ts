@@ -47,10 +47,15 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   ) {}
 
   ngOnDestroy(): void {
-    if (this.pdfBlobUrl) {
+    this.releaseOwnBlob();
+  }
+
+  // Blob URLs passed in belong to the caller, so only release ones this viewer downloaded
+  private releaseOwnBlob(): void {
+    if (this.pdfBlobUrl && this.pdfBlobUrl !== this._pdfUrl) {
       this.fileDownloader.releaseBlob(this.pdfBlobUrl);
-      this.pdfBlobUrl = null;
     }
+    this.pdfBlobUrl = null;
   }
 
   ngAfterViewInit(): void {
@@ -67,10 +72,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   pdfUrlChanges(value: string): void {
     if (this._pdfUrl !== value) {
       // Free the memory used by the old PDF blob
-      if (this.pdfBlobUrl) {
-        this.fileDownloader.releaseBlob(this.pdfBlobUrl);
-        this.pdfBlobUrl = null;
-      }
+      this.releaseOwnBlob();
 
       // Get the new blob
       this._pdfUrl = value;
