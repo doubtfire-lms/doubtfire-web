@@ -1,3 +1,4 @@
+import {Location} from '@angular/common';
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {
@@ -29,6 +30,7 @@ import {GlobalStateService, ViewType} from 'src/app/projects/states/index/global
 
 export type UnitTaskViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
 export type UnitTaskRouteMode = 'inbox' | 'definition' | 'moderation' | 'overflow';
+export type DashboardInboxPreset = 'ready_for_feedback' | 'need_help' | 'feedback_overdue';
 
 export interface TaskKey {
   studentId: string | number;
@@ -73,6 +75,7 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
   public unitRole: UnitRole;
   public studentsLoaded = false;
   public filters: Partial<TaskFilters> = {};
+  public dashboardInboxPreset: DashboardInboxPreset | null = null;
 
   public get inboxLoading(): boolean {
     return !(this.unit && this.unitRole && this.studentsLoaded);
@@ -105,6 +108,7 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private selectedTaskService: SelectedTaskService,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -112,6 +116,15 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
     this.clearSelectedTask();
 
     this.routeMode = this.route.snapshot.data.routeMode ?? this.routeMode;
+    // Capture the preset before unit/student requests finish and navigation ends.
+    const state = this.router.currentNavigation()?.extras.state ?? this.location.getState();
+    const preset = (state as {dashboardInboxPreset?: unknown})?.dashboardInboxPreset;
+    if (
+      this.routeMode === 'inbox' &&
+      (preset === 'ready_for_feedback' || preset === 'need_help' || preset === 'feedback_overdue')
+    ) {
+      this.dashboardInboxPreset = preset;
+    }
     this.configureRouteMode();
     this.setTaskKeyFromRoute();
 
@@ -253,6 +266,10 @@ export class UnitTaskInboxStateComponent implements OnInit, OnDestroy {
 
   private getFilterOverrides(unit: Unit): Partial<TaskFilters> {
     const selectedStudents = this.route.snapshot.queryParamMap.get('students');
+
+    if (this.routeMode === 'inbox' && this.dashboardInboxPreset) {
+      return {tutorialIdSelected: 'mine'};
+    }
 
     switch (this.routeMode) {
       case 'definition':
