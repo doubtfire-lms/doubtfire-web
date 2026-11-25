@@ -30,6 +30,9 @@ interface SubmissionFileCard {
   // Highlighted html for each line of a code or text file
   codeLines: string[] | null;
   loadFailed: boolean;
+  // Shown when the requirement name has no extension, or a different one
+  uploadedExtension: string | null;
+  extensionDiffers: boolean;
 }
 
 /**
@@ -193,6 +196,8 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
           sizeLabel: '',
           codeLines: null,
           loadFailed: false,
+          uploadedExtension: null,
+          extensionDiffers: false,
         });
       }
 
@@ -269,6 +274,13 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
       const requirementIndex = getOrderedUploadFileIndex(card.entry.path) ?? index;
       const name = this.uploadRequirementNames?.[requirementIndex]?.trim();
       card.requirementName = name || card.entry.name;
+      const required = name?.match(/\.[a-z0-9]{1,8}$/i)?.[0].toLowerCase();
+      const uploaded = card.entry.name.match(/\.[^./]+$/)?.[0].toLowerCase();
+      // Word documents are converted to PDF, so treat .docx and .pdf as the same
+      const sameKind = (ext?: string) => (ext === '.docx' ? '.pdf' : ext);
+      const matches = sameKind(uploaded) === sameKind(required);
+      card.extensionDiffers = !!required && !matches;
+      card.uploadedExtension = matches ? null : (uploaded ?? (required ? 'no extension' : null));
     });
   }
 

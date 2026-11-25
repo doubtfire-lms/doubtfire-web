@@ -82,6 +82,18 @@
             >
               {{ card.requirementName }}
             </span>
+            @if (card.uploadedExtension) {
+              <span
+                class="shrink-0 rounded-full bg-slate-300 px-2 py-0.5 text-xs font-medium text-slate-700"
+                [matTooltip]="
+                  card.extensionDiffers
+                    ? 'Uploaded file extension differs from the upload requirement'
+                    : 'Uploaded file extension'
+                "
+              >
+                {{ card.uploadedExtension }}
+              </span>
+            }
           </button>
           @if (card.entry.kind === 'pdf') {
             <button
