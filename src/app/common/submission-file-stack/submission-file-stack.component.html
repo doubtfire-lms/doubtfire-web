@@ -55,30 +55,33 @@
         [id]="'submission-file-' + i"
       >
         <div
-          class="sticky top-12 z-10 flex h-[45px] cursor-pointer items-center gap-1.5 bg-slate-100 pr-1 pl-1.5 select-none"
-          role="button"
-          tabindex="0"
-          [attr.aria-expanded]="card.expanded"
+          class="sticky top-12 z-10 flex h-[45px] items-center gap-1.5 bg-slate-100 pr-1"
           [class.border-b]="card.expanded"
           [class.border-slate-200]="card.expanded"
           [class.rounded-md]="!card.expanded"
           [class.rounded-t-md]="card.expanded"
-          (click)="toggleCard(card)"
-          (keydown.enter)="toggleCard(card)"
-          (keydown.space)="toggleCard(card); $event.preventDefault()"
         >
-          <mat-icon class="size-5! shrink-0 text-[20px]! leading-5! text-slate-500">
-            {{ card.expanded ? 'expand_more' : 'chevron_right' }}
-          </mat-icon>
-          <mat-icon class="size-4.5! shrink-0 text-[18px]! leading-[18px]! text-slate-500">
-            {{ iconFor(card) }}
-          </mat-icon>
-          <span
-            class="mr-auto min-w-0 truncate text-sm leading-5 font-medium text-slate-800"
-            [matTooltip]="card.requirementName"
+          <!-- A real button for opening and closing, filling the header up to the
+               action buttons (buttons can't be nested, so they sit beside it) -->
+          <button
+            class="flex h-full min-w-0 flex-1 cursor-pointer items-center gap-1.5 rounded-md pl-1.5 text-left select-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-slate-800"
+            type="button"
+            [attr.aria-expanded]="card.expanded"
+            (click)="toggleCard(card)"
           >
-            {{ card.requirementName }}
-          </span>
+            <mat-icon class="size-5! shrink-0 text-[20px]! leading-5! text-slate-500">
+              {{ card.expanded ? 'expand_more' : 'chevron_right' }}
+            </mat-icon>
+            <mat-icon class="size-4.5! shrink-0 text-[18px]! leading-[18px]! text-slate-500">
+              {{ iconFor(card) }}
+            </mat-icon>
+            <span
+              class="min-w-0 truncate text-sm leading-5 font-medium text-slate-800"
+              [matTooltip]="card.requirementName"
+            >
+              {{ card.requirementName }}
+            </span>
+          </button>
           @if (card.entry.kind === 'pdf') {
             <button
               aria-label="Open in browser viewer"
