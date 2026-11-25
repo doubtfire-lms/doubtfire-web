@@ -46,9 +46,9 @@ describe('StackedAreaSubmissionChartComponent', () => {
     component.ngOnChanges({snapshots: new SimpleChange(undefined, [snapshot], true)});
 
     expect(component.data).toEqual([
-      {name: '3 tasks', series: [{name: '1-0', value: 2}]},
-      {name: '2 tasks', series: [{name: '1-0', value: 1}]},
-      {name: '1 tasks', series: [{name: '1-0', value: 1}]},
+      {name: '3 tasks', series: [{name: '2026-03-01', value: 2}]},
+      {name: '2 tasks', series: [{name: '2026-03-01', value: 1}]},
+      {name: '1 tasks', series: [{name: '2026-03-01', value: 1}]},
     ]);
   });
 
@@ -59,14 +59,48 @@ describe('StackedAreaSubmissionChartComponent', () => {
     component.ngOnChanges({studentTargetGradeFilter: new SimpleChange([], [0], false)});
 
     expect(component.data).toEqual([
-      {name: '2 tasks', series: [{name: '1-0', value: 1}]},
-      {name: '0 tasks', series: [{name: '1-0', value: 1}]},
+      {name: '2 tasks', series: [{name: '2026-03-01', value: 1}]},
+      {name: '0 tasks', series: [{name: '2026-03-01', value: 1}]},
     ]);
 
     component.campusFilter = 'Burwood';
     component.tutorialFilter = 'T1';
     component.ngOnChanges({tutorialFilter: new SimpleChange('all', 'T1', false)});
 
-    expect(component.data).toEqual([{name: '2 tasks', series: [{name: '1-0', value: 1}]}]);
+    expect(component.data).toEqual([{name: '2 tasks', series: [{name: '2026-03-01', value: 1}]}]);
+  });
+
+  it('does not label the eighth snapshot of an ordinary week as a break', () => {
+    const component = chart();
+    component.snapshots = Array.from({length: 8}, (_, index) => ({
+      ...snapshot,
+      snapshot_date: `2026-03-${String(index + 1).padStart(2, '0')}`,
+    }));
+    component.ngOnChanges({snapshots: new SimpleChange(undefined, component.snapshots, true)});
+
+    expect(component.xAxisTickFormatting('2026-03-01')).toBe('Week 1');
+    expect(component.xAxisTickFormatting('2026-03-08')).toBe('');
+    expect(component.xAxisTicks).toEqual(['2026-03-01']);
+  });
+
+  it('labels only real week-pausing breaks and folds pre-teaching snapshots into week zero', () => {
+    const component = chart();
+    component.unit = {
+      gradeValues: [0, 2],
+      weekNumber: (date: string) => (date === '2026-02-28' ? -1 : 1),
+      teachingPeriod: {
+        weekPausingBreakAt: (date: string) => (date === '2026-03-02' ? {id: 1} : null),
+      },
+    } as unknown as Unit;
+    component.snapshots = ['2026-02-28', '2026-03-01', '2026-03-02', '2026-03-03'].map(
+      (snapshot_date) => ({...snapshot, snapshot_date}),
+    );
+    component.ngOnChanges({snapshots: new SimpleChange(undefined, component.snapshots, true)});
+
+    expect(component.xAxisTickFormatting('2026-02-28')).toBe('Week 0');
+    expect(component.xAxisTickFormatting('2026-03-01')).toBe('Week 1');
+    expect(component.xAxisTickFormatting('2026-03-02')).toBe('Break');
+    expect(component.xAxisTickFormatting('2026-03-03')).toBe('Week 1');
+    expect(component.xAxisTicks).toEqual(['2026-02-28', '2026-03-01', '2026-03-02', '2026-03-03']);
   });
 });

@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
+import {displayWeekNumber} from '../chart-data-helpers';
 
 @Component({
   selector: 'f-stacked-area-submission-chart',
@@ -31,18 +32,9 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   XAxisLabel: string = 'Week';
   YAxisLabel: string = 'Students';
 
-  xAxisTickFormatting = (val: string): string => {
-    const [week, count] = String(val).split('-');
-    const countNum = Number(count);
-
-    if (countNum === 0) {
-      return `Week ${week}`;
-    }
-    if (countNum > 0 && countNum % 7 === 0) {
-      return 'Break';
-    }
-    return '';
-  };
+  xAxisTicks: string[] = [];
+  private xAxisTickLabels: Record<string, string> = {};
+  xAxisTickFormatting = (val: string): string => this.xAxisTickLabels[String(val)] ?? '';
 
   constructor(
     private readonly chartToolTipService: TooltipService,
@@ -70,24 +62,31 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   }
 
   private buildChartData(): MultiSeries {
-    let lastWeek: number | string | null = null;
-    let weekCounter = 0;
+    let lastSegment: string | null = null;
+    const tickLabels: Record<string, string> = {};
 
     const days = this.snapshots.map((snapshot) => {
-      const week = this.unit.weekNumber(snapshot.snapshot_date);
+      const teachingBreak =
+        this.unit.teachingPeriod?.weekPausingBreakAt(snapshot.snapshot_date) ?? null;
+      const week = teachingBreak ? null : displayWeekNumber(this.unit, snapshot.snapshot_date);
+      const segment = teachingBreak ? `break-${teachingBreak.id}` : `week-${week}`;
 
-      if (week === lastWeek) {
-        weekCounter++;
-      } else {
-        lastWeek = week;
-        weekCounter = 0;
+      if (segment !== lastSegment) {
+        tickLabels[snapshot.snapshot_date] = teachingBreak
+          ? 'Break'
+          : week === null
+            ? 'Unscheduled'
+            : `Week ${week}`;
+        lastSegment = segment;
       }
 
       return {
-        name: `${week}-${weekCounter}`,
+        name: snapshot.snapshot_date,
         submittedCounts: this.getFilteredSubmittedCounts(snapshot),
       };
     });
+    this.xAxisTickLabels = tickLabels;
+    this.xAxisTicks = Object.keys(tickLabels);
 
     const taskCountKeys = Array.from(
       new Set(days.flatMap((day) => Object.keys(day.submittedCounts))),
