@@ -15,6 +15,7 @@ import {
 import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {displayWeekNumber, formatSnapshotLabel} from '../chart-data-helpers';
+import {steppedPointIndex} from '../chart-day-marker.directive';
 
 type HoveredSubmissionPoint = {
   dateLabel: string;
@@ -93,6 +94,13 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
   onChartClick(hoveredDate: string | undefined): void {
     if (hoveredDate) {
       this.daySelect.emit(hoveredDate);
+    }
+  }
+
+  onChartKeydown(event: KeyboardEvent): void {
+    const index = steppedPointIndex(event, this.markerIndex, this.snapshots.length);
+    if (index !== null) {
+      this.daySelect.emit(this.snapshots[index].snapshot_date);
     }
   }
 

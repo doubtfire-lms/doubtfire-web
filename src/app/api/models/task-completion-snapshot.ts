@@ -52,7 +52,8 @@ function sumInto(target: NestedCounts, source: NestedCounts): NestedCounts {
     if (typeof value === 'number') {
       target[key] = ((target[key] as number) ?? 0) + value;
     } else {
-      sumInto(((target[key] as NestedCounts) ??= {}), value);
+      target[key] ??= {};
+      sumInto(target[key] as NestedCounts, value);
     }
   });
   return target;

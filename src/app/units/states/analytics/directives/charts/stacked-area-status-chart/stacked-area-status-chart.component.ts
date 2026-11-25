@@ -19,6 +19,7 @@ import {
   getTaskPopulationStats,
   statusMapping,
 } from '../chart-data-helpers';
+import {steppedPointIndex} from '../chart-day-marker.directive';
 
 @Component({
   selector: 'f-stacked-area-status-chart',
@@ -88,6 +89,14 @@ export class StackedAreaStatusChartComponent implements OnChanges {
   // A week stands for its last snapshot, the one its point is drawn from.
   onChartClick(hoveredWeek: string | undefined): void {
     const date = hoveredWeek && this.lastDateByWeek.get(hoveredWeek);
+    if (date) {
+      this.daySelect.emit(date);
+    }
+  }
+
+  onChartKeydown(event: KeyboardEvent): void {
+    const index = steppedPointIndex(event, this.markerIndex, this.weeks.length);
+    const date = index === null ? undefined : this.lastDateByWeek.get(this.weeks[index]);
     if (date) {
       this.daySelect.emit(date);
     }

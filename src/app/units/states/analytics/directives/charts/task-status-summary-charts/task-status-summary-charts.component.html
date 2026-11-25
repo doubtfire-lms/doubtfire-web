@@ -1,9 +1,8 @@
 <div class="flex flex-col gap-4">
-  <div
-    aria-label="Progress filters"
-    class="sticky top-0 z-10 flex flex-wrap items-center justify-end gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3"
-    role="group"
+  <fieldset
+    class="sticky top-0 z-10 m-0 flex min-w-0 flex-wrap items-center justify-end gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3"
   >
+    <legend class="sr-only">Progress filters</legend>
     <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-label>Campus</mat-label>
       <mat-select [(ngModel)]="campusFilter" (ngModelChange)="onFilterChange()">
@@ -52,7 +51,7 @@
     >
       <mat-icon>refresh</mat-icon>
     </button>
-  </div>
+  </fieldset>
 
   <mat-card appearance="outlined" class="p-4">
     <div class="flex flex-col gap-2.5 lg:flex-row lg:items-start lg:justify-between">

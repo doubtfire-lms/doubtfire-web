@@ -21,6 +21,24 @@ export function pointScaleOffset(index: number, count: number, width: number): n
 }
 
 /**
+ * Index the left/right arrow keys move to from `current` (or the latest point when nothing is
+ * marked yet), or null for any other key.
+ */
+export function steppedPointIndex(
+  event: KeyboardEvent,
+  current: number | null,
+  count: number,
+): number | null {
+  const step = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
+  if (!step || count === 0) {
+    return null;
+  }
+
+  event.preventDefault();
+  return Math.min(Math.max((current ?? count - 1) + step, 0), count - 1);
+}
+
+/**
  * Draws a vertical marker over an ng-charts area chart at one of its ordinal x values.
  * The chart has no API for this, so the plot is measured from its rendered SVG.
  */
@@ -100,15 +118,14 @@ export class ChartDayMarkerDirective implements OnInit, OnChanges, OnDestroy {
     const host = this.host.nativeElement;
     const plot = host.querySelector<SVGGElement>('g.area-chart');
     const clipRect = host.querySelector<SVGRectElement>('clipPath rect');
-    const translate = plot
-      ?.getAttribute('transform')
-      ?.match(/translate\(\s*([-\d.]+)\s*,?\s*([-\d.]+)\s*\)/);
+    // The browser has already parsed the plot's translate(x, y); e and f are its offsets.
+    const offset = plot?.transform.baseVal.consolidate()?.matrix;
     const index = this.fChartDayMarker;
 
     if (
       !plot?.ownerSVGElement ||
       !clipRect ||
-      !translate ||
+      !offset ||
       index === null ||
       index < 0 ||
       index >= this.markerPointCount
@@ -117,16 +134,16 @@ export class ChartDayMarkerDirective implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
-    const width = Number(clipRect.getAttribute('width')) - CLIP_RECT_PADDING;
-    const height = Number(clipRect.getAttribute('height')) - CLIP_RECT_PADDING;
+    const width = clipRect.width.baseVal.value - CLIP_RECT_PADDING;
+    const height = clipRect.height.baseVal.value - CLIP_RECT_PADDING;
     const hostRect = host.getBoundingClientRect();
     const svgRect = plot.ownerSVGElement.getBoundingClientRect();
     const left =
       svgRect.left -
       hostRect.left +
-      Number(translate[1]) +
+      offset.e +
       pointScaleOffset(index, this.markerPointCount, width);
-    const top = svgRect.top - hostRect.top + Number(translate[2]);
+    const top = svgRect.top - hostRect.top + offset.f;
 
     this.marker.style.left = `${left - 1}px`;
     this.marker.style.top = `${top}px`;
