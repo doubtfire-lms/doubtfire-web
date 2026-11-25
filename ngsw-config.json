@@ -3,6 +3,16 @@
   "index": "/index.html",
   "dataGroups": [
     {
+      "name": "gravatar-avatars",
+      "urls": ["https://www.gravatar.com/avatar/**"],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 1000,
+        "maxAge": "7d",
+        "cacheOpaqueResponses": true
+      }
+    },
+    {
       "name": "google-fonts-cache",
       "urls": ["https://fonts.googleapis.com/**", "https://fonts.gstatic.com/**"],
       "cacheConfig": {
