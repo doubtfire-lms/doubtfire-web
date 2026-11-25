@@ -1,4 +1,5 @@
 #docxContainer {
+  position: relative;
   flex-direction: column;
   height: 100%;
   min-height: 100%;
@@ -10,29 +11,7 @@
   align-items: center;
 }
 
-#docxActionBar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-#docxViewActions {
-  padding-top: 1rem;
-  padding-left: 1rem;
-  margin-right: auto;
-
-  button {
-    margin-bottom: 28px;
-  }
-}
-
-#docxActions {
-  padding-top: 1rem;
-  padding-right: 1rem;
-  margin-left: auto;
-
+.search-bar {
   ::ng-deep .mdc-notched-outline__leading {
     min-width: 28px !important;
     border-top-left-radius: 28px !important;

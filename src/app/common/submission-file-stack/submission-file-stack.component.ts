@@ -84,12 +84,20 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
     }
 
     const target = event.target as Element | null;
-    const body = target?.closest('[data-file-body]');
+    // An open file's header counts as part of the file, so scrolling over it
+    // doesn't slide the file under the header
+    const header = target?.closest('[data-file-header]');
+    const headerBody = header?.nextElementSibling;
+    const body = header
+      ? headerBody?.matches('[data-file-body]')
+        ? headerBody
+        : null
+      : target?.closest('[data-file-body]');
     if (!body) {
       return;
     }
 
-    for (let el: Element | null = target; el; el = el.parentElement) {
+    for (let el: Element | null = header ? null : target; el; el = el.parentElement) {
       if (this.canScrollVertically(el, event.deltaY)) {
         return;
       }

@@ -1,6 +1,9 @@
-<div class="flex size-full min-h-[350px] flex-col bg-white">
-  <div class="notebook-action-bar">
-    <div class="notebook-view-actions">
+<div class="relative flex size-full min-h-[350px] flex-col bg-white">
+  <!-- Floats over the notebook, so the tools take no height of their own. Faded until hovered -->
+  <div class="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start p-2">
+    <div
+      class="pointer-events-auto mr-auto flex rounded-full bg-gray-200 opacity-50 shadow-sm transition-opacity duration-150 focus-within:opacity-100 hover:opacity-100"
+    >
       <button aria-label="Switch notebook view" mat-icon-button (click)="toggleView()">
         @if (viewMode === 'raw') {
           <mat-icon>toggle_on</mat-icon>
@@ -9,39 +12,61 @@
         }
       </button>
     </div>
-    <div class="notebook-actions" [hidden]="viewMode === 'raw'">
-      <form (ngSubmit)="findNextMatch()">
-        <mat-form-field appearance="outline" class="notebook-form-field" floatLabel="auto">
-          <mat-icon matPrefix>search</mat-icon>
-          <input
-            aria-label="Search notebook"
-            matInput
-            name="notebookSearchString"
-            placeholder="Search notebook"
-            type="search"
-            [(ngModel)]="searchQuery"
-            (ngModelChange)="scheduleSearch()"
-          />
-          <button
-            aria-label="Zoom out notebook"
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="zoomOut()"
+    <div class="pointer-events-auto ml-auto" [hidden]="viewMode === 'raw'">
+      @if (searchOpen) {
+        <form
+          class="search-bar flex w-80 justify-end overflow-hidden rounded-full bg-white shadow-md transition-[width,opacity] duration-200 ease-out starting:w-10 starting:opacity-0"
+          (focusout)="onSearchFocusOut($event)"
+          (keydown.escape)="closeSearch()"
+          (ngSubmit)="findNextMatch()"
+        >
+          <mat-form-field
+            appearance="outline"
+            class="w-80 shrink-0"
+            floatLabel="auto"
+            subscriptSizing="dynamic"
           >
-            <mat-icon>zoom_out</mat-icon>
-          </button>
-          <button
-            aria-label="Zoom in notebook"
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="zoomIn()"
-          >
-            <mat-icon>zoom_in</mat-icon>
-          </button>
-        </mat-form-field>
-      </form>
+            <mat-icon matPrefix>search</mat-icon>
+            <input
+              #searchInput
+              aria-label="Search notebook"
+              matInput
+              name="notebookSearchString"
+              placeholder="Search notebook"
+              type="search"
+              [(ngModel)]="searchQuery"
+              (ngModelChange)="scheduleSearch()"
+            />
+            <button
+              aria-label="Zoom out notebook"
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="zoomOut()"
+            >
+              <mat-icon>zoom_out</mat-icon>
+            </button>
+            <button
+              aria-label="Zoom in notebook"
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="zoomIn()"
+            >
+              <mat-icon>zoom_in</mat-icon>
+            </button>
+          </mat-form-field>
+        </form>
+      } @else {
+        <button
+          aria-label="Search and zoom"
+          class="rounded-full bg-gray-200 opacity-50 shadow-sm transition-opacity duration-150 focus-within:opacity-100 hover:opacity-100"
+          mat-icon-button
+          (click)="openSearch()"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      }
     </div>
   </div>
 

@@ -29,12 +29,14 @@ export class NotebookViewerComponent implements AfterViewInit, OnChanges, OnDest
   @Input() notebookBlob?: Blob;
   @Input() notebookText = '';
   @ViewChild('notebookFrame', {static: true}) private frame: ElementRef<HTMLIFrameElement>;
+  @ViewChild('searchInput') private searchInput?: ElementRef<HTMLInputElement>;
 
   public isLoading = false;
   public errorMessage: string | null = null;
   public zoomValue = 1;
   public searchQuery = '';
   public viewMode: 'rendered' | 'raw' = 'rendered';
+  public searchOpen = false;
   public readonly rawEditorOptions = {
     theme: 'vs',
     language: 'json',
@@ -76,6 +78,7 @@ export class NotebookViewerComponent implements AfterViewInit, OnChanges, OnDest
     if (changes['notebookBlob']) {
       this.viewMode = 'rendered';
       this.searchQuery = '';
+      this.searchOpen = false;
       void this.loadNotebook();
     }
   }
@@ -103,6 +106,26 @@ export class NotebookViewerComponent implements AfterViewInit, OnChanges, OnDest
     }
     this.matchIndex = (this.matchIndex + 1) % this.matchCount;
     this.scrollToMatch();
+  }
+
+  public openSearch(): void {
+    this.searchOpen = true;
+    // Focus once the search bar has rendered
+    setTimeout(() => this.searchInput?.nativeElement.focus());
+  }
+
+  public closeSearch(): void {
+    this.searchQuery = '';
+    this.scheduleSearch();
+    this.searchOpen = false;
+  }
+
+  // Collapse back to the icon when focus leaves an empty search bar
+  public onSearchFocusOut(event: FocusEvent): void {
+    const bar = event.currentTarget as HTMLElement;
+    if (!bar.contains(event.relatedTarget as Node | null) && !this.searchQuery) {
+      this.searchOpen = false;
+    }
   }
 
   public toggleView(): void {

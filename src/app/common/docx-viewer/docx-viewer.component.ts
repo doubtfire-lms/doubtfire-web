@@ -40,12 +40,14 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
   @ViewChild('documentContainer', {static: true})
   private documentContainer: ElementRef<HTMLElement>;
   private documentRoot?: ShadowRoot;
+  @ViewChild('searchInput') private searchInput?: ElementRef<HTMLInputElement>;
 
   public isLoading = false;
   public errorMessage: string | null = null;
   public zoomValue = 1;
   public docxSearchString = '';
   public useReadingView = false;
+  public searchOpen = false;
 
   private renderToken = 0;
   private readonly legacyPreviewCache: WeakMap<Blob, Promise<Blob>> = new WeakMap();
@@ -99,6 +101,26 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
     this.useReadingView = !this.useReadingView;
     localStorage.setItem('useReadingDocxViewer', this.useReadingView.toString());
     void this.renderDocument();
+  }
+
+  public openSearch(): void {
+    this.searchOpen = true;
+    // Focus once the search bar has rendered
+    setTimeout(() => this.searchInput?.nativeElement.focus());
+  }
+
+  public closeSearch(): void {
+    this.docxSearchString = '';
+    this.searchDocx('');
+    this.searchOpen = false;
+  }
+
+  // Collapse back to the icon when focus leaves an empty search bar
+  public onSearchFocusOut(event: FocusEvent): void {
+    const bar = event.currentTarget as HTMLElement;
+    if (!bar.contains(event.relatedTarget as Node | null) && !this.docxSearchString) {
+      this.searchOpen = false;
+    }
   }
 
   public searchDocx(query: string): void {

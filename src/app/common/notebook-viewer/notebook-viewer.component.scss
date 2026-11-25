@@ -1,26 +1,4 @@
-.notebook-action-bar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.notebook-view-actions {
-  padding-top: 1rem;
-  padding-left: 1rem;
-  margin-right: auto;
-
-  button {
-    margin-bottom: 28px;
-  }
-}
-
-.notebook-actions {
-  padding-top: 1rem;
-  padding-right: 1rem;
-  margin-left: auto;
-
+.search-bar {
   ::ng-deep .mdc-notched-outline__leading {
     min-width: 28px !important;
     border-top-left-radius: 28px !important;

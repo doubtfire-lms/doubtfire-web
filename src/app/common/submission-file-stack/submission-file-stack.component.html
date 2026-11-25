@@ -53,6 +53,7 @@
       <section class="scroll-mt-14 rounded-md bg-white" [id]="'submission-file-' + i">
         <div
           class="sticky top-12 z-10 flex h-[45px] items-center gap-1.5 bg-slate-100 pr-1 shadow-sm hover:bg-slate-200"
+          data-file-header
           [class.border-b]="card.expanded"
           [class.border-slate-200]="card.expanded"
           [class.rounded-md]="!card.expanded"
@@ -140,7 +141,7 @@
 
         @if (card.expanded) {
           <!-- onWheel keeps scrolling in here inside the file -->
-          <div class="overflow-hidden rounded-b-md" data-file-body>
+          <div class="isolate overflow-hidden rounded-b-md" data-file-body>
             @if (card.loadFailed) {
               <div class="flex items-center gap-2 p-4 text-sm text-red-700">
                 <mat-icon>error_outline</mat-icon>
