@@ -58,7 +58,8 @@ export interface GradeDefinition {
 }
 
 export class Unit extends Entity {
-  private taskCompletionSnapshotRequests = new Map<string, Observable<TaskCompletionSnapshot[]>>();
+  private taskCompletionSnapshotRequests: Map<string, Observable<TaskCompletionSnapshot[]>> =
+    new Map();
 
   id: number;
   code: string;
