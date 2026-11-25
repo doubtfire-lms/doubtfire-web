@@ -42,7 +42,7 @@ interface SubmissionFileCard {
 @Component({
   selector: 'f-submission-file-stack',
   templateUrl: './submission-file-stack.component.html',
-  host: {'class': 'block size-full overflow-y-auto bg-slate-50'},
+  host: {'class': 'block size-full overflow-y-auto bg-white'},
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
