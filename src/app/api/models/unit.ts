@@ -1,6 +1,17 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable, filter, finalize, map, of, shareReplay, switchMap, take, tap} from 'rxjs';
+import {
+  Observable,
+  catchError,
+  filter,
+  map,
+  of,
+  shareReplay,
+  switchMap,
+  take,
+  tap,
+  throwError,
+} from 'rxjs';
 import {AppInjector} from 'src/app/app-injector';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
@@ -961,11 +972,14 @@ export class Unit extends Entity {
     endDate?: Date,
     limit: number = 365,
   ): Observable<TaskCompletionSnapshot[]> {
-    // The API sends the whole stored file, so every caller shares one download and filters it here.
+    // The API sends the whole stored file, so it is downloaded once and kept for every caller.
     if (!this.taskCompletionSnapshotsRequest) {
       this.taskCompletionSnapshotsRequest = this.fetchTaskCompletionSnapshots().pipe(
-        finalize(() => (this.taskCompletionSnapshotsRequest = undefined)),
-        shareReplay({bufferSize: 1, refCount: true}),
+        catchError((error) => {
+          this.taskCompletionSnapshotsRequest = undefined;
+          return throwError(() => error);
+        }),
+        shareReplay({bufferSize: 1, refCount: false}),
       );
     }
 
@@ -1009,6 +1023,11 @@ export class Unit extends Entity {
             );
         }),
       );
+  }
+
+  /** Drop the kept snapshots so the next call downloads them again, e.g. after a capture. */
+  public clearTaskCompletionSnapshots(): void {
+    this.taskCompletionSnapshotsRequest = undefined;
   }
 
   public captureTaskCompletionSnapshot(): Observable<SidekiqJob> {

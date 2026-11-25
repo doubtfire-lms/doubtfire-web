@@ -569,6 +569,7 @@ export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
           )
           .subscribe((trackedJob) => {
             if (trackedJob.status === 'complete') {
+              this.unit.clearTaskCompletionSnapshots();
               this.loadRecentSnapshot();
             }
           });
