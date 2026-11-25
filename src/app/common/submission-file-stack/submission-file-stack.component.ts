@@ -186,13 +186,13 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
     this.scrollToCard(target);
   }
 
+  // Opens one file on its own, closing any others
   public jumpToCard(index: number): void {
-    const card = this.cards[index];
-    if (!card) {
+    if (!this.cards[index]) {
       return;
     }
 
-    card.expanded = true;
+    this.cards.forEach((card, i) => (card.expanded = i === index));
     this.scrollToCard(index);
   }
 
