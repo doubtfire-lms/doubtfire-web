@@ -40,15 +40,21 @@ function chart(): StackedAreaSubmissionChartComponent {
   return component;
 }
 
+const point = (value: number, percentage: number, totalStudents: number) => ({
+  name: '2026-03-01',
+  value,
+  extra: {percentage, totalStudents},
+});
+
 describe('StackedAreaSubmissionChartComponent', () => {
   it('counts every task grade and student when both grade filters are empty', () => {
     const component = chart();
     component.ngOnChanges({snapshots: new SimpleChange(undefined, [snapshot], true)});
 
     expect(component.data).toEqual([
-      {name: '3 tasks', series: [{name: '2026-03-01', value: 2}]},
-      {name: '2 tasks', series: [{name: '2026-03-01', value: 1}]},
-      {name: '1 tasks', series: [{name: '2026-03-01', value: 1}]},
+      {name: '3 tasks', series: [point(2, 50, 4)]},
+      {name: '2 tasks', series: [point(1, 25, 4)]},
+      {name: '1 task', series: [point(1, 25, 4)]},
     ]);
   });
 
@@ -59,15 +65,55 @@ describe('StackedAreaSubmissionChartComponent', () => {
     component.ngOnChanges({studentTargetGradeFilter: new SimpleChange([], [0], false)});
 
     expect(component.data).toEqual([
-      {name: '2 tasks', series: [{name: '2026-03-01', value: 1}]},
-      {name: '0 tasks', series: [{name: '2026-03-01', value: 1}]},
+      {name: '2 tasks', series: [point(1, 50, 2)]},
+      {name: '0 tasks', series: [point(1, 50, 2)]},
     ]);
 
     component.campusFilter = 'Burwood';
     component.tutorialFilter = 'T1';
     component.ngOnChanges({tutorialFilter: new SimpleChange('all', 'T1', false)});
 
-    expect(component.data).toEqual([{name: '2 tasks', series: [{name: '2026-03-01', value: 1}]}]);
+    expect(component.data).toEqual([{name: '2 tasks', series: [point(1, 100, 1)]}]);
+  });
+
+  it('uses each snapshot population for its tooltip percentages', () => {
+    const component = chart();
+    component.snapshots = [
+      snapshot,
+      {
+        ...snapshot,
+        snapshot_date: '2026-03-02',
+        submitted_task_count_student_counts: {
+          task_grade_values: [0, 2],
+          all: {Burwood: {__all__: {'1,2': 1, '0,1': 2}}},
+          target_grades: {},
+        },
+      },
+    ];
+    component.ngOnChanges({snapshots: new SimpleChange(undefined, component.snapshots, true)});
+
+    expect(component.data.find((series) => series.name === '3 tasks')?.series).toEqual([
+      point(2, 50, 4),
+      {name: '2026-03-02', value: 1, extra: {percentage: 33.3, totalStudents: 3}},
+    ]);
+  });
+
+  it('shows the details of the hovered point on a specific task-count band', () => {
+    const component = chart();
+    component.ngOnChanges({snapshots: new SimpleChange(undefined, [snapshot], true)});
+
+    component.onPointActivate({value: {name: '3 tasks'}}, '2026-03-01');
+
+    expect(component.hoveredPoint).toEqual({
+      dateLabel: 'Sun 1st Mar 2026',
+      series: '3 tasks',
+      value: 2,
+      percentage: 50,
+      color: 'hsl(220, 65%, 50%)',
+    });
+
+    component.onPointDeactivate({value: {name: '3 tasks'}});
+    expect(component.hoveredPoint).toBeNull();
   });
 
   it('does not label the eighth snapshot of an ordinary week as a break', () => {

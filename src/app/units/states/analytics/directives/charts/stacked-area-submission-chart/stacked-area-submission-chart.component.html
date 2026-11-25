@@ -8,6 +8,7 @@
 @if (snapshots.length) {
   <div class="min-h-125">
     <ng-charts-area-chart-stacked
+      #areaChart
       class="reverse-legend-order"
       [animations]="false"
       [gradient]="false"
@@ -23,8 +24,33 @@
       [xAxisTicks]="xAxisTicks"
       [yAxis]="true"
       [yAxisLabel]="YAxisLabel"
+      (activate)="onPointActivate($event, areaChart.hoveredVertical)"
+      (deactivate)="onPointDeactivate($event)"
+      (mouseleave)="hoveredPoint = null"
+      (mousemove)="onChartMouseMove($event)"
+      (mouseover)="onChartMouseMove($event)"
     >
     </ng-charts-area-chart-stacked>
+    @if (hoveredPoint) {
+      <div
+        class="pointer-events-none fixed z-50 rounded bg-slate-900 px-3 py-2 text-sm text-white shadow-lg"
+        [style.left.px]="tooltipX"
+        [style.top.px]="tooltipY"
+      >
+        <div class="font-medium">{{ hoveredPoint.dateLabel }}</div>
+        <div class="flex items-center gap-2">
+          <span
+            class="size-2.5 shrink-0 rounded-sm"
+            [style.background-color]="hoveredPoint.color"
+          ></span>
+          <span>
+            {{ hoveredPoint.series }}: {{ hoveredPoint.value }}
+            {{ hoveredPoint.value === 1 ? 'student' : 'students' }}
+            ({{ hoveredPoint.percentage }}%)
+          </span>
+        </div>
+      </div>
+    }
   </div>
 } @else {
   <div class="flex h-full items-center justify-center">

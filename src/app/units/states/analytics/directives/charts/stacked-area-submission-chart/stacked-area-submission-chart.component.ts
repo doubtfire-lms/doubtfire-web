@@ -1,4 +1,6 @@
 import {MultiSeries, TooltipService} from '@glitchtip/ng-charts';
+import {format, parseISO} from 'date-fns';
+import {enAU} from 'date-fns/locale';
 import {
   ChangeDetectorRef,
   Component,
@@ -11,6 +13,14 @@ import {
 import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
 import {displayWeekNumber} from '../chart-data-helpers';
+
+type HoveredSubmissionPoint = {
+  dateLabel: string;
+  series: string;
+  value: number;
+  percentage: number;
+  color: string;
+};
 
 @Component({
   selector: 'f-stacked-area-submission-chart',
@@ -28,6 +38,9 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
 
   data: MultiSeries = [];
   colorScheme = {domain: ['']};
+  hoveredPoint: HoveredSubmissionPoint | null = null;
+  tooltipX = 0;
+  tooltipY = 0;
 
   XAxisLabel: string = 'Week';
   YAxisLabel: string = 'Students';
@@ -56,9 +69,45 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
       changes['taskGradeFilter'] ||
       changes['studentTargetGradeFilter']
     ) {
+      this.hoveredPoint = null;
       this.data = this.unit && this.snapshots.length ? this.buildChartData() : [];
       this.changeDetectorRef.markForCheck();
     }
+  }
+
+  onPointActivate(event: {value: {name: string}}, snapshotDate: string): void {
+    if (!snapshotDate) {
+      return;
+    }
+
+    const seriesIndex = this.data.findIndex((series) => series.name === event.value.name);
+    const series = this.data[seriesIndex];
+    const point = series?.series.find((entry) => entry.name === snapshotDate);
+    const percentage = point?.extra?.['percentage'];
+    if (!point || typeof percentage !== 'number') {
+      return;
+    }
+
+    this.hoveredPoint = {
+      dateLabel: format(parseISO(snapshotDate), 'EEE do MMM yyyy', {locale: enAU}),
+      series: String(series.name),
+      value: point.value,
+      percentage,
+      color: this.colorScheme.domain[seriesIndex] ?? '#000000',
+    };
+    this.changeDetectorRef.markForCheck();
+  }
+
+  onPointDeactivate(event: {value: {name: string}}): void {
+    if (this.hoveredPoint?.series === event.value.name) {
+      this.hoveredPoint = null;
+      this.changeDetectorRef.markForCheck();
+    }
+  }
+
+  onChartMouseMove(event: MouseEvent): void {
+    this.tooltipX = Math.max(8, Math.min(event.clientX + 12, window.innerWidth - 240));
+    this.tooltipY = Math.max(8, Math.min(event.clientY + 12, window.innerHeight - 90));
   }
 
   private buildChartData(): MultiSeries {
@@ -80,9 +129,11 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
         lastSegment = segment;
       }
 
+      const submittedCounts = this.getFilteredSubmittedCounts(snapshot);
       return {
         name: snapshot.snapshot_date,
-        submittedCounts: this.getFilteredSubmittedCounts(snapshot),
+        submittedCounts,
+        totalStudents: Object.values(submittedCounts).reduce((sum, count) => sum + count, 0),
       };
     });
     this.xAxisTickLabels = tickLabels;
@@ -97,11 +148,20 @@ export class StackedAreaSubmissionChartComponent implements OnChanges {
     };
 
     return taskCountKeys.map((countKey) => ({
-      name: `${countKey} tasks`,
-      series: days.map((day) => ({
-        name: day.name,
-        value: day.submittedCounts[countKey] ?? 0,
-      })),
+      name: `${countKey} ${countKey === '1' ? 'task' : 'tasks'}`,
+      series: days.map((day) => {
+        const students = day.submittedCounts[countKey] ?? 0;
+        return {
+          name: day.name,
+          value: students,
+          extra: {
+            totalStudents: day.totalStudents,
+            percentage: day.totalStudents
+              ? Math.round((students / day.totalStudents) * 1000) / 10
+              : 0,
+          },
+        };
+      }),
     }));
   }
 
