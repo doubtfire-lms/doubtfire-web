@@ -20,6 +20,9 @@ import {
   isArchivePathHidden,
 } from '../archive-viewer/archive-viewer.helpers';
 
+// Matches the file open and close animations in the component styles
+const FILE_ANIMATION_MS = 200;
+
 /**
  * A file from the submission zip, shown as one card in the stack.
  */
@@ -49,6 +52,7 @@ interface SubmissionFileCard {
     'class': 'block size-full overflow-y-auto bg-white [container-type:size]',
     'style': '--file-body-height: calc(100cqh - 110px)',
   },
+  styleUrls: ['./submission-file-stack.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
@@ -59,6 +63,8 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
 
   public cards: SubmissionFileCard[] = [];
   public isLoading = false;
+  // Bumped to cancel a card scroll in progress
+  private scrollRun = 0;
   public errorMessage: string | null = null;
 
   constructor(private readonly host: ElementRef<HTMLElement>) {}
@@ -79,6 +85,9 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
   // otherwise scroll the whole panel. Only let it scroll something inside the file.
   @HostListener('wheel', ['$event'])
   public onWheel(event: WheelEvent): void {
+    // Scrolling by hand takes over from a card scroll in progress
+    this.scrollRun++;
+
     if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
       return;
     }
@@ -173,7 +182,8 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
     }
 
     this.cards[index].expanded = false;
-    this.jumpToCard(target);
+    this.cards[target].expanded = true;
+    this.scrollToCard(target);
   }
 
   public jumpToCard(index: number): void {
@@ -186,11 +196,52 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
     this.scrollToCard(index);
   }
 
+  // Scrolls a card's header to the top in step with the open and close
+  // animations. The target is re-measured every frame, because files growing
+  // and shrinking around it keep moving it (and the panel's scroll limit).
   private scrollToCard(index: number): void {
-    // Wait for the card to render its new state before scrolling to it
-    setTimeout(() => {
-      this.cardElement(index)?.scrollIntoView({behavior: 'smooth', block: 'start'});
-    });
+    const panel = this.host.nativeElement;
+    const run = ++this.scrollRun;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let from: number | null = null;
+    let start = 0;
+
+    const step = (now: number): void => {
+      const section = this.cardElement(index);
+      if (run !== this.scrollRun || !section) {
+        return;
+      }
+
+      const margin = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
+      const target =
+        panel.scrollTop +
+        section.getBoundingClientRect().top -
+        panel.getBoundingClientRect().top -
+        margin;
+
+      if (from === null) {
+        from = panel.scrollTop;
+        start = now;
+      }
+      const progress = reduceMotion ? 1 : Math.min((now - start) / FILE_ANIMATION_MS, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      panel.scrollTop = from + (target - from) * eased;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        this.refreshCursor();
+      }
+    };
+    requestAnimationFrame(step);
+  }
+
+  // Browsers only re-check what's under a still mouse when a cursor style changes,
+  // so after the header slides out from under it the pointer cursor would stick
+  private refreshCursor(): void {
+    const panel = this.host.nativeElement;
+    panel.style.cursor = 'default';
+    requestAnimationFrame(() => panel.style.removeProperty('cursor'));
   }
 
   private cardElement(index: number): HTMLElement | null {
