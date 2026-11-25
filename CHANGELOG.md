@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-26](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-25...v11.1.0-26) (2026-11-25)
+
+
+### Features
+
+* show teaching period breaks in task planner gantt chart ([#1774](https://github.com/b0ink/doubtfire-deploy/issues/1774)) ([2a0d2bc](https://github.com/b0ink/doubtfire-deploy/commit/2a0d2bca44690892d2dae8ff8de0c455e6d3c1be))
+* whitelist lti and health routes in ngsw config ([899504b](https://github.com/b0ink/doubtfire-deploy/commit/899504b026d0c7f4ae30cb8206c09267641bfde1))
+
 ## [11.1.0-25](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-24...v11.1.0-25) (2026-11-24)
 
 
