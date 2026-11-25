@@ -78,7 +78,7 @@ const spanStyle = (fraction: number) => `calc(${fraction} * (100% - ${TICK_MARK_
 export class TaskStatusSummaryChartsComponent implements OnInit, OnDestroy {
   @Input() unit: Unit;
 
-  chartView: 'snapshots' | 'timeseries' | 'submissions' = 'snapshots';
+  chartView: 'snapshots' | 'timeseries' = 'snapshots';
 
   sliderSelect: number = 0;
   snapshots: TaskCompletionSnapshot[] = [];
