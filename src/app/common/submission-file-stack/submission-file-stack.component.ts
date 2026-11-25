@@ -132,13 +132,17 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
         return 'image';
       case 'pdf':
         return 'picture_as_pdf';
+      case 'docx':
+        return 'article';
+      case 'notebook':
+        return 'data_object';
       default:
         return 'insert_drive_file';
     }
   }
 
-  public downloadFile(card: SubmissionFileCard, event: Event): void {
-    event.stopPropagation();
+  public downloadFile(card: SubmissionFileCard, event?: Event): void {
+    event?.stopPropagation();
 
     const blob = card.entry.blob;
     if (!blob) {

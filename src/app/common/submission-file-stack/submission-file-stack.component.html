@@ -151,6 +151,18 @@
                 class="block h-[85vh] w-full"
                 [pdfUrl]="card.entry.blobUrl"
               ></f-pdf-viewer>
+            } @else if (card.entry.kind === 'docx' && card.entry.blob) {
+              <f-docx-viewer
+                class="block h-[85vh] w-full"
+                [documentBlob]="card.entry.blob"
+                (downloadRequested)="downloadFile(card)"
+              ></f-docx-viewer>
+            } @else if (card.entry.kind === 'notebook' && card.entry.blob) {
+              <f-notebook-viewer
+                class="block h-[85vh] w-full"
+                [notebookBlob]="card.entry.blob"
+                [notebookText]="card.entry.textContent ?? ''"
+              ></f-notebook-viewer>
             } @else {
               <div class="flex items-center gap-2 p-4 text-sm text-slate-600">
                 <mat-icon>insert_drive_file</mat-icon>
