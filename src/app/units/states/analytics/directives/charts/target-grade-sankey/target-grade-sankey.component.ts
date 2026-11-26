@@ -1,8 +1,7 @@
 import {SankeyData} from '@glitchtip/ng-charts';
-import {ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import {TaskCompletionSnapshot} from 'src/app/api/models/doubtfire-model';
 import {Unit} from 'src/app/api/models/unit';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {getLastSnapshotByWeek, shouldIncludeSnapshot} from '../chart-data-helpers';
 
 @Component({
@@ -12,6 +11,8 @@ import {getLastSnapshotByWeek, shouldIncludeSnapshot} from '../chart-data-helper
 })
 export class TargetGradeSankeyComponent implements OnChanges {
   @Input() unit: Unit;
+  @Input() snapshots: TaskCompletionSnapshot[] = [];
+  @Input() campusFilter: string = 'all';
 
   data: SankeyData = [];
   weeks: string[] = [];
@@ -22,34 +23,29 @@ export class TargetGradeSankeyComponent implements OnChanges {
     domain: ['#0079D8'],
   };
 
-  constructor(
-    private readonly alertService: AlertService,
-    private readonly changeDetectorRef: ChangeDetectorRef,
-  ) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['unit'] && this.unit) {
-      this.loadSnapshots();
+  ngOnChanges(): void {
+    if (!this.unit) {
+      return;
     }
+
+    const snapshots = this.snapshots
+      .filter((snapshot) => !snapshot.placeholder && shouldIncludeSnapshot(this.unit, snapshot))
+      .sort((left, right) => Number(left.snapshot_timestamp) - Number(right.snapshot_timestamp));
+    this.data = this.buildSankeyData(snapshots);
+    this.hasChartData = this.data.length > 0;
   }
 
-  private loadSnapshots(): void {
-    this.unit.getTaskCompletionSnapshots().subscribe({
-      next: (data) => {
-        const snapshots = (data as TaskCompletionSnapshot[])
-          .filter((snapshot) => shouldIncludeSnapshot(this.unit, snapshot))
-          .sort(
-            (left, right) => Number(left.snapshot_timestamp) - Number(right.snapshot_timestamp),
-          );
+  private gradeCounts(snapshot: TaskCompletionSnapshot): Record<string, number> | undefined {
+    if (this.campusFilter === 'all') {
+      return snapshot.target_grade_student_counts;
+    }
 
-        this.data = this.buildSankeyData(snapshots);
-        this.hasChartData = this.data.length > 0;
-        this.changeDetectorRef.markForCheck();
-      },
-      error: (error) => {
-        this.alertService.error(error?.message || 'Failed to load target grade snapshots.', 6000);
-      },
-    });
+    return Object.fromEntries(
+      Object.entries(snapshot.target_grade_campus_student_counts ?? {}).map(([grade, campuses]) => [
+        grade,
+        campuses[this.campusFilter] ?? 0,
+      ]),
+    );
   }
 
   private buildSankeyData(snapshots: TaskCompletionSnapshot[]): SankeyData {
@@ -78,13 +74,13 @@ export class TargetGradeSankeyComponent implements OnChanges {
     targetSnapshot: TaskCompletionSnapshot,
   ): SankeyData {
     const sourceCounts = new Map(
-      Object.entries(sourceSnapshot.target_grade_student_counts ?? {}).map(([grade, count]) => [
+      Object.entries(this.gradeCounts(sourceSnapshot) ?? {}).map(([grade, count]) => [
         grade,
         Number(count),
       ]),
     );
     const targetCounts = new Map(
-      Object.entries(targetSnapshot.target_grade_student_counts ?? {}).map(([grade, count]) => [
+      Object.entries(this.gradeCounts(targetSnapshot) ?? {}).map(([grade, count]) => [
         grade,
         Number(count),
       ]),

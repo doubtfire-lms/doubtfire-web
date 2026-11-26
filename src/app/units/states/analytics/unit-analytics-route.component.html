@@ -12,11 +12,8 @@
   </mat-tab-group>
   <div class="flex flex-col gap-2.5 pb-16">
     @switch (currentTab.routeSegment) {
-      @case ('task-completion') {
+      @case ('progress') {
         <f-task-status-summary-charts [unit]="unit" />
-      }
-      @case ('target-grades') {
-        <f-target-grade-sankey [unit]="unit" />
       }
       @case ('download-data') {
         <mat-card appearance="outlined" class="mt-2.5 p-4">

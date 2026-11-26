@@ -5,12 +5,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import {sanitizeDocxInlineStyles, sanitizeDocxStyles} from './docx-css-sanitizer';
@@ -18,7 +16,8 @@ import {docxWithLegacyHyperlinks} from './docx-legacy-hyperlinks';
 
 const SEARCH_HIGHLIGHT = 'docx-search';
 const CURRENT_SEARCH_HIGHLIGHT = 'docx-search-current';
-const SEARCH_HIGHLIGHT_STYLES = `
+const VIEWER_STYLES = `
+  .docx-wrapper { background: white; }
   ::highlight(docx-search) { background-color: #ffe066; }
   ::highlight(docx-search-current) { background-color: #ffb74d; }
 `;
@@ -27,7 +26,7 @@ const SEARCH_HIGHLIGHT_STYLES = `
   selector: 'f-docx-viewer',
   templateUrl: './docx-viewer.component.html',
   styleUrls: ['./docx-viewer.component.scss'],
-  host: {'class': 'block size-full min-h-0'},
+  host: {'class': 'block size-full min-h-0 min-w-0 max-w-full bg-white'},
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
@@ -36,16 +35,17 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
   private readonly ZOOM_MAX = 2.5;
 
   @Input() documentBlob?: Blob;
-  @Output() downloadRequested: EventEmitter<void> = new EventEmitter();
   @ViewChild('documentContainer', {static: true})
   private documentContainer: ElementRef<HTMLElement>;
   private documentRoot?: ShadowRoot;
+  @ViewChild('searchInput') private searchInput?: ElementRef<HTMLInputElement>;
 
   public isLoading = false;
   public errorMessage: string | null = null;
   public zoomValue = 1;
   public docxSearchString = '';
   public useReadingView = false;
+  public searchOpen = false;
 
   private renderToken = 0;
   private readonly legacyPreviewCache: WeakMap<Blob, Promise<Blob>> = new WeakMap();
@@ -91,14 +91,30 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
     this.setZoom(this.zoomValue - 0.1);
   }
 
-  public downloadDocument(): void {
-    this.downloadRequested.emit();
-  }
-
   public toggleReadingView(): void {
     this.useReadingView = !this.useReadingView;
     localStorage.setItem('useReadingDocxViewer', this.useReadingView.toString());
     void this.renderDocument();
+  }
+
+  public openSearch(): void {
+    this.searchOpen = true;
+    // Focus once the search bar has rendered
+    setTimeout(() => this.searchInput?.nativeElement.focus());
+  }
+
+  public closeSearch(): void {
+    this.docxSearchString = '';
+    this.searchDocx('');
+    this.searchOpen = false;
+  }
+
+  // Collapse back to the icon when focus leaves an empty search bar
+  public onSearchFocusOut(event: FocusEvent): void {
+    const bar = event.currentTarget as HTMLElement;
+    if (!bar.contains(event.relatedTarget as Node | null) && !this.docxSearchString) {
+      this.searchOpen = false;
+    }
   }
 
   public searchDocx(query: string): void {
@@ -288,14 +304,14 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
       this.sanitizeLink(link, rendered, bookmarks, pageUrls);
     }
 
-    const highlightStyles = document.createElement('style');
-    highlightStyles.textContent = SEARCH_HIGHLIGHT_STYLES;
+    const viewerStyles = document.createElement('style');
+    viewerStyles.textContent = VIEWER_STYLES;
     const safeStyles = documentStyles.map((css) => {
       const style = document.createElement('style');
       style.textContent = css;
       return style;
     });
-    root.replaceChildren(...safeStyles, highlightStyles, ...Array.from(rendered.childNodes));
+    root.replaceChildren(...safeStyles, viewerStyles, ...Array.from(rendered.childNodes));
     if (this.docxSearchString) {
       this.searchDocx(this.docxSearchString);
     }

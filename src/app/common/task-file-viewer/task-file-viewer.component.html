@@ -14,10 +14,9 @@
     <span>No submitted files available.</span>
   </div>
 } @else {
-  <f-archive-viewer
-    class="block size-full min-h-0 overflow-hidden"
+  <f-submission-file-stack
     [archiveFile]="archiveBlob"
-    [readOnly]="true"
     [uploadRequirementNames]="uploadRequirementNames"
-  ></f-archive-viewer>
+    [uploadRequirementTypes]="uploadRequirementTypes"
+  ></f-submission-file-stack>
 }

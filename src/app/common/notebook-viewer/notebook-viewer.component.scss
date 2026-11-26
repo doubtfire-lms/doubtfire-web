@@ -1,0 +1,38 @@
+.search-bar {
+  ::ng-deep .mdc-notched-outline__leading {
+    min-width: 28px !important;
+    border-top-left-radius: 28px !important;
+    border-bottom-left-radius: 28px !important;
+  }
+
+  ::ng-deep .mdc-notched-outline__notch {
+    border-radius: 28px 0 0 28px !important;
+  }
+
+  ::ng-deep .mdc-notched-outline__trailing {
+    border-radius: 0 28px 28px 0 !important;
+  }
+
+  ::ng-deep .mat-form-field-outline-end {
+    border-radius: 0 28px 28px 0 !important;
+  }
+
+  ::ng-deep .mat-mdc-form-field-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  button {
+    margin-left: -12px;
+  }
+}
+
+:host ::ng-deep .notebook-monaco,
+:host ::ng-deep .notebook-monaco .monaco-editor,
+:host ::ng-deep .notebook-monaco .overflow-guard,
+:host ::ng-deep .notebook-monaco .monaco-scrollable-element {
+  width: 100% !important;
+  height: 100% !important;
+}
