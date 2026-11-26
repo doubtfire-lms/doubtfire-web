@@ -16,7 +16,8 @@ import {docxWithLegacyHyperlinks} from './docx-legacy-hyperlinks';
 
 const SEARCH_HIGHLIGHT = 'docx-search';
 const CURRENT_SEARCH_HIGHLIGHT = 'docx-search-current';
-const SEARCH_HIGHLIGHT_STYLES = `
+const VIEWER_STYLES = `
+  .docx-wrapper { background: white; }
   ::highlight(docx-search) { background-color: #ffe066; }
   ::highlight(docx-search-current) { background-color: #ffb74d; }
 `;
@@ -25,7 +26,7 @@ const SEARCH_HIGHLIGHT_STYLES = `
   selector: 'f-docx-viewer',
   templateUrl: './docx-viewer.component.html',
   styleUrls: ['./docx-viewer.component.scss'],
-  host: {'class': 'block size-full min-h-0 min-w-0 max-w-full'},
+  host: {'class': 'block size-full min-h-0 min-w-0 max-w-full bg-white'},
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
@@ -303,14 +304,14 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
       this.sanitizeLink(link, rendered, bookmarks, pageUrls);
     }
 
-    const highlightStyles = document.createElement('style');
-    highlightStyles.textContent = SEARCH_HIGHLIGHT_STYLES;
+    const viewerStyles = document.createElement('style');
+    viewerStyles.textContent = VIEWER_STYLES;
     const safeStyles = documentStyles.map((css) => {
       const style = document.createElement('style');
       style.textContent = css;
       return style;
     });
-    root.replaceChildren(...safeStyles, highlightStyles, ...Array.from(rendered.childNodes));
+    root.replaceChildren(...safeStyles, viewerStyles, ...Array.from(rendered.childNodes));
     if (this.docxSearchString) {
       this.searchDocx(this.docxSearchString);
     }
