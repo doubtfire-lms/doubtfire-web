@@ -301,7 +301,6 @@ import {MarkingSessionService} from './api/services/marking-session.service';
 import {PortfolioIncludedTasksComponent} from './projects/states/portfolio/directives/portfolio-review-step/portfolio-included-tasks/portfolio-included-tasks.component';
 import {OverseerScriptEditorModalComponent} from './units/states/edit/directives/unit-tasks-editor/task-definition-editor/task-definition-overseer/overseer-script-editor-modal/overseer-script-editor-modal.component';
 import {UploadGradesComponent} from './units/states/portfolios/upload-grades/upload-grades.component';
-import {NotificationsButtonComponent} from './common/header/notifications-button/notifications-button.component';
 import {GANTT_GLOBAL_CONFIG, GanttLinkLineType, NgxGanttModule} from '@worktile/gantt';
 import {DiscussionPromptService} from './api/services/discussion-prompt.service';
 import {DiscussionPromptsComponent} from './projects/states/discussion-prompts/discussion-prompts.component';
@@ -510,7 +509,6 @@ const GANTT_CHART_CONFIG = {
     AnalyticsTutorTimesComponent,
     PortfolioIncludedTasksComponent,
     OverseerScriptEditorModalComponent,
-    NotificationsButtonComponent,
     StaffGrantExtensionComponent,
     StaffGrantExtensionSummaryComponent,
     StaffTaskListComponent,
