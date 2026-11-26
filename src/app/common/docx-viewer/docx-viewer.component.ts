@@ -5,12 +5,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import {sanitizeDocxInlineStyles, sanitizeDocxStyles} from './docx-css-sanitizer';
@@ -36,7 +34,6 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
   private readonly ZOOM_MAX = 2.5;
 
   @Input() documentBlob?: Blob;
-  @Output() downloadRequested: EventEmitter<void> = new EventEmitter();
   @ViewChild('documentContainer', {static: true})
   private documentContainer: ElementRef<HTMLElement>;
   private documentRoot?: ShadowRoot;
@@ -91,10 +88,6 @@ export class DocxViewerComponent implements AfterViewInit, OnChanges, OnDestroy,
 
   public zoomOut(): void {
     this.setZoom(this.zoomValue - 0.1);
-  }
-
-  public downloadDocument(): void {
-    this.downloadRequested.emit();
   }
 
   public toggleReadingView(): void {

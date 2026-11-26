@@ -127,11 +127,7 @@
               [ngTemplateOutlet]="filePathLabel"
               [ngTemplateOutletContext]="{$implicit: file.path}"
             ></ng-container>
-            <f-docx-viewer
-              class="block min-h-0 flex-1"
-              [documentBlob]="file.blob"
-              (downloadRequested)="downloadSelectedFile()"
-            ></f-docx-viewer>
+            <f-docx-viewer class="block min-h-0 flex-1" [documentBlob]="file.blob"></f-docx-viewer>
           </div>
         } @else if (isArchiveNotebookFile(file)) {
           <div class="flex min-h-[350px] w-full flex-1 flex-col">

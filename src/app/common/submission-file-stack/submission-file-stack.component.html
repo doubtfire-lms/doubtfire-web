@@ -194,7 +194,6 @@
                 <f-docx-viewer
                   class="block h-(--file-body-height) w-full"
                   [documentBlob]="card.entry.blob"
-                  (downloadRequested)="downloadFile(card)"
                 ></f-docx-viewer>
               } @else if (card.entry.kind === 'notebook' && card.entry.blob) {
                 <f-notebook-viewer

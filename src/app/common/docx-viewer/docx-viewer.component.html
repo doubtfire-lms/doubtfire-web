@@ -12,9 +12,6 @@
           <mat-icon>toggle_off</mat-icon>
         }
       </button>
-      <button aria-label="Download Word document" mat-icon-button (click)="downloadDocument()">
-        <mat-icon>download</mat-icon>
-      </button>
     </div>
     <div class="pointer-events-auto ml-auto" [hidden]="isLoading || errorMessage">
       @if (searchOpen) {
