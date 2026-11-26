@@ -37,6 +37,7 @@ export class InboxDashboardComponent implements OnChanges {
   public readonly InboxDashboardTab = InboxDashboardTab;
   public currentTab: InboxDashboardTab = InboxDashboardTab.submission;
   public currentIndex = InboxDashboardTab.submission;
+  public showSubmissionPdf = false;
 
   constructor(
     private fileDownloader: FileDownloaderService,
@@ -69,11 +70,25 @@ export class InboxDashboardComponent implements OnChanges {
     this.fileDownloader.downloadFile(this.task.submittedFilesUrl(), 'submitted-files.zip');
   }
 
+  public toggleSubmissionView(): void {
+    this.showSubmissionPdf = !this.submissionPdfVisible;
+    this.setSelectedTab(InboxDashboardTab.submission);
+  }
+
+  public get submissionPdfVisible(): boolean {
+    return (
+      this.currentTab === InboxDashboardTab.submission &&
+      this.showSubmissionPdf &&
+      !!this.task?.hasPdf
+    );
+  }
+
   public get overseerEnabled(): boolean {
     return this.task?.overseerEnabled ?? false;
   }
 
   private selectDefaultTab(): void {
+    this.showSubmissionPdf = false;
     if (this.task) {
       this.setSelectedTab(InboxDashboardTab.submission);
     } else {
@@ -95,6 +110,8 @@ export class InboxDashboardComponent implements OnChanges {
     }
 
     switch (tab) {
+      case InboxDashboardTab.submission:
+        return this.showSubmissionPdf && this.task.hasPdf ? this.task.submissionUrl() : null;
       case InboxDashboardTab.taskSheet:
         if (this.task.definition?.hasContentLink) {
           return null;

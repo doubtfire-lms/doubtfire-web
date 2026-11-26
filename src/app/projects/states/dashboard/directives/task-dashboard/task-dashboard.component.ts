@@ -45,6 +45,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
   };
   public currentView: DashboardViews;
   public currentIndex = 0;
+  public showSubmissionPdf = false;
 
   private requestedDestination?: Params;
   private openedAssessmentId?: number;
@@ -104,6 +105,7 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue) {
+      this.showSubmissionPdf = false;
       this.urls = {
         taskSheetPdfUrl: changes.task.currentValue.definition.getTaskPDFUrl(),
         taskSubmissionPdfUrl: changes.task.currentValue.submissionUrl(),
@@ -141,6 +143,19 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
     this.selectedTaskService.currentView$.next(nextView);
     this.currentView = nextView;
     this.currentIndex = this.tabIndexForView(nextView);
+  }
+
+  public toggleSubmissionView(): void {
+    this.showSubmissionPdf = !this.submissionPdfVisible;
+    this.setSelectedDashboardView(DashboardViews.submission);
+  }
+
+  public get submissionPdfVisible(): boolean {
+    return (
+      this.currentView === DashboardViews.submission &&
+      this.showSubmissionPdf &&
+      !!this.task?.hasPdf
+    );
   }
 
   private tabIndexForView(view: DashboardViews): number {

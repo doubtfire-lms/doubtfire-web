@@ -55,6 +55,10 @@
       </button>
 
       <mat-menu #taskMenu="matMenu" xPosition="before">
+        <button mat-menu-item [disabled]="!task.hasPdf" (click)="toggleSubmissionView()">
+          <mat-icon>{{ submissionPdfVisible ? 'folder_open' : 'picture_as_pdf' }}</mat-icon>
+          <span>{{ submissionPdfVisible ? 'View submission files' : 'View submission PDF' }}</span>
+        </button>
         <button mat-menu-item [disabled]="!task.hasPdf" (click)="downloadSubmission()">
           <mat-icon>download</mat-icon>
           <span>Download submission PDF</span>
@@ -70,7 +74,11 @@
       @switch (currentTab) {
         @case (InboxDashboardTab.submission) {
           <div class="h-full">
-            <f-task-file-viewer [task]="task"></f-task-file-viewer>
+            @if (showSubmissionPdf && task.hasPdf) {
+              <f-pdf-viewer class="block size-full" [pdfUrl]="task.submissionUrl()"></f-pdf-viewer>
+            } @else {
+              <f-task-file-viewer [task]="task"></f-task-file-viewer>
+            }
           </div>
         }
         @case (InboxDashboardTab.taskSheet) {
