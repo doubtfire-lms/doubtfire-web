@@ -9,7 +9,12 @@
 
       <div class="task-list-container">
         @if (unit) {
-          <f-unit-task-list mode="all-tasks" [unitTasks]="unit.taskDefinitions"></f-unit-task-list>
+          <f-unit-task-list
+            mode="all-tasks"
+            [selectedTaskDefinition$]="selectedTaskDefinition$"
+            [selectionUrlBase]="['/units', unit.id, 'staff_grant_extension']"
+            [taskDefinitions]="unit.taskDefinitions"
+          ></f-unit-task-list>
         }
         @if (!unit) {
           <div class="no-unit-message">

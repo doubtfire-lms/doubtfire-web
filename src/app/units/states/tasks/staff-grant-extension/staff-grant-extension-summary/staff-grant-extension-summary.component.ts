@@ -6,6 +6,7 @@ import {ExtensionSummaryPayload} from 'src/app/units/states/tasks/staff-grant-ex
   selector: 'f-staff-grant-extension-summary',
   templateUrl: './staff-grant-extension-summary.component.html',
   styleUrls: ['./staff-grant-extension-summary.component.scss'],
+  standalone: false,
 })
 export class StaffGrantExtensionSummaryComponent implements OnInit, OnDestroy {
   @Input() summary!: ExtensionSummaryPayload | null;
