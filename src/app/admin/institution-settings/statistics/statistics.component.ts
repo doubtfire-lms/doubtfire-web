@@ -10,6 +10,8 @@ interface InstitutionStatistics {
   activeUsers: Record<ActivityWindow, number>;
   totalUsers: number;
   diskSpaceGb: number | null;
+  studentWorkStorage: {usedGb: number; totalGb: number} | null;
+  studentWorkUsage: {usedGb: number; calculatedAt: string; durationSeconds: number} | null;
   sidekiq: {
     activeJobs: {jobClass: string; queue: string}[];
     queuedJobs: number;
@@ -80,6 +82,12 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   public refresh(): void {
     this.refreshRequests.next();
+  }
+
+  public formatSize(gb: number): string {
+    return gb >= 1024
+      ? `${(gb / 1024).toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 2})} TB`
+      : `${gb.toLocaleString(undefined, {maximumFractionDigits: 2})} GB`;
   }
 
   public get activeUsers(): number {
