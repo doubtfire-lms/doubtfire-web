@@ -1,144 +1,90 @@
-<form [formGroup]="grantExtensionForm" (ngSubmit)="submitForm()">
-  <!-- Student Selection with Search -->
-  <div class="mb-4 w-full">
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Search Students</mat-label>
+<form class="flex flex-col gap-4" [formGroup]="grantExtensionForm" (ngSubmit)="submitForm()">
+  <section aria-labelledby="student-selection-title">
+    <div class="mb-2 flex items-center justify-between gap-2">
+      <h3 class="m-0 text-base font-medium" id="student-selection-title">Students</h3>
+      <span class="text-sm text-gray-600">{{ selectedStudents.length }} selected</span>
+    </div>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Find students</mat-label>
       <input
         matInput
-        placeholder="Type to search students..."
+        placeholder="Search by name or ID"
         [ngModelOptions]="{standalone: true}"
         [(ngModel)]="searchQuery"
         (ngModelChange)="filterStudents()"
       />
     </mat-form-field>
 
-    <!-- Select All Option -->
-    @if (showStudentList) {
-      <div class="mt-0 flex items-center px-2">
+    <div class="overflow-hidden rounded-lg border border-gray-200">
+      <div class="border-b border-gray-200 px-3 py-2">
         <mat-checkbox
-          #selectAllBox
-          color="primary"
-          disableRipple
-          [checked]="selectedStudents?.length === filteredStudents?.length"
+          [checked]="allFilteredSelected"
+          [disabled]="!filteredStudents.length"
           (change)="toggleSelectAll()"
-          (mouseup)="handleCheckboxBlur()"
         >
-          Select All
+          Select visible students
         </mat-checkbox>
       </div>
-    }
-
-    <!-- Student List -->
-    @if (showStudentList) {
-      <div
-        class="student-list-container mt-4"
-        style="
-          max-height: 200px;
-          min-height: 100px;
-          overflow-y: auto;
-          border: 1px solid #e0e0e0;
-          border-radius: 4px;
-          padding: 8px;
-          scrollbar-width: thin;
-          scrollbar-color: #888 #f1f1f1;
-        "
-        [class.border-2]="
-          grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
-        "
-        [class.border-red-500]="
-          grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
-        "
-      >
+      <div aria-label="Students" class="max-h-56 overflow-y-auto px-3 py-1" role="group">
         @for (student of filteredStudents; track student.id) {
-          <div
-            class="flex cursor-pointer items-center px-4 py-2 transition-colors duration-200"
-            role="option"
-            tabindex="0"
-            [attr.aria-selected]="isStudentSelected(student.id)"
-            [class.bg-blue-100]="isStudentSelected(student.id)"
-            [class.hover:bg-gray-100]="!isStudentSelected(student.id)"
-            (click)="toggleStudent(student.id)"
-            (keydown)="handleStudentKeydown($event, student.id)"
+          <mat-checkbox
+            class="block py-1"
+            [checked]="isStudentSelected(student.id)"
+            (change)="toggleStudent(student.id)"
           >
             {{ student.name }} ({{ student.id }})
-          </div>
+          </mat-checkbox>
+        } @empty {
+          <p class="my-3 text-sm text-gray-600">No students match your search.</p>
         }
       </div>
+    </div>
+    @if (
+      grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
+    ) {
+      <mat-error class="mt-2">Select at least one student.</mat-error>
     }
-  </div>
+  </section>
 
-  <!-- Student Selection Error -->
-  @if (grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid) {
-    <div style="color: #f44336; font-size: 12px; margin-top: 4px; margin-bottom: 24px">
-      Please select at least one student.
+  <section aria-labelledby="extension-duration-title">
+    <div class="flex items-center justify-between gap-2">
+      <h3 class="m-0 text-base font-medium" id="extension-duration-title">Extension duration</h3>
+      <span class="text-sm font-medium">
+        {{ grantExtensionForm.get('extension')?.value }}
+        {{ grantExtensionForm.get('extension')?.value === 1 ? 'week' : 'weeks' }}
+      </span>
     </div>
-  }
-
-  <!-- Extension Duration -->
-  <div class="mb-8">
-    <label class="mb-4 block text-xl font-semibold text-gray-900" for="extension">
-      Extension Duration: <strong>{{ grantExtensionForm.get('extension')?.value }}</strong> week(s)
-    </label>
-
-    <div
-      [class.border]="
-        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
-      "
-      [class.border-2]="
-        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
-      "
-      [class.border-red-500]="
-        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
-      "
-      [class.p-2]="
-        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
-      "
-      [class.rounded]="
-        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
-      "
-    >
-      <mat-slider
-        class="w-full"
-        max="4"
-        min="1"
-        step="1"
-        style="width: 100%; max-width: 600px; min-width: 300px"
-        thumbLabel
-        tickInterval="5"
-      >
-        <input formControlName="extension" matSliderThumb />
-      </mat-slider>
-    </div>
-
+    <mat-slider class="w-full" discrete max="4" min="1" step="1">
+      <input aria-label="Extension duration in weeks" formControlName="extension" matSliderThumb />
+    </mat-slider>
     @if (
       grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
     ) {
-      <mat-error class="mt-2"> Please select a valid extension duration (1-4 weeks). </mat-error>
+      <mat-error>Select a duration between one and four weeks.</mat-error>
     }
-  </div>
+  </section>
 
-  <!-- Reason Field -->
-  <mat-form-field appearance="fill" class="mb-4 w-full">
+  <mat-form-field appearance="outline" class="w-full">
     <mat-label>Reason</mat-label>
     <textarea
       formControlName="reason"
       matInput
       maxlength="300"
-      placeholder="Explain why extension is needed (max 300 characters)"
+      placeholder="Explain why the extension is needed"
       required
       rows="4"
     ></textarea>
     <mat-hint align="end">{{ grantExtensionForm.get('reason')?.value?.length || 0 }}/300</mat-hint>
     @if (grantExtensionForm.get('reason')?.touched && grantExtensionForm.get('reason')?.invalid) {
-      <mat-error> Please provide a reason for the extension (max 300 characters). </mat-error>
+      <mat-error>Provide a reason of no more than 300 characters.</mat-error>
     }
   </mat-form-field>
 
-  <!-- Form Buttons -->
-  <div class="mt-6 flex justify-end gap-3">
+  <div class="flex justify-end gap-2">
     <button mat-button type="button" [disabled]="isSubmitting" (click)="resetForm()">Reset</button>
     <button color="primary" mat-flat-button type="submit" [disabled]="isSubmitting">
-      Grant Extension
+      Grant extension
     </button>
   </div>
 </form>

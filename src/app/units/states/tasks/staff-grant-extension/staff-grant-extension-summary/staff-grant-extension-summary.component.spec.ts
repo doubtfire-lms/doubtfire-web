@@ -1,4 +1,5 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {MatButtonModule} from '@angular/material/button';
 import {ExtensionSummaryPayload} from '../models/extension-results.model';
 import {StaffGrantExtensionSummaryComponent} from './staff-grant-extension-summary.component';
 
@@ -9,6 +10,7 @@ describe('StaffGrantExtensionSummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StaffGrantExtensionSummaryComponent],
+      imports: [MatButtonModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(StaffGrantExtensionSummaryComponent);

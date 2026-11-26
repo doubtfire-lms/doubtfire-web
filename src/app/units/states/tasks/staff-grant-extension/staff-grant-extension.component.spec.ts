@@ -1,3 +1,4 @@
+import {CommonModule} from '@angular/common';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatIconModule} from '@angular/material/icon';
@@ -12,7 +13,7 @@ describe('StaffGrantExtensionComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StaffGrantExtensionComponent],
-      imports: [MatIconModule],
+      imports: [CommonModule, MatIconModule],
       providers: [{provide: ActivatedRoute, useValue: {parent: null}}],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

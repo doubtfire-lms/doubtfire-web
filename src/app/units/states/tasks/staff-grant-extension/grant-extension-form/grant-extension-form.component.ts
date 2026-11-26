@@ -39,33 +39,6 @@ export class StaffGrantExtensionFormComponent implements OnInit {
   isSubmitting = false;
   searchQuery = '';
   selectedStudents: number[] = [];
-  showStudentList = true;
-
-  // Old hardcoded values (for reference):
-  // unitId = 1;
-  // taskDefinitionId = 25;
-  // students = [
-  //   { id: 1, name: 'Joe M' },
-  //   { id: 2, name: 'Sahiru W' },
-  //   { id: 3, name: 'Samindi M' },
-  //   { id: 4, name: 'Student 4' },
-  //   { id: 5, name: 'Student 5' },
-  //   { id: 6, name: 'Student 6' },
-  //   { id: 7, name: 'Student 7' },
-  //   { id: 8, name: 'Student 8' },
-  //   { id: 9, name: 'Student 9' },
-  //   { id: 10, name: 'Student 10' },
-  //   { id: 11, name: 'Student 11' },
-  //   { id: 12, name: 'Student 12' },
-  //   { id: 13, name: 'Student 13' },
-  //   { id: 14, name: 'Student 14' },
-  //   { id: 15, name: 'Student 15' },
-  //   { id: 16, name: 'Student 16' },
-  //   { id: 17, name: 'Student 17' },
-  //   { id: 18, name: 'Student 18' },
-  //   { id: 19, name: 'Student 19' },
-  //   { id: 20, name: 'Student 20' }
-  // ];
 
   @Input({required: true}) unit!: Unit;
   @Input() taskDefinitionId!: number;
@@ -144,12 +117,20 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     return this.selectedStudents.includes(studentId);
   }
 
+  get allFilteredSelected(): boolean {
+    return (
+      this.filteredStudents.length > 0 &&
+      this.filteredStudents.every((student) => this.isStudentSelected(student.id))
+    );
+  }
+
   // Toggle select all students
   toggleSelectAll(): void {
-    if (this.selectedStudents.length === this.filteredStudents.length) {
-      this.selectedStudents = [];
+    const filteredIds = this.filteredStudents.map((student) => student.id);
+    if (this.allFilteredSelected) {
+      this.selectedStudents = this.selectedStudents.filter((id) => !filteredIds.includes(id));
     } else {
-      this.selectedStudents = this.filteredStudents.map((student) => student.id);
+      this.selectedStudents = [...new Set([...this.selectedStudents, ...filteredIds])];
     }
     this.updateFormStudents();
   }
@@ -159,21 +140,6 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     this.grantExtensionForm.patchValue({
       students: this.selectedStudents,
     });
-  }
-
-  // Handle keyboard navigation for student list
-  handleStudentKeydown(event: KeyboardEvent, studentId: number): void {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      this.toggleStudent(studentId);
-    }
-  }
-
-  // Handle checkbox blur to prevent immediate closing
-  handleCheckboxBlur(): void {
-    setTimeout(() => {
-      this.showStudentList = true;
-    }, 100);
   }
 
   // Submit the form
@@ -294,6 +260,5 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     this.selectedStudents = [];
     this.searchQuery = '';
     this.filteredStudents = this.students;
-    this.showStudentList = true;
   }
 }

@@ -137,7 +137,10 @@
         <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'check-in']">
           <mat-icon aria-label="Student Check In icon" fontIcon="history_edu"></mat-icon>Check-in
         </button>
-        @if (isAdmin || unitRole.role === 'Tutor' || unitRole.role === 'Convenor') {
+        @if (
+          !unitRole.unit.allowFlexibleDates &&
+          (isAdmin || unitRole.role === 'Tutor' || unitRole.role === 'Convenor')
+        ) {
           <button
             mat-menu-item
             [routerLink]="['/units', unitRole.unit.id, 'staff_grant_extension']"
