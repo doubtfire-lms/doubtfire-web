@@ -27,9 +27,9 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
 
   extensionSummary?: ExtensionSummaryPayload | null = null;
   showSummary = false;
-  extensionSummaries = new Map<number, ExtensionSummaryPayload>();
+  extensionSummaries: Map<number, ExtensionSummaryPayload> = new Map();
 
-  private destroy$ = new Subject<void>();
+  private destroy$: Subject<void> = new Subject();
 
   constructor(
     private globalState: GlobalStateService,
@@ -109,7 +109,9 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   // Called when child emits extensionResult
   onExtensionResult(payload: ExtensionSummaryPayload): void {
     const tdId = payload.taskDefinitionId ?? this.taskDefinitionId;
-    if (!tdId) return;
+    if (!tdId) {
+      return;
+    }
 
     // Always clear the previous one
     this.extensionSummaries.delete(tdId);

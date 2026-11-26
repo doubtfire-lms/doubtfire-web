@@ -1,6 +1,6 @@
-<div fxLayout="row" fxFill class="main-content">
+<div class="main-content" fxFill fxLayout="row">
   <!-- Left Panel - Task List -->
-  <div fxFlex="35" class="task-list-panel">
+  <div class="task-list-panel" fxFlex="35">
     <div class="panel-container">
       <div class="panel-header">
         <h3>Tasks</h3>
@@ -10,8 +10,8 @@
       <div class="task-list-container">
         <f-unit-task-list
           *ngIf="unit"
-          [unitTasks]="unit.taskDefinitions"
           mode="all-tasks"
+          [unitTasks]="unit.taskDefinitions"
         ></f-unit-task-list>
         <div *ngIf="!unit" class="no-unit-message">
           <mat-icon>info</mat-icon>
@@ -22,7 +22,7 @@
   </div>
 
   <!-- Right Panel - Grant Extension Form -->
-  <div fxFlex="65" class="form-panel">
+  <div class="form-panel" fxFlex="65">
     <div class="panel-container" [class.disabled]="!isFormActive">
       <div class="panel-header">
         <h3>Grant Extension</h3>
@@ -37,16 +37,16 @@
       <div class="form-container">
         <f-staff-grant-extension-summary
           *ngIf="showSummary && extensionSummary"
+          class="mb-4"
           [summary]="extensionSummary"
           (dismissed)="onSummaryDismissed()"
-          class="mb-4"
         ></f-staff-grant-extension-summary>
 
         <div *ngIf="isFormActive && selectedTaskDefinition" class="form-content">
           <f-staff-grant-extension-form
-            (extensionResult)="onExtensionResult($event)"
-            [unitId]="unitId"
             [taskDefinitionId]="taskDefinitionId"
+            [unitId]="unitId"
+            (extensionResult)="onExtensionResult($event)"
           >
           </f-staff-grant-extension-form>
         </div>

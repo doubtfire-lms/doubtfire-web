@@ -9,7 +9,7 @@ import {ExtensionSummaryPayload} from 'src/app/units/states/tasks/staff-grant-ex
 })
 export class StaffGrantExtensionSummaryComponent implements OnInit, OnDestroy {
   @Input() summary!: ExtensionSummaryPayload | null;
-  @Output() dismissed = new EventEmitter<void>();
+  @Output() dismissed: EventEmitter<void> = new EventEmitter();
 
   expiryDate?: Date;
   expiryFormatted = '';
@@ -21,7 +21,9 @@ export class StaffGrantExtensionSummaryComponent implements OnInit, OnDestroy {
   private intervalId: ReturnType<typeof setInterval> | null = null;
 
   ngOnInit(): void {
-    if (!this.summary) return;
+    if (!this.summary) {
+      return;
+    }
 
     const createdAt = this.summary.createdAt ? new Date(this.summary.createdAt) : new Date();
     this.expiryDate = new Date(
@@ -51,7 +53,9 @@ export class StaffGrantExtensionSummaryComponent implements OnInit, OnDestroy {
 
   // Timer: setTimeout supports max ~2,147,483,647ms (~24.85 days)
   private scheduleAutoDismiss(): void {
-    if (!this.expiryDate) return;
+    if (!this.expiryDate) {
+      return;
+    }
     const msUntilExpiry = this.expiryDate.getTime() - Date.now();
     if (msUntilExpiry <= 0) {
       // already expired

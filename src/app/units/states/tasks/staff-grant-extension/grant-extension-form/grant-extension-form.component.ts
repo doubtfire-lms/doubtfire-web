@@ -35,7 +35,7 @@ import {
   templateUrl: './grant-extension-form.component.html',
 })
 export class StaffGrantExtensionFormComponent implements OnInit {
-  @Output() extensionResult = new EventEmitter<ExtensionSummaryPayload>();
+  @Output() extensionResult: EventEmitter<ExtensionSummaryPayload> = new EventEmitter();
 
   grantExtensionForm!: FormGroup;
   isSubmitting = false;
@@ -94,7 +94,9 @@ export class StaffGrantExtensionFormComponent implements OnInit {
 
   // Load students for the unit
   private loadUnitStudents(): void {
-    if (!this.unitId) return;
+    if (!this.unitId) {
+      return;
+    }
 
     this.http
       .get<{student: {id: number; first_name: string; last_name: string}}[]>(
