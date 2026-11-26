@@ -8,12 +8,7 @@ import {TeachingPeriodListComponent} from './admin/states/teaching-periods/teach
 import {AcceptEulaComponent} from './eula/accept-eula/accept-eula.component';
 import {FUsersComponent} from './admin/states/f-users/f-users.component';
 import {FUnitsComponent} from './admin/states/f-units/f-units.component';
-// import {UnauthorisedComponent} from './errors/states/unauthorised/unauthorised.component';
 import {StaffGrantExtensionComponent} from './units/states/tasks/staff-grant-extension/staff-grant-extension.component';
-// import {ProjectDashboardComponent} from './projects/states/dashboard/project-dashboard/project-dashboard.component';
-// import {UnitRootState} from './units/unit-root-state.component';
-// import {ProjectRootState} from './projects/states/project-root-state.component';
-// import {TaskViewerState} from './units/task-viewer/task-viewer-state.component';
 import {ScormPlayerComponent} from './common/scorm-player/scorm-player.component';
 import {TutorDiscussionComponent} from './projects/states/tutor-discussion/tutor-discussion.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
@@ -22,7 +17,6 @@ import {JplagReportViewerComponent} from './projects/states/jplag/jplag-report-v
 import {LtiDashboardComponent} from './home/states/lti-dashboard/lti-dashboard.component';
 import {LtiUnitLinkComponent} from './home/states/lti-unit-link/lti-unit-link.component';
 import {Ng2ViewDeclaration} from '@uirouter/angular';
-// import {GrantExtensionFormComponent} from './admin/modals/grant-extension-form/grant-extension-form.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component'; // Todo @SGE team: Replace with SGE component
 
 /*
