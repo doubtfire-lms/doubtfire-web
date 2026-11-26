@@ -94,7 +94,8 @@
         }
         <span>
           @if (effectiveSubmissionIsAfterFeedbackDeadline()) {
-            I won't receive tutor feedback or have time to discuss this task if I submit
+            I won't receive staff feedback or have time to discuss my work with teaching staff if I
+            submit
             {{ plannedSubmissionDateHasPassed() ? 'today' : 'on this date' }}.
             @if (plannedSubmissionDateHasPassed()) {
               The last day to submit for feedback was {{ dateWithOrdinal(feedbackDate()) }}.
@@ -103,25 +104,27 @@
             }
           } @else if (discussionTiming() === 'past') {
             @if (plannedSubmissionDateHasPassed()) {
-              I can still receive tutor feedback, but teaching has ended, so I won't have time to
-              discuss this task with my tutor.
+              I can still receive staff feedback, but teaching has ended, so I won't have time to
+              discuss my work with teaching staff.
             } @else {
-              I can still receive tutor feedback, but teaching ends before I plan to submit. Marking
-              may take up to 7 days, so I won't have time to discuss this task with my tutor.
+              I can still receive staff feedback, but teaching ends before I plan to submit. Marking
+              may take up to 7 days, so I won't have time to discuss my work with teaching staff.
             }
           } @else if (discussionTiming() === 'tight') {
-            I can still receive tutor feedback on this submission, but if I need to fix and
-            resubmit, I may miss out on further feedback and a chance to discuss the task with my
-            tutor.
+            I can still receive staff feedback on this submission, but if I need to fix and
+            resubmit, I may miss out on further feedback and a chance to discuss my work with
+            teaching staff.
           } @else if (discussionTiming() === 'enough') {
             @if (daysFromTargetDueDate(effectiveSubmissionDate()) > 0) {
               I should make sure I'm not falling behind. I should still have enough time to receive
-              tutor feedback and discuss this task with my tutor.
+              staff feedback and discuss my work with teaching staff.
             } @else {
-              I will have enough time to receive tutor feedback and discuss this task with my tutor.
+              I will have enough time to receive staff feedback and discuss my work with teaching
+              staff.
             }
           } @else {
-            I can receive tutor feedback. I should check with my tutor about discussion timing.
+            I can receive staff feedback. I should check with teaching staff about discussion
+            timing.
           }
         </span>
       </div>
