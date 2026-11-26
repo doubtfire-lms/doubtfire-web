@@ -1,5 +1,4 @@
 import {AfterViewInit, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
 import {UIRouter} from '@uirouter/core';
 import * as _ from 'lodash';
 import {Task} from 'src/app/api/models/task';
@@ -29,7 +28,6 @@ export class TaskStatusCardComponent implements OnChanges, AfterViewInit {
     private doubtfireConstants: DoubtfireConstants,
     private submissionTypeModalService: SubmissionTypeModalService,
     private userService: UserService,
-    private dialog: MatDialog,
     private feedbackAppealService: FeedbackAppealModalService,
   ) {}
 
