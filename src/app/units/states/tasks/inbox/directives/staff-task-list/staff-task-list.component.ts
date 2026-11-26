@@ -40,6 +40,8 @@ import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progres
 import {AlertService} from 'src/app/common/services/alert.service';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from 'src/app/projects/states/dashboard/selected-task.service';
+import {StaffViewAsId, VIEW_AS_SELF} from 'src/app/units/staff-view-as-selector.component';
+import type {DashboardInboxPreset} from '../../unit-task-inbox-state.component';
 import {BatchFeedbackWorkflowDialogComponent} from './batch-feedback-workflow-dialog/batch-feedback-workflow-dialog.component';
 
 type StaffTaskListViewType = 'inbox' | 'explorer' | 'moderation' | 'overflow';
@@ -48,7 +50,8 @@ type StaffTaskListSortOption = 'default' | 'feedbackDeadline';
 
 type StaffTaskListSortDirection = 'asc' | 'desc';
 
-type StaffTaskListFilterKey = 'awaitingFeedback' | 'similaritiesDetected' | 'showWithdrawnStudents';
+type StaffTaskListFilterKey =
+  'awaitingFeedback' | 'feedbackOverdue' | 'similaritiesDetected' | 'showWithdrawnStudents';
 
 interface StaffTaskListViewPreferences {
   sortBy: StaffTaskListSortOption;
@@ -83,6 +86,7 @@ const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
   sortDirection: 'asc',
   filters: {
     awaitingFeedback: false,
+    feedbackOverdue: false,
     similaritiesDetected: false,
     showWithdrawnStudents: false,
   },
@@ -90,8 +94,6 @@ const DEFAULT_VIEW_PREFERENCES: StaffTaskListViewPreferences = {
 };
 
 const ALL_TASK_DEFINITIONS = '';
-
-const VIEW_AS_SELF = 'self';
 
 // The inbox and overflow queue lead with the longest-waiting task, so their default
 // is really a date sort and can be reversed. The other views have no ordering worth
@@ -142,6 +144,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   };
   @Input() unit: Unit;
   @Input() unitRole: UnitRole;
+  @Input() dashboardInboxPreset: DashboardInboxPreset | null = null;
   @Input() filters: Partial<{
     taskDefinition: TaskDefinition;
     tutorials: Tutorial[];
@@ -172,8 +175,8 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     options: {id: string | number; inboxDescription: string | undefined}[];
   }[] = [];
 
-  viewAsOptions: {id: number | typeof VIEW_AS_SELF; name: string}[] = [];
-  viewAsUnitRoleId: number | typeof VIEW_AS_SELF = VIEW_AS_SELF;
+  viewAsOptions: UnitRole[] = [];
+  viewAsUnitRoleId: StaffViewAsId = VIEW_AS_SELF;
 
   tasks: Task[] = null;
 
@@ -221,6 +224,7 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   ];
 
   statusOptions: StaffTaskListStatusOptionView[] = [];
+  feedbackOverdueCount = 0;
 
   filtersExpanded = false;
 
@@ -303,10 +307,28 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.filteredTasks = null;
     this.fetchedAllTasks = false;
     this.viewPreferences = this.defaultViewPreferences();
-    this.viewAsUnitRoleId = VIEW_AS_SELF;
+    const requestedRoleId = this.canViewInboxAs
+      ? Number(this.route.snapshot.queryParamMap.get('viewAsUnitRoleId'))
+      : null;
+    const requestedRole = this.unit.staff.find(
+      (staff) => staff.id === requestedRoleId && staff.id !== this.unitRole.id,
+    );
+    this.viewAsUnitRoleId = requestedRole?.id ?? VIEW_AS_SELF;
+
+    // Apply the card's selection after defaults and before the first task fetch.
+    switch (this.dashboardInboxPreset) {
+      case 'ready_for_feedback':
+      case 'need_help':
+        this.viewPreferences.statuses = [this.dashboardInboxPreset];
+        break;
+      case 'feedback_overdue':
+        this.viewPreferences.filters.feedbackOverdue = true;
+        break;
+    }
 
     // Does the current user have any tutorials?
-    this.userHasTutorials = this.unit.tutorialsForUserName(this.inboxUserName)?.length > 0;
+    this.userHasTutorials =
+      this.unit.tutorialsForUserName(this.userService.currentUser.name)?.length > 0;
 
     const staff = this.unit.staff.slice();
 
@@ -322,12 +344,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     const tutorUserIds = new Set(this.unit.tutorials.map((t) => t.tutor?.id).filter(Boolean));
     const allTutors = staff.filter((ur) => tutorUserIds.has(ur.user?.id)).sort(byName);
 
-    this.viewAsOptions = [
-      {id: VIEW_AS_SELF, name: 'Myself'},
-      ...allTutors
-        .filter((ur) => ur.id !== this.unitRole.id)
-        .map((ur) => ({id: ur.id, name: ur.user?.name})),
-    ];
+    this.viewAsOptions = staff
+      .filter((ur) => tutorUserIds.has(ur.user?.id) || ur === requestedRole)
+      .filter((ur) => ur.id !== this.unitRole.id)
+      .sort(byName);
     const shouldDefaultToMyStudents =
       (this.unitRole.role === 'Tutor' || this.unitRole.role === 'Convenor') &&
       this.userHasTutorials;
@@ -345,6 +365,10 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
       },
       this.filters,
     );
+
+    if (requestedRole) {
+      this.filters.tutorialIdSelected = 'mine';
+    }
 
     // mat-select skips options with a null value, so the "all" entry needs a real one to match
     this.filters.taskDefinitionIdSelected ??= ALL_TASK_DEFINITIONS;
@@ -438,7 +462,14 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     this.fetchedAllTasks = false;
     // Another tutor's inbox is only their own students
     const defaultTutorialId = this.userHasTutorials ? 'mine' : 'all';
-    this.tutorialIdChanged(false, this.isViewingAsOther ? 'mine' : defaultTutorialId);
+    const students = this.isViewingAsOther ? 'mine' : defaultTutorialId;
+    this.tutorialIdChanged(false, students);
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {viewAsUnitRoleId: this.viewAsUnitRole?.id ?? null, students},
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
     this.refreshData();
   }
 
@@ -606,9 +637,17 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
     // the statuses you could switch to.
     const beforeStatusFilter = filteredTasks?.filter((task) => this.matchesQuickFilters(task));
     this.statusOptions = this.buildStatusOptions(beforeStatusFilter);
+    this.feedbackOverdueCount =
+      beforeStatusFilter?.filter((task) => task && this.getWarningIcon(task) === 'overflow')
+        .length ?? 0;
 
     filteredTasks = this.sortTasks(
-      beforeStatusFilter?.filter((task) => this.matchesStatusFilter(task)),
+      beforeStatusFilter?.filter(
+        (task) =>
+          this.matchesStatusFilter(task) &&
+          (!this.isFilterActive('feedbackOverdue') ||
+            (task && this.getWarningIcon(task) === 'overflow')),
+      ),
     );
     this.filteredTasks = filteredTasks;
 
@@ -966,7 +1005,11 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public clearStatusFilter(): void {
-    this.viewPreferences = {...this.viewPreferences, statuses: []};
+    this.viewPreferences = {
+      ...this.viewPreferences,
+      statuses: [],
+      filters: {...this.viewPreferences.filters, feedbackOverdue: false},
+    };
     this.viewPreferencesChanged();
   }
 
@@ -982,7 +1025,12 @@ export class StaffTaskListComponent implements OnInit, OnChanges, OnDestroy {
 
   // A lone status is not worth a filter row -- everything in the list already has it
   public get showStatusFilter(): boolean {
-    return this.statusOptions.length > 1 || this.viewPreferences.statuses.length > 0;
+    return (
+      this.statusOptions.length > 1 ||
+      this.viewPreferences.statuses.length > 0 ||
+      this.feedbackOverdueCount > 0 ||
+      this.isFilterActive('feedbackOverdue')
+    );
   }
 
   public get activeFilterCount(): number {

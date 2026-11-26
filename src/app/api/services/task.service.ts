@@ -27,11 +27,14 @@ export class TaskService extends CachedEntityService<Task> {
   private readonly taskOverflowEndpoint = '/units/:id:/tasks/overflow';
   private readonly refreshTaskEndpoint = 'projects/:projectId:/refresh_tasks/:taskDefinitionId:';
 
+  private readonly overflowHttpClient: HttpClient;
+
   constructor(
     httpClient: HttpClient,
     private alertService: AlertService,
   ) {
     super(httpClient, API_URL);
+    this.overflowHttpClient = httpClient;
 
     this.mapping.addKeys(
       'id',
@@ -198,6 +201,12 @@ export class TaskService extends CachedEntityService<Task> {
         unit.incorporateTasks(tasks);
       }),
     );
+  }
+
+  public getOverflowAvailableToClaimCount(unit: Unit): Observable<number> {
+    return this.overflowHttpClient
+      .get<{available_to_claim_count: number}>(`${API_URL}/units/${unit.id}/stats/overflow_queue`)
+      .pipe(map((stats) => stats.available_to_claim_count));
   }
 
   public queryTasksForOverflow(unit: Unit): Observable<Task[]> {

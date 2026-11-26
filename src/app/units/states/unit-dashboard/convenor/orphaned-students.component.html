@@ -1,0 +1,15 @@
+@let rows = orphanedStudents();
+@if (rows.length) {
+  <section
+    aria-labelledby="orphaned-students-heading"
+    class="mx-auto mt-8 rounded-xl border border-slate-300 bg-white p-5 text-left"
+  >
+    <h2 class="m-0 text-lg font-medium" id="orphaned-students-heading">Orphaned students</h2>
+    <p class="mt-4 text-sm">These students have no allocated TA in any tutorial.</p>
+    <ul>
+      @for (project of rows; track project.id) {
+        <li>{{ project.student.name }} ({{ project.student.username }})</li>
+      }
+    </ul>
+  </section>
+}

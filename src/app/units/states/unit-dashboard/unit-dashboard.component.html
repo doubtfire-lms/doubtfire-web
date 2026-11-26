@@ -1,0 +1,63 @@
+<main class="w-full max-w-225 text-center">
+  <h1 class="m-0 mb-2 text-[28px] font-medium">Unit Dashboard</h1>
+  @if (dashboard$ | async; as dashboard) {
+    @if (dashboard.unitRole === 'Convenor') {
+      <f-staff-view-as-selector
+        class="mt-3 inline-block w-full max-w-80"
+        label="View as"
+        [staff]="dashboard.otherStaff"
+        [value]="selectedStaff?.id ?? self"
+        (valueChange)="selectStaff($event, dashboard.otherStaff)"
+      />
+    }
+    @let primaryRole = selectedStaff?.role ?? dashboard.unitRole;
+    @let view = activeView ?? primaryRole;
+    @let teachingConvenor =
+      primaryRole === 'Convenor' &&
+      teachesTutorials(dashboard.unit, selectedStaff ?? dashboard.staffRole);
+    @if (primaryRole; as unitRole) {
+      @let queues =
+        selectedStaff ? dashboardQueues(dashboard.unit, selectedStaff) : dashboard.queues;
+      <div class="mt-3 flex flex-wrap items-center justify-center gap-2 text-sm">
+        <span class="font-medium">
+          {{ selectedStaff ? selectedStaff.user.name + '’s roles' : 'Your roles' }}:
+        </span>
+        @if (unitRole === 'Convenor' || unitRole === 'Tutor') {
+          @for (role of teachingConvenor ? ['Convenor', 'Tutor'] : [unitRole]; track role) {
+            <button
+              class="cursor-pointer rounded-full bg-slate-100 px-3 py-1 text-slate-800 underline hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-formatif-blue aria-pressed:font-semibold"
+              type="button"
+              [attr.aria-pressed]="view === role"
+              (click)="activeView = role === 'Convenor' ? 'Convenor' : 'Tutor'"
+            >
+              {{ role }}
+            </button>
+          }
+        } @else {
+          <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-800">{{ unitRole }}</span>
+        }
+        @for (queue of queues; track queue.path) {
+          <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-800">{{ queue.role }}</span>
+        }
+      </div>
+    }
+
+    @if (view === 'Convenor') {
+      <f-convenor
+        id="convenor-dashboard"
+        [unit]="dashboard.unit"
+        [viewAsUnitRoleId]="selectedStaff?.id ?? undefined"
+      />
+    } @else {
+      <f-tutor-dashboard
+        id="tutor-dashboard"
+        [dashboardQueues]="selectedStaff ? [] : dashboard.queues"
+        [showTimesheet]="
+          teachingConvenor || (selectedStaff ? primaryRole === 'Tutor' : dashboard.showTimesheet)
+        "
+        [unit]="dashboard.unit"
+        [viewAsStaff]="selectedStaff ?? undefined"
+      />
+    }
+  }
+</main>

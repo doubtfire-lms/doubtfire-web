@@ -187,6 +187,17 @@ export class NotificationService implements OnDestroy {
     );
   }
 
+  public getStaffWeeklySummary(
+    unitId: number,
+    unitRoleId: number,
+  ): Observable<WeeklySummary | null> {
+    return this.httpClient
+      .get<{weekly_summary: Record<string, unknown> | null}>(
+        `${API_URL}/units/${unitId}/staff/${unitRoleId}/weekly_summary`,
+      )
+      .pipe(map(({weekly_summary}) => this.mapWeeklySummary(weekly_summary ?? undefined) ?? null));
+  }
+
   public markRead(notificationIds: number[]): Observable<{count: number}> {
     return this.httpClient
       .put<{count: number}>(`${API_URL}/notifications/read`, {

@@ -1,0 +1,183 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {RouterLink} from '@angular/router';
+import {
+  EMPTY,
+  ReplaySubject,
+  Subject,
+  catchError,
+  finalize,
+  map,
+  merge,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
+import {
+  ProjectService,
+  Task,
+  TaskService,
+  Unit,
+  UnitRole,
+} from 'src/app/api/models/doubtfire-model';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {DashboardQueue} from '../dashboard-queue';
+import {LatestWeeklySummaryComponent} from '../latest-weekly-summary.component';
+import {OpenInboxButtonComponent} from '../open-inbox-button.component';
+import {WeeklyTimesheetComponent} from './weekly-timesheet.component';
+
+@Component({
+  selector: 'f-tutor-dashboard',
+  imports: [
+    LatestWeeklySummaryComponent,
+    MatIconModule,
+    OpenInboxButtonComponent,
+    RouterLink,
+    WeeklyTimesheetComponent,
+  ],
+  host: {class: 'block'},
+  templateUrl: './tutor.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+})
+export class TutorComponent implements OnChanges, OnInit, OnDestroy {
+  @Input({required: true}) unit: Unit;
+  @Input({required: true}) dashboardQueues: readonly DashboardQueue[];
+  @Input({required: true}) showTimesheet: boolean;
+
+  @Input() viewAsStaff?: UnitRole;
+
+  private readonly context$: ReplaySubject<{
+    unit: Unit;
+    queues: readonly DashboardQueue[];
+    viewAsUnitRoleId?: number;
+  }> = new ReplaySubject(1);
+  private readonly destroy$: Subject<void> = new Subject();
+
+  public loading = true;
+  public readyForFeedbackCount: number | null = null;
+  public needsHelpCount: number | null = null;
+  public feedbackOverdueCount: number | null = null;
+  public oldestSubmissionAgeDays: number | null = null;
+  public unreadMessagesCount: number | null = null;
+  public queues: (DashboardQueue & {count: number | 'Unavailable' | null})[] = [];
+
+  constructor(
+    private projectService: ProjectService,
+    private taskService: TaskService,
+    private alertService: AlertService,
+  ) {}
+
+  ngOnChanges(): void {
+    this.context$.next({
+      unit: this.unit,
+      queues: this.dashboardQueues,
+      viewAsUnitRoleId: this.viewAsStaff?.id,
+    });
+  }
+
+  ngOnInit(): void {
+    this.context$
+      .pipe(
+        switchMap(({unit, queues, viewAsUnitRoleId}) => {
+          this.loading = true;
+          this.readyForFeedbackCount = null;
+          this.needsHelpCount = null;
+          this.feedbackOverdueCount = null;
+          this.oldestSubmissionAgeDays = null;
+          this.unreadMessagesCount = null;
+          this.queues = queues.map((queue) => ({...queue, count: null}));
+
+          // TaskService maps queue and inbox tasks to projects in the unit's student cache.
+          return this.projectService.loadStudents(unit).pipe(
+            switchMap(() => {
+              const inbox$ = this.taskService
+                .queryTasksForTaskInbox(unit, undefined, true, viewAsUnitRoleId)
+                .pipe(
+                  tap((tasks) => this.calculateMetrics(tasks)),
+                  catchError(() => {
+                    this.alertService.error('Error loading tutor dashboard.', 6000);
+                    return EMPTY;
+                  }),
+                );
+              const queues$ = this.queues.map((queue) => {
+                const tasks$ =
+                  queue.path === 'moderation'
+                    ? this.taskService.queryTasksForMentorModeration(unit)
+                    : this.taskService.queryTasksForOverflow(unit);
+
+                return tasks$.pipe(
+                  map((tasks) => tasks.length),
+                  catchError(() => of('Unavailable' as const)),
+                  tap((count) => (queue.count = count)),
+                );
+              });
+              return merge(inbox$, ...queues$);
+            }),
+            catchError(() => {
+              this.queues.forEach((queue) => (queue.count = 'Unavailable'));
+              this.alertService.error('Error loading tutor dashboard.', 6000);
+              return EMPTY;
+            }),
+            finalize(() => (this.loading = false)),
+          );
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private calculateMetrics(tasks: Task[]): void {
+    let readyForFeedback = 0;
+    let needsHelp = 0;
+    let feedbackOverdue = 0;
+    let unreadMessages = 0;
+    let oldestSubmissionTime = Infinity;
+    let oldestSubmissionAgeDays: number | null = null;
+    const now = Date.now();
+
+    tasks.forEach((task) => {
+      if (task.status === 'ready_for_feedback') {
+        readyForFeedback++;
+
+        if (task.submissionDate) {
+          // Match the inbox's feedback age, including teaching-break pauses.
+          const ageDays = task.daysSinceSubmission(now);
+          if (ageDays >= task.unit.feedbackOverflowThresholdDays) {
+            feedbackOverdue++;
+          }
+
+          const submissionTime = task.submissionDate.getTime();
+          if (submissionTime < oldestSubmissionTime) {
+            oldestSubmissionTime = submissionTime;
+            oldestSubmissionAgeDays = ageDays;
+          }
+        }
+      }
+
+      if (task.status === 'need_help') {
+        needsHelp++;
+      }
+
+      unreadMessages += task.numNewComments ?? 0;
+    });
+
+    this.readyForFeedbackCount = readyForFeedback;
+    this.needsHelpCount = needsHelp;
+    this.feedbackOverdueCount = feedbackOverdue;
+    this.oldestSubmissionAgeDays = oldestSubmissionAgeDays;
+    this.unreadMessagesCount = unreadMessages;
+  }
+}

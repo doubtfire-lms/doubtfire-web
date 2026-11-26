@@ -42,6 +42,8 @@ const buildTask = (
     waitingSince: overrides.waitingSince ?? submissionDate,
     project: {student: {name: overrides.studentName ?? 'Student'}},
     definition: {id: 1, seq: 1, dueDate: deadline},
+    unit: {feedbackWarningThresholdDays: 7, feedbackOverflowThresholdDays: 14},
+    daysSinceSubmission: () => (submissionDate ? 1 : 0),
     localDeadlineDate: () => deadline,
   } as unknown as Task;
 };

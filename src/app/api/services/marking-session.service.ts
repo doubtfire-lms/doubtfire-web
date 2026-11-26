@@ -21,6 +21,7 @@ export class MarkingSessionService extends CachedEntityService<MarkingSession> {
 
       'commentsAdded',
       'assessments',
+      'assessedProjectIds',
       'submissionsOpened',
 
       {
