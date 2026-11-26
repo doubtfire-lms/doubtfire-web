@@ -48,11 +48,11 @@
           ></f-staff-grant-extension-summary>
         }
 
-        @if (isFormActive && selectedTaskDefinition) {
+        @if (isFormActive && selectedTaskDefinition && unit) {
           <div class="form-content">
             <f-staff-grant-extension-form
               [taskDefinitionId]="taskDefinitionId"
-              [unitId]="unitId"
+              [unit]="unit"
               (extensionResult)="onExtensionResult($event)"
             >
             </f-staff-grant-extension-form>

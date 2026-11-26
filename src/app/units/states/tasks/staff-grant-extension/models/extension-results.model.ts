@@ -1,3 +1,10 @@
+export interface GrantExtensionPayload {
+  student_ids: number[];
+  task_definition_id: number;
+  weeks_requested: number;
+  comment: string;
+}
+
 export interface SuccessfulResult {
   student_id: number;
   project_id: number;

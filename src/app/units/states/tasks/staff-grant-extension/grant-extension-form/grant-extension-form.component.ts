@@ -1,5 +1,4 @@
 import {CommonModule} from '@angular/common';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {FormsModule} from '@angular/forms';
@@ -11,8 +10,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {finalize} from 'rxjs/operators';
-import {UserService} from 'src/app/api/models/doubtfire-model';
-import {ExtensionService} from 'src/app/api/services/extension.service';
+import {ProjectService, Unit, UnitService} from 'src/app/api/models/doubtfire-model';
 import {
   ExtensionServiceResult,
   ExtensionSummaryPayload,
@@ -69,7 +67,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
   //   { id: 20, name: 'Student 20' }
   // ];
 
-  @Input() unitId!: number;
+  @Input({required: true}) unit!: Unit;
   @Input() taskDefinitionId!: number;
   @Input() students: {id: number; name: string}[] = [];
   filteredStudents: {id: number; name: string}[] = [];
@@ -77,45 +75,29 @@ export class StaffGrantExtensionFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private extensionService: ExtensionService,
-    private http: HttpClient,
-    private userService: UserService,
+    private unitService: UnitService,
+    private projectService: ProjectService,
   ) {}
-
-  // Build headers for API calls
-  private buildHeaders(): HttpHeaders {
-    const authToken = this.userService.currentUser?.authenticationToken ?? '';
-    const username = this.userService.currentUser?.username ?? '';
-    return new HttpHeaders({
-      'Auth-Token': authToken,
-      'Username': username,
-    });
-  }
 
   // Load students for the unit
   private loadUnitStudents(): void {
-    if (!this.unitId) {
+    if (!this.unit) {
       return;
     }
 
-    this.http
-      .get<{student: {id: number; first_name: string; last_name: string}}[]>(
-        `/api/students?unit_id=${this.unitId}`,
-        {headers: this.buildHeaders()},
-      )
-      .subscribe({
-        next: (projects) => {
-          this.students = (projects ?? []).map((p) => ({
-            id: p.student.id,
-            name: `${p.student.first_name} ${p.student.last_name}`,
-          }));
-          this.filteredStudents = this.students;
-        },
-        error: () => {
-          this.students = [];
-          this.filteredStudents = [];
-        },
-      });
+    this.projectService.loadStudents(this.unit).subscribe({
+      next: (projects) => {
+        this.students = (projects ?? []).map((project) => ({
+          id: project.student.id,
+          name: `${project.student.firstName} ${project.student.lastName}`,
+        }));
+        this.filteredStudents = this.students;
+      },
+      error: () => {
+        this.students = [];
+        this.filteredStudents = [];
+      },
+    });
   }
 
   // Initialize the reactive form with validators for each field
@@ -213,8 +195,8 @@ export class StaffGrantExtensionFormComponent implements OnInit {
       };
 
       // Submit the extension request
-      this.extensionService
-        .grantExtension(this.unitId, payload)
+      this.unitService
+        .grantExtension(this.unit, payload)
         .pipe(
           finalize(() => {
             this.isSubmitting = false;
