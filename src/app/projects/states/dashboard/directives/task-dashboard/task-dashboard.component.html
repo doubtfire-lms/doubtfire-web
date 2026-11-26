@@ -149,10 +149,22 @@
       @case (DashboardViews.submission) {
         <div class="h-full">
           @if (showSubmissionPdf && task.hasPdf) {
-            <f-pdf-viewer
-              class="block size-full"
-              [pdfUrl]="urls.taskSubmissionPdfUrl"
-            ></f-pdf-viewer>
+            <div class="flex h-full min-h-0 flex-col">
+              <button
+                class="w-full shrink-0"
+                color="primary"
+                mat-button
+                type="button"
+                (click)="toggleSubmissionView()"
+              >
+                Try the new file viewer
+                <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+              </button>
+              <f-pdf-viewer
+                class="block min-h-0 flex-1"
+                [pdfUrl]="urls.taskSubmissionPdfUrl"
+              ></f-pdf-viewer>
+            </div>
           } @else {
             <f-task-file-viewer [task]="task"></f-task-file-viewer>
           }

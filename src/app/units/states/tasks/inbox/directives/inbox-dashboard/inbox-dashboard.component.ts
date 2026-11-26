@@ -37,7 +37,7 @@ export class InboxDashboardComponent implements OnChanges {
   public readonly InboxDashboardTab = InboxDashboardTab;
   public currentTab: InboxDashboardTab = InboxDashboardTab.submission;
   public currentIndex = InboxDashboardTab.submission;
-  public showSubmissionPdf = false;
+  public showSubmissionPdf = true;
 
   constructor(
     private fileDownloader: FileDownloaderService,
@@ -88,7 +88,7 @@ export class InboxDashboardComponent implements OnChanges {
   }
 
   private selectDefaultTab(): void {
-    this.showSubmissionPdf = false;
+    this.showSubmissionPdf = true;
     if (this.task) {
       this.setSelectedTab(InboxDashboardTab.submission);
     } else {
