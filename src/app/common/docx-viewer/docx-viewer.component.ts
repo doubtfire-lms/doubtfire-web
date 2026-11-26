@@ -25,7 +25,7 @@ const SEARCH_HIGHLIGHT_STYLES = `
   selector: 'f-docx-viewer',
   templateUrl: './docx-viewer.component.html',
   styleUrls: ['./docx-viewer.component.scss'],
-  host: {'class': 'block size-full min-h-0'},
+  host: {'class': 'block size-full min-h-0 min-w-0 max-w-full'},
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
