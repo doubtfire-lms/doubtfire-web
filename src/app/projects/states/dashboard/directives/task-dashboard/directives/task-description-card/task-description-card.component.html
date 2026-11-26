@@ -19,11 +19,11 @@
       @if (unit?.allowFlexibleDates ?? taskDef?.unit?.allowFlexibleDates) {
         <li>
           @if (task) {
-            For my target grade, this task is <b>due</b>
+            For my target grade, this task is
           } @else {
-            This task is <b>due</b>
+            This task is
           }
-          {{ dateWithOrdinal(targetGradeDueDate()) }}.
+          <b>due {{ dateWithOrdinal(targetGradeDueDate()) }}.</b>
         </li>
         <br />
         <li>
