@@ -11,7 +11,7 @@
         label="Task Sheet"
         [disabled]="!task.definition.hasTaskSheet && !task.definition.hasContentLink"
       ></mat-tab>
-      <mat-tab [disabled]="!task.hasPdf && !task.processingPdf">
+      <mat-tab [disabled]="!task.submissionDate && !task.hasPdf && !task.processingPdf">
         <ng-template mat-tab-label>
           <span class="flex items-center gap-1">
             Your Submission
@@ -64,6 +64,10 @@
     </button>
 
     <mat-menu #taskMenu="matMenu" xPosition="before">
+      <button mat-menu-item [disabled]="!task.hasPdf" (click)="toggleSubmissionView()">
+        <mat-icon>{{ submissionPdfVisible ? 'folder_open' : 'picture_as_pdf' }}</mat-icon>
+        <span>{{ submissionPdfVisible ? 'View submission files' : 'View submission PDF' }}</span>
+      </button>
       <button mat-menu-item [disabled]="!task.hasPdf" (click)="downloadSubmission()">
         <mat-icon>download</mat-icon>
         <span>Download submission PDF</span>
@@ -143,29 +147,32 @@
         }
       }
       @case (DashboardViews.submission) {
-        <div class="flex h-full flex-col">
-          <div class="flex shrink-0 justify-end px-2 py-1">
-            <mat-button-toggle-group
-              aria-label="Submission view"
-              hideSingleSelectionIndicator
-              [value]="submissionViewMode"
-              (change)="submissionViewMode = $event.value"
-            >
-              <mat-button-toggle class="w-24" value="pdf">PDF</mat-button-toggle>
-              <mat-button-toggle class="w-24" value="files">Files</mat-button-toggle>
-            </mat-button-toggle-group>
-          </div>
-          <div class="min-h-0 flex-1">
-            @if (submissionViewMode === 'files') {
-              <f-task-file-viewer [task]="task"></f-task-file-viewer>
-            } @else if (task.hasPdf) {
-              <f-pdf-viewer [pdfUrl]="task.submissionUrl()" [startPage]="2"></f-pdf-viewer>
-            } @else {
-              <div class="flex size-full flex-col items-center justify-center">
-                <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
-              </div>
-            }
-          </div>
+        <div class="h-full">
+          @if (!task.hasPdf) {
+            <div class="flex size-full flex-col items-center justify-center">
+              <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
+            </div>
+          } @else if (showSubmissionPdf) {
+            <div class="flex h-full min-h-0 flex-col">
+              <button
+                class="w-full shrink-0"
+                color="primary"
+                mat-button
+                type="button"
+                (click)="toggleSubmissionView()"
+              >
+                Try the new file viewer
+                <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+              </button>
+              <f-pdf-viewer
+                class="block min-h-0 flex-1"
+                [pdfUrl]="urls.taskSubmissionPdfUrl"
+                [startPage]="2"
+              ></f-pdf-viewer>
+            </div>
+          } @else {
+            <f-task-file-viewer [task]="task"></f-task-file-viewer>
+          }
         </div>
       }
       @case (DashboardViews.similarity) {

@@ -3,12 +3,13 @@
   "index": "/index.html",
   "dataGroups": [
     {
-      "name": "api",
-      "urls": ["/api"],
+      "name": "gravatar-avatars",
+      "urls": ["https://www.gravatar.com/avatar/**"],
       "cacheConfig": {
-        "maxSize": 0,
-        "maxAge": "0u",
-        "strategy": "freshness"
+        "strategy": "performance",
+        "maxSize": 1000,
+        "maxAge": "7d",
+        "cacheOpaqueResponses": true
       }
     },
     {
@@ -42,16 +43,7 @@
       "installMode": "lazy",
       "updateMode": "prefetch",
       "resources": {
-        "files": [
-          "/assets/**",
-          "/*.(eot|svg|cur|jpg|png|png?default=blank&size=25webp|gif|otf|ttf|woff|woff2|ani)"
-        ]
-      }
-    },
-    {
-      "name": "external_assets",
-      "resources": {
-        "urls": ["https://www.gravatar.com/avatar/**"]
+        "files": ["/assets/**", "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"]
       }
     }
   ],
@@ -60,6 +52,11 @@
     "!/**/*.*",
     "!/**/*__*",
     "!/**/*__*/**",
+    "!/api/**",
+    "!/api",
+    "!/lti/api/**",
+    "!/lti/api",
+    "!/health",
     "!/JPlag/**",
     "!/JPlag",
     "!/sidekiq/**",

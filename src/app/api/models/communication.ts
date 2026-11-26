@@ -63,6 +63,8 @@ export interface CommunicationRulePreviewStudent {
   full_name?: string;
   username?: string;
   student_id?: string;
+  email?: string;
+  tutorials?: string[];
   campus?: string;
   target_grade?: number;
   spec_con_days?: number;

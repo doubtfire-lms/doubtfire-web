@@ -2,6 +2,75 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-29](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-28...v11.1.0-29) (2026-11-26)
+
+## [11.1.0-28](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-27...v11.1.0-28) (2026-11-26)
+
+
+### Features
+
+* add python-based jupyter notebook language option ([#1786](https://github.com/b0ink/doubtfire-deploy/issues/1786)) ([47a696c](https://github.com/b0ink/doubtfire-deploy/commit/47a696c2880edb0e85f82394379f6cb100343aa2))
+
+## [11.1.0-27](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-26...v11.1.0-27) (2026-11-26)
+
+
+### Features
+
+* cache gravatar avatars ([480342a](https://github.com/b0ink/doubtfire-deploy/commit/480342adf25393b4a3133fb26856a2d5325d42eb))
+* combine snapshot analytics into a single progress tab ([#1782](https://github.com/b0ink/doubtfire-deploy/issues/1782)) ([ad0a5dc](https://github.com/b0ink/doubtfire-deploy/commit/ad0a5dc508e55e68ffd09bb5bcd11db3dfd19b41))
+* jupyter notebook viewer ([#1772](https://github.com/b0ink/doubtfire-deploy/issues/1772)) ([c537e90](https://github.com/b0ink/doubtfire-deploy/commit/c537e90a83863f45399c0f177a75b9711a53df08))
+* show submitted files as a stack of file cards ([#1775](https://github.com/b0ink/doubtfire-deploy/issues/1775)) ([eccd90c](https://github.com/b0ink/doubtfire-deploy/commit/eccd90c3bfe99fb7014e6b3fe3746ac5ee58db31))
+* stacked area submission count graph ([#1781](https://github.com/b0ink/doubtfire-deploy/issues/1781)) ([ac80e24](https://github.com/b0ink/doubtfire-deploy/commit/ac80e2439eb2859ae0dd2e14b81d381bb63ca2f6))
+
+
+### Bug Fixes
+
+* guard against projects without a unit on home page ([88986de](https://github.com/b0ink/doubtfire-deploy/commit/88986decf6a30402ec20768882bc0a45b6216be7))
+* open legacy submission pdf viewer on page 2 ([062450d](https://github.com/b0ink/doubtfire-deploy/commit/062450daaf1367ce7c7fa93650b99c9dd44b07f9))
+* skip submission chart ticks when there is no submission data ([da4dbdc](https://github.com/b0ink/doubtfire-deploy/commit/da4dbdcc6b582b2d8f4cd555702af53e38a8c56f))
+
+## [11.1.0-26](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-25...v11.1.0-26) (2026-11-25)
+
+
+### Features
+
+* show teaching period breaks in task planner gantt chart ([#1774](https://github.com/b0ink/doubtfire-deploy/issues/1774)) ([2a0d2bc](https://github.com/b0ink/doubtfire-deploy/commit/2a0d2bca44690892d2dae8ff8de0c455e6d3c1be))
+* whitelist lti and health routes in ngsw config ([899504b](https://github.com/b0ink/doubtfire-deploy/commit/899504b026d0c7f4ae30cb8206c09267641bfde1))
+
+## [11.1.0-25](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-24...v11.1.0-25) (2026-11-24)
+
+
+### Features
+
+* tutorial stream and tutorial CSV buttons ([#1762](https://github.com/b0ink/doubtfire-deploy/issues/1762)) ([8894caa](https://github.com/b0ink/doubtfire-deploy/commit/8894caa5bef7088a87dfb86b1ccd57efb2fc33b1))
+
+
+### Bug Fixes
+
+* extend admin permission access ([#1770](https://github.com/b0ink/doubtfire-deploy/issues/1770)) ([67bcf32](https://github.com/b0ink/doubtfire-deploy/commit/67bcf321c860302bd0a520e97b75114c5d98c56f))
+* reveal session download to admins ([be82daa](https://github.com/b0ink/doubtfire-deploy/commit/be82daacccfb54c47842cd0bee100db722dced43))
+
+## [11.1.0-24](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-23...v11.1.0-24) (2026-11-20)
+
+## [11.1.0-23](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-22...v11.1.0-23) (2026-11-20)
+
+## [11.1.0-22](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-21...v11.1.0-22) (2026-11-19)
+
+
+### Features
+
+* add task file viewer component ([#1741](https://github.com/b0ink/doubtfire-deploy/issues/1741)) ([592c117](https://github.com/b0ink/doubtfire-deploy/commit/592c11750b5540b6fdbf958a4a49165b7bc3b58e))
+* export student preview for communication set as csv ([7c66714](https://github.com/b0ink/doubtfire-deploy/commit/7c667144161e37ce28252358a7103c7d7c4c609a))
+* prevent submissions until specified date ([#1730](https://github.com/b0ink/doubtfire-deploy/issues/1730)) ([34814e7](https://github.com/b0ink/doubtfire-deploy/commit/34814e713f9afeba877ec6572b9125508956a030))
+
+
+### Bug Fixes
+
+* allow main convenors to manage lms ([4bd7859](https://github.com/b0ink/doubtfire-deploy/commit/4bd7859142319bc79f1b41b67cc44be0bcd4e175))
+* high priority sonarqube issues ([#1743](https://github.com/b0ink/doubtfire-deploy/issues/1743)) ([f7e1b76](https://github.com/b0ink/doubtfire-deploy/commit/f7e1b7648477a6ff74fcee6f76534ad88679e346))
+* make SonarQube reliability controls keyboard accessible ([f440b8c](https://github.com/b0ink/doubtfire-deploy/commit/f440b8ca377c5865ae6ac95c41888b73e84901f5))
+* show base dates under each tasks minimum grade ([#1742](https://github.com/b0ink/doubtfire-deploy/issues/1742)) ([84a40cc](https://github.com/b0ink/doubtfire-deploy/commit/84a40cc12a0feb1b235dbce3099eabfd19ffdc12))
+
 ## [11.1.0-21](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-20...v11.1.0-21) (2026-11-12)
 
 

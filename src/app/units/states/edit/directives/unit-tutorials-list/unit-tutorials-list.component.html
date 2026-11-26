@@ -44,165 +44,80 @@
     (matSortChange)="sortTableData($event)"
   >
     <!-- Abbreviation Column -->
-    <ng-container matColumnDef="abbreviation" sticky [formGroup]="formData">
+    <ng-container matColumnDef="abbreviation" sticky>
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Abbreviation</th>
       <td *matCellDef="let tutorial" mat-cell>
-        @if (!editing(tutorial)) {
-          <div>
-            {{ tutorial.abbreviation }}
-          </div>
-        } @else {
-          <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="abbreviation" matInput placeholder="Abbreviation" required />
-          </mat-form-field>
-        }
+        <div>
+          {{ tutorial.abbreviation }}
+        </div>
       </td>
     </ng-container>
 
     <!-- Campus Column -->
-    <ng-container matColumnDef="campus" [formGroup]="formData">
+    <ng-container matColumnDef="campus">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Campus</th>
       <td *matCellDef="let tutorial" mat-cell>
-        @if (!editing(tutorial)) {
-          <div>
-            {{ tutorial.campus ? tutorial.campus.name : '' }}
-          </div>
-        } @else {
-          <mat-form-field appearance="outline" class="data-entry">
-            <mat-label>Campus</mat-label>
-            <mat-select formControlName="campus" [compareWith]="compareSelection">
-              <mat-option [value]="null">Not Specified</mat-option>
-              @for (campus of campuses; track campus) {
-                <mat-option [value]="campus">
-                  {{ campus.name }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        }
+        <div>
+          {{ tutorial.campus ? tutorial.campus.name : '' }}
+        </div>
       </td>
     </ng-container>
 
     <!-- Location Column -->
-    <ng-container matColumnDef="location" sticky [formGroup]="formData">
+    <ng-container matColumnDef="location" sticky>
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Location</th>
       <td *matCellDef="let tutorial" mat-cell>
-        @if (!editing(tutorial)) {
-          <div>
-            {{ tutorial.meetingLocation }}
-          </div>
-        } @else {
-          <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="meetingLocation" matInput placeholder="Location" required />
-          </mat-form-field>
-        }
+        <div>
+          {{ tutorial.meetingLocation }}
+        </div>
       </td>
     </ng-container>
 
     <!-- Day Column -->
-    <ng-container matColumnDef="day" [formGroup]="formData">
+    <ng-container matColumnDef="day">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Day</th>
       <td *matCellDef="let tutorial" mat-cell>
-        @if (!editing(tutorial)) {
-          <div>
-            {{ tutorial.meetingDay }}
-          </div>
-        } @else {
-          <mat-form-field appearance="outline" class="data-entry">
-            <mat-label>Day</mat-label>
-            <mat-select formControlName="meetingDay" required>
-              @for (day of days; track day) {
-                <mat-option [value]="day">
-                  {{ day }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        }
+        <div>
+          {{ tutorial.meetingDay }}
+        </div>
       </td>
     </ng-container>
 
     <!-- Time Column -->
-    <ng-container matColumnDef="time" sticky [formGroup]="formData">
+    <ng-container matColumnDef="time" sticky>
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Time</th>
       <td *matCellDef="let tutorial" mat-cell>
-        @if (!editing(tutorial)) {
-          <div>
-            {{ tutorial.meetingTime }}
-          </div>
-        } @else {
-          <mat-form-field appearance="outline" class="data-entry">
-            <input
-              formControlName="meetingTime"
-              matInput
-              placeholder="Time"
-              required
-              [value]="formData.get('meetingTime').value"
-            />
-          </mat-form-field>
-        }
+        <div>
+          {{ tutorial.meetingTime }}
+        </div>
       </td>
     </ng-container>
 
     <!-- Duration Column -->
-    <ng-container matColumnDef="duration" [formGroup]="formData">
+    <ng-container matColumnDef="duration">
       <th *matHeaderCellDef class="max-w-24" mat-header-cell mat-sort-header>Duration</th>
       <td *matCellDef="let tutorial" class="max-w-24" mat-cell>
-        @if (!editing(tutorial)) {
-          <div [matTooltip]="formatDuration(tutorial.durationMinutes)">
-            {{ formatDurationShort(tutorial.durationMinutes) }}
-          </div>
-        } @else {
-          <mat-form-field appearance="outline" class="data-entry">
-            <input
-              formControlName="durationMinutes"
-              matInput
-              min="1"
-              placeholder="Mins"
-              required
-              step="15"
-              type="number"
-            />
-            <span matTextSuffix>m</span>
-          </mat-form-field>
-        }
+        <div [matTooltip]="formatDuration(tutorial.durationMinutes)">
+          {{ formatDurationShort(tutorial.durationMinutes) }}
+        </div>
       </td>
     </ng-container>
 
     <!-- Tutor Column -->
-    <ng-container matColumnDef="tutor" [formGroup]="formData">
+    <ng-container matColumnDef="tutor">
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Tutor</th>
       <td *matCellDef="let tutorial" mat-cell>
-        @if (!editing(tutorial)) {
-          <div>
-            {{ tutorial.tutor?.name }}
-          </div>
-        } @else {
-          <mat-form-field appearance="outline" class="data-entry">
-            <mat-label>Tutor</mat-label>
-            <mat-select formControlName="tutor" required [compareWith]="compareSelection">
-              @for (tutor of unit.staffUsers; track tutor) {
-                <mat-option [value]="tutor">
-                  {{ tutor.name }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        }
+        <div>
+          {{ tutorial.tutor?.name }}
+        </div>
       </td>
     </ng-container>
 
     <!-- Capacity Column -->
-    <ng-container matColumnDef="capacity" sticky [formGroup]="formData">
+    <ng-container matColumnDef="capacity" sticky>
       <th *matHeaderCellDef mat-header-cell mat-sort-header>Capacity</th>
       <td *matCellDef="let tutorial" mat-cell>
-        @if (!editing(tutorial)) {
-          <div>{{ tutorial.numStudents }} / {{ tutorial.capacity }}</div>
-        } @else {
-          <mat-form-field appearance="outline" class="data-entry">
-            <input formControlName="capacity" matInput placeholder="Capacity" required />
-          </mat-form-field>
-        }
+        <div>{{ tutorial.numStudents }} / {{ tutorial.capacity }}</div>
       </td>
     </ng-container>
 
@@ -210,25 +125,11 @@
     <ng-container matColumnDef="options" stickyEnd>
       <th *matHeaderCellDef mat-header-cell></th>
       <td *matCellDef="let tutorial" mat-cell>
-        @if (!editing(tutorial)) {
-          <div class="right mr-3">
-            <button mat-icon-button (click)="flagEdit(tutorial)">
-              <mat-icon>edit</mat-icon>
-            </button>
-          </div>
-        } @else {
-          <div class="edit-actions right mr-3">
-            <button color="primary" mat-icon-button (click)="submit()">
-              <mat-icon>save</mat-icon>
-            </button>
-            <button color="warn" mat-icon-button (click)="cancelEdit()">
-              <mat-icon>cancel</mat-icon>
-            </button>
-            <button color="warn" mat-icon-button (click)="deleteTutorial(tutorial)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        }
+        <div class="right mr-3">
+          <button mat-icon-button (click)="editTutorial(tutorial)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
       </td>
     </ng-container>
 

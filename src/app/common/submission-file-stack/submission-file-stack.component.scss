@@ -1,0 +1,26 @@
+// Files slide open and closed by animating the body's single grid row
+// between 0fr and its content height (1fr). Both ends must be fr values to blend,
+// and no Tailwind grid-rows class can be on the body: utilities here are
+// !important, which overrides animations.
+.file-body-open {
+  animation: file-body-open 200ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+.file-body-close {
+  animation: file-body-close 200ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+@keyframes file-body-open {
+  from {
+    grid-template-rows: 0fr;
+  }
+  to {
+    grid-template-rows: 1fr;
+  }
+}
+@keyframes file-body-close {
+  from {
+    grid-template-rows: 1fr;
+  }
+  to {
+    grid-template-rows: 0fr;
+  }
+}

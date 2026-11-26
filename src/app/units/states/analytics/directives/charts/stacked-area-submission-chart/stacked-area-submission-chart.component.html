@@ -1,0 +1,61 @@
+@if (snapshots.length) {
+  <div
+    class="relative mt-8 min-h-125 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
+    tabindex="0"
+    [attr.aria-label]="'Tasks submitted per student chart. Use the left and right arrow keys to pick a day.'"
+    [fChartDayMarker]="markerIndex"
+    [markerLabel]="markerLabel"
+    [markerPointCount]="snapshots.length"
+    (click)="onChartClick(areaChart.hoveredVertical)"
+    (keydown)="onChartKeydown($event)"
+  >
+    <ng-charts-area-chart-stacked
+      #areaChart
+      class="reverse-legend-order"
+      [animations]="false"
+      [gradient]="false"
+      [legend]="true"
+      [results]="data"
+      [scheme]="$any(colorScheme)"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [tooltipDisabled]="false"
+      [xAxis]="true"
+      [xAxisLabel]="XAxisLabel"
+      [xAxisTickFormatting]="xAxisTickFormatting"
+      [xAxisTicks]="xAxisTicks"
+      [yAxis]="true"
+      [yAxisLabel]="YAxisLabel"
+      (activate)="onPointActivate($event, areaChart.hoveredVertical)"
+      (deactivate)="onPointDeactivate($event)"
+      (mouseleave)="hoveredPoint = null"
+      (mousemove)="onChartMouseMove($event)"
+      (mouseover)="onChartMouseMove($event)"
+    >
+    </ng-charts-area-chart-stacked>
+    @if (hoveredPoint) {
+      <div
+        class="pointer-events-none fixed z-50 rounded bg-slate-900 px-3 py-2 text-sm text-white shadow-lg"
+        [style.left.px]="tooltipX"
+        [style.top.px]="tooltipY"
+      >
+        <div class="font-medium">{{ hoveredPoint.dateLabel }}</div>
+        <div class="flex items-center gap-2">
+          <span
+            class="size-2.5 shrink-0 rounded-sm"
+            [style.background-color]="hoveredPoint.color"
+          ></span>
+          <span>
+            {{ hoveredPoint.series }}: {{ hoveredPoint.value }}
+            {{ hoveredPoint.value === 1 ? 'student' : 'students' }}
+            ({{ hoveredPoint.percentage }}%)
+          </span>
+        </div>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="flex h-full items-center justify-center">
+    <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+  </div>
+}

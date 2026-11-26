@@ -179,6 +179,7 @@ import {AudioCommentRecorderComponent} from './common/audio-recorder/audio/audio
 import {MicrophoneTesterComponent} from './common/audio-recorder/audio/microphone-tester/microphone-tester.component';
 import {ChartBaseComponent} from './common/chart-base/chart-base-component/chart-base-component.component';
 import {DragDropDirective} from './common/directives/drag-drop.directive';
+import {DocxViewerComponent} from './common/docx-viewer/docx-viewer.component';
 import {EditProfileFormComponent} from './common/edit-profile-form/edit-profile-form.component';
 import {FChipComponent} from './common/f-chip/chip.component';
 import {FeedbackTemplateEditorComponent} from './common/feedback-template-editor/feedback-template-editor.component';
@@ -223,6 +224,7 @@ import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal
 import {SubmissionAccessModalComponent} from './common/modals/submission-access-modal/submission-access-modal.component';
 import {TaskAssessmentModalComponent} from './common/modals/task-assessment-modal/task-assessment-modal.component';
 import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
+import {NotebookViewerComponent} from './common/notebook-viewer/notebook-viewer.component';
 import {ObjectSelectComponent} from './common/obect-select/object-select.component';
 import {PdfViewerPanelComponent} from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import {fPdfViewerComponent} from './common/pdf-viewer/pdf-viewer.component';
@@ -241,6 +243,7 @@ import {HttpErrorInterceptor} from './common/services/http-error.interceptor';
 import {SettingCheckboxComponent} from './common/setting-checkbox/setting-checkbox.component';
 import {SettingToggleComponent} from './common/setting-toggle/setting-toggle.component';
 import {StatusIconComponent} from './common/status-icon/status-icon.component';
+import {SubmissionFileStackComponent} from './common/submission-file-stack/submission-file-stack.component';
 import {SubmissionFilesDownloadComponent} from './common/submission-files-download/submission-files-download.component';
 import {SuccessCloseComponent} from './common/success-close/success-close.component';
 import {TaskFileViewerComponent} from './common/task-file-viewer/task-file-viewer.component';
@@ -342,8 +345,10 @@ import {UnitStudentEnrolmentModalComponent} from './units/modals/unit-student-en
 import {UnitTutorialModalComponent} from './units/modals/unit-tutorial-modal/unit-tutorial-modal.component';
 import {StaffViewAsSelectorComponent} from './units/staff-view-as-selector.component';
 import {AnalyticsTutorTimesComponent} from './units/states/analytics/directives/analytics-tutor-times/analytics-tutor-times.component';
+import {ChartDayMarkerDirective} from './units/states/analytics/directives/charts/chart-day-marker.directive';
 import {NormalisedTaskStatusChartComponent} from './units/states/analytics/directives/charts/normalised-task-status-chart/normalised-task-status-chart.component';
 import {StackedAreaStatusChartComponent} from './units/states/analytics/directives/charts/stacked-area-status-chart/stacked-area-status-chart.component';
+import {StackedAreaSubmissionChartComponent} from './units/states/analytics/directives/charts/stacked-area-submission-chart/stacked-area-submission-chart.component';
 import {TargetGradeSankeyComponent} from './units/states/analytics/directives/charts/target-grade-sankey/target-grade-sankey.component';
 import {TaskStatusSummaryChartsComponent} from './units/states/analytics/directives/charts/task-status-summary-charts/task-status-summary-charts.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
@@ -613,7 +618,10 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     NewTeachingPeriodDialogComponent,
     FileViewerComponent,
     ArchiveViewerComponent,
+    DocxViewerComponent,
+    NotebookViewerComponent,
     TaskFileViewerComponent,
+    SubmissionFileStackComponent,
     AlertComponent,
     FUnitTaskListComponent,
     FTaskDetailsViewComponent,
@@ -679,6 +687,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     StackedAreaStatusChartComponent,
     TaskStatusSummaryChartsComponent,
     TargetGradeSankeyComponent,
+    ChartDayMarkerDirective,
     SubmissionFilesModalComponent,
     TutorNotesComponent,
     TutorNotesViewComponent,
@@ -729,6 +738,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     LegacyRoutePlaceholderComponent,
     NotificationsComponent,
     NotificationSettingsComponent,
+    StackedAreaSubmissionChartComponent,
   ],
   providers: [
     // Services we provide
