@@ -13,65 +13,66 @@
     </mat-form-field>
 
     <!-- Select All Option -->
-    <div *ngIf="showStudentList" class="mt-0 flex items-center px-2">
-      <mat-checkbox
-        #selectAllBox
-        color="primary"
-        disableRipple
-        [checked]="selectedStudents?.length === filteredStudents?.length"
-        (change)="toggleSelectAll()"
-        (mouseup)="handleCheckboxBlur()"
-      >
-        Select All
-      </mat-checkbox>
-    </div>
+    @if (showStudentList) {
+      <div class="mt-0 flex items-center px-2">
+        <mat-checkbox
+          #selectAllBox
+          color="primary"
+          disableRipple
+          [checked]="selectedStudents?.length === filteredStudents?.length"
+          (change)="toggleSelectAll()"
+          (mouseup)="handleCheckboxBlur()"
+        >
+          Select All
+        </mat-checkbox>
+      </div>
+    }
 
     <!-- Student List -->
-    <div
-      *ngIf="showStudentList"
-      class="student-list-container mt-4"
-      style="
-        max-height: 200px;
-        min-height: 100px;
-        overflow-y: auto;
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        padding: 8px;
-        scrollbar-width: thin;
-        scrollbar-color: #888 #f1f1f1;
-      "
-      [class.border-2]="
-        grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
-      "
-      [class.border-red-500]="
-        grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
-      "
-    >
+    @if (showStudentList) {
       <div
-        *ngFor="let student of filteredStudents"
-        class="flex cursor-pointer items-center px-4 py-2 transition-colors duration-200"
-        role="option"
-        tabindex="0"
-        [attr.aria-selected]="isStudentSelected(student.id)"
-        [class.bg-blue-100]="isStudentSelected(student.id)"
-        [class.hover:bg-gray-100]="!isStudentSelected(student.id)"
-        (click)="toggleStudent(student.id)"
-        (keydown)="handleStudentKeydown($event, student.id)"
+        class="student-list-container mt-4"
+        style="
+          max-height: 200px;
+          min-height: 100px;
+          overflow-y: auto;
+          border: 1px solid #e0e0e0;
+          border-radius: 4px;
+          padding: 8px;
+          scrollbar-width: thin;
+          scrollbar-color: #888 #f1f1f1;
+        "
+        [class.border-2]="
+          grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
+        "
+        [class.border-red-500]="
+          grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
+        "
       >
-        {{ student.name }} ({{ student.id }})
+        @for (student of filteredStudents; track student.id) {
+          <div
+            class="flex cursor-pointer items-center px-4 py-2 transition-colors duration-200"
+            role="option"
+            tabindex="0"
+            [attr.aria-selected]="isStudentSelected(student.id)"
+            [class.bg-blue-100]="isStudentSelected(student.id)"
+            [class.hover:bg-gray-100]="!isStudentSelected(student.id)"
+            (click)="toggleStudent(student.id)"
+            (keydown)="handleStudentKeydown($event, student.id)"
+          >
+            {{ student.name }} ({{ student.id }})
+          </div>
+        }
       </div>
-    </div>
+    }
   </div>
 
   <!-- Student Selection Error -->
-  <div
-    *ngIf="
-      grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
-    "
-    style="color: #f44336; font-size: 12px; margin-top: 4px; margin-bottom: 24px"
-  >
-    Please select at least one student.
-  </div>
+  @if (grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid) {
+    <div style="color: #f44336; font-size: 12px; margin-top: 4px; margin-bottom: 24px">
+      Please select at least one student.
+    </div>
+  }
 
   <!-- Extension Duration -->
   <div class="mb-8">
@@ -109,14 +110,11 @@
       </mat-slider>
     </div>
 
-    <mat-error
-      *ngIf="
-        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
-      "
-      class="mt-2"
-    >
-      Please select a valid extension duration (1-4 weeks).
-    </mat-error>
+    @if (
+      grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
+    ) {
+      <mat-error class="mt-2"> Please select a valid extension duration (1-4 weeks). </mat-error>
+    }
   </div>
 
   <!-- Reason Field -->
@@ -131,11 +129,9 @@
       rows="4"
     ></textarea>
     <mat-hint align="end">{{ grantExtensionForm.get('reason')?.value?.length || 0 }}/300</mat-hint>
-    <mat-error
-      *ngIf="grantExtensionForm.get('reason')?.touched && grantExtensionForm.get('reason')?.invalid"
-    >
-      Please provide a reason for the extension (max 300 characters).
-    </mat-error>
+    @if (grantExtensionForm.get('reason')?.touched && grantExtensionForm.get('reason')?.invalid) {
+      <mat-error> Please provide a reason for the extension (max 300 characters). </mat-error>
+    }
   </mat-form-field>
 
   <!-- Form Buttons -->

@@ -1,6 +1,6 @@
 import {UIRouter} from '@uirouter/angular';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {UnitService} from 'src/app/api/models/doubtfire-model';

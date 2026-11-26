@@ -2,6 +2,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {UserService} from 'src/app/api/models/doubtfire-model';
+import {ExtensionServiceResult} from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
 
 interface GrantExtensionPayload {
   student_ids: number[];
@@ -19,7 +20,10 @@ export class ExtensionService {
     private userService: UserService,
   ) {}
 
-  grantExtension(unitId: number, payload: GrantExtensionPayload): Observable<any> {
+  grantExtension(
+    unitId: number,
+    payload: GrantExtensionPayload,
+  ): Observable<ExtensionServiceResult> {
     const authToken = this.userService.currentUser?.authenticationToken ?? '';
     const username = this.userService.currentUser?.username ?? '';
 
@@ -28,6 +32,10 @@ export class ExtensionService {
       'Username': username,
     });
 
-    return this.http.post(`/api/units/${unitId}/staff-grant-extension`, payload, {headers});
+    return this.http.post<ExtensionServiceResult>(
+      `/api/units/${unitId}/staff-grant-extension`,
+      payload,
+      {headers},
+    );
   }
 }
