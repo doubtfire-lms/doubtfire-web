@@ -141,12 +141,8 @@
           !unitRole.unit.allowFlexibleDates &&
           (isAdmin || unitRole.role === 'Tutor' || unitRole.role === 'Convenor')
         ) {
-          <button
-            mat-menu-item
-            [routerLink]="['/units', unitRole.unit.id, 'staff_grant_extension']"
-          >
-            <mat-icon aria-label="Staff Grant Extension" fontIcon="schedule"></mat-icon>Staff Grant
-            Extension
+          <button mat-menu-item [routerLink]="['/units', unitRole.unit.id, 'task-extensions']">
+            <mat-icon aria-label="Task Extensions" fontIcon="schedule"></mat-icon>Task Extensions
           </button>
         }
         @if (canAdministerUnit) {

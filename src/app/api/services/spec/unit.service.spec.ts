@@ -31,7 +31,7 @@ describe('UnitService', () => {
     service.grantExtension(unit, payload).subscribe((result) => expect(result).toBe(response));
 
     expect(vi.mocked(httpClient.post).mock.calls[0][0]).toBe(
-      'http://localhost:3000/api/units/42/staff-grant-extension',
+      'http://localhost:3000/api/units/42/task-extensions',
     );
     expect(vi.mocked(httpClient.post).mock.calls[0][1]).toBe(payload);
   });

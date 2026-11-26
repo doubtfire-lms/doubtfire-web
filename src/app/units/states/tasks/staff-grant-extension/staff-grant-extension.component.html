@@ -8,14 +8,14 @@
         class="min-h-0 flex-1"
         mode="all-tasks"
         [selectedTaskDefinition$]="selectedTaskDefinition$"
-        [selectionUrlBase]="['/units', unit.id, 'staff_grant_extension']"
+        [selectionUrlBase]="['/units', unit.id, 'task-extensions']"
         [taskDefinitions]="unit.taskDefinitions"
       ></f-unit-task-list>
     }
   </aside>
 
   <main
-    aria-label="Staff grant extension"
+    aria-label="Task extensions"
     class="flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-y-auto p-4"
   >
     @if (unit?.allowFlexibleDates) {
@@ -30,9 +30,9 @@
     } @else if (selectedTaskDefinition && unit) {
       <f-task-description-card class="block" [taskDef]="selectedTaskDefinition" [unit]="unit">
       </f-task-description-card>
-      <mat-card aria-label="Grant extension" role="region">
+      <mat-card aria-label="Task extensions" role="region">
         <mat-card-header>
-          <mat-card-title>Grant extension</mat-card-title>
+          <mat-card-title>Task extensions</mat-card-title>
           <mat-card-subtitle>
             The dates above are the original task dates. Individual students may already have a
             different due date. Review each result after granting an extension.

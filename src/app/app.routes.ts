@@ -291,16 +291,16 @@ export const routes: Routes = [
             },
           },
           {
-            path: 'staff_grant_extension',
+            path: 'task-extensions',
             component: StaffGrantExtensionComponent,
             canActivate: [roleWhitelistGuard],
-            data: {task: 'Staff Grant Extension', roleWhitelist: ['Tutor', 'Convenor', 'Admin']},
+            data: {task: 'Task Extensions', roleWhitelist: ['Tutor', 'Convenor', 'Admin']},
           },
           {
-            path: 'staff_grant_extension/:taskAbbreviation',
+            path: 'task-extensions/:taskAbbreviation',
             component: StaffGrantExtensionComponent,
             canActivate: [roleWhitelistGuard],
-            data: {task: 'Staff Grant Extension', roleWhitelist: ['Tutor', 'Convenor', 'Admin']},
+            data: {task: 'Task Extensions', roleWhitelist: ['Tutor', 'Convenor', 'Admin']},
           },
           {
             path: 'tasks',
