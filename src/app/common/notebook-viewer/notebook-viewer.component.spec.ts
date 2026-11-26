@@ -1,0 +1,194 @@
+import {describe, expect, it, vi} from 'vitest';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {TestBed} from '@angular/core/testing';
+import {FormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {markNotebookMatches, renderNotebookPreview} from './notebook-preview';
+import {NotebookViewerComponent} from './notebook-viewer.component';
+
+describe('NotebookViewerComponent security', () => {
+  it('highlights notebook text without turning search input into markup', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      cells: [{cell_type: 'markdown', source: 'Safe text and safe links'}],
+    });
+    const result = markNotebookMatches(html, 'safe');
+    const document = new DOMParser().parseFromString(result.html, 'text/html');
+    expect(result.count).toBe(2);
+    expect(document.querySelectorAll('mark.notebook-search')).toHaveLength(2);
+    expect(document.querySelector('#notebook-search-0')?.textContent).toBe('Safe');
+    expect(document.querySelector('meta[http-equiv="Content-Security-Policy"]')).toBeTruthy();
+
+    const malicious = markNotebookMatches(html, '<script>alert(1)</script>');
+    expect(malicious.count).toBe(0);
+    expect(malicious.html).not.toContain('<script>');
+  });
+
+  it('highlights code using notebook language metadata and escapes source markup', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      metadata: {language_info: {name: 'python'}},
+      cells: [{cell_type: 'code', source: 'if True:\n    print("<script>alert(1)</script>")'}],
+    });
+
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.querySelector('.source .hljs-keyword')?.textContent).toBe('if');
+    expect(document.querySelector('.source script')).toBeNull();
+    expect(document.querySelector('.source code')?.textContent).toContain(
+      '<script>alert(1)</script>',
+    );
+  });
+
+  it('shows unknown notebook languages as plain escaped code', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      metadata: {language_info: {name: 'unknown-language'}},
+      cells: [{cell_type: 'code', source: '<img src=x onerror=alert(1)>'}],
+    });
+
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.querySelector('.source img, .source .hljs-keyword')).toBeNull();
+    expect(document.querySelector('.source code')?.textContent).toBe(
+      '<img src=x onerror=alert(1)>',
+    );
+  });
+
+  it('renders untrusted notebook content without active markup', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      cells: [
+        {
+          cell_type: 'markdown',
+          source:
+            '<script>alert(1)</script>\n\n<img src="x" onerror="alert(2)">\n\n' +
+            '[bad](javascript:alert(3)) [good](https://example.org/) ' +
+            '![PNG](attachment:figure.png) ![SVG](attachment:probe.svg)',
+          attachments: {
+            'figure.png': {'image/png': 'iVBORw0KGgo='},
+            'probe.svg': {'image/svg+xml': '<svg onload="alert(9)"></svg>'},
+          },
+        },
+        {
+          cell_type: 'code',
+          source: 'print("hello")',
+          outputs: [
+            {output_type: 'display_data', data: {'application/javascript': 'alert(4)'}},
+            {
+              output_type: 'display_data',
+              data: {
+                'text/html':
+                  '<b>Safe text</b><img src="x" onerror="alert(5)"><iframe srcdoc="<script>alert(6)</script>"></iframe>',
+              },
+            },
+            {
+              output_type: 'display_data',
+              data: {'image/svg+xml': '<svg onload="alert(7)"></svg>'},
+            },
+            {output_type: 'stream', text: '<img src="x" onerror="alert(8)">'},
+          ],
+        },
+      ],
+    });
+
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.querySelector('script, iframe, svg, form, object, embed')).toBeNull();
+    expect(document.querySelector('[onerror], [onclick]')).toBeNull();
+    expect(document.querySelector('a[href^="javascript:"]')).toBeNull();
+    expect(document.querySelector('a[href="https://example.org/"]')).toBeTruthy();
+    expect(document.querySelector('img[src^="data:image/png;base64,"]')).toBeTruthy();
+    expect(document.querySelectorAll('img[src^="data:image/svg+xml"]')).toHaveLength(1);
+    expect(document.querySelector('.markdown-cell img[src^="data:image/svg+xml"]')).toBeNull();
+    expect(document.body.textContent).toContain('Interactive JavaScript output omitted.');
+    expect(document.body.textContent).toContain('<img src="x" onerror="alert(8)">');
+    expect(
+      document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute('content'),
+    ).toContain("script-src 'none'");
+  });
+
+  it('renders TeX in markdown cells and LaTeX outputs', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      cells: [
+        {
+          cell_type: 'markdown',
+          source: 'Inline $x_1$, display $$\\frac{a}{b}$$ and $\\href{javascript:alert(1)}{y}$',
+        },
+        {
+          cell_type: 'code',
+          source: 'P',
+          outputs: [
+            {
+              output_type: 'execute_result',
+              data: {'text/latex': '$\\displaystyle P{\\left(t \\right)}$', 'text/plain': 'P(t)'},
+            },
+            {
+              output_type: 'display_data',
+              data: {'text/latex': '\\frac{1}{2}'},
+            },
+          ],
+        },
+      ],
+    });
+
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.querySelectorAll('.katex').length).toBeGreaterThanOrEqual(4);
+    expect(document.querySelectorAll('.output .katex')).toHaveLength(2);
+    expect(document.querySelector('[data-notebook-math], script, a[href]')).toBeNull();
+    expect(document.body.textContent).not.toContain('$');
+  });
+
+  it('omits malformed SVG output without losing the notebook', async () => {
+    const html = await renderNotebookPreview({
+      nbformat: 4,
+      cells: [
+        {cell_type: 'markdown', source: 'Keep this cell'},
+        {
+          cell_type: 'code',
+          outputs: [{output_type: 'display_data', data: {'image/svg+xml': '<svg>\ud800</svg>'}}],
+        },
+      ],
+    });
+
+    const document = new DOMParser().parseFromString(html, 'text/html');
+    expect(document.body.textContent).toContain('Keep this cell');
+    expect(document.body.textContent).toContain('SVG output omitted.');
+  });
+
+  it('keeps the preview iframe scriptless and isolated', async () => {
+    await TestBed.configureTestingModule({
+      declarations: [NotebookViewerComponent],
+      imports: [
+        FormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        NoopAnimationsModule,
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(NotebookViewerComponent);
+    fixture.componentRef.setInput(
+      'notebookBlob',
+      new Blob([JSON.stringify({nbformat: 4, cells: [{cell_type: 'markdown', source: 'Ready'}]})]),
+    );
+    fixture.detectChanges();
+
+    const frame = fixture.nativeElement.querySelector('iframe') as HTMLIFrameElement;
+    const sandbox = frame.getAttribute('sandbox') ?? '';
+    expect(sandbox).toBe('allow-popups allow-popups-to-escape-sandbox');
+    expect(sandbox).not.toContain('allow-scripts');
+    expect(sandbox).not.toContain('allow-same-origin');
+    expect(fixture.componentInstance.isLoading).toBe(true);
+    await vi.waitFor(() => expect(frame.srcdoc).toContain('Ready'));
+    expect(fixture.componentInstance.isLoading).toBe(true);
+    frame.dispatchEvent(new Event('load'));
+    expect(fixture.componentInstance.isLoading).toBe(false);
+  });
+});

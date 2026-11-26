@@ -224,6 +224,7 @@ import {SpecConModalService} from './common/modals/spec-con-modal/spec-con-modal
 import {SubmissionAccessModalComponent} from './common/modals/submission-access-modal/submission-access-modal.component';
 import {TaskAssessmentModalComponent} from './common/modals/task-assessment-modal/task-assessment-modal.component';
 import {TutorNotesModalComponent} from './common/modals/tutor-notes-modal/tutor-notes-modal.component';
+import {NotebookViewerComponent} from './common/notebook-viewer/notebook-viewer.component';
 import {ObjectSelectComponent} from './common/obect-select/object-select.component';
 import {PdfViewerPanelComponent} from './common/pdf-viewer-panel/pdf-viewer-panel.component';
 import {fPdfViewerComponent} from './common/pdf-viewer/pdf-viewer.component';
@@ -617,6 +618,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     FileViewerComponent,
     ArchiveViewerComponent,
     DocxViewerComponent,
+    NotebookViewerComponent,
     TaskFileViewerComponent,
     SubmissionFileStackComponent,
     AlertComponent,

@@ -53,6 +53,7 @@
       <section class="scroll-mt-14 rounded-md bg-white" [id]="'submission-file-' + i">
         <div
           class="sticky top-12 z-10 flex h-[45px] items-center gap-1.5 bg-slate-100 pr-1 shadow-sm hover:bg-slate-200"
+          data-file-header
           [class.border-b]="card.expanded"
           [class.border-slate-200]="card.expanded"
           [class.rounded-md]="!card.expanded"
@@ -81,7 +82,7 @@
             </span>
             @if (card.uploadedExtension) {
               <span
-                class="shrink-0 rounded-full bg-slate-300 px-2 py-0.5 text-xs font-medium text-slate-700"
+                class="shrink-0 rounded-full px-2 py-0.5 text-xs text-gray-500 ring-1 ring-gray-300"
                 [matTooltip]="
                   card.extensionDiffers
                     ? 'Uploaded file extension differs from the upload requirement'
@@ -104,6 +105,28 @@
               <mat-icon class="size-5! text-[20px]! leading-5!">open_in_new</mat-icon>
             </button>
           }
+          @if (card.expanded) {
+            <button
+              aria-label="Previous file"
+              class="flex! size-8! shrink-0 items-center justify-center p-0!"
+              mat-icon-button
+              matTooltip="Previous file"
+              [disabled]="i === 0"
+              (click)="openSiblingCard(i, -1)"
+            >
+              <mat-icon class="size-5! text-[20px]! leading-5!">keyboard_arrow_up</mat-icon>
+            </button>
+            <button
+              aria-label="Next file"
+              class="flex! size-8! shrink-0 items-center justify-center p-0!"
+              mat-icon-button
+              matTooltip="Next file"
+              [disabled]="i === cards.length - 1"
+              (click)="openSiblingCard(i, 1)"
+            >
+              <mat-icon class="size-5! text-[20px]! leading-5!">keyboard_arrow_down</mat-icon>
+            </button>
+          }
           <button
             aria-label="Download file"
             class="flex! size-8! shrink-0 items-center justify-center p-0!"
@@ -117,46 +140,76 @@
         </div>
 
         @if (card.expanded) {
-          <div class="overflow-hidden rounded-b-md">
-            @if (card.loadFailed) {
-              <div class="flex items-center gap-2 p-4 text-sm text-red-700">
-                <mat-icon>error_outline</mat-icon>
-                <span>Unable to open this file.</span>
-              </div>
-            } @else if (!card.entry.isLoaded) {
-              <div class="flex items-center gap-2 p-4 text-sm text-slate-600">
-                <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
-                <span>Loading {{ card.entry.name }}...</span>
-              </div>
-            } @else if (card.codeLines) {
-              <div class="py-1 font-mono text-xs leading-5">
-                @for (line of card.codeLines; track $index) {
-                  <div class="flex hover:bg-slate-50">
-                    <span
-                      aria-hidden="true"
-                      class="w-10 shrink-0 pr-3 text-right text-slate-400 select-none"
-                      >{{ $index + 1 }}</span
-                    >
-                    <span
-                      class="min-w-0 flex-1 pr-2 break-all whitespace-pre-wrap"
-                      [innerHTML]="line || '&nbsp;'"
-                    ></span>
-                  </div>
-                }
-              </div>
-            } @else if (card.entry.kind === 'image' && card.entry.blobUrl) {
-              <img class="block h-auto w-full" [alt]="card.entry.name" [src]="card.entry.blobUrl" />
-            } @else if (card.entry.kind === 'pdf' && card.entry.blobUrl) {
-              <f-pdf-viewer
-                class="block h-[85vh] w-full"
-                [pdfUrl]="card.entry.blobUrl"
-              ></f-pdf-viewer>
-            } @else {
-              <div class="flex items-center gap-2 p-4 text-sm text-slate-600">
-                <mat-icon>insert_drive_file</mat-icon>
-                <span>This file type cannot be previewed. Use the download button to open it.</span>
-              </div>
-            }
+          <!-- onWheel keeps scrolling in here inside the file -->
+          <div
+            animate.enter="file-body-open"
+            animate.leave="file-body-close"
+            class="isolate grid overflow-hidden rounded-b-md"
+            data-file-body
+          >
+            <!-- Grid row lets the height animate from 0 to the content's height -->
+            <div class="min-h-0">
+              @if (card.loadFailed) {
+                <div class="flex items-center gap-2 p-4 text-sm text-red-700">
+                  <mat-icon>error_outline</mat-icon>
+                  <span>Unable to open this file.</span>
+                </div>
+              } @else if (!card.entry.isLoaded) {
+                <div class="flex items-center gap-2 p-4 text-sm text-slate-600">
+                  <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
+                  <span>Loading {{ card.entry.name }}...</span>
+                </div>
+              } @else if (card.codeLines) {
+                <div
+                  class="max-h-(--file-body-height) overflow-auto py-1 font-mono text-xs leading-5"
+                >
+                  @for (line of card.codeLines; track $index) {
+                    <div class="flex hover:bg-slate-50">
+                      <span
+                        aria-hidden="true"
+                        class="w-10 shrink-0 pr-3 text-right text-slate-400 select-none"
+                        >{{ $index + 1 }}</span
+                      >
+                      <span
+                        class="min-w-0 flex-1 pr-2 break-all whitespace-pre-wrap"
+                        [innerHTML]="line || '&nbsp;'"
+                      ></span>
+                    </div>
+                  }
+                </div>
+              } @else if (card.entry.kind === 'image' && card.entry.blobUrl) {
+                <div class="max-h-(--file-body-height) overflow-auto">
+                  <img
+                    class="block h-auto w-full"
+                    [alt]="card.entry.name"
+                    [src]="card.entry.blobUrl"
+                  />
+                </div>
+              } @else if (card.entry.kind === 'pdf' && card.entry.blobUrl) {
+                <f-pdf-viewer
+                  class="block h-(--file-body-height) w-full"
+                  [pdfUrl]="card.entry.blobUrl"
+                ></f-pdf-viewer>
+              } @else if (card.entry.kind === 'docx' && card.entry.blob) {
+                <f-docx-viewer
+                  class="block h-(--file-body-height) w-full"
+                  [documentBlob]="card.entry.blob"
+                ></f-docx-viewer>
+              } @else if (card.entry.kind === 'notebook' && card.entry.blob) {
+                <f-notebook-viewer
+                  class="block h-(--file-body-height) w-full"
+                  [notebookBlob]="card.entry.blob"
+                  [notebookText]="card.entry.textContent ?? ''"
+                ></f-notebook-viewer>
+              } @else {
+                <div class="flex items-center gap-2 p-4 text-sm text-slate-600">
+                  <mat-icon>insert_drive_file</mat-icon>
+                  <span
+                    >This file type cannot be previewed. Use the download button to open it.</span
+                  >
+                </div>
+              }
+            </div>
           </div>
         }
       </section>

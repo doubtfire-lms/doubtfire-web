@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
@@ -18,6 +19,9 @@ import {
   isArchiveCodeOrTextFile,
   isArchivePathHidden,
 } from '../archive-viewer/archive-viewer.helpers';
+
+// Matches the file open and close animations in the component styles
+const FILE_ANIMATION_MS = 200;
 
 /**
  * A file from the submission zip, shown as one card in the stack.
@@ -42,16 +46,25 @@ interface SubmissionFileCard {
 @Component({
   selector: 'f-submission-file-stack',
   templateUrl: './submission-file-stack.component.html',
-  host: {'class': 'block size-full overflow-y-auto bg-white'},
+  // A size container, so an open file can be capped to the panel's visible height
+  // (less the toolbar, the file header and the gaps around them)
+  host: {
+    'class': 'block size-full overflow-y-auto bg-white [container-type:size]',
+    'style': '--file-body-height: calc(100cqh - 110px)',
+  },
+  styleUrls: ['./submission-file-stack.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
   @Input() archiveFile: Blob | null = null;
   @Input() uploadRequirementNames: string[] = [];
+  @Input() uploadRequirementTypes: string[] = [];
 
   public cards: SubmissionFileCard[] = [];
   public isLoading = false;
+  // Bumped to cancel a card scroll in progress
+  private scrollRun = 0;
   public errorMessage: string | null = null;
 
   constructor(private readonly host: ElementRef<HTMLElement>) {}
@@ -59,13 +72,73 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['archiveFile']) {
       void this.loadArchive();
-    } else if (changes['uploadRequirementNames']) {
+    } else if (changes['uploadRequirementNames'] || changes['uploadRequirementTypes']) {
       this.applyRequirementNames();
     }
   }
 
   public ngOnDestroy(): void {
     this.clearCards();
+  }
+
+  // A wheel over an open file's toolbar, or past the end of its content, would
+  // otherwise scroll the whole panel. Only let it scroll something inside the file.
+  @HostListener('wheel', ['$event'])
+  public onWheel(event: WheelEvent): void {
+    // Scrolling by hand takes over from a card scroll in progress
+    this.scrollRun++;
+
+    if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+      return;
+    }
+
+    const target = event.target as Element | null;
+    // An open file's header counts as part of the file, so scrolling over it
+    // doesn't slide the file under the header
+    const header = target?.closest('[data-file-header]');
+    const headerBody = header?.nextElementSibling;
+    const body = header
+      ? headerBody?.matches('[data-file-body]')
+        ? headerBody
+        : null
+      : target?.closest('[data-file-body]');
+    if (!body) {
+      return;
+    }
+
+    for (let el: Element | null = header ? null : target; el; el = el.parentElement) {
+      if (this.canScrollVertically(el, event.deltaY)) {
+        return;
+      }
+      if (el === body) {
+        break;
+      }
+    }
+
+    // Still let the panel scroll while part of the file is hidden, so the file
+    // can be brought fully back into view
+    if (this.isPartlyHidden(body, event.deltaY)) {
+      return;
+    }
+    event.preventDefault();
+  }
+
+  private isPartlyHidden(body: Element, deltaY: number): boolean {
+    const bodyRect = body.getBoundingClientRect();
+    if (deltaY < 0) {
+      const headerBottom =
+        body.previousElementSibling?.getBoundingClientRect().bottom ?? bodyRect.top;
+      return bodyRect.top < headerBottom - 1;
+    }
+    return bodyRect.bottom > this.host.nativeElement.getBoundingClientRect().bottom + 1;
+  }
+
+  private canScrollVertically(el: Element, deltaY: number): boolean {
+    const overflowY = getComputedStyle(el).overflowY;
+    if (overflowY !== 'auto' && overflowY !== 'scroll') {
+      return false;
+    }
+    return deltaY < 0 ? el.scrollTop > 0 : el.scrollTop + el.clientHeight < el.scrollHeight - 1;
   }
 
   public get allExpanded(): boolean {
@@ -101,21 +174,74 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
     }
   }
 
-  public jumpToCard(index: number): void {
-    const card = this.cards[index];
-    if (!card) {
+  // Closes the open file and opens the one before or after it
+  public openSiblingCard(index: number, offset: number): void {
+    const target = index + offset;
+    if (!this.cards[target]) {
       return;
     }
 
-    card.expanded = true;
+    this.cards[index].expanded = false;
+    this.cards[target].expanded = true;
+    this.scrollToCard(target);
+  }
+
+  // Opens one file on its own, closing any others
+  public jumpToCard(index: number): void {
+    if (!this.cards[index]) {
+      return;
+    }
+
+    this.cards.forEach((card, i) => (card.expanded = i === index));
     this.scrollToCard(index);
   }
 
+  // Scrolls a card's header to the top in step with the open and close
+  // animations. The target is re-measured every frame, because files growing
+  // and shrinking around it keep moving it (and the panel's scroll limit).
   private scrollToCard(index: number): void {
-    // Wait for the card to render its new state before scrolling to it
-    setTimeout(() => {
-      this.cardElement(index)?.scrollIntoView({behavior: 'smooth', block: 'start'});
-    });
+    const panel = this.host.nativeElement;
+    const run = ++this.scrollRun;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let from: number | null = null;
+    let start = 0;
+
+    const step = (now: number): void => {
+      const section = this.cardElement(index);
+      if (run !== this.scrollRun || !section) {
+        return;
+      }
+
+      const margin = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
+      const target =
+        panel.scrollTop +
+        section.getBoundingClientRect().top -
+        panel.getBoundingClientRect().top -
+        margin;
+
+      if (from === null) {
+        from = panel.scrollTop;
+        start = now;
+      }
+      const progress = reduceMotion ? 1 : Math.min((now - start) / FILE_ANIMATION_MS, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      panel.scrollTop = from + (target - from) * eased;
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        this.refreshCursor();
+      }
+    };
+    requestAnimationFrame(step);
+  }
+
+  // Browsers only re-check what's under a still mouse when a cursor style changes,
+  // so after the header slides out from under it the pointer cursor would stick
+  private refreshCursor(): void {
+    const panel = this.host.nativeElement;
+    panel.style.cursor = 'default';
+    requestAnimationFrame(() => panel.style.removeProperty('cursor'));
   }
 
   private cardElement(index: number): HTMLElement | null {
@@ -132,13 +258,17 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
         return 'image';
       case 'pdf':
         return 'picture_as_pdf';
+      case 'docx':
+        return 'article';
+      case 'notebook':
+        return 'data_object';
       default:
         return 'insert_drive_file';
     }
   }
 
-  public downloadFile(card: SubmissionFileCard, event: Event): void {
-    event.stopPropagation();
+  public downloadFile(card: SubmissionFileCard, event?: Event): void {
+    event?.stopPropagation();
 
     const blob = card.entry.blob;
     if (!blob) {
@@ -274,11 +404,11 @@ export class SubmissionFileStackComponent implements OnChanges, OnDestroy {
       const requirementIndex = getOrderedUploadFileIndex(card.entry.path) ?? index;
       const name = this.uploadRequirementNames?.[requirementIndex]?.trim();
       card.requirementName = name || card.entry.name;
+      // Documents are nearly always a PDF or Word file, so their extension isn't worth showing
+      const isDocument = this.uploadRequirementTypes?.[requirementIndex] === 'document';
       const required = name?.match(/\.[a-z0-9]{1,8}$/i)?.[0].toLowerCase();
       const uploaded = card.entry.name.match(/\.[^./]+$/)?.[0].toLowerCase();
-      // Word documents are converted to PDF, so treat .docx and .pdf as the same
-      const sameKind = (ext?: string) => (ext === '.docx' ? '.pdf' : ext);
-      const matches = sameKind(uploaded) === sameKind(required);
+      const matches = isDocument || uploaded === required;
       card.extensionDiffers = !!required && !matches;
       card.uploadedExtension = matches ? null : (uploaded ?? (required ? 'no extension' : null));
     });

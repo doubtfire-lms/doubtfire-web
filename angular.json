@@ -42,6 +42,11 @@
                 "glob": "pdf.worker.min.js",
                 "input": "./node_modules/pdfjs-dist/legacy/build",
                 "output": "/assets/pdfjs/"
+              },
+              {
+                "glob": "{katex.min.css,fonts/*.woff2}",
+                "input": "./node_modules/katex/dist",
+                "output": "/assets/katex/"
               }
             ],
             "loader": {
