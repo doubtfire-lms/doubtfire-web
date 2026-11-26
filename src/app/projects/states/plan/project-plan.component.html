@@ -41,7 +41,10 @@
     </p>
   </div>
 
-  <div class="mx-auto w-full max-w-[95vw]" [style.height.px]="(planner?.items.length + 2) * 43">
+  <div
+    class="mx-auto w-full max-w-[95vw]"
+    [style.height.px]="((planner?.items.length ?? 0) + 2) * 43"
+  >
     <f-task-planner [project]="project" [targetGrade]="selectedTargetGrade"></f-task-planner>
   </div>
 }
