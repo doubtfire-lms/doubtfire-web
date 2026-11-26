@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.1.0-28](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-27...v11.1.0-28) (2026-11-26)
+
+
+### Features
+
+* add python-based jupyter notebook language option ([#1786](https://github.com/b0ink/doubtfire-deploy/issues/1786)) ([47a696c](https://github.com/b0ink/doubtfire-deploy/commit/47a696c2880edb0e85f82394379f6cb100343aa2))
+
 ## [11.1.0-27](https://github.com/b0ink/doubtfire-deploy/compare/v11.1.0-26...v11.1.0-27) (2026-11-26)
 
 
