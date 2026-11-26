@@ -25,8 +25,8 @@
           [theme]="{height: '40px', width: '100px', 'border-radius': '8px', margin: '0'}"
         ></ngx-skeleton-loader>
       </mat-card>
-      <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-        @for (card of [0, 1, 2]; track card) {
+      <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        @for (card of [0, 1, 2, 3]; track card) {
           <mat-card appearance="outlined" class="p-6">
             <ngx-skeleton-loader
               [theme]="{height: '14px', width: '60%', 'border-radius': '999px', margin: '0 0 14px'}"
@@ -95,7 +95,7 @@
       </div>
     </mat-card>
 
-    <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
+    <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       <mat-card appearance="outlined" class="p-6">
         <p class="mb-1 text-sm text-gray-600">Last 24 hours</p>
         <p class="m-0 text-2xl font-semibold">{{ statistics.activeUsers.twentyFourHours }}</p>
@@ -113,6 +113,28 @@
         <p class="m-0 text-2xl font-semibold">
           {{ statistics.diskSpaceGb === null ? 'Unavailable' : statistics.diskSpaceGb + ' GB' }}
         </p>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="p-6">
+        <p class="mb-1 text-sm text-gray-600">Student work</p>
+        @if (statistics.studentWorkUsage; as usage) {
+          <p class="m-0 text-2xl font-semibold">
+            {{ formatSize(usage.usedGb) }}
+            @if (statistics.studentWorkStorage; as storage) {
+              / {{ formatSize(storage.totalGb) }}
+            }
+          </p>
+          <p class="mt-1 mb-0 text-sm text-gray-500">
+            last checked {{ usage.calculatedAt | date: 'medium' }}
+          </p>
+        } @else if (statistics.studentWorkStorage; as storage) {
+          <p class="m-0 text-2xl font-semibold">Calculating…</p>
+          <p class="mt-1 mb-0 text-sm text-gray-500">
+            of {{ formatSize(storage.totalGb) }} total storage
+          </p>
+        } @else {
+          <p class="m-0 text-2xl font-semibold">Unavailable</p>
+        }
       </mat-card>
     </div>
 
