@@ -1,6 +1,6 @@
+import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {Observable, tap} from 'rxjs';
 import {ProjectService, Task, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
@@ -50,6 +50,7 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
         },
       },
       'readByUnitRole',
+      'requiresCurrentUserRead',
     );
 
     this.mapping.addJsonKey('note', 'createdAt', 'updatedAt');
@@ -136,13 +137,16 @@ export class TutorNoteService extends CachedEntityService<TutorNote> {
     return this.put<boolean>(pathId, opts).pipe(
       tap((response: boolean) => {
         if (response) {
-          note.readByUnitRole = true;
-          if (unitRole.user.id !== note.user.id) {
-            unitRole.tutorNoteCount--;
+          note.requiresCurrentUserRead = false;
+          // read_by_unit_role and the unread badge belong to the tutor the note is
+          // about - a mentor or reply author clearing their own notification must
+          // leave both alone.
+          if (note.noteIsForMe) {
+            note.readByUnitRole = true;
+            if (unitRole.user.id !== note.user.id) {
+              unitRole.tutorNoteCount--;
+            }
           }
-          // unitRole.tutorNoteCount = unitRole.tutorNotesCache.currentValues.filter(
-          //   (note) => !note.readByUnitRole,
-          // ).length;
         }
       }),
     );

@@ -13,6 +13,14 @@
   color: black;
 }
 
+.attachment-button .mat-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 0;
+  font-size: 24px;
+  line-height: 24px;
+}
+
 @keyframes blueGlowFade {
   0% {
     background-color: rgba(66, 133, 244, 0.6);

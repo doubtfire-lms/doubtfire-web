@@ -1,4 +1,5 @@
-::ng-deep input.mat-mdc-input-element.fallback-date {
+::ng-deep input.mat-mdc-input-element.fallback-date,
+::ng-deep .fallback-date .mat-mdc-select-value-text {
   font-style: italic;
   color: #bfbfbf !important;
   -webkit-text-fill-color: #bfbfbf !important; /* fixes some WebKit cases */
@@ -10,7 +11,8 @@
   border-color: #ef4444 !important; // tailwind red-500
 }
 
-::ng-deep .date-error .mat-mdc-input-element {
+::ng-deep .date-error .mat-mdc-input-element,
+::ng-deep .date-error .mat-mdc-select-value-text {
   color: #ef4444 !important;
   -webkit-text-fill-color: #ef4444 !important;
 }

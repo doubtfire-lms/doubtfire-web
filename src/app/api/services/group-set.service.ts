@@ -1,7 +1,7 @@
 import {CachedEntityService} from 'ngx-entity-service';
-import {GroupSet, Unit} from 'src/app/api/models/doubtfire-model';
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {GroupSet, Unit} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class GroupSetService extends CachedEntityService<GroupSet> {
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(json: object, other?: any): GroupSet {
-    return new GroupSet(other as Unit);
+  public createInstanceFrom(_json: object, other?: Unit): GroupSet {
+    return new GroupSet(other);
   }
 }

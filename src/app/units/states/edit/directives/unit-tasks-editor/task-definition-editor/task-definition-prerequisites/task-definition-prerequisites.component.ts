@@ -1,4 +1,11 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {Observable, Subscription} from 'rxjs';
@@ -15,6 +22,8 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-task-definition-prerequisites',
   templateUrl: 'task-definition-prerequisites.component.html',
   styleUrls: ['task-definition-prerequisites.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
   @Input() taskDefinition: TaskDefinition;
@@ -25,7 +34,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
 
   private prereqSub?: Subscription;
 
-  public dataSource = new MatTableDataSource<TaskPrerequisite>();
+  public dataSource: MatTableDataSource<TaskPrerequisite> = new MatTableDataSource();
 
   selectedTaskPrerequisite: TaskDefinition | null = null;
   searchCtrl = new FormControl('');
@@ -37,6 +46,7 @@ export class TaskDefinitionPrerequisitesComponent implements OnInit, OnChanges {
     ready_for_feedback: 1,
     assess_in_portfolio: 1,
     discuss: 2,
+    rediscuss: 2,
     attention_required: 0,
     demonstrate: 2,
     complete: 3,

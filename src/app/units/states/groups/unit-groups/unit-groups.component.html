@@ -1,0 +1,21 @@
+@if (unit.hasGroupwork()) {
+  <div class="mx-auto max-w-[90vw]">
+    <f-group-set-manager [selectedGroupSet]="selectedGroupSet" [unit]="unit" [unitRole]="unitRole">
+    </f-group-set-manager>
+  </div>
+} @else {
+  <div class="mx-auto flex max-w-4xl flex-col items-center justify-center">
+    <mat-icon>groups</mat-icon>
+
+    <h1>No Groupwork Enabled</h1>
+
+    <p class="p-1 text-center text-gray-500">
+      There is no group work enabled for this unit. Convenors should create at least one group set
+      first for groups to be created. This can be found under the groups tab in the unit
+      administration settings.
+    </p>
+    <button mat-raised-button [routerLink]="['/units', unit.id, 'admin', 'groups']">
+      Unit Administration
+    </button>
+  </div>
+}

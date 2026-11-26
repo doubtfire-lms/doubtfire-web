@@ -1,32 +1,58 @@
-import {Component, Input, OnInit} from '@angular/core';
+import Convert from 'ansi-to-html';
+import DOMPurify from 'dompurify';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatMenuTrigger} from '@angular/material/menu';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {forkJoin} from 'rxjs';
 import {OverseerAssessment, UnitRole, UserService} from 'src/app/api/models/doubtfire-model';
+import {SubmissionHistory} from 'src/app/api/models/submission-history';
 import {Task} from 'src/app/api/models/task';
 import {OverseerAssessmentService} from 'src/app/api/services/overseer-assessment.service';
 import {OverseerStepResultService} from 'src/app/api/services/overseer-step-result.service';
+import {SubmissionHistoryService} from 'src/app/api/services/submission-history.service';
 import {AlertService} from 'src/app/common/services/alert.service';
-import {TaskSubmissionService} from 'src/app/common/services/task-submission.service';
 import {SubmissionFilesModalComponent} from './submission-files-modal/submission-files-modal.component';
 
 @Component({
   selector: 'f-task-overseer-report',
   templateUrl: './task-overseer-report.component.html',
   styleUrl: './task-overseer-report.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskOverseerReportComponent implements OnInit {
   @Input() task: Task;
   @Input() loadOverseerAssessmentId?: number;
-  public comparisonSourceAssessmentId: number | null = null;
+  public histories: SubmissionHistory[] = [];
+  public overseerAssessments: OverseerAssessment[] = [];
+  public comparisonSourceHistoryId: number | null = null;
+  public loading = false;
 
   constructor(
     private alerts: AlertService,
-    private submissions: TaskSubmissionService,
+    private submissionHistoryService: SubmissionHistoryService,
     private overseerAssessmentService: OverseerAssessmentService,
     private overseerStepResultsService: OverseerStepResultService,
     private dialog: MatDialog,
+    private readonly sanitizer: DomSanitizer,
     private userService: UserService,
-  ) {}
+  ) {
+    DOMPurify.addHook('uponSanitizeAttribute', (_node, data) => {
+      if (data.attrName !== 'style') {
+        return;
+      }
+      data.attrValue = data.attrValue
+        .split(';')
+        .map((rule) => rule.trim())
+        .filter((rule) =>
+          /^(color|background-color|font-weight|font-style)\s*:\s*(#[0-9a-f]{3,8}|[a-z]+|\d+)\b/i.test(
+            rule,
+          ),
+        )
+        .join('; ');
+    });
+  }
 
   public get currentUnitRole(): UnitRole | undefined {
     const currentUser = this.userService.currentUser;
@@ -73,6 +99,24 @@ export class TaskOverseerReportComponent implements OnInit {
     lineNumbers: 'off',
   };
 
+  private ansi = new Convert({
+    newline: false,
+    escapeXML: true,
+    fg: '#1f2937',
+    bg: '#f9fafb',
+  });
+
+  protected renderOutput(output?: string | null): SafeHtml {
+    const html = this.ansi.toHtml(output ?? '');
+
+    const clean = DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: ['span', 'br', 'i', 'b', 'strong', 'em', 'code'],
+      ALLOWED_ATTR: ['style'],
+    });
+
+    return this.sanitizer.bypassSecurityTrustHtml(clean);
+  }
+
   diff() {
     this.diffEditorOptions.renderSideBySide = false;
     this.diffEditorOptions.compactMode = true;
@@ -97,38 +141,38 @@ export class TaskOverseerReportComponent implements OnInit {
     this.viewOutput = 'expected_output';
   }
 
-  public overseerAssessments: OverseerAssessment[] = [];
-
-  public get comparisonSourceAssessment(): OverseerAssessment | null {
-    if (!this.comparisonSourceAssessmentId) {
+  public get comparisonSourceHistory(): SubmissionHistory | null {
+    if (!this.comparisonSourceHistoryId) {
       return null;
     }
-    return (
-      this.overseerAssessments.find(
-        (assessment) => assessment.id === this.comparisonSourceAssessmentId,
-      ) ?? null
-    );
+    return this.histories.find((history) => history.id === this.comparisonSourceHistoryId) ?? null;
   }
 
   ngOnInit(): void {
-    this.loadAssessments();
+    this.loadHistory();
   }
 
-  loadAssessments(isRefresh: boolean = false) {
+  loadHistory(isRefresh: boolean = false) {
     if (isRefresh) {
       this.loadOverseerAssessmentId = null;
     }
-    this.overseerAssessmentService.queryForTask(this.task).subscribe({
-      next: (assessments) => {
+    this.loading = true;
+
+    forkJoin({
+      histories: this.submissionHistoryService.queryForTask(this.task),
+      assessments: this.overseerAssessmentService.queryForTask(this.task),
+    }).subscribe({
+      next: ({histories, assessments}) => {
+        this.histories = histories;
         this.overseerAssessments = assessments;
+
         if (
-          this.comparisonSourceAssessmentId &&
-          !this.overseerAssessments.some(
-            (assessment) => assessment.id === this.comparisonSourceAssessmentId,
-          )
+          this.comparisonSourceHistoryId &&
+          !this.histories.some((history) => history.id === this.comparisonSourceHistoryId)
         ) {
-          this.comparisonSourceAssessmentId = null;
+          this.comparisonSourceHistoryId = null;
         }
+
         for (const oa of this.overseerAssessments) {
           for (const result of oa.stepResultsCache.currentValues) {
             result.overseerStep = this.task.definition.overseerStepsCache.currentValues.find(
@@ -136,26 +180,39 @@ export class TaskOverseerReportComponent implements OnInit {
             );
           }
         }
+        this.loading = false;
       },
       error: (error) => {
-        this.alerts.error(`Failed to load overseer reports: ${error}`, 6000);
+        this.loading = false;
+        this.alerts.error(`Failed to load submission history: ${error}`, 6000);
       },
     });
   }
 
-  loadingAssessments = new Set<number>();
+  loadingAssessments: Set<number> = new Set();
 
-  onAssessmentOpen(overseerAssesment: OverseerAssessment) {
-    if (this.loadOverseerAssessmentId === overseerAssesment.id) {
+  assessmentFor(history: SubmissionHistory): OverseerAssessment | undefined {
+    return this.overseerAssessments.find(
+      (assessment) => assessment.submissionHistoryId === history.id,
+    );
+  }
+
+  onHistoryOpen(history: SubmissionHistory) {
+    const overseerAssessment = this.assessmentFor(history);
+    if (!overseerAssessment) {
+      return;
+    }
+
+    if (this.loadOverseerAssessmentId === overseerAssessment.id) {
       setTimeout(() => {
-        const el = document.getElementById(`oa-panel-${overseerAssesment.id}`);
+        const el = document.getElementById(`history-panel-${history.id}`);
         el?.scrollIntoView({behavior: 'smooth', block: 'start'});
       }, 250);
     }
 
-    this.loadingAssessments.add(overseerAssesment.id);
+    this.loadingAssessments.add(overseerAssessment.id);
 
-    this.overseerStepResultsService.getOverseerStepResults(overseerAssesment).subscribe({
+    this.overseerStepResultsService.getOverseerStepResults(overseerAssessment).subscribe({
       next: () => {
         for (const oa of this.overseerAssessments) {
           for (const result of oa.stepResultsCache.currentValues) {
@@ -164,11 +221,11 @@ export class TaskOverseerReportComponent implements OnInit {
             );
           }
         }
-        this.loadingAssessments.delete(overseerAssesment.id);
+        this.loadingAssessments.delete(overseerAssessment.id);
       },
       error: (error) => {
         console.error(error);
-        this.loadingAssessments.delete(overseerAssesment.id);
+        this.loadingAssessments.delete(overseerAssessment.id);
       },
     });
   }
@@ -177,66 +234,55 @@ export class TaskOverseerReportComponent implements OnInit {
     event.stopPropagation();
   }
 
-  isComparisonSource(assessment: OverseerAssessment): boolean {
-    return this.comparisonSourceAssessmentId === assessment.id;
+  isComparisonSource(history: SubmissionHistory): boolean {
+    return this.comparisonSourceHistoryId === history.id;
   }
 
-  hasComparisonSourceFor(assessment: OverseerAssessment): boolean {
-    return (
-      this.comparisonSourceAssessmentId !== null &&
-      this.comparisonSourceAssessmentId !== assessment.id
-    );
+  hasComparisonSourceFor(history: SubmissionHistory): boolean {
+    return this.comparisonSourceHistoryId !== null && this.comparisonSourceHistoryId !== history.id;
   }
 
-  selectComparisonSource(
-    assessment: OverseerAssessment,
-    event?: Event,
-    menuTrigger?: MatMenuTrigger,
-  ) {
+  selectComparisonSource(history: SubmissionHistory, event?: Event, menuTrigger?: MatMenuTrigger) {
     event?.stopPropagation();
-    this.comparisonSourceAssessmentId = assessment.id;
+    this.comparisonSourceHistoryId = history.id;
     menuTrigger?.closeMenu();
-    this.alerts.message(`Selected submission ${assessment.timestampString} for comparison.`, 3500);
+    this.alerts.message(`Selected submission ${history.timestampString} for comparison.`, 3500);
   }
 
   clearComparisonSource(event?: Event) {
     event?.stopPropagation();
-    this.comparisonSourceAssessmentId = null;
+    this.comparisonSourceHistoryId = null;
   }
 
-  compareWithSelected(assessment: OverseerAssessment, event?: Event) {
+  compareWithSelected(history: SubmissionHistory, event?: Event) {
     event?.stopPropagation();
-    const selected = this.comparisonSourceAssessment;
-    if (!selected || selected.id === assessment.id) {
+    const selected = this.comparisonSourceHistory;
+    if (!selected || selected.id === history.id) {
       return;
     }
 
-    this.openSubmissionFilesDialog(assessment, selected);
+    this.openSubmissionFilesDialog(history, selected);
   }
 
-  viewSubmissionFiles(assessment: OverseerAssessment, event?: Event) {
+  viewSubmissionFiles(history: SubmissionHistory, event?: Event) {
     event?.stopPropagation();
-    this.openSubmissionFilesDialog(assessment);
+    this.openSubmissionFilesDialog(history);
   }
 
-  private openSubmissionFilesDialog(
-    assessment: OverseerAssessment,
-    comparedWith?: OverseerAssessment,
-  ) {
-    const assessmentIndex = this.overseerAssessments.findIndex((item) => item.id === assessment.id);
+  private openSubmissionFilesDialog(history: SubmissionHistory, comparedWith?: SubmissionHistory) {
+    const historyIndex = this.histories.findIndex((item) => item.id === history.id);
     const comparedWithIndex = comparedWith
-      ? this.overseerAssessments.findIndex((item) => item.id === comparedWith.id)
+      ? this.histories.findIndex((item) => item.id === comparedWith.id)
       : -1;
 
     this.dialog.open(SubmissionFilesModalComponent, {
       data: {
-        assessment,
-        assessmentNumber:
-          assessmentIndex >= 0 ? this.overseerAssessments.length - assessmentIndex : undefined,
-        assessmentIsMostRecent: assessmentIndex === 0,
+        assessment: history,
+        assessmentNumber: historyIndex >= 0 ? this.histories.length - historyIndex : undefined,
+        assessmentIsMostRecent: historyIndex === 0,
         comparedWith,
         comparedWithNumber:
-          comparedWithIndex >= 0 ? this.overseerAssessments.length - comparedWithIndex : undefined,
+          comparedWithIndex >= 0 ? this.histories.length - comparedWithIndex : undefined,
         comparedWithIsMostRecent: comparedWithIndex === 0,
       },
       maxWidth: '95vw',

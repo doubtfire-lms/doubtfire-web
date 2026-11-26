@@ -11,7 +11,10 @@ export class ConfirmationModalService {
   public show(
     title: string,
     message: string,
-    action?: any,
+    action?: () => void,
+    cancelAction?: () => void,
+    confirmText?: string,
+    cancelText?: string,
   ): MatDialogRef<ConfirmationModalComponent, ConfirmationModalData> {
     return this.dialog.open<ConfirmationModalComponent, ConfirmationModalData>(
       ConfirmationModalComponent,
@@ -20,6 +23,9 @@ export class ConfirmationModalService {
           title,
           message,
           action,
+          cancelAction,
+          confirmText,
+          cancelText,
         },
         position: {top: '2.5%'},
         width: '100%',

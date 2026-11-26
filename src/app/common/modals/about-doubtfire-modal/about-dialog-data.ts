@@ -1,7 +1,7 @@
-import { GithubProfile } from './github-profile';
-import { ContributorData } from './contributor-data';
-import { BehaviorSubject } from 'rxjs';
-import { Sort } from '@angular/material/sort';
+import {Sort} from '@angular/material/sort';
+import {BehaviorSubject} from 'rxjs';
+import {ContributorData} from './contributor-data';
+import {GithubProfile} from './github-profile';
 
 /**
  * The data shared between the AboutDoubtfireModal and its associated
@@ -51,7 +51,7 @@ export class AboutDialogData {
           default:
             return 0;
         }
-      })
+      }),
     );
   }
 }

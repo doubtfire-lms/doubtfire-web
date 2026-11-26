@@ -1,7 +1,6 @@
-import {HttpClient, HttpBackend} from '@angular/common/http';
+import {HttpBackend, HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-
 import API_URL from 'src/app/config/constants/apiUrl';
 import HOST_URL from 'src/app/config/constants/hostUrl';
 
@@ -13,6 +12,7 @@ interface SettingsResponseFormat {
   overseerEnabled: boolean;
   tiiEnabled: boolean;
   d2lEnabled: boolean;
+  ltiEnabled: boolean;
 }
 
 export interface LogoSettings {
@@ -29,7 +29,7 @@ interface SignOutUrlResponseFormat {
 export class DoubtfireConstants {
   private http: HttpClient;
 
-  public mainContributors: ReadonlyArray<string> = [
+  public mainContributors: readonly string[] = [
     'macite', // Andrew Cain
     'alexcu', // Alex Cummaudo
     'jakerenzella', // Jake Renzella
@@ -53,6 +53,11 @@ export class DoubtfireConstants {
    * Whether or not the D2L integration is enabled.
    */
   public IsD2LEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  /**
+   * Whether or not LTI is enabled, which enables the unit LMS tab.
+   */
+  public IsLtiEnabled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   /**
    * Details on the logo
@@ -93,6 +98,7 @@ export class DoubtfireConstants {
       this.IsOverseerEnabled.next(result.overseerEnabled);
       this.IsTiiEnabled.next(result.tiiEnabled);
       this.IsD2LEnabled.next(result.d2lEnabled);
+      this.IsLtiEnabled.next(result.ltiEnabled === true);
 
       this.LogoSettings.next({
         hasLogo: result.hasLogo,

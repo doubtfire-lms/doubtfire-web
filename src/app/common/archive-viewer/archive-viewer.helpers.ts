@@ -1,7 +1,7 @@
-import * as monaco from 'monaco-editor';
 import JSZip from 'jszip';
+import * as monaco from 'monaco-editor';
 
-export type ArchiveFileKind = 'code' | 'image' | 'pdf' | 'text' | 'binary';
+export type ArchiveFileKind = 'code' | 'docx' | 'image' | 'notebook' | 'pdf' | 'text' | 'binary';
 
 export interface ArchiveFileClassification {
   kind: ArchiveFileKind;
@@ -30,6 +30,7 @@ export interface ArchiveFileEntry {
 
 type ArchiveFileKindLike = Pick<ArchiveFileEntry, 'kind'> | null | undefined;
 type ArchiveFilePreviewLike = Pick<ArchiveFileEntry, 'kind' | 'blobUrl'> | null | undefined;
+type ArchiveDocumentPreviewLike = Pick<ArchiveFileEntry, 'kind' | 'blob'> | null | undefined;
 
 export function isArchiveCodeOrTextFile(file: ArchiveFileKindLike): boolean {
   return file?.kind === 'code' || file?.kind === 'text';
@@ -41,6 +42,14 @@ export function isArchiveImageFile(file: ArchiveFilePreviewLike): boolean {
 
 export function isArchivePdfFile(file: ArchiveFilePreviewLike): boolean {
   return file?.kind === 'pdf' && !!file.blobUrl;
+}
+
+export function isArchiveDocxFile(file: ArchiveDocumentPreviewLike): boolean {
+  return file?.kind === 'docx' && !!file.blob;
+}
+
+export function isArchiveNotebookFile(file: ArchiveDocumentPreviewLike): boolean {
+  return file?.kind === 'notebook' && !!file.blob;
 }
 
 export function createArchiveFilePlaceholder(
@@ -77,15 +86,21 @@ export function isArchivePathHidden(path: string): boolean {
   return segments.some((segment) => segment.startsWith('.') || segment === '__MACOSX');
 }
 
+function toArrayBuffer(data: Uint8Array): ArrayBuffer {
+  return new Uint8Array(data).buffer;
+}
+
 export function createArchiveFileEntry(
   existing: ArchiveFileEntry,
   classification: ArchiveFileClassification,
   data: Uint8Array,
 ): ArchiveFileEntry {
-  const blob = new Blob([data], {type: classification.mimeType});
+  const blob = new Blob([toArrayBuffer(data)], {type: classification.mimeType});
   const shouldCreateBlobUrl =
     classification.kind === 'image' ||
     classification.kind === 'pdf' ||
+    classification.kind === 'docx' ||
+    classification.kind === 'notebook' ||
     classification.kind === 'binary';
 
   return {
@@ -105,6 +120,15 @@ export function createArchiveFileEntry(
 }
 
 export function classifyArchiveFile(path: string, data: Uint8Array): ArchiveFileClassification {
+  if (path.toLowerCase().endsWith('.ipynb')) {
+    return {
+      kind: 'notebook',
+      mimeType: 'application/x-ipynb+json',
+      textContent: new TextDecoder().decode(data),
+      language: 'json',
+    };
+  }
+
   const detectedMimeType = detectMimeType(data);
   if (detectedMimeType === 'application/pdf') {
     return {kind: 'pdf', mimeType: detectedMimeType};
@@ -112,6 +136,13 @@ export function classifyArchiveFile(path: string, data: Uint8Array): ArchiveFile
 
   if (detectedMimeType.startsWith('image/')) {
     return {kind: 'image', mimeType: detectedMimeType};
+  }
+
+  if (path.toLowerCase().endsWith('.docx') && startsWithBytes(data, [0x50, 0x4b, 0x03, 0x04])) {
+    return {
+      kind: 'docx',
+      mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    };
   }
 
   if (isProbablyText(data)) {

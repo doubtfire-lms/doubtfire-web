@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+
+<mat-dialog-content class="flex flex-col gap-2.5">
+  <p>{{ data.prompt }}</p>
+
+  <div>
+    {{ data.prefix }}
+  </div>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Reason</mat-label>
+    <textarea
+      matInput
+      maxlength="1000"
+      placeholder="Add the rest of the tutor note here."
+      rows="5"
+      [(ngModel)]="reasonBody"
+    ></textarea>
+    @if (reasonBody.length > 0 && !hasReasonBody) {
+      <mat-error> Please enter at least {{ minimumReasonLength }} characters. </mat-error>
+    }
+    <div class="flex justify-end">
+      <mat-hint>{{ trimmedReasonBody.length }}/1000</mat-hint>
+    </div>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="cancel()">Cancel</button>
+  <button color="primary" mat-raised-button [disabled]="!hasReasonBody" (click)="submit()">
+    Save and Mark Discussed
+  </button>
+</mat-dialog-actions>

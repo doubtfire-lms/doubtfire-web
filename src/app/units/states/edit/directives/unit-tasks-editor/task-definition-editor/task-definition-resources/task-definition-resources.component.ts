@@ -1,4 +1,4 @@
-import {Component, Inject, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
@@ -9,6 +9,8 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'f-task-definition-resources',
   templateUrl: 'task-definition-resources.component.html',
   styleUrls: ['task-definition-resources.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskDefinitionResourcesComponent {
   @Input() taskDefinition: TaskDefinition;
@@ -51,7 +53,7 @@ export class TaskDefinitionResourcesComponent {
     });
   }
 
-  public uploadTaskSheet(files: FileList) {
+  public uploadTaskSheet(files: ArrayLike<File>) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
       (f) => f.type === 'application/pdf',
     );
@@ -69,7 +71,7 @@ export class TaskDefinitionResourcesComponent {
     }
   }
 
-  public uploadTaskResources(files: FileList) {
+  public uploadTaskResources(files: ArrayLike<File>) {
     const validFiles = Array.from(files as ArrayLike<File>).filter(
       (f) => f.type === 'application/zip' || f.type === 'application/x-zip-compressed',
     );

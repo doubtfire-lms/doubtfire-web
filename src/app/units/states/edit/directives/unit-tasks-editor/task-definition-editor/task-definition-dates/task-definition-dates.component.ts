@@ -1,11 +1,13 @@
-import { Component, Input } from '@angular/core';
-import { TaskDefinition } from 'src/app/api/models/task-definition';
-import { Unit } from 'src/app/api/models/unit';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {TaskDefinition} from 'src/app/api/models/task-definition';
+import {Unit} from 'src/app/api/models/unit';
 
 @Component({
   selector: 'f-task-definition-dates',
   templateUrl: 'task-definition-dates.component.html',
   styleUrls: ['task-definition-dates.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskDefinitionDatesComponent {
   @Input() taskDefinition: TaskDefinition;

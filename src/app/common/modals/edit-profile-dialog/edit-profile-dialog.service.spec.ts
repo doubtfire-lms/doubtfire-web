@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-
-import { EditProfileDialogService } from './edit-profile-dialog.service';
+import {beforeEach, describe, expect, it} from 'vitest';
+import {TestBed} from '@angular/core/testing';
+import {EditProfileDialogService} from './edit-profile-dialog.service';
 
 describe('EditProfileDialogService', () => {
   let service: EditProfileDialogService;

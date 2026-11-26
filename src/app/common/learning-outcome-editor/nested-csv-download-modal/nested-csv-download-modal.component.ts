@@ -1,10 +1,12 @@
-import {Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FileDownloaderService} from '../../file-downloader/file-downloader.service';
 
 @Component({
   selector: 'f-nested-csv-download-modal',
   templateUrl: './nested-csv-download-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class NestedCsvDownloadModalComponent {
   public includeNested = false;

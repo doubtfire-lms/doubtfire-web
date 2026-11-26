@@ -1,10 +1,19 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {UIRouter} from '@uirouter/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {ActivatedRoute, Params} from '@angular/router';
+import {UnitRole} from 'src/app/api/models/doubtfire-model';
 import {Task} from 'src/app/api/models/task';
 import {TaskService} from 'src/app/api/services/task.service';
+import {UserService} from 'src/app/api/services/user.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
 import {TaskAssessmentModalService} from 'src/app/common/modals/task-assessment-modal/task-assessment-modal.service';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 import {SelectedTaskService} from '../../selected-task.service';
 import {DashboardViews} from '../../selected-task.service';
 
@@ -12,37 +21,75 @@ import {DashboardViews} from '../../selected-task.service';
   selector: 'f-task-dashboard',
   templateUrl: './task-dashboard.component.html',
   styleUrls: ['./task-dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskDashboardComponent implements OnInit, OnChanges {
   @Input() task: Task;
   @Input() pdfUrl: string;
-
   public DashboardViews = DashboardViews;
 
-  public taskStatusData: any;
-  public tutor = this.router.globals.params.tutor;
+  public taskStatusData: {
+    keys: TaskService['markedStatuses'];
+    help: TaskService['helpDescriptions'];
+    icons: TaskService['statusIcons'];
+    labels: TaskService['statusLabels'];
+    class: TaskService['statusClass'];
+  };
+  public tutor = false;
   public urls: {
     taskSubmissionPdfAttachmentUrl: string;
     taskFilesUrl: string;
     taskSheetPdfUrl?: string;
     taskSubmissionPdfUrl?: string;
   };
-  public overseerEnabledObs = this.doubtfire.IsOverseerEnabled;
   public currentView: DashboardViews;
+  public currentIndex = 0;
+  public showSubmissionPdf = true;
+
+  private requestedDestination?: Params;
+  private openedAssessmentId?: number;
+
+  private readonly tabViews: DashboardViews[] = [
+    DashboardViews.details,
+    DashboardViews.task,
+    DashboardViews.submission,
+    DashboardViews.submission_history,
+    DashboardViews.similarity,
+    DashboardViews.staff_notes,
+    DashboardViews.tutor_notes,
+  ];
+
+  onTabChange(event: MatTabChangeEvent) {
+    const view = this.tabViews[event.index];
+    if (view !== undefined) {
+      this.setSelectedDashboardView(view);
+    }
+  }
 
   constructor(
-    private doubtfire: DoubtfireConstants,
     private taskService: TaskService,
-    private taskAssessmentModal: TaskAssessmentModalService,
     private fileDownloader: FileDownloaderService,
-    private router: UIRouter,
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private taskAssessmentModal: TaskAssessmentModalService,
     public selectedTaskService: SelectedTaskService,
   ) {}
 
   ngOnInit(): void {
-    this.selectedTaskService.currentView$.next(DashboardViews.submission);
+    this.tutor =
+      this.currentUnitRole !== undefined || this.userService.currentUser?.systemRole === 'Admin';
+    this.setSelectedDashboardView(DashboardViews.details);
+
+    // Subscribed rather than read once, because ngOnChanges runs before ngOnInit
+    // resets the view, and because navigating between tasks keeps this component.
+    this.route.queryParams.subscribe((params) => {
+      this.requestedDestination = params;
+      this.applyRequestedDestination();
+    });
     this.selectedTaskService.currentView$.subscribe((view) => {
-      this.currentView = view;
+      this.currentView = this.canAccessDashboardView(view) ? view : DashboardViews.details;
+      this.currentIndex = this.tabIndexForView(this.currentView);
     });
 
     this.taskStatusData = {
@@ -58,21 +105,118 @@ export class TaskDashboardComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.task && changes.task.currentValue) {
+      this.showSubmissionPdf = true;
       this.urls = {
         taskSheetPdfUrl: changes.task.currentValue.definition.getTaskPDFUrl(),
         taskSubmissionPdfUrl: changes.task.currentValue.submissionUrl(),
         taskSubmissionPdfAttachmentUrl: changes.task.currentValue.submissionUrl(true),
         taskFilesUrl: changes.task.currentValue.submittedFilesUrl(),
       };
+      this.setSelectedDashboardView(DashboardViews.details);
+      this.applyRequestedDestination();
     }
   }
 
-  public get overseerEnabled() {
-    return this.doubtfire.IsOverseerEnabled.value && this.task?.overseerEnabled;
+  /**
+   * Honours the query params a notification navigates with. Needs both the task
+   * and the params, which arrive in either order.
+   */
+  private applyRequestedDestination(): void {
+    if (!this.task || !this.requestedDestination) {
+      return;
+    }
+
+    const view = DashboardViews[this.requestedDestination.view as keyof typeof DashboardViews];
+    if (view !== undefined) {
+      this.setSelectedDashboardView(view);
+    }
+
+    const assessmentId = Number(this.requestedDestination.overseerAssessmentId);
+    if (assessmentId && assessmentId !== this.openedAssessmentId) {
+      this.openedAssessmentId = assessmentId;
+      this.taskAssessmentModal.show(this.task, assessmentId);
+    }
   }
 
-  showSubmissionHistoryModal() {
-    this.taskAssessmentModal.show(this.task);
+  setSelectedDashboardView(view: DashboardViews): void {
+    const nextView = this.canAccessDashboardView(view) ? view : DashboardViews.details;
+    this.selectedTaskService.currentView$.next(nextView);
+    this.currentView = nextView;
+    this.currentIndex = this.tabIndexForView(nextView);
+  }
+
+  public toggleSubmissionView(): void {
+    this.showSubmissionPdf = !this.submissionPdfVisible;
+    this.setSelectedDashboardView(DashboardViews.submission);
+  }
+
+  public get submissionPdfVisible(): boolean {
+    return (
+      this.currentView === DashboardViews.submission &&
+      this.showSubmissionPdf &&
+      !!this.task?.hasPdf
+    );
+  }
+
+  private tabIndexForView(view: DashboardViews): number {
+    const index = this.tabViews.indexOf(view);
+    return index >= 0 ? index : 0;
+  }
+
+  private canAccessDashboardView(view: DashboardViews): boolean {
+    switch (view) {
+      case DashboardViews.similarity:
+      case DashboardViews.submission_history:
+      case DashboardViews.staff_notes:
+      case DashboardViews.discussion_prompts:
+        return this.canAccessStaffViews;
+      case DashboardViews.tutor_notes:
+        return this.canAccessTutorNotes;
+      default:
+        return true;
+    }
+  }
+
+  public get canAccessStaffViews(): boolean {
+    return (
+      this.tutor || !!this.currentUnitRole || this.userService.currentUser?.systemRole === 'Admin'
+    );
+  }
+
+  public get canManageStaffTask(): boolean {
+    return (
+      this.currentUnitRole?.role === 'Convenor' ||
+      this.currentUnitRole?.role === 'Tutor' ||
+      this.userService.currentUser?.systemRole === 'Admin'
+    );
+  }
+
+  public get currentUnitRole(): UnitRole | undefined {
+    const currentUser = this.userService.currentUser;
+    if (!currentUser) {
+      return undefined;
+    }
+
+    return this.task?.unit?.staff?.find((ur) => ur.user?.id === currentUser.id);
+  }
+
+  public get canAccessTutorNotes(): boolean {
+    const tutor = this.task?.tutor;
+    if (!tutor) {
+      return false;
+    }
+
+    if (!this.currentUnitRole && this.userService.currentUser?.systemRole !== 'Admin') {
+      return false;
+    }
+
+    tutor.unit = this.task.unit;
+
+    return (
+      this.userService.currentUser?.systemRole === 'Admin' ||
+      this.currentUnitRole?.role === 'Convenor' ||
+      (tutor.mentor && tutor.mentor.id === this.currentUnitRole?.id)
+    );
   }
 
   downloadSubmission() {

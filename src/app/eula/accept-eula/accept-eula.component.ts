@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {StateService} from '@uirouter/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Router} from '@angular/router';
 import {Observable, ReplaySubject, take} from 'rxjs';
 import {UserService} from 'src/app/api/models/doubtfire-model';
 import {TiiService} from 'src/app/api/services/tii.service';
@@ -10,25 +10,27 @@ import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
   selector: 'f-accept-eula',
   templateUrl: './accept-eula.component.html',
   styleUrls: ['./accept-eula.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class AcceptEulaComponent {
   public toolName: Observable<string>;
   public eulaHtml: string;
 
-  public iframeDoc$ = new ReplaySubject<any>(1);
+  public iframeDoc$: ReplaySubject<Document> = new ReplaySubject(1);
 
   constructor(
     private constants: DoubtfireConstants,
     private tiiService: TiiService,
     private userService: UserService,
     private alertService: AlertService,
-    private state: StateService,
+    private router: Router,
   ) {
     this.constants.IsTiiEnabled.subscribe((enabled) => {
       if (enabled) {
         this.getEulaHtml();
       } else {
-        this.state.go('home');
+        this.router.navigateByUrl('/home');
       }
     });
 
@@ -45,15 +47,17 @@ export class AcceptEulaComponent {
   public acceptEula(): void {
     this.userService.currentUser.acceptTiiEula().subscribe(() => {
       this.alertService.success('You have accepted the EULAs');
-      this.state.go('home');
+      this.router.navigateByUrl('/home');
     });
   }
 
-  public onIframeLoad(iframe): void {
-    this.iframeDoc$.next(iframe.contentDocument || iframe.contentWindow);
+  public onIframeLoad(iframe: HTMLIFrameElement): void {
+    if (iframe.contentDocument) {
+      this.iframeDoc$.next(iframe.contentDocument);
+    }
   }
 
-  getIframeDoc(): Observable<any> {
+  getIframeDoc(): Observable<Document> {
     return this.iframeDoc$.asObservable();
   }
 

@@ -1,7 +1,7 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CodeModel} from '@ngstack/code-editor';
+import {HttpClient} from '@angular/common/http';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {OverseerScriptEditorModalData} from './overseer-script-editor-modal.service';
 
@@ -9,6 +9,8 @@ import {OverseerScriptEditorModalData} from './overseer-script-editor-modal.serv
   selector: 'f-overseer-script-editor-modal',
   templateUrl: './overseer-script-editor-modal.component.html',
   styleUrls: ['./overseer-script-editor-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class OverseerScriptEditorModalComponent implements OnInit {
   constructor(

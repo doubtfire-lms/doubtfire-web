@@ -1,0 +1,34 @@
+@if (snapshots.length) {
+  <div
+    class="relative mt-8 min-h-125 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-formatif-blue"
+    tabindex="0"
+    [attr.aria-label]="'Task statuses over time chart. Use the left and right arrow keys to pick a day.'"
+    [fChartDayMarker]="markerIndex"
+    [markerLabel]="markerLabel"
+    [markerPointCount]="weeks.length"
+    (click)="onChartClick(areaChart.hoveredVertical)"
+    (keydown)="onChartKeydown($event)"
+  >
+    <ng-charts-area-chart-stacked
+      #areaChart
+      class="reverse-legend-order"
+      [animations]="false"
+      [gradient]="false"
+      [legend]="true"
+      [results]="weeklyData"
+      [scheme]="$any(colorScheme)"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      [tooltipDisabled]="false"
+      [xAxis]="true"
+      [xAxisLabel]="XAxisLabel"
+      [yAxis]="true"
+      [yAxisLabel]="YAxisLabel"
+    >
+    </ng-charts-area-chart-stacked>
+  </div>
+} @else {
+  <div class="flex h-full items-center justify-center">
+    <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+  </div>
+}

@@ -1,4 +1,4 @@
-@import '../../../styles/mixins/task-status-colors-generator.scss';
+@use 'styles/mixins/task-status-colors-generator' as *;
 
 :host {
   font-size: 1em;
@@ -40,6 +40,9 @@
   }
   &.discuss {
     @include status-icon('discuss');
+  }
+  &.rediscuss {
+    @include status-icon('rediscuss');
   }
   &.demonstrate {
     @include status-icon('demonstrate');

@@ -1,8 +1,8 @@
-import {HttpResponse} from '@angular/common/http';
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import * as monaco from 'monaco-editor';
+import {HttpResponse} from '@angular/common/http';
+import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {OverseerAssessment} from 'src/app/api/models/doubtfire-model';
+import {SubmissionArchive} from 'src/app/api/models/submission-history';
 import {
   ArchiveFileEntry,
   isArchiveCodeOrTextFile,
@@ -13,10 +13,10 @@ import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloa
 import {AlertService} from 'src/app/common/services/alert.service';
 
 export interface SubmissionFilesModalData {
-  assessment: OverseerAssessment;
+  assessment: SubmissionArchive;
   assessmentNumber?: number;
   assessmentIsMostRecent?: boolean;
-  comparedWith?: OverseerAssessment;
+  comparedWith?: SubmissionArchive;
   comparedWithNumber?: number;
   comparedWithIsMostRecent?: boolean;
 }
@@ -25,6 +25,8 @@ export interface SubmissionFilesModalData {
   selector: 'f-submission-files-modal',
   templateUrl: './submission-files-modal.component.html',
   styleUrls: ['./submission-files-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
   private readonly diffOriginalUri = monaco.Uri.parse('inmemory://submission-compare/original');
@@ -150,7 +152,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  private downloadSubmissionArchive(assessment: OverseerAssessment): Promise<Blob> {
+  private downloadSubmissionArchive(assessment: SubmissionArchive): Promise<Blob> {
     return new Promise((resolve, reject) => {
       this.fileDownloader.downloadBlob(
         assessment.submissionFilesUrl(),
@@ -271,7 +273,7 @@ export class SubmissionFilesModalComponent implements OnInit, OnDestroy {
       return '';
     }
 
-    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    const digest = await crypto.subtle.digest('SHA-256', new Uint8Array(bytes).buffer);
     return Array.from(new Uint8Array(digest))
       .map((value) => value.toString(16).padStart(2, '0'))
       .join('');

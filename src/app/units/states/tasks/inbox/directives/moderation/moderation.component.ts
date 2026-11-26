@@ -1,13 +1,15 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {Router} from '@angular/router';
 import {FeedbackModerationActionType, Task} from 'src/app/api/models/task';
 import {AlertService} from 'src/app/common/services/alert.service';
 import {ConfirmModerationModalService} from './confirm-moderation-modal/confirm-moderation-modal.service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'f-moderation',
   templateUrl: './moderation.component.html',
   styleUrl: './moderation.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class ModerationComponent {
   @Input() task: Task;
@@ -25,7 +27,7 @@ export class ModerationComponent {
       this.task,
       'Overturn',
       `The original feedback will be revised and the task outcome updated.
-      Provide clear, constructive feedback explaining the changes made, and record any guidance for the tutor in the tutor notes section.`,
+      Provide clear, constructive feedback explaining the changes made, and record any guidance for the tutor in the moderation notes section.`,
       'overturn',
       false,
       () => {

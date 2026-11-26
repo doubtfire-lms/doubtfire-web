@@ -1,5 +1,4 @@
 microphone-tester {
-
   h1 {
     font-size: 12pt;
   }
@@ -9,7 +8,9 @@ microphone-tester {
     border-radius: 72px;
     color: #fff;
     height: 72px;
-    transition: width 0.1s, height 0.1s;
+    transition:
+      width 0.1s,
+      height 0.1s;
     width: 72px;
     border: none;
     outline: none;
@@ -18,7 +19,7 @@ microphone-tester {
     top: 50%;
 
     p {
-      font-family: "Helvetica Neue", "Segoe UI", "Helvetica", "Arial", "sans-serif";
+      font-family: 'Helvetica Neue', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif';
       text-rendering: optimizeLegibility;
       line-height: 1.3;
       font-size: 14px;

@@ -1,10 +1,10 @@
-import {Task, TaskSimilarity} from 'src/app/api/models/doubtfire-model';
-import {Injectable} from '@angular/core';
 import {CachedEntityService} from 'ngx-entity-service';
-import API_URL from 'src/app/config/constants/apiUrl';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
+import {Task, TaskSimilarity} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
+import API_URL from 'src/app/config/constants/apiUrl';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Injectable()

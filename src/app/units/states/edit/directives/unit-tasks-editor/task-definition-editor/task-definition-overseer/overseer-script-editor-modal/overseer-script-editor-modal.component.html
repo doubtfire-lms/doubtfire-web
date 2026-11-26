@@ -1,4 +1,4 @@
-<div class="p-10 w-full">
+<div class="w-full p-6">
   <div class="w-full text-center">
     <p>{{ data.taskDefinition.abbreviation }} {{ data.taskDefinition.name }}</p>
     <p>Overseer script</p>
@@ -9,6 +9,10 @@
     </button>
   </div>
   @if (!loading) {
-    <ngs-code-editor class="w-full h-[70vh]" [codeModel]="model" readOnly></ngs-code-editor>
+    <ngs-code-editor
+      class="h-[70vh] w-full"
+      [codeModel]="model"
+      [readOnly]="true"
+    ></ngs-code-editor>
   }
 </div>

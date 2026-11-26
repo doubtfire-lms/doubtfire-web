@@ -79,9 +79,9 @@
   <!-- Incomplete Task Prerequisites Warning -->
   <div
     ng-if="task && isCurrentView('task') && task.blockedByPrerequisiteTasks()"
-    class="flex items-center text-center px-4 py-3 bg-yellow-100 border-l-4 border-r-4 border-yellow-500 text-yellow-700"
+    class="flex items-center border-r-4 border-l-4 border-yellow-500 bg-yellow-100 px-2.5 py-2 text-center text-yellow-700"
   >
-    <i class="fa fa-exclamation-triangle mr-2 fa-lg"></i>
+    <i class="fa fa-exclamation-triangle fa-lg mr-1"></i>
     Warning: This task has {{task.definition.taskPrerequisitesCache.currentValues.length}}
     prerequisite{{ task.definition.taskPrerequisitesCache.currentValues.length > 1 ? 's' : '' }}
     that you still need to complete. You won’t be able to submit this task until all prerequisites

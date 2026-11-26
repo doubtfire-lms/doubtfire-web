@@ -1,75 +1,155 @@
-<button id="dialogCloseButton" mat-icon-button mat-dialog-close aria-label="Close dialog button">
+<button
+  aria-label="Close dialog button"
+  class="float-right"
+  id="dialogCloseButton"
+  mat-dialog-close
+  mat-icon-button
+>
   <mat-icon aria-label="Quit cross icon">close</mat-icon>
 </button>
-<mat-horizontal-stepper id="intelligentDiscussionStepper" [linear]="true" #stepper>
+
+<mat-horizontal-stepper #stepper class="mt-5" id="intelligentDiscussionStepper" [linear]="true">
   <mat-step>
     <ng-template matStepLabel>Introduction</ng-template>
-    <div class="introduction-text">
-      <img id="discussion-splash-image" src="/assets/images/discussion_splash_1.svg" alt="Discussion Splash Image">
-      <p>
-        Your tutor would like to discuss some topics with you regarding this task
 
-        Discussions are a great way for you and your tutor to gauge your understanding of concepts and are an important
-        aspect of your portfolio.
+    <div class="mt-8 flex flex-col gap-6 md:flex-row md:items-center">
+      <img
+        alt="Discussion Splash Image"
+        class="max-h-[260px] w-full max-w-[360px] self-center"
+        id="discussion-splash-image"
+        src="/assets/images/discussion_splash_1.svg"
+      />
 
-        These discussions are designed to be casual and informal, and will <strong>require a working microphone and
-          speakers.</strong>
-
-        These are timed discussions, <strong> you will have a few minutes from when you hear your tutor's discussion
-          prompt to reply.</strong> <br><br><br><br>
-
-        You should only proceed once you are in a suitably quiet environment.
-      </p>
-
+      <div class="space-y-4 text-sm leading-6 text-gray-700">
+        <h2 class="m-0 text-xl font-semibold text-gray-900">
+          Your tutor would like to discuss this task
+        </h2>
+        <p>
+          You will hear one or more short prompts, then respond out loud. The discussion is casual,
+          but it is recorded as part of your task conversation.
+        </p>
+        <p class="rounded-md bg-blue-50 p-3 text-blue-900">
+          You will need a working microphone and speakers. Start only when you are somewhere quiet.
+        </p>
+      </div>
     </div>
-    <div>
-      <button mat-button mat-raised-button matStepperNext color="primary" style="float: right;">Next</button>
+
+    <div class="mt-6 flex justify-end">
+      <button color="primary" mat-button mat-raised-button matStepperNext>Next</button>
     </div>
   </mat-step>
 
   <mat-step [completed]="confirmed">
-    <ng-template matStepLabel>Test everything is working</ng-template>
+    <ng-template matStepLabel>Microphone check</ng-template>
+
     <microphone-tester #testRecorder></microphone-tester>
-    <button mat-button mat-raised-button matStepperNext color="primary" matStepperPrevious>Back</button>
-    <div style="float: right">
-      <mat-checkbox style="margin-right: 20px;" [(ngModel)]="confirmed" matStepperNext required> Ready to go!
-      </mat-checkbox>
-      <button [disabled]="!confirmed" (click)="disableTester()" mat-button mat-raised-button matStepperNext
-        color="primary" matStepperNext>Next</button>
+
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <button color="primary" mat-button mat-raised-button matStepperPrevious>Back</button>
+
+      <div class="flex items-center justify-end gap-4">
+        <mat-checkbox matStepperNext required [(ngModel)]="confirmed">Ready to go</mat-checkbox>
+        <button
+          color="primary"
+          mat-button
+          mat-raised-button
+          matStepperNext
+          [disabled]="!confirmed"
+          (click)="disableTester()"
+        >
+          Next
+        </button>
+      </div>
     </div>
   </mat-step>
 
   <mat-step>
     <ng-template matStepLabel>Discussion</ng-template>
-    <div fxLayout="row" fxLayoutAlign="space-around center" id="discussionRecorderContainer">
 
-      <intelligent-discussion-recorder [task]="data.task" [discussion]="data.dc" #discussionRecorder>
-      </intelligent-discussion-recorder>
-      <div fxLayout="column" fxLayoutAlign="start end">
-        <p id="discussionCountdown">{{guide.text}}</p>
-        <!-- <p>remaining</p> -->
+    <div class="space-y-5">
+      <div class="rounded-lg border border-gray-200 bg-white p-5">
+        <div>
+          <p class="m-0 text-sm font-medium uppercase tracking-wide text-gray-500">
+            Prompt {{ activePromptId + 1 }} of {{ numberOfPrompts }}
+          </p>
+          <h2 class="m-0 mt-1 text-2xl font-semibold text-gray-900">{{ discussionStatusTitle }}</h2>
+          <p class="m-0 mt-2 max-w-2xl text-sm text-gray-600">{{ discussionStatusHint }}</p>
+        </div>
+
+        <div class="mt-5 grid gap-3 sm:grid-cols-2">
+          <div
+            class="rounded-md border p-3"
+            [class.bg-blue-50]="promptLoading || promptPlaying"
+            [class.border-blue-300]="promptLoading || promptPlaying"
+          >
+            <mat-icon class="text-blue-600">
+              {{ promptLoading ? 'hourglass_empty' : promptPlaying ? 'volume_up' : 'hearing' }}
+            </mat-icon>
+            <p class="m-0 mt-2 text-sm font-semibold text-gray-900">Listen</p>
+            <p class="m-0 text-xs text-gray-600">The tutor prompt will play first.</p>
+          </div>
+
+          <div
+            class="rounded-md border p-3"
+            [class.bg-green-50]="responseRecording"
+            [class.border-green-300]="responseRecording"
+          >
+            <mat-icon class="text-green-600">
+              {{ responseRecording ? 'record_voice_over' : 'chat_bubble_outline' }}
+            </mat-icon>
+            <p class="m-0 mt-2 text-sm font-semibold text-gray-900">Respond</p>
+            <p class="m-0 text-xs text-gray-600">Answer after the tone.</p>
+          </div>
+        </div>
+
+        <intelligent-discussion-recorder
+          #discussionRecorder
+          class="mt-4 block"
+          [countdownText]="countdownValue"
+          [discussion]="data.dc"
+          [promptActive]="promptLoading || promptPlaying"
+          [task]="data.task"
+        ></intelligent-discussion-recorder>
       </div>
-    </div>
-    <mat-divider></mat-divider>
-    <button style="margin-bottom: 3em" mat-button mat-stroked-button [hidden]="startedDiscussion" (click)="startDiscussion()">Start
-      discussion</button>
-    <div fxLayout="row" fxLayoutAlign="space-evenly center" [hidden]="!inDiscussion">
-      <h2 class="mat-headline-5">Prompt {{activePromptId+1}} of {{numberOfPrompts}}</h2>
-      <button style="margin-bottom: 3em;" [hidden]="activePromptId === numberOfPrompts " mat-button mat-stroked-button
-        (click)="responseConfirmed($event)">{{activePromptId+1 === numberOfPrompts ? 'Finish' : 'Next Prompt' }}
-      </button>
-    </div>
 
-    <div>
-      <button [disabled]="!discussionComplete" mat-button mat-raised-button matStepperNext color="primary"
-        matStepperNext required style="float: right;">Complete</button>
-      <button [disabled]="startedDiscussion" mat-button mat-raised-button matStepperNext color="primary"
-        matStepperPrevious>Back</button>
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <button
+          color="primary"
+          mat-button
+          mat-raised-button
+          matStepperPrevious
+          [disabled]="startedDiscussion"
+        >
+          Back
+        </button>
+
+        <div class="flex justify-end gap-3">
+          @if (!startedDiscussion) {
+          <button color="primary" mat-raised-button type="button" (click)="startDiscussion()">
+            Start discussion
+          </button>
+          } @else if (!discussionComplete) {
+          <button
+            color="primary"
+            mat-raised-button
+            type="button"
+            [disabled]="!canAdvancePrompt"
+            (click)="responseConfirmed($event)"
+          >
+            {{ activePromptId + 1 === numberOfPrompts ? 'Finish discussion' : 'Next prompt' }}
+          </button>
+          } @else {
+          <button color="primary" mat-raised-button matStepperNext required>Complete</button>
+          }
+        </div>
+      </div>
     </div>
   </mat-step>
 
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    Thank you for completing the discussion.
+    <div class="rounded-lg bg-green-50 p-5 text-green-900">
+      Thank you for completing the discussion.
+    </div>
   </mat-step>
 </mat-horizontal-stepper>

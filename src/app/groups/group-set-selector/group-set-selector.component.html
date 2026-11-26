@@ -1,10 +1,7 @@
 <mat-form-field>
-  <mat-select
-    (ngModelChange)="selectGroupSet($event)"
-    [(ngModel)]="selectedGroupSet"
-  >
+  <mat-select [(ngModel)]="selectedGroupSet" (ngModelChange)="selectGroupSet($event)">
     @for (gs of unit.groupSets; track gs.id) {
-      <mat-option [value]="gs">{{gs.name}}</mat-option>
+      <mat-option [value]="gs">{{ gs.name }}</mat-option>
     }
   </mat-select>
 </mat-form-field>

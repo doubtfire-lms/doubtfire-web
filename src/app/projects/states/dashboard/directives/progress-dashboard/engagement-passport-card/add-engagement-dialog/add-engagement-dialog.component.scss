@@ -1,0 +1,12 @@
+// Prevent mobile devices from zooming in engagement stamp modal inputs
+@media (max-width: 768px) {
+  :host ::ng-deep {
+    .mat-mdc-input-element,
+    .mat-mdc-select,
+    .mat-mdc-select-value,
+    .mat-mdc-select-trigger,
+    .mat-mdc-select-min-line {
+      font-size: 20px !important;
+    }
+  }
+}

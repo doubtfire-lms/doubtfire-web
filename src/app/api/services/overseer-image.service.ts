@@ -1,8 +1,8 @@
 import {CachedEntityService} from 'ngx-entity-service';
-import {Observable, switchMap} from 'rxjs';
-import {OverseerImage} from 'src/app/api/models/doubtfire-model';
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {OverseerImage} from 'src/app/api/models/doubtfire-model';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {SidekiqJob} from '../models/sidekiq-job';
 
@@ -32,7 +32,7 @@ export class OverseerImageService extends CachedEntityService<OverseerImage> {
     });
   }
 
-  public createInstanceFrom(json: object, other?: any): OverseerImage {
+  public createInstanceFrom(_json: object): OverseerImage {
     return new OverseerImage();
   }
 }

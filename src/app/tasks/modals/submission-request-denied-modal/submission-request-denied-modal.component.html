@@ -1,0 +1,25 @@
+<h2 class="w-full" mat-dialog-title>
+  <div class="flex w-full justify-between">
+    <span>Submission blocked by network security</span>
+    <mat-icon class="size-[30px] text-[30px]" color="warn">security</mat-icon>
+  </div>
+</h2>
+
+<mat-dialog-content class="flex flex-col gap-4">
+  <p>
+    A network security service blocked the upload before it reached {{ externalName | async }}. This
+    does not mean there is a problem with your work. Your work was not submitted, so please copy the
+    details below and send them to your tutor or support team.
+  </p>
+
+  <pre
+    class="rounded bg-gray-200 p-4 font-mono text-sm break-all whitespace-pre-wrap text-gray-800 select-text"
+    >{{ copyText }}</pre>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="close()">Close</button>
+  <button color="primary" mat-flat-button type="button" [cdkCopyToClipboard]="copyText">
+    Copy request details
+  </button>
+</mat-dialog-actions>

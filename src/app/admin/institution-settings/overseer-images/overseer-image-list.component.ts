@@ -1,26 +1,36 @@
 import {HttpClient} from '@angular/common/http';
-import {AfterViewInit, Component, TemplateRef, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSort, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {finalize} from 'rxjs';
 import {OverseerImage, OverseerImageService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
 import {AlertService} from 'src/app/common/services/alert.service';
+import API_URL from 'src/app/config/constants/apiUrl';
 
 @Component({
   selector: 'overseer-image-list',
   templateUrl: 'overseer-image-list.component.html',
   styleUrls: ['overseer-image-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class OverseerImageListComponent
   extends EntityFormComponent<OverseerImage>
   implements AfterViewInit
 {
-  @ViewChild('textDialog') textDialog!: TemplateRef<any>;
+  @ViewChild('textDialog') textDialog!: TemplateRef<object>;
 
-  @ViewChild(MatTable, {static: true}) table: MatTable<any>;
+  @ViewChild(MatTable, {static: true}) table: MatTable<OverseerImage>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   // Set up the table
@@ -28,6 +38,8 @@ export class OverseerImageListComponent
   overseerImages: OverseerImage[] = new Array<OverseerImage>();
   dataSource = new MatTableDataSource(this.overseerImages);
   loading = false;
+  loadingImages = true;
+  skeletonRows = Array.from({length: 2}, (_, index) => index);
 
   public diskSpace: number | null = null;
 
@@ -51,11 +63,15 @@ export class OverseerImageListComponent
 
   ngAfterViewInit() {
     // Get all the overseer images and add them to the table
-    this.overseerImageService.fetchAll().subscribe((response) => {
-      this.pushToTable(response);
-    });
+    this.loadingImages = true;
+    this.overseerImageService
+      .fetchAll()
+      .pipe(finalize(() => (this.loadingImages = false)))
+      .subscribe((response) => {
+        this.pushToTable(response);
+      });
 
-    this.httpClient.get<number>('/api/admin/disk_space').subscribe({
+    this.httpClient.get<number>(`${API_URL}/admin/disk_space`).subscribe({
       next: (diskSpace) => {
         this.diskSpace = diskSpace;
       },
@@ -73,8 +89,14 @@ export class OverseerImageListComponent
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: OverseerImage | OverseerImage[]) {
-    if (!value) return;
-    value instanceof Array ? this.overseerImages.push(...value) : this.overseerImages.push(value);
+    if (!value) {
+      return;
+    }
+    if (value instanceof Array) {
+      this.overseerImages.push(...value);
+    } else {
+      this.overseerImages.push(value);
+    }
     this.dataSource.sort = this.sort;
   }
 
@@ -92,8 +114,7 @@ export class OverseerImageListComponent
       this.sidekiqProgressModalService
         .show(`Pulling image ${image.name} (${image.tag})`, job.id)
         .subscribe((_job) => {
-          this.overseerImageService.fetch(image.id).subscribe((newImage) => {
-            console.log(newImage);
+          this.overseerImageService.fetch(image.id).subscribe(() => {
             this.loading = false;
           });
         });
@@ -102,7 +123,7 @@ export class OverseerImageListComponent
 
   deleteOverseerImage(image: OverseerImage) {
     this.overseerImageService.delete(image).subscribe(
-      ((response) => {
+      ((_response) => {
         this.cancelEdit();
         this.overseerImages.splice(this.overseerImages.indexOf(image), 1);
         this.dataSource.data = this.overseerImages;
@@ -120,7 +141,29 @@ export class OverseerImageListComponent
       case 'name':
       case 'tag':
         return super.sortTableData(sort);
+      case 'last-pulled':
+        this.dataSource.data = [...this.dataSource.data].sort((a, b) =>
+          this.sortCompare(
+            this.sortDateValue(a.lastPulledDate),
+            this.sortDateValue(b.lastPulledDate),
+            sort.direction === 'asc',
+          ),
+        );
+        return;
+      case 'status':
+        this.dataSource.data = [...this.dataSource.data].sort((a, b) =>
+          this.sortCompare(a.pulledImageStatus, b.pulledImageStatus, sort.direction === 'asc'),
+        );
+        return;
     }
+  }
+
+  private sortDateValue(value: string): number {
+    if (!value) {
+      return 0;
+    }
+    const time = new Date(value).getTime();
+    return Number.isFinite(time) ? time : 0;
   }
 
   public showDialog(image: OverseerImage) {

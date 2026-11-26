@@ -28,8 +28,8 @@
         <h4 style="margin-bottom: 0" class="list-group-item-heading">{{task.definition.name}}</h4>
         <p style="margin-bottom: 0" class="list-group-item-text">
           <i class="fa fa-users" aria-hidden="true" ng-show="task.isGroupTask()"></i
-          ><i class="fa fa-user" aria-hidden="true" ng-hide="task.isGroupTask()"></i> {{task.definition.abbreviation}} -
-          {{gradeNames[task.definition.targetGrade]}} Task
+          ><i class="fa fa-user" aria-hidden="true" ng-hide="task.isGroupTask()"></i>
+          {{task.definition.abbreviation}} - {{gradeNames[task.definition.targetGrade]}} Task
           <span class="due-time" ng-if="task.isBeforeStartDate() && !task.inSubmittedState()"
             ><i class="fa fa-hourglass-start"></i> {{task.timeToStart()}}</span
           ><span class="due-time" ng-if="!task.isBeforeStartDate() && !task.inSubmittedState()"
@@ -44,16 +44,24 @@
           <span class="task-superscript-badge new-comments-badge" ng-if="task.numNewComments > 0">
             {{task.numNewComments}}
           </span>
-          <span class="task-superscript-badge plagiarism-detected-badge" ng-if="task.similaritiesDetected">
+          <span
+            class="task-superscript-badge plagiarism-detected-badge"
+            ng-if="task.similaritiesDetected"
+          >
             <i class="fa fa-eye"></i>
           </span>
         </div>
         <div class="task-subscript-badges">
-          <span class="task-subscript-badge grade-badge" ng-if="task.hasGrade()"> {{task.gradeDesc()}} </span>
+          <span class="task-subscript-badge grade-badge" ng-if="task.hasGrade()">
+            {{task.gradeDesc()}}
+          </span>
           <span class="task-subscript-badge quality-badge" ng-if="task.hasQualityPoints()">
             <sup>{{task.qualityQts}}</sup>&frasl;<sub>{{task.definition.maxQualityPts}}</sub>
           </span>
-          <span class="task-subscript-badge soon-badge" ng-if="task.isDueSoon() && !task.inFinalState()">
+          <span
+            class="task-subscript-badge soon-badge"
+            ng-if="task.isDueSoon() && !task.inFinalState()"
+          >
             <i class="fa fa-clock-o"></i>
           </span>
           <span
@@ -62,7 +70,10 @@
           >
             <i class="fa fa-clock-o"></i>
           </span>
-          <span class="task-subscript-badge due-badge" ng-if="task.isPastDeadline() && !task.inFinalState()">
+          <span
+            class="task-subscript-badge due-badge"
+            ng-if="task.isPastDeadline() && !task.inFinalState()"
+          >
             <i class="fa fa-clock-o"></i><strong>!</strong>
           </span>
         </div>
@@ -77,7 +88,10 @@
       <create-portfolio-task-list-item [project]="project" [set-selected-task]="setSelectedTask">
       </create-portfolio-task-list-item>
     </li>
-    <li ng-show="filteredTasks.length == 0 && !showCreatePortfolio" class="list-group-item text-center text-muted">
+    <li
+      ng-show="filteredTasks.length == 0 && !showCreatePortfolio"
+      class="list-group-item text-muted text-center"
+    >
       No tasks to display.
     </li>
   </ul>

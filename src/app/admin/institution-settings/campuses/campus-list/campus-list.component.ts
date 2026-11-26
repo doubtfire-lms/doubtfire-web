@@ -1,7 +1,7 @@
-import {Component, ViewChild} from '@angular/core';
-import {MatSort, Sort} from '@angular/material/sort';
-import {MatTableDataSource, MatTable} from '@angular/material/table';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {Campus, CampusService} from 'src/app/api/models/doubtfire-model';
 import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {AlertService} from 'src/app/common/services/alert.service';
@@ -10,8 +10,10 @@ import {AlertService} from 'src/app/common/services/alert.service';
   selector: 'campus-list',
   templateUrl: 'campus-list.component.html',
   styleUrls: ['campus-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class CampusListComponent extends EntityFormComponent<Campus> {
+export class CampusListComponent extends EntityFormComponent<Campus> implements AfterViewInit {
   @ViewChild(MatTable, {static: true}) table: MatTable<Campus>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -58,9 +60,15 @@ export class CampusListComponent extends EntityFormComponent<Campus> {
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: Campus | Campus[]) {
-    if (!value) return;
+    if (!value) {
+      return;
+    }
 
-    value instanceof Array ? this.campuses.push(...value) : this.campuses.push(value);
+    if (value instanceof Array) {
+      this.campuses.push(...value);
+    } else {
+      this.campuses.push(value);
+    }
     this.dataSource.sort = this.sort;
   }
 

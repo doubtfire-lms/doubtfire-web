@@ -1,58 +1,58 @@
-<!-- <div class="flex justify-center py-2">Tutor: {{ task.tutor?.user.name }}</div> -->
-<span class="center-buttons flex justify-around gap-5 mx-5">
+<!-- <div class="flex justify-center py-1">Tutor: {{ task.tutor?.user.name }}</div> -->
+<span class="center-buttons mx-3 flex justify-around gap-3">
   @if (task.moderationType === 'random_sample' || task.moderationType === 'first_feedback') {
     <button
-      [disabled]="task === undefined || isModerated(task)"
+      aria-label=""
+      class="button"
       mat-icon-button
       matTooltip="Show more from this tutor"
       matTooltipPosition="above"
-      aria-label=""
-      class="button"
+      [disabled]="task === undefined || isModerated(task)"
       (click)="showMore()"
     >
       <mat-icon>flag</mat-icon>
     </button>
     <button
-      [disabled]="task === undefined || isModerated(task)"
+      aria-label=""
+      class="button large-button"
       mat-icon-button
       matTooltip="Snooze task"
       matTooltipPosition="above"
-      aria-label=""
-      class="button large-button"
+      [disabled]="task === undefined || isModerated(task)"
       (click)="snooze()"
     >
       <mat-icon>snooze</mat-icon>
     </button>
     <button
-      [disabled]="task === undefined || isModerated(task)"
+      aria-label=""
+      class="button large-button"
       mat-icon-button
       matTooltip="Dismiss moderation task"
       matTooltipPosition="above"
-      aria-label=""
-      class="button large-button"
+      [disabled]="task === undefined || isModerated(task)"
       (click)="dismiss()"
     >
       <mat-icon>archive</mat-icon>
     </button>
     <button
-      [disabled]="task === undefined || isModerated(task)"
+      aria-label=""
+      class="button"
       mat-icon-button
       matTooltip="Show less from this tutor"
       matTooltipPosition="above"
-      aria-label=""
-      class="button"
+      [disabled]="task === undefined || isModerated(task)"
       (click)="showLess()"
     >
       <mat-icon>thumb_up</mat-icon>
     </button>
   } @else if (task.moderationType === 'escalation') {
     <button
-      [disabled]="task === undefined || isModerated(task)"
+      aria-label=""
+      class="button"
       mat-icon-button
       matTooltip="Overturn"
       matTooltipPosition="above"
-      aria-label=""
-      class="button"
+      [disabled]="task === undefined || isModerated(task)"
       (click)="overturn()"
     >
       <!-- <mat-icon>flag</mat-icon> -->
@@ -60,12 +60,12 @@
     </button>
 
     <button
-      [disabled]="task === undefined || isModerated(task)"
+      aria-label=""
+      class="button"
       mat-icon-button
       matTooltip="Upheld"
       matTooltipPosition="above"
-      aria-label=""
-      class="button"
+      [disabled]="task === undefined || isModerated(task)"
       (click)="upheld()"
     >
       <!-- <mat-icon>thumb_up</mat-icon> -->

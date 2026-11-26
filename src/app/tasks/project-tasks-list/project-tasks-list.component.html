@@ -1,0 +1,37 @@
+<ul class="project-tasks-list">
+  @for (grouping of groupTasks; track grouping) {
+    <div class="clearfix">
+      @if (!hideGroupSetName) {
+        <h5 class="group-set-name">{{ grouping.name }}</h5>
+      }
+      <div class="grid grid-cols-3 gap-1 outline-1 sm:grid-cols-4">
+        @for (
+          task of project.tasks
+            | tasksForGroupset: grouping.groupSet
+            | orderBy: ['definition.targetGrade', 'definition.seq'];
+          track task;
+          let i = $index
+        ) {
+          <mat-chip
+            #tooltip="matTooltip"
+            class="task-status chip truncate text-center"
+            matTooltip="{{ task.definition.name }}: {{ task.statusLabel() }}"
+            [class.mat-chip-clicked]="selectedTask === task"
+            [ngClass]="newTaskService.statusClass(task.status)"
+            [style.--mat-chip-elevated-container-color]="
+              newTaskService.statusColors.get(task.status)
+            "
+            (click)="selectChip(task)"
+          >
+            @if (task.similarityFlag) {
+              <mat-icon svgIcon="visibility"></mat-icon>
+            }
+            <span class="{{ task.status === 'not_started' ? 'text-black' : '' }}">{{
+              taskText(task)
+            }}</span></mat-chip
+          >
+        }
+      </div>
+    </div>
+  }
+</ul>

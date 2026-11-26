@@ -1,0 +1,9 @@
+<div class="flex items-center">
+  <span class="grow" matSnackBarLabel>
+    An update to the app has been found, would you like to refresh now?
+  </span>
+  <span class="ml-auto" matSnackBarActions>
+    <button mat-button matSnackBarAction (click)="snackBarRef.dismiss()">Dismiss</button>
+    <button mat-button matSnackBarAction (click)="snackBarRef.dismissWithAction()">Refresh</button>
+  </span>
+</div>

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {UserService} from './user.service';
-import API_URL from 'src/app/config/constants/apiUrl';
 import {ScormDataModel, ScormPlayerContext} from 'src/app/api/models/doubtfire-model';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {UserService} from './user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -42,8 +42,20 @@ export class ScormAdapterService {
     this.context.state = 'Uninitialized';
   }
 
+  private refreshUserContext(): void {
+    const user = this.userService.currentUser;
+    this.context.user = user;
+    this.context.learnerId = user.id;
+    this.context.learnerName = user.firstName + ' ' + user.lastName;
+  }
+
+  private hasSuccessfulResponse(): boolean {
+    return this.xhr.status >= 200 && this.xhr.status < 300;
+  }
+
   Initialize(): string {
     // console.log('API_1484_11: Initialize');
+    this.refreshUserContext();
 
     // TODO: error handling and reporting
     switch (this.context.state) {
@@ -64,6 +76,12 @@ export class ScormAdapterService {
 
       this.xhr.send();
       // console.log(this.xhr.responseText);
+
+      if (!this.hasSuccessfulResponse()) {
+        this.context.errorCode = 101;
+        console.error('Error retrieving SCORM review session:', this.xhr.responseText);
+        return 'false';
+      }
 
       const reviewSession = JSON.parse(this.xhr.responseText);
       this.dataModel.restore(reviewSession.cmi_datamodel);
@@ -103,6 +121,12 @@ export class ScormAdapterService {
     this.xhr.send();
     // console.log(this.xhr.responseText);
 
+    if (!noTestFound && !this.hasSuccessfulResponse()) {
+      this.context.errorCode = 101;
+      console.error('Error retrieving latest SCORM attempt:', this.xhr.responseText);
+      return 'false';
+    }
+
     if (!noTestFound) {
       const latestSession = JSON.parse(this.xhr.responseText);
       // console.log('Latest exam session:', latestSession);
@@ -121,6 +145,12 @@ export class ScormAdapterService {
       this.xhr.send();
       // console.log(this.xhr.responseText);
 
+      if (!this.hasSuccessfulResponse()) {
+        this.context.errorCode = 101;
+        console.error('Error resuming SCORM attempt:', this.xhr.responseText);
+        return 'false';
+      }
+
       const currentSession = JSON.parse(this.xhr.responseText);
       // console.log('Current exam session:', currentSession);
       this.context.attemptId = currentSession.id;
@@ -137,6 +167,12 @@ export class ScormAdapterService {
       this.xhr.send();
       // console.log(this.xhr.responseText);
 
+      if (!this.hasSuccessfulResponse()) {
+        this.context.errorCode = 101;
+        console.error('Error creating SCORM attempt:', this.xhr.responseText);
+        return 'false';
+      }
+
       const currentSession = JSON.parse(this.xhr.responseText);
       // console.log('Current exam session:', currentSession);
       this.context.attemptId = currentSession.id;
@@ -150,6 +186,7 @@ export class ScormAdapterService {
 
   Terminate(): string {
     // console.log('API_1484_11: Terminate');
+    this.refreshUserContext();
 
     // TODO: error handling and reporting
     switch (this.context.state) {
@@ -200,7 +237,7 @@ export class ScormAdapterService {
     return value;
   }
 
-  SetValue(element: string, value: any): string {
+  SetValue(element: string, value: string): string {
     // console.log(`API_1484_11: SetValue:`, element, value);
 
     // TODO: error reporting
@@ -222,6 +259,7 @@ export class ScormAdapterService {
 
   Commit(): string {
     // console.log('API_1484_11: Commit');
+    this.refreshUserContext();
 
     // TODO: error reporting
     // TODO: can't commit until init is done
@@ -275,7 +313,7 @@ export class ScormAdapterService {
     return errorString;
   }
 
-  GetDiagnostic(errorCode: string): string {
+  GetDiagnostic(_errorCode: string): string {
     // TODO: implement this
     // console.log(`API_1484_11: GetDiagnostic:`, errorCode);
     return 'GetDiagnostic is currently not implemented';

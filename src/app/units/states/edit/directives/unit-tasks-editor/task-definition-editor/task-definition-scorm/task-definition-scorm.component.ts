@@ -1,15 +1,16 @@
-import {Component, Input} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
-import {AlertService} from 'src/app/common/services/alert.service';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {TaskDefinition} from 'src/app/api/models/task-definition';
 import {Unit} from 'src/app/api/models/unit';
 import {TaskDefinitionService} from 'src/app/api/services/task-definition.service';
 import {FileDownloaderService} from 'src/app/common/file-downloader/file-downloader.service';
+import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'f-task-definition-scorm',
   templateUrl: 'task-definition-scorm.component.html',
   styleUrls: ['task-definition-scorm.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskDefinitionScormComponent {
   @Input() taskDefinition: TaskDefinition;
@@ -45,7 +46,7 @@ export class TaskDefinitionScormComponent {
     });
   }
 
-  public uploadScormData(files: FileList) {
+  public uploadScormData(files: ArrayLike<File>) {
     // console.log(Array.from(files).map((f) => f.type));
     const validMimeTypes = ['application/zip', 'application/x-zip-compressed', 'multipart/x-zip'];
     const validFiles = Array.from(files as ArrayLike<File>).filter((f) =>

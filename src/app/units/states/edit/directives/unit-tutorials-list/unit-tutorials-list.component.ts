@@ -1,40 +1,49 @@
-import { Component, Input, Inject, ViewChild, AfterViewInit } from '@angular/core';
-import { confirmationModal } from 'src/app/ajs-upgraded-providers';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
+import {HttpErrorResponse} from '@angular/common/http';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {Subscription} from 'rxjs';
 import {
   Tutorial,
-  TutorialService,
-  Campus,
-  CampusService,
-  User,
   TutorialStream,
   TutorialStreamService,
   Unit,
 } from 'src/app/api/models/doubtfire-model';
-import { EntityFormComponent } from 'src/app/common/entity-form/entity-form.component';
-import { UntypedFormControl, Validators } from '@angular/forms';
-import { RequestOptions } from 'ngx-entity-service';
-import { AlertService } from 'src/app/common/services/alert.service';
+import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
+import {ConfirmationModalService} from 'src/app/common/modals/confirmation-modal/confirmation-modal.service';
+import {AlertService} from 'src/app/common/services/alert.service';
+import {UnitTutorialModalService} from 'src/app/units/modals/unit-tutorial-modal/unit-tutorial-modal.service';
 
 @Component({
   selector: 'df-unit-tutorials-list',
   templateUrl: 'unit-tutorials-list.component.html',
   styleUrls: ['unit-tutorials-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> implements AfterViewInit {
-  @ViewChild(MatTable, { static: true }) table: MatTable<any>;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+export class UnitTutorialsListComponent
+  extends EntityFormComponent<Tutorial>
+  implements OnInit, OnDestroy
+{
   @Input() stream: TutorialStream;
   @Input() unit: Unit;
 
-  days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Asynchronous'];
+  columns: string[] = [
+    'abbreviation',
+    'campus',
+    'location',
+    'day',
+    'time',
+    'duration',
+    'tutor',
+    'capacity',
+    'options',
+  ];
+  tutorials: Tutorial[] = [];
+  dataSource: MatTableDataSource<Tutorial> = new MatTableDataSource();
 
-  campuses: Campus[] = new Array<Campus>();
-  columns: string[] = ['abbreviation', 'campus', 'location', 'day', 'time', 'tutor', 'capacity', 'options'];
-  tutorials: Tutorial[];
-
-  private editingStream: boolean = false;
+  public editingStream: boolean = false;
+  private subscriptions: Subscription[] = [];
 
   /**
    * The original stream abbreviation is required to update the stream - as it may change but is used in the url.
@@ -43,52 +52,43 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
   private origName: string;
 
   constructor(
-    private tutorialService: TutorialService,
     private tutorialStreamService: TutorialStreamService,
-    private campusService: CampusService,
-    @Inject(confirmationModal) private confirmationModal: any,
+    private confirmationModal: ConfirmationModalService,
+    private tutorialModal: UnitTutorialModalService,
     private alerts: AlertService,
   ) {
-    super(
-      {
-        meetingDay: new UntypedFormControl('', [Validators.required]),
-        meetingTime: new UntypedFormControl(null, [Validators.required]),
-        meetingLocation: new UntypedFormControl('', [Validators.required]),
-        abbreviation: new UntypedFormControl('', [Validators.required]),
-        campus: new UntypedFormControl(null, []),
-        capacity: new UntypedFormControl('', [Validators.required]),
-        tutor: new UntypedFormControl(null, [Validators.required]),
-      },
-      'Tutorial',
-    );
+    // Sorting helpers only - editing happens in the tutorial modal.
+    super({}, 'Tutorial');
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     if (this.stream) {
       this.origStreamAbbr = this.stream.abbreviation;
       this.origName = this.stream.name;
     }
 
-    this.campusService.query().subscribe((campuses) => {
-      this.campuses.push(...campuses);
-    });
-
-    this.dataSource = new MatTableDataSource();
     this.filterTutorials();
 
-    this.unit.tutorialsCache.values.subscribe((_t) => this.filterTutorials());
+    this.subscriptions.push(
+      this.unit.tutorialsCache.values.subscribe((_t) => this.filterTutorials()),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   private filterTutorials(): void {
     this.tutorials = this.unit.tutorials.filter(
-      (tutorial) => tutorial.tutorialStream === this.stream || (!tutorial.tutorialStream && !this.stream),
+      (tutorial) =>
+        tutorial.tutorialStream === this.stream || (!tutorial.tutorialStream && !this.stream),
     );
     this.dataSource.data = this.tutorials;
   }
 
   public saveStream(): void {
     this.tutorialStreamService
-      .update({ abbreviation: this.origStreamAbbr, unit_id: this.unit.id }, { entity: this.stream })
+      .update({abbreviation: this.origStreamAbbr, unit_id: this.unit.id}, {entity: this.stream})
       .subscribe({
         next: (stream: TutorialStream) => {
           this.stream = stream;
@@ -97,14 +97,13 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
           this.editingStream = false;
           this.alerts.success('Stream updated successfully', 2000);
         },
-        error: (error: any) => {
+        error: (error: HttpErrorResponse) => {
           this.alerts.error('Something went wrong - ' + JSON.stringify(error.error), 6000);
         },
       });
   }
 
   public setEditStream(value: boolean): void {
-    console.log('set edit stream', value)
     if (!value) {
       this.stream.abbreviation = this.origStreamAbbr;
       this.stream.name = this.origName;
@@ -112,64 +111,15 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     this.editingStream = value;
   }
 
-  // This method is passed to the submit method on the parent
-  // and is only run when an entity is successfully created or updated
-  onSuccess(response: Tutorial, isNew: boolean): void {
-    if (isNew) {
-      this.pushToTable(response);
-    }
+  public newTutorial(): void {
+    this.tutorialModal.show(this.unit, this.stream);
   }
 
-  // Push the values that will be displayed in the table
-  // to the datasource
-  private pushToTable(value: Tutorial | Tutorial[]) {
-    if (!value) return;
-    value instanceof Array ? this.tutorials.push(...value) : this.tutorials.push(value);
-    this.renderTable();
-  }
-
-  // Handle the removal of a tutorial
-  public deleteTutorial(tutorial: Tutorial): void {
-    this.tutorialService.delete(tutorial, this.optionsOnRequest('delete')).subscribe((_result) => {
-      this.cancelEdit();
-      this.filterTutorials();
-      this.renderTable();
-    });
-  }
-
-  private renderTable() {
-    this.dataSource.sort = this.sort;
-    this.table.renderRows();
-  }
-
-  // This method is called when the form is submitted,
-  // which then calls the parent's submit.
-  submit(): void {
-    super.submit(this.tutorialService, this.alerts, this.onSuccess.bind(this));
-  }
-
-  protected formDataToNewObject(endPointKey: string, _associations?: object): object {
-    this.selected = new Tutorial(this.unit);
-    this.copyChangesFromForm();
-    this.selected.tutorialStream = this.stream;
-    super.formDataToNewObject(endPointKey);
-    return this.selected;
-  }
-
-  // This comparison function is required to determine what campus or user
-  // to render in the associated mat-select components when editing a
-  // tutorial. The function is bound to the compareFn attribute on the related
-  // mat-selects.
-  // See: https://angular.io/api/forms/SelectControlValueAccessor
-  compareSelection(aEntity: User | Campus | any, bEntity: User | Campus) {
-    if (!aEntity || !bEntity) {
-      return;
-    }
-    if (bEntity instanceof User) {
-      return aEntity.user_id === bEntity.id;
-    } else {
-      return aEntity.id === bEntity.id;
-    }
+  public editTutorial(tutorial: Tutorial): void {
+    this.tutorialModal
+      .show(this.unit, this.stream, tutorial)
+      .afterClosed()
+      .subscribe(() => this.filterTutorials());
   }
 
   // Handle the deletion of a stream
@@ -195,14 +145,34 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     );
   }
 
-  /**
-   * Ensure that the unit is passed to the Tutorial entity when create it called.
-   */
-  protected override optionsOnRequest(kind: 'create' | 'update' | 'delete'): RequestOptions<Tutorial> {
-    return {
-      constructorParams: this.unit,
-      cache: this.unit.tutorialsCache,
-    };
+  formatDurationShort(minutes: number): string {
+    if (minutes == null) {
+      return '';
+    }
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (hours === 0) {
+      return `${remainingMinutes}m`;
+    }
+    if (remainingMinutes === 0) {
+      return `${hours}h`;
+    }
+    return `${hours}h ${remainingMinutes}m`;
+  }
+
+  formatDuration(minutes: number): string {
+    if (minutes == null) {
+      return '';
+    }
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (hours === 0) {
+      return `${remainingMinutes} minute${remainingMinutes === 1 ? '' : 's'}`;
+    }
+    if (remainingMinutes === 0) {
+      return `${hours} hour${hours === 1 ? '' : 's'}`;
+    }
+    return `${hours} hour${hours === 1 ? '' : 's'} ${remainingMinutes} minute${remainingMinutes === 1 ? '' : 's'}`;
   }
 
   // Sorting function to sort data when sort
@@ -211,21 +181,25 @@ export class UnitTutorialsListComponent extends EntityFormComponent<Tutorial> im
     if (!sort.active || sort.direction === '') {
       return;
     }
-    switch (sort.active) {
-      case 'abbreviation':
-      case 'location':
-      case 'day':
-      case 'time':
-      case 'capacity':
-        return super.sortTableData(sort);
-    }
-    this.dataSource.data = this.dataSource.data.sort((a, b) => {
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
+        case 'abbreviation':
+          return this.sortCompare(a.abbreviation, b.abbreviation, isAsc);
         case 'campus':
-          return this.sortCompare(a.campus ? a.campus.abbreviation : '', b.campus ? b.campus.abbreviation : '', isAsc);
+          return this.sortCompare(a.campus?.abbreviation, b.campus?.abbreviation, isAsc);
+        case 'location':
+          return this.sortCompare(a.meetingLocation, b.meetingLocation, isAsc);
+        case 'day':
+          return this.sortCompare(a.meetingDay, b.meetingDay, isAsc);
+        case 'time':
+          return this.sortCompare(a.meetingTime, b.meetingTime, isAsc);
+        case 'duration':
+          return this.sortCompare(a.durationMinutes, b.durationMinutes, isAsc);
         case 'tutor':
-          return this.sortCompare(a.tutor.name, b.tutor.name, isAsc);
+          return this.sortCompare(a.tutorName, b.tutorName, isAsc);
+        case 'capacity':
+          return this.sortCompare(a.capacity, b.capacity, isAsc);
         default:
           return 0;
       }

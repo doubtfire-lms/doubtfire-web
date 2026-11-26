@@ -17,3 +17,6 @@ dist/
 .angulardoc.json
 .nx
 .idea
+
+# Sentry Config File
+.sentryclirc

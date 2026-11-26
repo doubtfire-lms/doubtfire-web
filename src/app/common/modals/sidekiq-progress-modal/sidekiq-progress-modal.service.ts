@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {Subject} from 'rxjs';
+import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
+import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {
   SidekiqProgressModalComponent,
   SidekiqProgressModalData,
 } from './sidekiq-progress-modal.component';
-import {Subject} from 'rxjs';
-import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
-import {SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,7 @@ export class SidekiqProgressModalService {
   ) {}
 
   public show(title: string, jobId: string) {
-    const subject = new Subject<SidekiqJob>();
+    const subject: Subject<SidekiqJob> = new Subject();
 
     this.sidekiqJobService.setJob(jobId, title, subject);
 

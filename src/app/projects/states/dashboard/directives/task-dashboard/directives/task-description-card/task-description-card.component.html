@@ -1,29 +1,61 @@
-<mat-card appearance="">
+<mat-card>
   <mat-card-header>
-    <div class="flex mb-4">
-      <f-task-badge [taskDef]="taskDef" class="mr-4"></f-task-badge>
+    <div class="mb-2.5 flex">
+      <f-task-badge class="mr-2.5" [taskDef]="taskDef"></f-task-badge>
       <mat-card-title>{{ taskDef?.name }}</mat-card-title>
     </div>
   </mat-card-header>
   <mat-card-content>
-    <div class="markdown-to-pdf" [innerHTML]="taskDef?.description | marked"></div>
-    @if (task) {
+    <div
+      class="markdown-to-pdf"
+      [innerHTML]="$safeNavigationMigration(taskDef?.description) | marked"
+    ></div>
+    <!-- @if (task) {
       <f-task-date-slider [task]="task" />
-    }
+    } -->
     <ul>
-      <li>{{ grades.names[taskDef?.targetGrade] }} Task</li>
+      <li class="my-3">{{ grades.names[taskDef?.targetGrade] }} Task</li>
 
-      @if (taskDef.unit.allowFlexibleDates) {
-        <li>I'm planning to <b>start</b> this task by {{ startDate() | date: 'EEE d MMM' }}.</li>
+      @if (unit?.allowFlexibleDates ?? taskDef?.unit?.allowFlexibleDates) {
+        <li>
+          @if (task) {
+            For my target grade, this task is
+            <a
+              class="cursor-pointer font-bold text-inherit no-underline hover:underline focus-visible:underline"
+              [queryParams]="{taskDef: taskDef.id}"
+              [routerLink]="['/projects', task.project.id, 'plan']"
+            >
+              due {{ dateWithOrdinal(targetGradeDueDate()) }}.
+            </a>
+          } @else {
+            This task is <b>due {{ dateWithOrdinal(targetGradeDueDate()) }}.</b>
+          }
+        </li>
+        <br />
+        <li>
+          I'm planning to <b>start</b> this task on {{ dateWithOrdinal(startDate())
+          }}{{ dateRelativeToDueDate(startDate()) }}.
+        </li>
         <li [hidden]="!task?.extensions || task?.extensions <= 0">
           The due date has been <b>extended</b> by {{ task?.extensions }} week{{
             task?.extensions > 1 ? 's' : ''
           }}.
         </li>
-        <li>I'm aiming to <b>submit</b> this task by {{ dueDate() | date: 'EEE d MMM' }}.</li>
-        <li>
-          To receive <b>feedback</b>, I must submit this task by
-          {{ feedbackDate() | date: 'EEE d MMM' }}.
+        <li
+          class="mb-3"
+          [class.bg-red-50]="
+            daysFromTargetDueDate(hasNotSubmitted() ? effectiveSubmissionDate() : dueDate()) > 0
+          "
+          [class.text-red-800]="
+            daysFromTargetDueDate(hasNotSubmitted() ? effectiveSubmissionDate() : dueDate()) > 0
+          "
+        >
+          @if (hasNotSubmitted() && plannedSubmissionDateHasPassed()) {
+            I'm aiming to <b>submit</b> this task today{{ todayRelativeToDueDate() }}.
+          } @else {
+            I'm aiming to <b>submit</b> this task on {{ dateWithOrdinal(dueDate())
+            }}{{ dateRelativeToDueDate(dueDate()) }}.
+          }
         </li>
       } @else {
         <li>
@@ -40,27 +72,96 @@
         </li>
       }
     </ul>
+    @if ((unit?.allowFlexibleDates ?? taskDef?.unit?.allowFlexibleDates) && hasNotSubmitted()) {
+      <div
+        class="mt-3 flex items-center gap-2 rounded-md bg-gray-50 p-3"
+        [class.text-amber-800]="
+          discussionTiming() !== 'tight' &&
+          discussionTiming() !== 'past' &&
+          !effectiveSubmissionIsAfterFeedbackDeadline() &&
+          daysFromTargetDueDate(effectiveSubmissionDate()) > 0
+        "
+        [class.text-red-800]="
+          effectiveSubmissionIsAfterFeedbackDeadline() ||
+          discussionTiming() === 'tight' ||
+          discussionTiming() === 'past'
+        "
+      >
+        @if (
+          effectiveSubmissionIsAfterFeedbackDeadline() ||
+          discussionTiming() === 'tight' ||
+          discussionTiming() === 'past'
+        ) {
+          <mat-icon aria-hidden="true" class="shrink-0">error</mat-icon>
+        } @else if (daysFromTargetDueDate(effectiveSubmissionDate()) > 0) {
+          <mat-icon aria-hidden="true" class="shrink-0">warning_amber</mat-icon>
+        } @else {
+          <mat-icon aria-hidden="true" class="shrink-0 text-green-700">check_circle</mat-icon>
+        }
+        <span>
+          @if (effectiveSubmissionIsAfterFeedbackDeadline()) {
+            I won't receive staff feedback or have time to discuss my work with teaching staff if I
+            submit
+            {{ plannedSubmissionDateHasPassed() ? 'today' : 'on this date' }}.
+            @if (plannedSubmissionDateHasPassed()) {
+              The last day to submit for feedback was {{ dateWithOrdinal(feedbackDate()) }}.
+            } @else {
+              To receive feedback, I need to submit by {{ dateWithOrdinal(feedbackDate()) }}.
+            }
+          } @else if (discussionTiming() === 'past') {
+            @if (plannedSubmissionDateHasPassed()) {
+              I can still receive staff feedback, but teaching has ended, so I won't have time to
+              discuss my work with teaching staff.
+            } @else {
+              I can still receive staff feedback, but teaching ends before I plan to submit. Marking
+              may take up to 7 days, so I won't have time to discuss my work with teaching staff.
+            }
+          } @else if (discussionTiming() === 'tight') {
+            I can still receive staff feedback on this submission, but if I need to fix and
+            resubmit, I may miss out on further feedback and a chance to discuss my work with
+            teaching staff.
+          } @else if (discussionTiming() === 'enough') {
+            @if (daysFromTargetDueDate(effectiveSubmissionDate()) > 0) {
+              I should make sure I'm not falling behind. I should still have enough time to receive
+              staff feedback and discuss my work with teaching staff.
+            } @else {
+              I will have enough time to receive staff feedback and discuss my work with teaching
+              staff.
+            }
+          } @else {
+            I can receive staff feedback. I should check with teaching staff about discussion
+            timing.
+          }
+        </span>
+      </div>
+    }
   </mat-card-content>
-  <mat-card-actions
-    class="space-x-2"
-    [hidden]="!(taskDef?.hasTaskSheet || taskDef?.hasTaskResources)"
-  >
-    <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="viewTaskSheet()">
+  @if (taskDef?.hasTaskSheet || taskDef?.hasTaskResources) {
+    <mat-card-actions class="space-x-1">
+      <!-- <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="viewTaskSheet()">
       <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="View icon"
         >description</mat-icon
       >
       Task Sheet
-    </button>
-    <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="downloadTaskSheet()">
-      <mat-icon style="width: 20px; height: 20px; font-size: 20px" aria-label="Download icon"
-        >download</mat-icon
+    </button> -->
+      <button mat-stroked-button [hidden]="!taskDef?.hasTaskSheet" (click)="downloadTaskSheet()">
+        <mat-icon aria-label="Download icon" style="width: 20px; height: 20px; font-size: 20px"
+          >download</mat-icon
+        >
+        Task Sheet
+      </button>
+      <button
+        mat-stroked-button
+        [hidden]="!taskDef?.hasTaskResources"
+        (click)="downloadResources()"
       >
-      Task Sheet
-    </button>
-    <button mat-stroked-button [hidden]="!taskDef?.hasTaskResources" (click)="downloadResources()">
-      <mat-icon style="width: 20px; height: 20px; font-size: 20px" inline aria-label="Download icon"
-        >download</mat-icon
-      ><span>Resources</span>
-    </button>
-  </mat-card-actions>
+        <mat-icon
+          aria-label="Download icon"
+          inline
+          style="width: 20px; height: 20px; font-size: 20px"
+          >download</mat-icon
+        ><span>Resources</span>
+      </button>
+    </mat-card-actions>
+  }
 </mat-card>

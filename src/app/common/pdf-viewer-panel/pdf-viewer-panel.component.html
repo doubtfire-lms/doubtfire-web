@@ -5,19 +5,21 @@
   </div>
   <!--/panel-body-->
   @if (!hideFooter) {
-  <div class="pdf-viewer-footer">
-    <div class="pull-left text-muted" [hidden]="!footerText"><strong>Note:</strong> {{ footerText }}</div>
-    <div class="pull-right btn-group">
-      @if (resourcesUrl) {
-      <a (click)="downloadResources()" class="btn btn-primary">
-        <i class="fa fa-download"></i><span> Resources</span>
-      </a>
-      }
-      <button (click)="downloadPdf()" class="btn btn-success">
-        <i class="fa fa-download"></i><span [hidden]="!resourcesUrl"> PDF</span>
-      </button>
+    <div class="pdf-viewer-footer">
+      <div class="pull-left text-muted" [hidden]="!footerText">
+        <strong>Note:</strong> {{ footerText }}
+      </div>
+      <div class="pull-right btn-group">
+        @if (resourcesUrl) {
+          <a class="btn btn-primary" (click)="downloadResources()">
+            <mat-icon inline>download</mat-icon><span> Resources</span>
+          </a>
+        }
+        <button class="btn btn-success" (click)="downloadPdf()">
+          <mat-icon inline>download</mat-icon><span [hidden]="!resourcesUrl"> PDF</span>
+        </button>
+      </div>
     </div>
-  </div>
   }
   <!--/panel-footer-->
 </div>

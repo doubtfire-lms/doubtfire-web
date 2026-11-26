@@ -1,64 +1,64 @@
-<div class="flex flex-col gap-4">
-  <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormEnabled">
-    Enable test for task
-  </mat-checkbox>
+<div class="flex flex-col gap-2.5">
+  <f-setting-toggle label="Enable test for task" [(checked)]="taskDefinition.scormEnabled">
+    Students complete a SCORM test as part of this task.
+  </f-setting-toggle>
 
   @if (taskDefinition.scormEnabled) {
     <f-file-drop
-      mode="event"
-      (filesDropped)="uploadScormData($event)"
       accept="application/zip"
+      mode="event"
       [desiredFileName]="'SCORM zip'"
+      (filesDropped)="uploadScormData($event)"
     />
     @if (taskDefinition.hasScormData) {
-      <div class="flex flex-row gap-4 pt-4">
-        <button mat-flat-button color="warn" (click)="removeScormData()" class="flex-grow me-4">
+      <div class="flex flex-row gap-2.5 pt-2.5">
+        <button class="me-4 grow" color="warn" mat-flat-button (click)="removeScormData()">
           Delete SCORM Zip
         </button>
-        <button mat-flat-button color="accent" (click)="downloadScormData()" class="flex-grow ms-4 me-4">
+        <button class="mx-4 grow" color="accent" mat-flat-button (click)="downloadScormData()">
           Download SCORM Zip
         </button>
-        <button mat-flat-button color="accent" (click)="previewScormTest()" class="flex-grow me-4">
+        <button class="me-4 grow" color="accent" mat-flat-button (click)="previewScormTest()">
           Preview SCORM Test
         </button>
       </div>
     }
 
-    <div class="flex-grow flex flex-row gap-4 pt-4">
-      <div class="basis-1/2">
-        <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormAllowReview">
-          Allow students to review completed test attempt
-        </mat-checkbox>
-        <mat-checkbox matInput required [(ngModel)]="taskDefinition.scormBypassTest">
-          Allow file upload regardless of test pass status
-        </mat-checkbox>
-      </div>
-      <mat-form-field appearance="outline" class="basis-1/2">
-        <mat-label>Limit to this number of attempts - 0 is unlimited</mat-label>
-        <input
-          matInput
-          min="0"
-          max="100"
-          type="number"
-          [(ngModel)]="taskDefinition.scormAttemptLimit"
-        />
-      </mat-form-field>
-    </div>
+    <div class="flex flex-col pt-2.5">
+      <f-setting-toggle
+        label="Allow students to review completed test attempt"
+        [(checked)]="taskDefinition.scormAllowReview"
+      />
 
-    <div class="flex-grow flex flex-row gap-4 pt-4">
-      <mat-checkbox
-        matInput
-        required
-        [(ngModel)]="taskDefinition.scormTimeDelayEnabled"
-        disabled
-        class="basis-1/2"
+      <f-setting-toggle
+        class="border-t border-gray-200"
+        label="Allow file upload regardless of test pass status"
+        [(checked)]="taskDefinition.scormBypassTest"
+      />
+
+      <f-setting-toggle
+        class="border-t border-gray-200"
+        label="Enable incremental time delays between test attempts"
+        [disabled]="true"
+        [(checked)]="taskDefinition.scormTimeDelayEnabled"
       >
-        Enable incremental time delays between test attempts
-      </mat-checkbox>
-      <span class="basis-1/2" disabled
-        >If enabled, first 2 attempts can be completed immediately. Subsequently, a time delay will
-        be added, increasing by 2 hours every attempt made.</span
-      >
+        The first 2 attempts can be completed immediately. After that a delay is added, increasing
+        by 2 hours with every attempt made.
+      </f-setting-toggle>
+
+      <div class="border-t border-gray-200 px-2 py-3">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Attempt limit</mat-label>
+          <input
+            matInput
+            max="100"
+            min="0"
+            type="number"
+            [(ngModel)]="taskDefinition.scormAttemptLimit"
+          />
+          <mat-hint>0 is unlimited.</mat-hint>
+        </mat-form-field>
+      </div>
     </div>
   }
 </div>

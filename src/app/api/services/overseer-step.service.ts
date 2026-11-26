@@ -1,6 +1,6 @@
+import {CachedEntityService} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {CachedEntityService} from 'ngx-entity-service';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {OverseerStep} from '../models/overseer/overseer-step';
 import {TaskDefinition} from '../models/task-definition';
@@ -23,7 +23,7 @@ export class OverseerStepService extends CachedEntityService<OverseerStep> {
       // 'runCommand',
       {
         keys: 'runCommand',
-        toEntityFn: (data: object, key: string, entity: OverseerStep, params?: any) => {
+        toEntityFn: (data: object, key: string, entity: OverseerStep) => {
           const raw = data['run_command'];
           if (raw?.startsWith('b64:')) {
             entity.decodedRunCommand = atob(raw.slice(4));
@@ -54,7 +54,7 @@ export class OverseerStepService extends CachedEntityService<OverseerStep> {
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public createInstanceFrom(json: object, other?: any): OverseerStep {
-    return new OverseerStep(other as TaskDefinition);
+  public createInstanceFrom(_json: object, other?: TaskDefinition): OverseerStep {
+    return new OverseerStep(other);
   }
 }

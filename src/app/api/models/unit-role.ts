@@ -1,5 +1,5 @@
 import {Entity, EntityCache, EntityMapping} from 'ngx-entity-service';
-import {User, Unit} from './doubtfire-model';
+import {Unit, User} from './doubtfire-model';
 import {TutorNote} from './tutor-note';
 
 /**

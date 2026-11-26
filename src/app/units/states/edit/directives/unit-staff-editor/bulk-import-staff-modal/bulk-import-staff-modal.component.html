@@ -1,0 +1,22 @@
+<h3 mat-dialog-title>Bulk Import Staff</h3>
+
+<div mat-dialog-content>
+  <p>Paste one staff email per line to add them to this unit as tutors.</p>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Staff emails</mat-label>
+    <textarea
+      matInput
+      placeholder="tutor@example.edu.au&#10;convenor@example.edu.au"
+      rows="10"
+      [(ngModel)]="emailList"
+    ></textarea>
+  </mat-form-field>
+</div>
+
+<div align="end" mat-dialog-actions>
+  <button color="warn" mat-stroked-button (click)="cancel()">Cancel</button>
+  <button color="primary" mat-flat-button [disabled]="!emailList.trim()" (click)="submit()">
+    Import staff
+  </button>
+</div>

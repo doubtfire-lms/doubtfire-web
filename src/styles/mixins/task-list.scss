@@ -1,5 +1,6 @@
-@import './task-status-colors-generator.scss';
-@import '../common/variables.scss';
+@use 'sass:color';
+@use 'styles/mixins/task-status-colors-generator' as *;
+@use 'styles/common/variables' as *;
 
 @mixin custom-box-shadow($color) {
   box-shadow: -15px 0 $color inset;
@@ -43,46 +44,60 @@
       text-decoration: none;
       // background-color: $list-group-hover-bg;
       &.ready-for-feedback {
-        @include custom-box-shadow(lighten(task-status-color('ready-for-feedback'), 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('ready-for-feedback'), $lightness: 15%)
+        );
       }
       &.not-started {
-        @include custom-box-shadow(lighten(task-status-color('not-started'), 5%));
+        @include custom-box-shadow(color.adjust(task-status-color('not-started'), $lightness: 5%));
       }
       &.working-on-it {
-        @include custom-box-shadow(lighten(task-status-color('working-on-it'), 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('working-on-it'), $lightness: 15%)
+        );
       }
       &.need-help {
-        @include custom-box-shadow(lighten(task-status-color('need-help'), 15%));
+        @include custom-box-shadow(color.adjust(task-status-color('need-help'), $lightness: 15%));
       }
       &.fix-and-resubmit {
-        @include custom-box-shadow(lighten(task-status-color('fix-and-resubmit'), 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('fix-and-resubmit'), $lightness: 15%)
+        );
       }
       &.feedback-exceeded {
-        @include custom-box-shadow(lighten(task-status-color('feedback-exceeded'), 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('feedback-exceeded'), $lightness: 15%)
+        );
       }
       &.fail {
-        @include custom-box-shadow(lighten(task-status-color('fail'), 15%));
+        @include custom-box-shadow(color.adjust(task-status-color('fail'), $lightness: 15%));
       }
       &.redo {
-        @include custom-box-shadow(lighten(task-status-color('redo'), 15%));
+        @include custom-box-shadow(color.adjust(task-status-color('redo'), $lightness: 15%));
       }
       &.discuss {
-        @include custom-box-shadow(lighten(task-status-color('discuss'), 15%));
+        @include custom-box-shadow(color.adjust(task-status-color('discuss'), $lightness: 15%));
       }
       &.demonstrate {
-        @include custom-box-shadow(lighten(task-status-color('demonstrate'), 15%));
+        @include custom-box-shadow(color.adjust(task-status-color('demonstrate'), $lightness: 15%));
       }
       &.complete {
-        @include custom-box-shadow(lighten(task-status-color('complete'), 15%));
+        @include custom-box-shadow(color.adjust(task-status-color('complete'), $lightness: 15%));
       }
       &.time-exceeded {
-        @include custom-box-shadow(lighten(task-status-color('time-exceeded'), 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('time-exceeded'), $lightness: 15%)
+        );
       }
       &.assess-in-portfolio {
-        @include custom-box-shadow(lighten(task-status-color('assess-in-portfolio'), 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('assess-in-portfolio'), $lightness: 15%)
+        );
       }
       &.attention-required {
-        @include custom-box-shadow(lighten(task-status-color('attention-required'), 15%));
+        @include custom-box-shadow(
+          color.adjust(task-status-color('attention-required'), $lightness: 15%)
+        );
       }
     }
     &.selected {
@@ -154,6 +169,13 @@
           & + .task-subscript-badge {
             margin-right: -3px;
           }
+          .material-icons,
+          mat-icon {
+            font-size: 12px;
+            height: 12px;
+            line-height: 12px;
+            width: 12px;
+          }
           &.grade-badge {
             background-color: #000000;
             font-size: 9px;
@@ -163,7 +185,7 @@
             font-size: 9px;
           }
           &.soon-badge {
-            background-color: lighten(#eb8f06, 15%);
+            background-color: color.adjust(#eb8f06, $lightness: 15%);
             color: black;
           }
           &.due-badge {

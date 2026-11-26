@@ -1,5 +1,7 @@
+import JSZip from 'jszip';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -8,7 +10,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import JSZip from 'jszip';
 import {firstValueFrom} from 'rxjs';
 import {AlertService} from '../services/alert.service';
 import {
@@ -19,7 +20,9 @@ import {
   getMonacoLanguageForPath,
   getOrderedUploadFileIndex,
   isArchiveCodeOrTextFile,
+  isArchiveDocxFile,
   isArchiveImageFile,
+  isArchiveNotebookFile,
   isArchivePathHidden,
   isArchivePdfFile,
 } from './archive-viewer.helpers';
@@ -39,6 +42,8 @@ interface ArchiveFileTreeNode {
   selector: 'f-archive-viewer',
   templateUrl: './archive-viewer.component.html',
   styleUrls: ['./archive-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() archiveFile: File | Blob | null = null;
@@ -52,10 +57,10 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   @Input() saveFieldName = 'file';
   @Input() saveFileName = 'archive.zip';
 
-  @Output() filesLoaded = new EventEmitter<number>();
-  @Output() saveSuccess = new EventEmitter<HttpResponse<unknown>>();
-  @Output() saveError = new EventEmitter<unknown>();
-  @Output() selectedFileChanged = new EventEmitter<ArchiveFileEntry | null>();
+  @Output() filesLoaded: EventEmitter<number> = new EventEmitter();
+  @Output() saveSuccess: EventEmitter<HttpResponse<unknown>> = new EventEmitter();
+  @Output() saveError: EventEmitter<unknown> = new EventEmitter();
+  @Output() selectedFileChanged: EventEmitter<ArchiveFileEntry | null> = new EventEmitter();
 
   public files: ArchiveFileEntry[] = [];
   public selectedTab = 0;
@@ -65,7 +70,9 @@ export class ArchiveViewerComponent implements OnChanges, OnDestroy {
   public fileTreeNodes: ArchiveFileTreeNode[] = [];
 
   public readonly isArchiveCodeOrTextFile = isArchiveCodeOrTextFile;
+  public readonly isArchiveDocxFile = isArchiveDocxFile;
   public readonly isArchiveImageFile = isArchiveImageFile;
+  public readonly isArchiveNotebookFile = isArchiveNotebookFile;
   public readonly isArchivePdfFile = isArchivePdfFile;
 
   public readonly editorOptions = {

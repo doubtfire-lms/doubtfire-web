@@ -1,0 +1,109 @@
+<div class="p-3">
+  <h2>Review progress of {{ project.student.name }}</h2>
+  <p>Review the students progress through the unit's tasks.</p>
+  <!-- <div class="flex w-full gap-3">
+    <mat-card appearance="outlined" class="w-full">
+      <mat-card-header>
+        <mat-card-title>Target Grade</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="p-3">
+        <div class="flex flex-col items-center justify-center gap-3 p-3">
+          <div class="flex flex-col items-center justify-center gap-1">
+            <mat-button-toggle-group hideSingleSelectionIndicator [ngModel]="project.targetGrade">
+              @for (grade of gradeValues; track grade) {
+                <mat-button-toggle
+                  [value]="grade"
+                  class="p-1 py-2.5"
+                  (click)="updatedTargetGrade(grade)"
+                >
+                  <f-grade-icon [grade]="grade"></f-grade-icon>
+                </mat-button-toggle>
+              }
+            </mat-button-toggle-group>
+          </div>
+          {{ gradeWord(project.targetGrade) ?? 'N/A' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card appearance="outlined" class="w-full">
+      <mat-card-header>
+        <mat-card-title>Submitted Grade</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="p-3">
+        <div class="flex flex-col items-center justify-center gap-3 p-3">
+          <div class="flex items-center justify-center gap-1">
+            <mat-button-toggle-group
+              hideSingleSelectionIndicator
+              [ngModel]="project.submittedGrade"
+            >
+              @for (grade of gradeValues; track grade) {
+                <mat-button-toggle
+                  [value]="grade"
+                  class="p-1 py-2.5"
+                  (click)="updateSubmittedGrade(grade)"
+                >
+                  <f-grade-icon [grade]="grade"></f-grade-icon>
+                </mat-button-toggle>
+              }
+            </mat-button-toggle-group>
+          </div>
+          {{ gradeWord(project.submittedGrade) ?? 'N/A' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div> -->
+  <f-project-dashboard
+    class="block min-h-fit min-w-0"
+    [defaultTaskListCollapsed]="true"
+    [project$]="project$"
+    [showSubmittedGrade]="showSubmittedGrade"
+    [taskSelectionUrlBase]="taskSelectionUrlBase"
+  ></f-project-dashboard>
+
+  <!-- <div class="flex w-full flex-col items-center justify-center gap-3">
+
+    <mat-card appearance="outlined" class="w-full">
+      <mat-card-header>
+        <mat-card-title>Task List</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="p-3">
+        <f-project-tasks-list
+          [project]="project"
+          [unit]="unit"
+          class="max-w-4xl"
+        ></f-project-tasks-list>
+      </mat-card-content>
+    </mat-card>
+    <div class="flex w-full flex-col gap-3 2xl:flex-row">
+      <mat-card appearance="outlined" class="w-full">
+        <mat-card-header>
+          <mat-card-title>Task Summary Chart</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-3">
+          <f-task-status-pie-chart
+            [project]="project"
+            [grade]="project.targetGrade"
+          ></f-task-status-pie-chart>
+        </mat-card-content>
+      </mat-card>
+      <mat-card appearance="outlined" class="w-full">
+        <mat-card-header>
+          <mat-card-title>Burndown Chart</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="p-3">
+          <div class="p-3 text-center">
+            {{ project.student.name }} has completed {{ taskStats.numberOfTasksCompleted }} tasks
+            and have {{ taskStats.numberOfTasksRemaining }} left to complete to achieve their target
+            of a
+            {{ grades[project.targetGrade] }}
+          </div>
+          <f-progress-burndown-chart
+            [project]="project"
+            [unit]="unit"
+            [grade]="project.targetGrade"
+          ></f-progress-burndown-chart>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div> -->
+</div>

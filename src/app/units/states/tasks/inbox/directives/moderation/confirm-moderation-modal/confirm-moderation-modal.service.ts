@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {FeedbackModerationActionType} from 'src/app/api/models/task';
-import {ConfirmModerationModalComponent} from './confirm-moderation-modal.component';
 import {Task} from 'src/app/api/models/task';
+import {ConfirmModerationModalComponent} from './confirm-moderation-modal.component';
 
 export interface ConfirmModerationModalData {
   task: Task;

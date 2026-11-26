@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
 import {SidekiqJobEntry, SidekiqJobService} from 'src/app/api/services/sidekiq-job.service';
 import {SidekiqProgressModalService} from 'src/app/common/modals/sidekiq-progress-modal/sidekiq-progress-modal.service';
@@ -8,6 +8,8 @@ import {AlertService} from '../../services/alert.service';
   selector: 'f-sidekiq-jobs-modal',
   templateUrl: './sidekiq-jobs-modal.component.html',
   styleUrl: './sidekiq-jobs-modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class SidekiqJobsModalComponent implements OnInit {
   constructor(

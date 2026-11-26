@@ -6,18 +6,18 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Number of days</mat-label>
-    <input matInput min="0" type="number" placeholder="Number of days" [(ngModel)]="days" />
+    <input matInput min="0" placeholder="Number of days" type="number" [(ngModel)]="days" />
   </mat-form-field>
 </div>
 
 <div mat-dialog-actions style="float: right">
-  <button mat-dialog-close mat-stroked-button color="warn">Cancel</button>
+  <button color="warn" mat-dialog-close mat-stroked-button>Cancel</button>
   <button
-    mat-dialog-close
-    style="margin-right: 10px"
-    mat-stroked-button
     color="primary"
     mat-button
+    mat-dialog-close
+    mat-stroked-button
+    style="margin-right: 10px"
     (click)="save()"
   >
     Apply

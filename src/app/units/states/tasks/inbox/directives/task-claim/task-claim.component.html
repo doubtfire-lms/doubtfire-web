@@ -8,15 +8,15 @@
   "
 >
   <button
-    mat-raised-button
+    class="ml-3"
     color="primary"
-    (click)="claimTask(selectedTask)"
+    mat-raised-button
     [disabled]="
       !selectedTask || selectedTask.loadingSubmissionDetails || selectedTask.claimedByUnitRoleId
     "
-    class="ml-5"
+    (click)="claimTask(selectedTask)"
   >
-    <div class="flex items-center gap-1">
+    <div class="flex items-center gap-0.5">
       @if (selectedTask.claimedByUnitRoleId) {
         @if (selectedTask.claimedByUnitRoleId === currentUnitRole.id) {
           <mat-icon class="scale-80">check_circle</mat-icon>

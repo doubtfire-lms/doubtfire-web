@@ -1,6 +1,14 @@
-import {HttpResponse} from '@angular/common/http';
-import {Component, Input, OnChanges, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import {MatAccordion} from '@angular/material/expansion';
+import {Subscription, finalize} from 'rxjs';
 import {Task} from 'src/app/api/models/task';
 import {TaskSimilarity} from 'src/app/api/models/task-similarity';
 import {TaskSimilarityService} from 'src/app/api/services/task-similarity.service';
@@ -13,13 +21,19 @@ import {SelectedTaskService} from '../../../../selected-task.service';
   selector: 'f-task-similarity-view',
   templateUrl: './task-similarity-view.component.html',
   styleUrls: ['./task-similarity-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class TaskSimilarityViewComponent implements OnChanges {
+export class TaskSimilarityViewComponent implements OnChanges, OnDestroy {
   @Input() task: Task;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @ViewChild('jplagViewer') jplagViewer!: JplagReportViewerComponent;
   panelOpenState = false;
   jplagOpenState = false;
+  loadingSimilarities = false;
+  similaritiesLoadError = false;
+  loadingJplagReportFor: TaskSimilarity | null = null;
+  private similaritiesSubscription?: Subscription;
 
   constructor(
     private taskSimilarityService: TaskSimilarityService,
@@ -29,13 +43,28 @@ export class TaskSimilarityViewComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.task && changes.task.currentValue && this.task?.id) {
-      this.jplagOpenState = false;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this.task?.fetchSimilarities().subscribe((_) => {
-        console.log('similarities fetched');
-      });
+    if (!changes.task) {
+      return;
     }
+
+    this.similaritiesSubscription?.unsubscribe();
+    this.jplagOpenState = false;
+    this.similaritiesLoadError = false;
+    this.loadingSimilarities = !!this.task?.id;
+    if (this.task?.id) {
+      this.similaritiesSubscription = this.task
+        .fetchSimilarities()
+        .pipe(finalize(() => (this.loadingSimilarities = false)))
+        .subscribe({
+          error: () => {
+            this.similaritiesLoadError = true;
+          },
+        });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.similaritiesSubscription?.unsubscribe();
   }
 
   toggleFlag(e: Event, similarity: TaskSimilarity) {
@@ -70,24 +99,33 @@ export class TaskSimilarityViewComponent implements OnChanges {
   viewJplagReport(similarity: TaskSimilarity) {
     // Students are identified by their username in JPlag reports (configured by API)
     // In most cases, usernames are a combination of their first and last names
+    this.loadingJplagReportFor = similarity;
     this.fileDownloaderService.downloadBlob(
       this.task.definition.getJplagReportUrl(),
-      (_, response: HttpResponse<Blob>) => {
-        // Open JPlag report viewer in embedded iframe
-        setTimeout(() => {
-          this.jplagViewer.uploadReport(response.body);
-          setTimeout(() => {
-            // Open comparison between the two students
-            this.jplagViewer.openComparison(
+      (url: string) => {
+        // Reports over 10 MB arrive in ranged parts; only the stitched url holds them all
+        fetch(url)
+          .then((response) => response.blob())
+          .then((report) => {
+            this.fileDownloaderService.releaseBlob(url);
+            return this.jplagViewer.openComparison(
+              report,
               similarity.task.project.student.username,
               similarity.otherStudent.username,
             );
+          })
+          .then(() => {
             this.jplagOpenState = true;
-          }, 100);
-        }, 100);
+            this.loadingJplagReportFor = null;
+          })
+          .catch((error) => {
+            console.error(error);
+            this.loadingJplagReportFor = null;
+          });
       },
       (error) => {
         console.error(error);
+        this.loadingJplagReportFor = null;
       },
     );
   }

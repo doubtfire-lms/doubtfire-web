@@ -1,4 +1,5 @@
-import { HumanizedDatePipe } from './humanized-date.pipe';
+import {describe, expect, it} from 'vitest';
+import {HumanizedDatePipe} from './humanized-date.pipe';
 
 describe('HumanizedDatePipe', () => {
   it('create an instance', () => {

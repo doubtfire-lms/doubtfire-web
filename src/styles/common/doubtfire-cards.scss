@@ -1,8 +1,0 @@
-
-@mixin doubtfire-card {
-  border-radius: 10px;
-}
-
-.mat-mdc-card.danger-card {
-  @include doubtfire-card();
-}

@@ -18,7 +18,7 @@ export class OverseerStepResult extends Entity {
   expectedOutputSha256: string;
   feedbackMessage: string;
 
-  constructor(oa?: OverseerAssessment, os?: OverseerStep) {
+  constructor(oa?: OverseerAssessment, _os?: OverseerStep) {
     super();
     this.overseerAssessment = oa;
     // this.overseerStep = os;

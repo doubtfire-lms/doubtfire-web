@@ -54,15 +54,3 @@ th.mat-mdc-header-cell:last-of-type {
 .mat-column-capacity {
   max-width: 80px;
 }
-
-.edit-actions {
-  display: flex;
-  flex-direction: column;
-  button {
-    margin-left: auto;
-  }
-}
-.data-entry {
-  padding: 1rem 1rem 1rem 0;
-  width: 95%;
-}

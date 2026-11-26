@@ -1,15 +1,16 @@
+import {PDFDocumentProxy, PdfViewerComponent} from 'ng2-pdf-viewer';
 import {HttpResponse} from '@angular/common/http';
 import {
-  AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   Inject,
   Input,
   OnChanges,
   OnDestroy,
+  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {PDFDocumentProxy, PdfViewerComponent} from 'ng2-pdf-viewer';
 import {FileDownloaderService} from '../file-downloader/file-downloader.service';
 import {AlertService} from '../services/alert.service';
 
@@ -17,8 +18,10 @@ import {AlertService} from '../services/alert.service';
   selector: 'f-pdf-viewer',
   templateUrl: './pdf-viewer.component.html',
   styleUrls: ['./pdf-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit {
+export class fPdfViewerComponent implements OnDestroy, OnChanges, OnInit {
   private readonly ZOOM_MIN = 0.5;
   private readonly ZOOM_MAX = 2.5;
 
@@ -44,13 +47,18 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   ) {}
 
   ngOnDestroy(): void {
-    if (this.pdfBlobUrl) {
-      this.fileDownloader.releaseBlob(this.pdfBlobUrl);
-      this.pdfBlobUrl = null;
-    }
+    this.releaseOwnBlob();
   }
 
-  ngAfterViewInit(): void {
+  // Blob URLs passed in belong to the caller, so only release ones this viewer downloaded
+  private releaseOwnBlob(): void {
+    if (this.pdfBlobUrl && this.pdfBlobUrl !== this._pdfUrl) {
+      this.fileDownloader.releaseBlob(this.pdfBlobUrl);
+    }
+    this.pdfBlobUrl = null;
+  }
+
+  ngOnInit(): void {
     this.useNativePdfViewer = localStorage.getItem('useNativePdfViewer') === 'true';
     const storedZoomValue = parseFloat(localStorage.getItem('pdfViewerZoom')) || 1;
     // Clamp zoom value between ZOOM_MIN and ZOOM_MAX
@@ -64,10 +72,7 @@ export class fPdfViewerComponent implements OnDestroy, OnChanges, AfterViewInit 
   pdfUrlChanges(value: string): void {
     if (this._pdfUrl !== value) {
       // Free the memory used by the old PDF blob
-      if (this.pdfBlobUrl) {
-        this.fileDownloader.releaseBlob(this.pdfBlobUrl);
-        this.pdfBlobUrl = null;
-      }
+      this.releaseOwnBlob();
 
       // Get the new blob
       this._pdfUrl = value;

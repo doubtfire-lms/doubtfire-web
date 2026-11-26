@@ -1,12 +1,13 @@
 .category-tab-group .mat-mdc-tab-header {
-  --mdc-secondary-navigation-tab-container-height: 40px;
+  --mat-tab-container-height: 40px;
 }
 
 .template-search .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
   height: 0px;
 }
 
-.template-search .mat-mdc-text-field-wrapper, .template-search .mat-mdc-form-field {
+.template-search .mat-mdc-text-field-wrapper,
+.template-search .mat-mdc-form-field {
   height: 40px;
 }
 

@@ -1,24 +1,32 @@
-import {Component, ViewChild} from '@angular/core';
-import {MatTableDataSource, MatTable} from '@angular/material/table';
-import {ActivityType, ActivityTypeService} from 'src/app/api/models/doubtfire-model';
-import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ViewChild} from '@angular/core';
 import {UntypedFormControl, Validators} from '@angular/forms';
 import {MatSort, Sort} from '@angular/material/sort';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {finalize} from 'rxjs';
+import {ActivityType, ActivityTypeService} from 'src/app/api/models/doubtfire-model';
+import {EntityFormComponent} from 'src/app/common/entity-form/entity-form.component';
 import {AlertService} from 'src/app/common/services/alert.service';
 
 @Component({
   selector: 'activity-type-list',
   templateUrl: 'activity-type-list.component.html',
   styleUrls: ['activity-type-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
-export class ActivityTypeListComponent extends EntityFormComponent<ActivityType> {
-  @ViewChild(MatTable, {static: true}) table: MatTable<any>;
+export class ActivityTypeListComponent
+  extends EntityFormComponent<ActivityType>
+  implements AfterViewInit
+{
+  @ViewChild(MatTable, {static: true}) table: MatTable<ActivityType>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   // Set up the table
   columns: string[] = ['name', 'abbreviation', 'options'];
   activityTypes: ActivityType[] = new Array<ActivityType>();
   dataSource = new MatTableDataSource(this.activityTypes);
+  loadingActivities = true;
+  skeletonRows = Array.from({length: 3}, (_, index) => index);
 
   // Calls the parent's constructor, passing in an object
   // that maps all of the form controls that this form consists of.
@@ -37,9 +45,13 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
 
   ngAfterViewInit() {
     // Get all the activity types and add them to the table
-    this.activityTypeService.query().subscribe((activityTypes) => {
-      this.pushToTable(activityTypes);
-    });
+    this.loadingActivities = true;
+    this.activityTypeService
+      .query()
+      .pipe(finalize(() => (this.loadingActivities = false)))
+      .subscribe((activityTypes) => {
+        this.pushToTable(activityTypes);
+      });
   }
 
   // This method is passed to the submit method on the parent
@@ -53,8 +65,14 @@ export class ActivityTypeListComponent extends EntityFormComponent<ActivityType>
   // Push the values that will be displayed in the table
   // to the datasource
   private pushToTable(value: ActivityType | ActivityType[]) {
-    if (!value) return;
-    value instanceof Array ? this.activityTypes.push(...value) : this.activityTypes.push(value);
+    if (!value) {
+      return;
+    }
+    if (value instanceof Array) {
+      this.activityTypes.push(...value);
+    } else {
+      this.activityTypes.push(value);
+    }
     this.dataSource.sort = this.sort;
     this.table.renderRows();
   }

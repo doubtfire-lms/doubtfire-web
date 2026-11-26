@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
-
-import { ConfettiService } from './confetti.service';
+import {beforeEach, describe, expect, it} from 'vitest';
+import {TestBed} from '@angular/core/testing';
+import {ConfettiService} from './confetti.service';
 
 describe('ConfettiService', () => {
   let service: ConfettiService;

@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Upload Batch Feedback Zip &mdash; {{ taskLabel }}</h2>
+
+<mat-dialog-content class="flex flex-col gap-2.5">
+  <div class="flex items-start gap-2">
+    <mat-icon class="mt-px">fact_check</mat-icon>
+    <div>
+      <p class="m-0">
+        Prepare a batch feedback zip for <span>{{ taskLabel }}</span
+        >.
+      </p>
+      <p class="m-0">
+        Include a <code>marks.csv</code> file and a folder for each student using their username.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <p class="m-0">Each username folder should contain a PDF named after the student username.</p>
+    <p class="m-0">We expect files to follow the pattern <code>username/username.pdf</code>.</p>
+  </div>
+
+  <div>
+    <p class="m-0">marks.csv Columns</p>
+    <p class="m-0">
+      <code>Student Username</code> | <code>Student ID</code> | <code>Status</code> |
+      <code>Comment</code>
+    </p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button color="primary" mat-flat-button type="button" (click)="continueToUpload()">
+    Upload Zip
+  </button>
+  <button mat-button type="button" (click)="close()">Close</button>
+</mat-dialog-actions>

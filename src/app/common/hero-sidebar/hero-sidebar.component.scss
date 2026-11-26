@@ -35,8 +35,20 @@
   }
 
   .pattern {
-    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 0, 0, 1)), from(rgba(0, 0, 0, 0)));
-    mask-image: -webkit-gradient(linear, left top, left bottom, to(rgba(0, 0, 0, 1)), from(rgba(0, 0, 0, 0)));
+    -webkit-mask-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      to(rgba(0, 0, 0, 1)),
+      from(rgba(0, 0, 0, 0))
+    );
+    mask-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      to(rgba(0, 0, 0, 1)),
+      from(rgba(0, 0, 0, 0))
+    );
     transition: 4s linear all;
     background-color: #e5e5f7;
     opacity: 1;

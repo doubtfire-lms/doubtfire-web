@@ -4,7 +4,7 @@ services:
     container_name: web-doubtfire-api
     image: lmsdoubtfire/doubtfire-api:7.0-dev
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - ../data/tmp:/doubtfire/tmp
       - ../data/student-work:/student-work
@@ -74,8 +74,8 @@ services:
     build: .
     command: /bin/bash -c 'npm install; npm start'
     ports:
-      - "4200:4200"
-      - "9876:9876"
+      - '4200:4200'
+      - '9876:9876'
     depends_on:
       - doubtfire-api
     volumes:

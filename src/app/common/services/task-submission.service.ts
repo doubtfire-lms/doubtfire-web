@@ -1,15 +1,15 @@
-import {Injectable, Inject} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
-  Task,
   OverseerAssessment,
   OverseerAssessmentService,
   OverseerImage,
   OverseerImageService,
+  Task,
 } from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 export interface TaskAssessmentResult {
   id?: number;
@@ -25,6 +25,15 @@ export interface TestResult {
   id: number;
   test_name?: string;
   is_successful: boolean;
+}
+
+export interface TaskAssessmentResponse {
+  result: string;
+}
+
+export interface SubmissionResult {
+  label: string;
+  result: string;
 }
 
 export interface DockerImageInfo {
@@ -50,22 +59,25 @@ export class TaskSubmissionService {
     private overseerAssessmentService: OverseerAssessmentService,
   ) {}
 
-  public getLatestTaskAssessment(taskInfo: Task): Observable<any> {
+  public getLatestTaskAssessment(taskInfo: Task): Observable<TaskAssessmentResponse> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${
       taskInfo.project.id
     }/task_def_id/${taskInfo.definition.id}/submissions/latest`;
-    return this.http.get<any>(url);
+    return this.http.get<TaskAssessmentResponse>(url);
   }
 
   public getLatestSubmissionsTimestamps(taskInfo: Task): Observable<OverseerAssessment[]> {
     return this.overseerAssessmentService.queryForTask(taskInfo);
   }
 
-  public getSubmissionByTimestamp(taskInfo: Task, timestamp: string): Observable<any> {
+  public getSubmissionByTimestamp(
+    taskInfo: Task,
+    timestamp: string,
+  ): Observable<SubmissionResult[]> {
     const url = `${AppInjector.get(DoubtfireConstants).API_URL}/projects/${
       taskInfo.project.id
     }/task_def_id/${taskInfo.definition.id}/submissions/timestamps/${timestamp}`;
-    return this.http.get<any>(url);
+    return this.http.get<SubmissionResult[]>(url);
   }
 
   public getDockerImages(): Observable<OverseerImage[]> {

@@ -1,24 +1,34 @@
-<div id="overflowContainer">
+<div class="mr-3.5 flex justify-end gap-0.5" id="overflowContainer">
   <!-- <button type="button" (click)="react()" matTooltip="React to this comment" mat-icon-button
     aria-label="React to this comment">
     <mat-icon>tag_faces</mat-icon>
   </button> -->
   <mat-icon
-    type="button"
-    (click)="reply()"
+    aria-label="Example icon-button with a heart icon"
     matTooltip="Reply to this comment"
     matTooltipPosition="above"
-    aria-label="Example icon-button with a heart icon"
+    type="button"
+    (click)="reply()"
   >
     reply</mat-icon
   >
   <mat-icon
+    aria-label="Edit this comment"
+    matTooltip="Edit this comment"
+    matTooltipPosition="above"
     type="button"
-    (click)="delete()"
+    [hidden]="!comment.currentUserCanEdit"
+    (click)="edit()"
+  >
+    edit</mat-icon
+  >
+  <mat-icon
+    aria-label="Example icon-button with a heart icon"
     matTooltip="Delete this comment"
     matTooltipPosition="above"
-    aria-label="Example icon-button with a heart icon"
-    [hidden]="!comment.currentUserCanEdit"
+    type="button"
+    [hidden]="!comment.currentUserCanDelete"
+    (click)="delete()"
   >
     delete</mat-icon
   >

@@ -46,7 +46,7 @@ export class FileDownloaderService {
 
           // Check the start is the same as the length of the binary data received
           if (start !== data.binaryData.map((value) => value.size).reduce((pv, cv) => pv + cv, 0)) {
-            console.log('Error: start != oldLen');
+            console.error('Downloaded file part was received out of order');
             this.alerts.error('Error downloading file part received out of order');
           }
           data.binaryData.push(data.response.body);
@@ -62,7 +62,9 @@ export class FileDownloaderService {
                   this.processHttpResponse(data);
                 },
                 error: (error) => {
-                  if (data.failure) data.failure(error);
+                  if (data.failure) {
+                    data.failure(error);
+                  }
                 },
               });
             return;
@@ -74,8 +76,11 @@ export class FileDownloaderService {
       }
     } else {
       // no range... so we can't do anything!
-      console.log('Error reading response from server - no range with 206 response');
-      if (data.failure) data.failure('Unable to read data from server');
+      console.error('Error reading response from server - no range with 206 response');
+      this.alerts.error('Unable to read data from server');
+      if (data.failure) {
+        data.failure('Unable to read data from server');
+      }
     }
   }
 
@@ -116,7 +121,9 @@ export class FileDownloaderService {
         });
       },
       error: (error) => {
-        if (failure) failure(error);
+        if (failure) {
+          failure(error);
+        }
       },
     });
   }
@@ -147,13 +154,13 @@ export class FileDownloaderService {
     this.downloadBlob(
       url,
       (resourceUrl: string, response: HttpResponse<Blob>) => {
-        const filenameRegex = /filename[^;=\n]*=((['']).*?\2|[^;\n]*)/;
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
 
         const matches = filenameRegex.exec(response.headers.get('Content-Disposition'));
         let filename: string;
 
         if (matches != null && matches[1]) {
-          filename = matches[1].replace(/['']/g, '');
+          filename = matches[1].trim().replace(/^(['"])(.*)\1$/, '$2');
         } else {
           filename = defaultFilename;
         }
@@ -164,5 +171,26 @@ export class FileDownloaderService {
         this.alerts.error(`Error downloading file - ${error}`);
       },
     );
+  }
+
+  /**
+   * Start a browser-managed download after Rails has issued a short-lived,
+   * HTTP-only access cookie. Unlike the Blob downloader, this streams directly
+   * to disk and appears in the browser's Downloads UI immediately.
+   */
+  public downloadNativeFile(url: string): void {
+    this.httpClient.post<void>(`${url}/access`, null).subscribe({
+      next: () => {
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.setAttribute('download', '');
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        downloadLink.remove();
+      },
+      error: (error) => {
+        this.alerts.error(`Error starting download - ${error}`);
+      },
+    });
   }
 }

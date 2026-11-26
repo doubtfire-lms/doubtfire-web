@@ -1,8 +1,15 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { FileDownloaderService } from '../file-downloader/file-downloader.service';
-import { HttpResponse } from '@angular/common/http';
-import { PDFProgressData } from 'ng2-pdf-viewer';
-import { AlertService } from '../services/alert.service';
+import {PDFProgressData} from 'ng2-pdf-viewer';
+import {HttpResponse} from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges,
+} from '@angular/core';
+import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {AlertService} from '../services/alert.service';
 
 /**
  * The file viewer downloads a file from a URL and displays it's contents.
@@ -11,6 +18,8 @@ import { AlertService } from '../services/alert.service';
   selector: 'f-file-viewer',
   templateUrl: './file-viewer.component.html',
   styleUrls: ['./file-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class FileViewerComponent implements OnDestroy, OnChanges {
   /**
@@ -50,7 +59,10 @@ export class FileViewerComponent implements OnDestroy, OnChanges {
    * @param fileDownloader is used to download the resources from the api
    * @param alerts is used to render alerts
    */
-  constructor(private fileDownloader: FileDownloaderService, private alertService: AlertService) {}
+  constructor(
+    private fileDownloader: FileDownloaderService,
+    private alertService: AlertService,
+  ) {}
 
   /**
    * When destroyed, the component must free its resources.
@@ -98,12 +110,12 @@ export class FileViewerComponent implements OnDestroy, OnChanges {
   private downloadBlob(downloadUrl: string): void {
     this.fileDownloader.downloadBlob(
       downloadUrl,
-      (url: string, response: HttpResponse<Blob>) => {
+      (url: string, _response: HttpResponse<Blob>) => {
         this.blobUrl = url;
       },
-      (error: any) => {
+      (error: Error) => {
         this.alertService.error(`Error downloading resource. ${error}`);
-      }
+      },
     );
   }
 

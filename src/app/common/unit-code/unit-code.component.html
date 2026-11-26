@@ -1,10 +1,5 @@
 <f-chip>
-  <div
-
-    [style.minWidth.px]="width"
-    [ngClass]="{'justify-between': isDropdown, 'justify-center': !isDropdown}"
-    class="flex flex-row items-center"
-  >
+  <div class="flex flex-row items-center justify-center px-2" [style.minWidth.px]="width">
     @if (isDualBadge && shiftBetweenBadges) {
       @for (part of unitCodeParts; track part; let i = $index) {
         @if (i === currentIndex) {

@@ -1,0 +1,85 @@
+<div id="docxContainer">
+  <!-- Floats over the document, so the tools take no height of their own. -->
+  <div class="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-start p-2">
+    <div class="pointer-events-auto mr-auto flex" [hidden]="!documentBlob">
+      <button
+        aria-label="Switch viewer"
+        class="rounded-full bg-transparent transition-colors duration-150 hover:bg-gray-200 focus-visible:bg-gray-200"
+        mat-icon-button
+        (click)="toggleReadingView()"
+      >
+        @if (useReadingView) {
+          <mat-icon>toggle_on</mat-icon>
+        } @else {
+          <mat-icon>toggle_off</mat-icon>
+        }
+      </button>
+    </div>
+    <div class="pointer-events-auto ml-auto" [hidden]="isLoading || errorMessage">
+      @if (searchOpen) {
+        <form
+          class="search-bar flex w-80 justify-end overflow-hidden rounded-full bg-white shadow-md transition-[width,opacity] duration-200 ease-out starting:w-10 starting:opacity-0"
+          (focusout)="onSearchFocusOut($event)"
+          (keydown.escape)="closeSearch()"
+          (ngSubmit)="findNextDocxMatch()"
+        >
+          <mat-form-field
+            appearance="outline"
+            class="w-80 shrink-0"
+            floatLabel="auto"
+            subscriptSizing="dynamic"
+          >
+            <mat-icon matPrefix>search</mat-icon>
+            <input
+              #searchInput
+              matInput
+              name="docxSearchString"
+              placeholder="Search DOCX"
+              type="text"
+              [(ngModel)]="docxSearchString"
+              (ngModelChange)="searchDocx(docxSearchString)"
+            />
+
+            <button
+              aria-label="Zoom out Word document"
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="zoomOut()"
+            >
+              <mat-icon>zoom_out</mat-icon>
+            </button>
+            <button
+              aria-label="Zoom in Word document"
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="zoomIn()"
+            >
+              <mat-icon>zoom_in</mat-icon>
+            </button>
+          </mat-form-field>
+        </form>
+      } @else {
+        <button
+          aria-label="Search and zoom"
+          class="rounded-full bg-transparent transition-colors duration-150 hover:bg-gray-200 focus-visible:bg-gray-200"
+          mat-icon-button
+          (click)="openSearch()"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      }
+    </div>
+  </div>
+  @if (errorMessage) {
+    <div class="flex min-h-[350px] w-full flex-1 items-center justify-center px-4 text-slate-600">
+      {{ errorMessage }}
+    </div>
+  } @else if (isLoading) {
+    <mat-spinner color="accent" diameter="100" strokeWidth="2"></mat-spinner>
+  }
+  <div class="docx-preview-container" [hidden]="isLoading || errorMessage">
+    <div #documentContainer [style.zoom]="zoomValue"></div>
+  </div>
+</div>

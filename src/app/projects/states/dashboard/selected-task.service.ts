@@ -5,13 +5,14 @@ import {TaskService} from 'src/app/api/services/task.service';
 import {GlobalStateService} from '../index/global-state.service';
 
 export enum DashboardViews {
+  details,
   submission,
   task,
   similarity,
   staff_notes,
   tutor_notes,
   discussion_prompts,
-  overseer,
+  submission_history,
 }
 
 @Injectable({
@@ -23,10 +24,12 @@ export class SelectedTaskService {
     private globalState: GlobalStateService,
   ) {}
 
-  private task$ = new BehaviorSubject<Task>(null);
-  public currentPdfUrl$ = new BehaviorSubject<string>(null);
+  private task$: BehaviorSubject<Task> = new BehaviorSubject(null);
+  public currentPdfUrl$: BehaviorSubject<string> = new BehaviorSubject(null);
 
-  public currentView$ = new BehaviorSubject<DashboardViews>(DashboardViews.submission);
+  public currentView$: BehaviorSubject<DashboardViews> = new BehaviorSubject(
+    DashboardViews.submission,
+  );
 
   public get hasTaskSheet(): boolean {
     return this.task$.value?.definition?.hasTaskSheet;
@@ -49,6 +52,13 @@ export class SelectedTaskService {
       this.taskService.get(task).subscribe(this.task$);
     } else {
       this.task$.next(task);
+
+      if (!task) {
+        this.currentPdfUrl$.next(null);
+        this.currentView$.next(DashboardViews.submission);
+        this.checkFooterHeight();
+        return;
+      }
 
       task?.getSubmissionDetails().subscribe();
     }
@@ -74,7 +84,11 @@ export class SelectedTaskService {
   }
 
   public showOverseerReports() {
-    this.currentView$.next(DashboardViews.overseer);
+    this.currentView$.next(DashboardViews.submission_history);
+  }
+
+  public showSubmissionHistory() {
+    this.currentView$.next(DashboardViews.submission_history);
   }
 
   public showDiscussionPrompts() {
@@ -82,7 +96,9 @@ export class SelectedTaskService {
   }
 
   public showSubmission() {
-    if (!this.task$.value) return;
+    if (!this.task$.value) {
+      return;
+    }
     this.currentPdfUrl$.next(this.task$.value.submissionUrl(false));
     this.currentView$.next(DashboardViews.submission);
   }

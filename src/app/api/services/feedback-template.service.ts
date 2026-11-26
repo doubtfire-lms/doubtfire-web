@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
 import {CachedEntityService} from 'ngx-entity-service';
-import {FeedbackTemplate} from '../models/feedback-template';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import API_URL from 'src/app/config/constants/apiUrl';
+import {FeedbackTemplate} from '../models/feedback-template';
 
 @Injectable()
 export class FeedbackTemplateService extends CachedEntityService<FeedbackTemplate> {
@@ -29,7 +29,7 @@ export class FeedbackTemplateService extends CachedEntityService<FeedbackTemplat
     this.mapping.mapAllKeysToJsonExcept('id');
   }
 
-  public override createInstanceFrom(json: object, other?: any): FeedbackTemplate {
+  public override createInstanceFrom(_json: object): FeedbackTemplate {
     return new FeedbackTemplate();
   }
 }

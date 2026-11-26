@@ -1,22 +1,30 @@
-import {Component, OnInit, Input, Inject} from '@angular/core';
-import {AlertService} from '../../services/alert.service';
+import {ChangeDetectionStrategy, Component, Inject, Input, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {AlertService} from '../../services/alert.service';
 
 export interface ConfirmationModalData {
   title: string;
   message: string;
-  action?: any;
+  action?: () => void;
+  cancelAction?: () => void;
+  confirmText?: string;
+  cancelText?: string;
 }
 
 @Component({
   selector: 'confirmation-modal',
   templateUrl: './confirmation-modal.component.html',
   styleUrls: ['./confirmation-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class ConfirmationModalComponent implements OnInit {
   @Input() title: string;
   @Input() message: string;
   @Input() action: () => void;
+  @Input() cancelActionFn: () => void;
+  @Input() confirmText: string;
+  @Input() cancelText: string;
 
   constructor(
     @Inject(AlertService) private alertService: AlertService,
@@ -29,6 +37,9 @@ export class ConfirmationModalComponent implements OnInit {
     this.title = this.data.title;
     this.message = this.data.message;
     this.action = this.data.action;
+    this.cancelActionFn = this.data.cancelAction;
+    this.confirmText = this.data.confirmText ?? 'Confirm';
+    this.cancelText = this.data.cancelText ?? 'Cancel';
   }
 
   public confirmAction() {
@@ -41,7 +52,11 @@ export class ConfirmationModalComponent implements OnInit {
   }
 
   public cancelAction() {
-    this.alertService.success(`${this.title} action cancelled.`);
+    if (typeof this.cancelActionFn === 'function') {
+      this.cancelActionFn();
+    } else {
+      this.alertService.success(`${this.title} action cancelled.`);
+    }
     this.dialogRef.close();
   }
 }

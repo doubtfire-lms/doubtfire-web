@@ -1,0 +1,47 @@
+<mat-card appearance="outlined" class="p-4">
+  <mat-card-header>
+    <mat-card-title>Target grade changes</mat-card-title>
+    <mat-card-subtitle>
+      Net weekly change in how many students picked each target grade; individual moves are
+      estimated. Filtered by campus only.
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  @if (hasChartData) {
+    <div class="px-3 pt-2">
+      <div class="flex justify-between pt-6">
+        @for (week of weeks; track week) {
+          <div class="text-xs">{{ week }}</div>
+        }
+      </div>
+      <div class="h-150">
+        <ng-charts-sankey
+          [animations]="false"
+          [gradient]="false"
+          [labelFormatting]="formatNodeLabel"
+          [results]="data"
+          [scheme]="$any(colorScheme)"
+          [showLabels]="true"
+          [tooltipDisabled]="false"
+          [truncateLabels]="false"
+        >
+          <ng-template #tooltipTemplate let-model="model">
+            <div>{{ formatTooltip(model) }}</div>
+            <div>{{ model.value }} students</div>
+            @if (model.source) {
+              <div>{{ formatTooltipPercentage(model) }}</div>
+            }
+          </ng-template>
+        </ng-charts-sankey>
+      </div>
+    </div>
+  } @else if (snapshots.length) {
+    <div class="flex h-40 items-center justify-center text-slate-600">
+      Needs at least two weeks of snapshots.
+    </div>
+  } @else {
+    <div class="flex h-125 items-center justify-center">
+      <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+    </div>
+  }
+</mat-card>

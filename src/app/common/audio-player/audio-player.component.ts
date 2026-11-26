@@ -1,21 +1,34 @@
-import { HttpResponse } from '@angular/common/http';
-import { Component, Inject, Input, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { Project, Task, TaskComment } from 'src/app/api/models/doubtfire-model';
-import { FileDownloaderService } from '../file-downloader/file-downloader.service';
-import { AlertService } from '../services/alert.service';
+import {HttpResponse} from '@angular/common/http';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import {Project, Task, TaskComment} from 'src/app/api/models/doubtfire-model';
+import {FileDownloaderService} from '../file-downloader/file-downloader.service';
+import {AlertService} from '../services/alert.service';
 
 @Component({
   selector: 'audio-player',
   templateUrl: './audio-player.component.html',
   styleUrls: ['./audio-player.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class AudioPlayerComponent implements OnDestroy {
   @Input() project: Project;
   @Input() task: Task;
   @Input() comment: TaskComment;
-  @Input() audioSrc: { src: string };
+  @Input() audioSrc: {src: string};
+  @Output() playingChange: EventEmitter<boolean> = new EventEmitter();
 
-  @ViewChild('progressBar', { read: ElementRef }) private progressBar: ElementRef;
+  @ViewChild('progressBar', {read: ElementRef}) private progressBar: ElementRef;
 
   private isLoaded = false;
   public isPlaying = false;
@@ -33,12 +46,13 @@ export class AudioPlayerComponent implements OnDestroy {
 
     this.audio.onended = () => {
       this.isPlaying = false;
+      this.playingChange.emit(false);
     };
   }
 
   ngOnDestroy(): void {
     // Clean up the blob
-    if ( this.audio.src ) {
+    if (this.audio.src) {
       this.fileDownloader.releaseBlob(this.audio.src);
     }
   }
@@ -59,9 +73,12 @@ export class AudioPlayerComponent implements OnDestroy {
 
   public setSrc(src: string) {
     // If there was an old blob, then free the memory it uses
-    if ( this.audio.src ) {
+    if (this.audio.src) {
       this.fileDownloader.releaseBlob(this.audio.src);
     }
+    this.isLoaded = true;
+    this.isPlaying = false;
+    this.playingChange.emit(false);
     this.audio.src = src;
     this.audio.load();
     this.audio.onloadeddata = () => {
@@ -83,12 +100,12 @@ export class AudioPlayerComponent implements OnDestroy {
 
       this.fileDownloader.downloadBlob(
         url,
-        ((blobUrl: string, response: HttpResponse<Blob>) => {
+        ((blobUrl: string, _response: HttpResponse<Blob>) => {
           this.isLoaded = true;
           this.setSrc(blobUrl);
           this.audio.src = blobUrl;
           this.audio.load();
-          if (onload) {
+          if (onLoad) {
             this.audio.onloadeddata = () => {
               fn();
             };
@@ -96,11 +113,29 @@ export class AudioPlayerComponent implements OnDestroy {
             fn();
           }
         }).bind(this),
-        ((error: any) => {
+        ((error: Error) => {
           this.alerts.error(`Error loading audio. ${error}`, 6000);
-        }).bind(this)
+        }).bind(this),
       );
     }
+  }
+
+  public play() {
+    this.execWithAudio(
+      true,
+      (() => {
+        this.audio.play();
+        this.isPlaying = true;
+        this.playingChange.emit(true);
+      }).bind(this),
+    );
+  }
+
+  public stop() {
+    this.audio.pause();
+    this.audio.currentTime = 0;
+    this.isPlaying = false;
+    this.playingChange.emit(false);
   }
 
   public pausePlay() {
@@ -108,13 +143,11 @@ export class AudioPlayerComponent implements OnDestroy {
       true,
       (() => {
         if (this.audio.paused) {
-          this.audio.play();
-          this.isPlaying = true;
+          this.play();
         } else {
-          this.audio.pause();
-          this.isPlaying = false;
+          this.stop();
         }
-      }).bind(this)
+      }).bind(this),
     );
   }
 }

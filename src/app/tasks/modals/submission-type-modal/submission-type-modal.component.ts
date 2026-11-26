@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Task} from 'src/app/api/models/task';
 import {TaskStatusEnum} from 'src/app/api/models/task-status';
@@ -11,9 +11,15 @@ export interface SubmissionTypeModalData {
   selector: 'f-submission-type-modal',
   templateUrl: './submission-type-modal.component.html',
   styleUrls: ['./submission-type-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class SubmissionTypeModalComponent {
   selectedTransition: 'ready_for_feedback' | 'assess_in_portfolio' = null;
+
+  public get isPastFeedbackDeadline(): boolean {
+    return Date.now() > this.data.task.localDeadlineDate().getTime();
+  }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: SubmissionTypeModalData,
@@ -21,6 +27,10 @@ export class SubmissionTypeModalComponent {
   ) {}
 
   public selectRff() {
+    if (this.isPastFeedbackDeadline) {
+      return;
+    }
+
     this.selectedTransition = 'ready_for_feedback';
   }
 
@@ -29,7 +39,10 @@ export class SubmissionTypeModalComponent {
   }
 
   public submit() {
-    if (this.selectedTransition === null) {
+    if (
+      this.selectedTransition === null ||
+      (this.selectedTransition === 'ready_for_feedback' && this.isPastFeedbackDeadline)
+    ) {
       return;
     }
 

@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
 import {CachedEntityService} from 'ngx-entity-service';
-import API_URL from 'src/app/config/constants/apiUrl';
-import {Task, TestAttempt} from 'src/app/api/models/doubtfire-model';
-import {Observable} from 'rxjs';
-import {AppInjector} from 'src/app/app-injector';
-import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
-import {AlertService} from 'src/app/common/services/alert.service';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Task, TestAttempt} from 'src/app/api/models/doubtfire-model';
+import {AppInjector} from 'src/app/app-injector';
+import {AlertService} from 'src/app/common/services/alert.service';
+import API_URL from 'src/app/config/constants/apiUrl';
+import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
 
 @Injectable()
 export class TestAttemptService extends CachedEntityService<TestAttempt> {

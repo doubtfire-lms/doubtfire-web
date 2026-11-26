@@ -1,11 +1,32 @@
-import {UnitRole, UnitService, User} from 'src/app/api/models/doubtfire-model';
-import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
-import {Injectable} from '@angular/core';
+import {CachedEntityService} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
-import API_URL from 'src/app/config/constants/apiUrl';
+import {Injectable} from '@angular/core';
+import {Observable, map} from 'rxjs';
+import {UnitRole, UnitService, User} from 'src/app/api/models/doubtfire-model';
 import {AppInjector} from 'src/app/app-injector';
-import {AuthenticationService} from './authentication.service';
-import {Observable, tap} from 'rxjs';
+import API_URL from 'src/app/config/constants/apiUrl';
+
+interface UnitMembershipResponse {
+  kind: 'staff' | 'student';
+  unit_id: number;
+  unit_code: string;
+  unit_name: string;
+  teaching_period_name: string | null;
+  active: boolean;
+  role: string;
+  project_id?: number;
+}
+
+export interface UserUnitMembership {
+  kind: 'staff' | 'student';
+  unitId: number;
+  unitCode: string;
+  unitName: string;
+  teachingPeriodName: string | null;
+  active: boolean;
+  role: string;
+  projectId?: number;
+}
 
 @Injectable()
 export class UserService extends CachedEntityService<User> {
@@ -14,8 +35,8 @@ export class UserService extends CachedEntityService<User> {
 
   public readonly csvURL: string;
 
-  constructor(httpClient: HttpClient) {
-    super(httpClient, API_URL);
+  constructor(private readonly unitMembershipHttpClient: HttpClient) {
+    super(unitMembershipHttpClient, API_URL);
 
     this.csvURL = API_URL + '/csv/users';
 
@@ -29,12 +50,15 @@ export class UserService extends CachedEntityService<User> {
       'username',
       'nickname',
       'systemRole',
+      'observeAllUnits',
       'receiveTaskNotifications',
       'receivePortfolioNotifications',
       'receiveFeedbackNotifications',
       'hasRunFirstTimeSetup',
       'pronouns',
       'acceptedTiiEula',
+      'timezone',
+      'autoTimezone',
     );
 
     this._currentUser = this.anonymousUser;
@@ -76,14 +100,38 @@ export class UserService extends CachedEntityService<User> {
     return this.query(undefined, {endpointFormat: this.tutorEndpointFormat});
   }
 
+  public getUnitMemberships(userId: number): Observable<UserUnitMembership[]> {
+    return this.unitMembershipHttpClient
+      .get<UnitMembershipResponse[]>(`${API_URL}/users/${userId}/unit_memberships`)
+      .pipe(
+        map((memberships) =>
+          memberships.map((membership) => ({
+            kind: membership.kind,
+            unitId: membership.unit_id,
+            unitCode: membership.unit_code,
+            unitName: membership.unit_name,
+            teachingPeriodName: membership.teaching_period_name,
+            active: membership.active,
+            role: membership.role,
+            projectId: membership.project_id,
+          })),
+        ),
+      );
+  }
+
   public adminRoleFor(unitId: number, user: User): UnitRole {
     return this.adminOrAuditorRoleFor('Admin', unitId, user);
   }
 
-  public adminOrAuditorRoleFor(role: 'Admin' | 'Auditor', unitId: number, user: User): UnitRole {
+  public adminOrAuditorRoleFor(
+    role: 'Admin' | 'Auditor' | 'Convenor',
+    unitId: number,
+    user: User,
+  ): UnitRole {
     const result = new UnitRole();
     result.role = role;
     result.user = user;
+    result.observerOnly = role === 'Convenor';
 
     const unitService = AppInjector.get(UnitService);
     result.unit = unitService.cache.getOrCreate(unitId, unitService, {id: unitId});

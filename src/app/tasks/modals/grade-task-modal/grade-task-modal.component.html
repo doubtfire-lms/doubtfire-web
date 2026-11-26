@@ -1,0 +1,75 @@
+<mat-card class="w-125 px-4">
+  <mat-card-header>
+    <mat-card-title> Assess Task Quality </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <!-- For Grade Tasks -->
+    @if (task.definition.isGraded) {
+      <div class="grade-task-item">
+        <p>
+          Please provide a grade for task:
+          <span
+            class="ml-2 inline-flex size-10 items-center justify-center rounded-full bg-formatif-blue font-bold text-white"
+          >
+            {{ task.definition.abbreviation }}
+          </span>
+        </p>
+        <div class="flex justify-center">
+          <mat-button-toggle-group
+            #group="matButtonToggleGroup"
+            hideSingleSelectionIndicator="true"
+            [value]="selectedGrade"
+            [(ngModel)]="selectedGrade"
+          >
+            @for (idx of gradeValues; track idx) {
+              <mat-button-toggle
+                aria-describedby="This student completed the task to a {{
+                  gradeName(idx)
+                }} standard"
+                aria-label="Mark task as {{ gradeName(idx) }}"
+                class="p-2"
+                matTooltip="This student completed the task to a {{ gradeName(idx) }} standard"
+                [matTooltipShowDelay]="500"
+                [value]="idx"
+              >
+                <f-grade-icon [grade]="idx" [unit]="task.unit"></f-grade-icon>
+              </mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    }
+    <!-- For Quality Points Tasks -->
+    @if (task.definition.maxQualityPts > 0) {
+      <div class="pt-4">
+        <p>
+          Please provide a quality rating for task:
+          <span
+            class="ml-2 inline-flex size-10 items-center justify-center rounded-full bg-formatif-blue font-bold text-white"
+          >
+            {{ task.definition.abbreviation }}
+          </span>
+        </p>
+        <mat-slider class="w-full" [discrete]="true" [max]="totalRating" [min]="0" [step]="1">
+          <input matSliderThumb [ngModel]="rating" (ngModelChange)="updateRating($event)" />
+        </mat-slider>
+        <div class="flex justify-end">
+          <p>Rating: {{ rating }} / {{ totalRating }}</p>
+        </div>
+      </div>
+    }
+  </mat-card-content>
+  <mat-card-actions>
+    <div class="flex w-full justify-between">
+      <button mat-raised-button (click)="dismiss()">Dismiss</button>
+      <button
+        color="primary"
+        mat-raised-button
+        [disabled]="!isValid()"
+        [mat-dialog-close]="{grade: selectedGrade, qualityPts: rating}"
+      >
+        Submit
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>

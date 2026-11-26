@@ -1,22 +1,24 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
   ViewEncapsulation,
-  EventEmitter,
-  OnInit,
 } from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable} from 'rxjs';
+import {MatTabChangeEvent} from '@angular/material/tabs';
+import {BehaviorSubject, Observable, combineLatest, map} from 'rxjs';
 import {
-  LearningOutcome,
   FeedbackTemplate,
-  Task,
   FeedbackTemplateService,
+  LearningOutcome,
   LearningOutcomeService,
+  Task,
   TaskService,
 } from 'src/app/api/models/doubtfire-model';
 
@@ -25,24 +27,26 @@ import {
   styleUrl: './task-feedback-templates.component.scss',
   templateUrl: './task-feedback-templates.component.html',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @Input() task: Task;
-  @Output() templateSelected = new EventEmitter<FeedbackTemplate>();
+  @Output() templateSelected: EventEmitter<FeedbackTemplate> = new EventEmitter();
 
   categories = ['TLO', 'ULO', 'GLO'];
   selectedTemplates: FeedbackTemplate[] = [];
   hoveredTemplate: FeedbackTemplate;
 
-  private generalTemplatesSubject = new BehaviorSubject<FeedbackTemplate[]>([]);
+  private generalTemplatesSubject: BehaviorSubject<FeedbackTemplate[]> = new BehaviorSubject([]);
   generalTemplates$ = this.generalTemplatesSubject.asObservable();
 
-  private navigationStackSubject = new BehaviorSubject<Map<number, number[]>>(
+  private navigationStackSubject: BehaviorSubject<Map<number, number[]>> = new BehaviorSubject(
     new Map<number, number[]>(),
   );
   navigationStack$ = this.navigationStackSubject.asObservable();
 
-  private searchTermSubject = new BehaviorSubject<string>('');
+  private searchTermSubject: BehaviorSubject<string> = new BehaviorSubject('');
   searchTerm$ = this.searchTermSubject.asObservable();
 
   public genTemplates$ = combineLatest([this.generalTemplates$, this.searchTerm$]).pipe(
@@ -74,14 +78,14 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   constructor(
     private learningOutcomeService: LearningOutcomeService,
     private feedbackTemplateService: FeedbackTemplateService,
-    private taskService: TaskService,
+    public taskService: TaskService,
   ) {}
 
   ngOnInit(): void {
     const greetingTemplate = new FeedbackTemplate();
     greetingTemplate.type = 'template';
     greetingTemplate.chipText = 'Greeting';
-    greetingTemplate.description = 'Insert a greeting with the student\'s name.';
+    greetingTemplate.description = "Insert a greeting with the student's name.";
 
     const summaryTemplate = new FeedbackTemplate();
     summaryTemplate.type = 'template';
@@ -91,7 +95,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     this.generalTemplatesSubject.next([greetingTemplate, summaryTemplate]);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(_changes: SimpleChanges): void {
     this.selectedTemplates = [];
     this.navigationStackSubject.next(new Map<number, number[]>());
     this.searchTermSubject.next('');
@@ -158,7 +162,9 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
 
       templatesToDisplay.push(allTemplates.find((template) => template.id === groupId));
       allTemplates.forEach((template) => {
-        if (template.parentChipId === groupId) templatesToDisplay.push(template);
+        if (template.parentChipId === groupId) {
+          templatesToDisplay.push(template);
+        }
       });
     } else {
       templatesToDisplay = allTemplates.filter((template) => !template.parentChipId);
@@ -179,7 +185,7 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
   @ViewChild('uloSection') uloSection!: ElementRef;
   @ViewChild('gloSection') gloSection!: ElementRef;
 
-  scrollToSection(event: any) {
+  scrollToSection(event: MatTabChangeEvent) {
     const sections = [this.tloSection, this.uloSection, this.gloSection];
     const selectedSection = sections[event.index];
 
@@ -193,10 +199,14 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
       if (template.chipText === 'Greeting') {
         template.commentText = `Hi ${this.task.project.student.preferredName}. `;
       } else if (template.chipText === 'Summarise feedback') {
-        if (!this.selectedTemplates || this.selectedTemplates.length < 1) return;
+        if (!this.selectedTemplates || this.selectedTemplates.length < 1) {
+          return;
+        }
         template.commentText = 'Summary of the given feedback:';
         this.selectedTemplates.forEach((t) => {
-          if (!t.summaryText) return;
+          if (!t.summaryText) {
+            return;
+          }
           template.commentText += '\n- ' + t.summaryText;
         });
       } else {
@@ -208,8 +218,11 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
       const updatedStack = new Map(this.navigationStackSubject.getValue());
       const outcomeStack = updatedStack.get(template.learningOutcomeId) || [];
       const index = outcomeStack.indexOf(template.id);
-      if (index === -1) outcomeStack.push(template.id);
-      else outcomeStack.splice(index, 1);
+      if (index === -1) {
+        outcomeStack.push(template.id);
+      } else {
+        outcomeStack.splice(index, 1);
+      }
       updatedStack.set(template.learningOutcomeId, outcomeStack);
       this.navigationStackSubject.next(updatedStack);
     }
@@ -223,8 +236,11 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     const stack = this.navigationStackSubject.getValue();
     const outcomeStack = stack.get(template.learningOutcomeId) || [];
     const index = outcomeStack.indexOf(template.id);
-    if (index === -1) return false;
-    else return true;
+    if (index === -1) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   onHoverTemplate(template: FeedbackTemplate) {
@@ -235,7 +251,9 @@ export class TaskFeedbackTemplatesComponent implements OnInit, OnChanges {
     if (template.taskStatus && this.task.suggestedTaskStatus) {
       const currentSeq = this.taskService.statusSeq.get(this.task.suggestedTaskStatus);
       const templateSeq = this.taskService.statusSeq.get(template.taskStatus);
-      if (templateSeq < currentSeq) this.task.suggestedTaskStatus = template.taskStatus;
+      if (templateSeq < currentSeq) {
+        this.task.suggestedTaskStatus = template.taskStatus;
+      }
     } else {
       this.task.suggestedTaskStatus = template.taskStatus;
     }

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
-import {TaskAssessmentModalComponent} from './task-assessment-modal.component';
+import {MatDialog} from '@angular/material/dialog';
 import {Task} from 'src/app/api/models/task';
+import {TaskAssessmentModalComponent} from './task-assessment-modal.component';
 
 export interface TaskAssessmentModalData {
   task: Task;

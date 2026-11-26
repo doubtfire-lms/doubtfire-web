@@ -11,9 +11,11 @@
     -moz-box-shadow: none;
     box-shadow: none;
 
-    i {
+    mat-icon {
       font-size: 25px;
+      height: 25px;
       margin-left: -5px;
+      width: 25px;
     }
   }
 
@@ -22,7 +24,7 @@
   padding: 0%;
   width: 100%;
 
-  i {
+  mat-icon {
     color: white;
   }
 
