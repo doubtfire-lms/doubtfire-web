@@ -20,10 +20,16 @@
         <li>
           @if (task) {
             For my target grade, this task is
+            <a
+              class="cursor-pointer font-bold text-inherit no-underline hover:underline focus-visible:underline"
+              [queryParams]="{taskDef: taskDef.id}"
+              [routerLink]="['/projects', task.project.id, 'plan']"
+            >
+              due {{ dateWithOrdinal(targetGradeDueDate()) }}.
+            </a>
           } @else {
-            This task is
+            This task is <b>due {{ dateWithOrdinal(targetGradeDueDate()) }}.</b>
           }
-          <b>due {{ dateWithOrdinal(targetGradeDueDate()) }}.</b>
         </li>
         <br />
         <li>
