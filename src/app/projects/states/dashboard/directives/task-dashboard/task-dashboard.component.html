@@ -148,7 +148,11 @@
       }
       @case (DashboardViews.submission) {
         <div class="h-full">
-          @if (showSubmissionPdf && task.hasPdf) {
+          @if (!task.hasPdf) {
+            <div class="flex size-full flex-col items-center justify-center">
+              <mat-icon class="empty-state-icon">subtitles_off</mat-icon>
+            </div>
+          } @else if (showSubmissionPdf) {
             <div class="flex h-full min-h-0 flex-col">
               <button
                 class="w-full shrink-0"

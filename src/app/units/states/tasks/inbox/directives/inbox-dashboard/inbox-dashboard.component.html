@@ -74,7 +74,13 @@
       @switch (currentTab) {
         @case (InboxDashboardTab.submission) {
           <div class="h-full">
-            @if (showSubmissionPdf && task.hasPdf) {
+            @if (!task.hasPdf) {
+              <div class="flex h-full flex-col items-center justify-center">
+                <mat-icon class="size-[120px] text-[120px] text-[#c5c5c5]">
+                  description_off
+                </mat-icon>
+              </div>
+            } @else if (showSubmissionPdf) {
               <div class="flex h-full min-h-0 flex-col">
                 <button
                   class="w-full shrink-0"
