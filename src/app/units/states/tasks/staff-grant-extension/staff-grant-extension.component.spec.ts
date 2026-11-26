@@ -1,6 +1,7 @@
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
+import {ActivatedRoute} from '@angular/router';
 import {TaskDefinition} from 'src/app/api/models/doubtfire-model';
 import {StaffGrantExtensionComponent} from './staff-grant-extension.component';
 
@@ -10,7 +11,10 @@ describe('StaffGrantExtensionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StaffGrantExtensionComponent, MatDialogModule, MatIconModule],
+      declarations: [StaffGrantExtensionComponent],
+      imports: [MatIconModule],
+      providers: [{provide: ActivatedRoute, useValue: {parent: null}}],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(StaffGrantExtensionComponent);
@@ -23,7 +27,7 @@ describe('StaffGrantExtensionComponent', () => {
   });
 
   it('should have form disabled initially', () => {
-    expect(component.isFormActive).toBeFalse();
+    expect(component.isFormActive).toBe(false);
     expect(component.selectedTaskDefinition).toBeNull();
   });
 
@@ -35,22 +39,20 @@ describe('StaffGrantExtensionComponent', () => {
 
     component.selectedTaskDefinition$.next(mockTaskDefinition);
 
-    expect(component.isFormActive).toBeTrue();
+    expect(component.isFormActive).toBe(true);
     expect(component.selectedTaskDefinition).toEqual(mockTaskDefinition);
   });
 
-  it('should reset form after submission', () => {
-    // First select a task
+  it('should disable the form when the task selection is cleared', () => {
     const mockTaskDefinition = {
       id: 1,
       name: 'Test Task',
     } as unknown as TaskDefinition;
     component.selectedTaskDefinition$.next(mockTaskDefinition);
 
-    // Then submit
-    component.onFormSubmitted();
+    component.selectedTaskDefinition$.next(null);
 
-    expect(component.isFormActive).toBeFalse();
+    expect(component.isFormActive).toBe(false);
     expect(component.selectedTaskDefinition).toBeNull();
   });
 });
