@@ -3,11 +3,13 @@
   <div class="w-full mb-4">
     <mat-form-field appearance="fill" class="w-full">
       <mat-label>Search Students</mat-label>
-      <input matInput
-             [(ngModel)]="searchQuery"
-             (ngModelChange)="filterStudents()"
-             [ngModelOptions]="{standalone: true}"
-             placeholder="Type to search students...">
+      <input
+        matInput
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="filterStudents()"
+        [ngModelOptions]="{standalone: true}"
+        placeholder="Type to search students..."
+      />
     </mat-form-field>
 
     <!-- Select All Option -->
@@ -18,33 +20,56 @@
         (change)="toggleSelectAll()"
         (mouseup)="handleCheckboxBlur()"
         color="primary"
-        disableRipple>
+        disableRipple
+      >
         Select All
       </mat-checkbox>
     </div>
 
     <!-- Student List -->
-    <div *ngIf="showStudentList"
-         class="student-list-container mt-4"
-         [class.border-red-500]="grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid"
-         [class.border-2]="grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid"
-         style="max-height: 200px; min-height: 100px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 4px; padding: 8px; scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
-      <div *ngFor="let student of filteredStudents"
-           class="flex items-center px-4 py-2 cursor-pointer transition-colors duration-200"
-           [class.hover:bg-gray-100]="!isStudentSelected(student.id)"
-           [class.bg-blue-100]="isStudentSelected(student.id)"
-           (click)="toggleStudent(student.id)"
-           (keydown)="handleStudentKeydown($event, student.id)"
-           tabindex="0"
-           role="option"
-           [attr.aria-selected]="isStudentSelected(student.id)">
+    <div
+      *ngIf="showStudentList"
+      class="student-list-container mt-4"
+      [class.border-red-500]="
+        grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
+      "
+      [class.border-2]="
+        grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
+      "
+      style="
+        max-height: 200px;
+        min-height: 100px;
+        overflow-y: auto;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 8px;
+        scrollbar-width: thin;
+        scrollbar-color: #888 #f1f1f1;
+      "
+    >
+      <div
+        *ngFor="let student of filteredStudents"
+        class="flex items-center px-4 py-2 cursor-pointer transition-colors duration-200"
+        [class.hover:bg-gray-100]="!isStudentSelected(student.id)"
+        [class.bg-blue-100]="isStudentSelected(student.id)"
+        (click)="toggleStudent(student.id)"
+        (keydown)="handleStudentKeydown($event, student.id)"
+        tabindex="0"
+        role="option"
+        [attr.aria-selected]="isStudentSelected(student.id)"
+      >
         {{ student.name }} ({{ student.id }})
       </div>
     </div>
   </div>
 
   <!-- Student Selection Error -->
-  <div *ngIf="grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid" style="color: #f44336; font-size: 12px; margin-top: 4px; margin-bottom: 24px;">
+  <div
+    *ngIf="
+      grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
+    "
+    style="color: #f44336; font-size: 12px; margin-top: 4px; margin-bottom: 24px"
+  >
     Please select at least one student.
   </div>
 
@@ -54,11 +79,23 @@
       Extension Duration: <strong>{{ grantExtensionForm.get('extension')?.value }}</strong> week(s)
     </label>
 
-    <div [class.border-red-500]="grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid"
-         [class.border-2]="grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid"
-         [class.border]="grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid"
-         [class.rounded]="grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid"
-         [class.p-2]="grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid">
+    <div
+      [class.border-red-500]="
+        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
+      "
+      [class.border-2]="
+        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
+      "
+      [class.border]="
+        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
+      "
+      [class.rounded]="
+        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
+      "
+      [class.p-2]="
+        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
+      "
+    >
       <mat-slider
         min="1"
         max="4"
@@ -66,13 +103,18 @@
         tickInterval="5"
         thumbLabel
         class="w-full"
-        style="width: 100%; max-width: 600px; min-width: 300px;"
+        style="width: 100%; max-width: 600px; min-width: 300px"
       >
         <input matSliderThumb formControlName="extension" />
       </mat-slider>
     </div>
 
-    <mat-error *ngIf="grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid" class="mt-2">
+    <mat-error
+      *ngIf="
+        grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
+      "
+      class="mt-2"
+    >
       Please select a valid extension duration (1-4 weeks).
     </mat-error>
   </div>
@@ -88,8 +130,10 @@
       maxlength="300"
       placeholder="Explain why extension is needed (max 300 characters)"
     ></textarea>
-    <mat-hint align="end">{{grantExtensionForm.get('reason')?.value?.length || 0}}/300</mat-hint>
-    <mat-error *ngIf="grantExtensionForm.get('reason')?.touched && grantExtensionForm.get('reason')?.invalid">
+    <mat-hint align="end">{{ grantExtensionForm.get('reason')?.value?.length || 0 }}/300</mat-hint>
+    <mat-error
+      *ngIf="grantExtensionForm.get('reason')?.touched && grantExtensionForm.get('reason')?.invalid"
+    >
       Please provide a reason for the extension (max 300 characters).
     </mat-error>
   </mat-form-field>
@@ -102,4 +146,3 @@
     </button>
   </div>
 </form>
-

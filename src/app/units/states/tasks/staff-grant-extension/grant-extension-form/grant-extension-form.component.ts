@@ -1,19 +1,22 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ExtensionService } from 'src/app/api/services/extension.service';
-import { FormsModule } from '@angular/forms';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UserService } from 'src/app/api/models/doubtfire-model';
-import { finalize } from 'rxjs/operators';
-import { ExtensionServiceResult, ExtensionSummaryPayload } from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
+import {CommonModule} from '@angular/common';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSliderModule} from '@angular/material/slider';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {finalize} from 'rxjs/operators';
+import {UserService} from 'src/app/api/models/doubtfire-model';
+import {ExtensionService} from 'src/app/api/services/extension.service';
+import {
+  ExtensionServiceResult,
+  ExtensionSummaryPayload,
+} from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
 
 @Component({
   selector: 'f-staff-grant-extension-form',
@@ -27,9 +30,9 @@ import { ExtensionServiceResult, ExtensionSummaryPayload } from 'src/app/units/s
     MatSliderModule,
     MatButtonModule,
     FormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
-  templateUrl: './grant-extension-form.component.html'
+  templateUrl: './grant-extension-form.component.html',
 })
 export class StaffGrantExtensionFormComponent implements OnInit {
   @Output() extensionResult = new EventEmitter<ExtensionSummaryPayload>();
@@ -68,16 +71,16 @@ export class StaffGrantExtensionFormComponent implements OnInit {
 
   @Input() unitId!: number;
   @Input() taskDefinitionId!: number;
-  @Input() students: { id: number; name: string }[] = [];
-  filteredStudents: { id: number; name: string }[] = [];
+  @Input() students: {id: number; name: string}[] = [];
+  filteredStudents: {id: number; name: string}[] = [];
 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private extensionService: ExtensionService,
     private http: HttpClient,
-    private userService: UserService
-  ) { }
+    private userService: UserService,
+  ) {}
 
   // Build headers for API calls
   private buildHeaders(): HttpHeaders {
@@ -85,7 +88,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     const username = this.userService.currentUser?.username ?? '';
     return new HttpHeaders({
       'Auth-Token': authToken,
-      'Username': username
+      'Username': username,
     });
   }
 
@@ -93,22 +96,24 @@ export class StaffGrantExtensionFormComponent implements OnInit {
   private loadUnitStudents(): void {
     if (!this.unitId) return;
 
-    this.http.get<{ student: { id: number; first_name: string; last_name: string } }[]>(
-      `/api/students?unit_id=${this.unitId}`,
-      { headers: this.buildHeaders() }
-    ).subscribe({
-      next: (projects) => {
-        this.students = (projects ?? []).map(p => ({
-          id: p.student.id,
-          name: `${p.student.first_name} ${p.student.last_name}`
-        }));
-        this.filteredStudents = this.students;
-      },
-      error: () => {
-        this.students = [];
-        this.filteredStudents = [];
-      }
-    });
+    this.http
+      .get<{student: {id: number; first_name: string; last_name: string}}[]>(
+        `/api/students?unit_id=${this.unitId}`,
+        {headers: this.buildHeaders()},
+      )
+      .subscribe({
+        next: (projects) => {
+          this.students = (projects ?? []).map((p) => ({
+            id: p.student.id,
+            name: `${p.student.first_name} ${p.student.last_name}`,
+          }));
+          this.filteredStudents = this.students;
+        },
+        error: () => {
+          this.students = [];
+          this.filteredStudents = [];
+        },
+      });
   }
 
   // Initialize the reactive form with validators for each field
@@ -116,7 +121,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     this.grantExtensionForm = this.fb.group({
       students: [[], Validators.required],
       extension: [1, [Validators.required, Validators.min(1)]],
-      reason: ['', [Validators.required, Validators.maxLength(300)]]
+      reason: ['', [Validators.required, Validators.maxLength(300)]],
     });
 
     this.filteredStudents = this.students;
@@ -131,9 +136,10 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     if (!this.searchQuery.trim()) {
       this.filteredStudents = this.students;
     } else {
-      this.filteredStudents = this.students.filter(student =>
-        student.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        student.id.toString().includes(this.searchQuery)
+      this.filteredStudents = this.students.filter(
+        (student) =>
+          student.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          student.id.toString().includes(this.searchQuery),
       );
     }
   }
@@ -159,7 +165,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     if (this.selectedStudents.length === this.filteredStudents.length) {
       this.selectedStudents = [];
     } else {
-      this.selectedStudents = this.filteredStudents.map(student => student.id);
+      this.selectedStudents = this.filteredStudents.map((student) => student.id);
     }
     this.updateFormStudents();
   }
@@ -167,7 +173,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
   // Update form control with selected students
   updateFormStudents(): void {
     this.grantExtensionForm.patchValue({
-      students: this.selectedStudents
+      students: this.selectedStudents,
     });
   }
 
@@ -201,20 +207,23 @@ export class StaffGrantExtensionFormComponent implements OnInit {
         student_ids: this.selectedStudents,
         task_definition_id: this.taskDefinitionId,
         weeks_requested: formData.extension,
-        comment: formData.reason
+        comment: formData.reason,
       };
 
       // Submit the extension request
-      this.extensionService.grantExtension(this.unitId, payload)
+      this.extensionService
+        .grantExtension(this.unitId, payload)
         .pipe(
-          finalize(() => { this.isSubmitting = false; }) // added this: always unset submitting flag
+          finalize(() => {
+            this.isSubmitting = false;
+          }), // added this: always unset submitting flag
         )
         .subscribe({
           next: (results: ExtensionServiceResult) => {
             this.snackBar.open('Extensions granted successfully!', 'Close', {
               duration: 3000,
               horizontalPosition: 'center',
-              verticalPosition: 'top'
+              verticalPosition: 'top',
             });
 
             // Build summary payload including weeksRequested and createdAt timestamp
@@ -222,7 +231,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
               results: results,
               weeksRequested: payload.weeks_requested,
               createdAt: new Date().toISOString(),
-              taskDefinitionId: this.taskDefinitionId!
+              taskDefinitionId: this.taskDefinitionId!,
             };
 
             // Emit the detailed summary so parent can show it
@@ -230,63 +239,62 @@ export class StaffGrantExtensionFormComponent implements OnInit {
 
             // Reset form
             this.resetForm();
+          },
+          error: (error) => {
+            console.error('Error granting extensions:', error);
 
-        },
-        error: (error) => {
-          console.error('Error granting extensions:', error);
+            // Extract specific error message from the API response
+            let errorMessage = 'Error granting extensions. Please try again.';
 
-          // Extract specific error message from the API response
-          let errorMessage = 'Error granting extensions. Please try again.';
-
-          // Check if error is directly a string (most common case)
-          if (typeof error === 'string') {
-            errorMessage = error;
-          } else if (error?.error) {
-            // Check if error.error is a string
-            if (typeof error.error === 'string') {
-              errorMessage = error.error;
-            } else if (error.error.error) {
-              errorMessage = error.error.error;
-            } else if (error.error.message) {
-              errorMessage = error.error.message;
+            // Check if error is directly a string (most common case)
+            if (typeof error === 'string') {
+              errorMessage = error;
+            } else if (error?.error) {
+              // Check if error.error is a string
+              if (typeof error.error === 'string') {
+                errorMessage = error.error;
+              } else if (error.error.error) {
+                errorMessage = error.error.error;
+              } else if (error.error.message) {
+                errorMessage = error.error.message;
+              }
+            } else if (error?.message) {
+              errorMessage = error.message;
             }
-          } else if (error?.message) {
-            errorMessage = error.message;
-          }
 
-          const errorResults = error?.error?.results;
-          if (errorResults) {
-            const summaryPayload: ExtensionSummaryPayload = {
-              results: errorResults,
-              weeksRequested: payload.weeks_requested,
-              createdAt: new Date().toISOString(),
-              taskDefinitionId: this.taskDefinitionId!
-            };
-            this.extensionResult.emit(summaryPayload);
-          }
+            const errorResults = error?.error?.results;
+            if (errorResults) {
+              const summaryPayload: ExtensionSummaryPayload = {
+                results: errorResults,
+                weeksRequested: payload.weeks_requested,
+                createdAt: new Date().toISOString(),
+                taskDefinitionId: this.taskDefinitionId!,
+              };
+              this.extensionResult.emit(summaryPayload);
+            }
 
-          this.snackBar.open(errorMessage, 'Close', {
-            duration: 7000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: ['error-snackbar']
-          });
-        }
-      });
+            this.snackBar.open(errorMessage, 'Close', {
+              duration: 7000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: ['error-snackbar'],
+            });
+          },
+        });
     } else {
       // Show validation error message
       this.snackBar.open('Please fill in all required fields correctly.', 'Close', {
         duration: 4000,
         horizontalPosition: 'center',
         verticalPosition: 'top',
-        panelClass: ['error-snackbar']
+        panelClass: ['error-snackbar'],
       });
     }
   }
 
   // Mark all form controls as touched to trigger validation display
   private markFormGroupTouched(): void {
-    Object.keys(this.grantExtensionForm.controls).forEach(key => {
+    Object.keys(this.grantExtensionForm.controls).forEach((key) => {
       const control = this.grantExtensionForm.get(key);
       control?.markAsTouched();
     });
@@ -297,7 +305,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
     this.grantExtensionForm.reset({
       students: [],
       extension: 1,
-      reason: ''
+      reason: '',
     });
     this.selectedStudents = [];
     this.searchQuery = '';

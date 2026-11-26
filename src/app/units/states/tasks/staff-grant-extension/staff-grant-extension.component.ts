@@ -1,19 +1,19 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { Unit } from 'src/app/api/models/unit';
-import { UnitRole } from 'src/app/api/models/unit-role';
-import { TaskDefinition } from 'src/app/api/models/doubtfire-model';
-import { GlobalStateService } from 'src/app/projects/states/index/global-state.service';
-import { UIRouter } from '@uirouter/angular';
-import { UnitService } from 'src/app/api/models/doubtfire-model';
-import { ExtensionSummaryPayload } from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
-import { TasksViewerService } from '../tasks-viewer.service';
+import {UIRouter} from '@uirouter/angular';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {BehaviorSubject, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {TaskDefinition} from 'src/app/api/models/doubtfire-model';
+import {UnitService} from 'src/app/api/models/doubtfire-model';
+import {Unit} from 'src/app/api/models/unit';
+import {UnitRole} from 'src/app/api/models/unit-role';
+import {GlobalStateService} from 'src/app/projects/states/index/global-state.service';
+import {ExtensionSummaryPayload} from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
+import {TasksViewerService} from '../tasks-viewer.service';
 
 @Component({
   selector: 'f-staff-grant-extension',
   templateUrl: './staff-grant-extension.component.html',
-  styleUrls: ['./staff-grant-extension.component.scss']
+  styleUrls: ['./staff-grant-extension.component.scss'],
 })
 export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
   @Input() unit?: Unit;
@@ -40,47 +40,45 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Subscribe to task definition selection changes
-    this.taskViewerService.selectedTaskDef
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(taskDef => {
-        this.selectedTaskDefinition = taskDef;
-        this.isFormActive = !!taskDef;
+    this.taskViewerService.selectedTaskDef.pipe(takeUntil(this.destroy$)).subscribe((taskDef) => {
+      this.selectedTaskDefinition = taskDef;
+      this.isFormActive = !!taskDef;
 
-        if (taskDef) {
-          this.taskDefinitionId = taskDef.id;
-          const saved = this.extensionSummaries.get(taskDef.id);
-          if (saved) {
-            this.extensionSummary = saved;
-            this.showSummary = true;
-          } else {
-            this.extensionSummary = null;
-            this.showSummary = false;
-          }
+      if (taskDef) {
+        this.taskDefinitionId = taskDef.id;
+        const saved = this.extensionSummaries.get(taskDef.id);
+        if (saved) {
+          this.extensionSummary = saved;
+          this.showSummary = true;
         } else {
           this.extensionSummary = null;
           this.showSummary = false;
         }
-      });
-
-    // Get current unit from global state
-    this.globalState.currentViewAndEntitySubject$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(state => {
-      if (state && state.entity) {
-        let newUnit: Unit | undefined;
-
-        // Handle both cases: Unit OR UnitRole
-        if (state.entity instanceof Unit) {
-          newUnit = state.entity;
-        } else if (state.entity instanceof UnitRole) {
-          newUnit = state.entity.unit;
-        }
-
-        if (newUnit) {
-          this.loadUnit(newUnit.id);
-        }
+      } else {
+        this.extensionSummary = null;
+        this.showSummary = false;
       }
     });
+
+    // Get current unit from global state
+    this.globalState.currentViewAndEntitySubject$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state) => {
+        if (state && state.entity) {
+          let newUnit: Unit | undefined;
+
+          // Handle both cases: Unit OR UnitRole
+          if (state.entity instanceof Unit) {
+            newUnit = state.entity;
+          } else if (state.entity instanceof UnitRole) {
+            newUnit = state.entity.unit;
+          }
+
+          if (newUnit) {
+            this.loadUnit(newUnit.id);
+          }
+        }
+      });
 
     // If no unit in global state, try to get it from the current URL
     const currentUrl = this.router.globals.current.url;
@@ -93,9 +91,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
 
     // If still no unit, try to get the first available unit for the user
     if (!this.unit) {
-      this.globalState.unitRolesSubject.pipe(
-        takeUntil(this.destroy$)
-      ).subscribe(unitRoles => {
+      this.globalState.unitRolesSubject.pipe(takeUntil(this.destroy$)).subscribe((unitRoles) => {
         if (unitRoles && unitRoles.length > 0 && !this.unit) {
           const firstUnitRole = unitRoles[0];
           this.unit = firstUnitRole.unit;
@@ -122,17 +118,15 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
     this.extensionSummary = null;
     this.showSummary = false;
 
-
     // Save the payload for that specific task
-    this.extensionSummaries.set(tdId, payload)
+    this.extensionSummaries.set(tdId, payload);
 
     if (this.selectedTaskDefinition && this.selectedTaskDefinition.id === tdId) {
-    setTimeout(() => {
-      this.extensionSummary = payload;
-      this.showSummary = true;
-    }, 0);
-  }
-
+      setTimeout(() => {
+        this.extensionSummary = payload;
+        this.showSummary = true;
+      }, 0);
+    }
   }
 
   onSummaryDismissed(): void {
@@ -164,7 +158,7 @@ export class StaffGrantExtensionComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           console.error('Error loading unit:', err);
-        }
+        },
       });
     }
   }

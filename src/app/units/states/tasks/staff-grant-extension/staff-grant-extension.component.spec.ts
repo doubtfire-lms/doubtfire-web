@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { StaffGrantExtensionComponent } from './staff-grant-extension.component';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { TaskDefinition } from 'src/app/api/models/doubtfire-model';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatIconModule} from '@angular/material/icon';
+import {TaskDefinition} from 'src/app/api/models/doubtfire-model';
+import {StaffGrantExtensionComponent} from './staff-grant-extension.component';
 
 describe('StaffGrantExtensionComponent', () => {
   let component: StaffGrantExtensionComponent;
@@ -10,13 +10,8 @@ describe('StaffGrantExtensionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        StaffGrantExtensionComponent,
-        MatDialogModule,
-        MatIconModule
-      ]
-    })
-    .compileComponents();
+      imports: [StaffGrantExtensionComponent, MatDialogModule, MatIconModule],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(StaffGrantExtensionComponent);
     component = fixture.componentInstance;
@@ -35,7 +30,7 @@ describe('StaffGrantExtensionComponent', () => {
   it('should enable form when task is selected', () => {
     const mockTaskDefinition = {
       id: 1,
-      name: 'Test Task'
+      name: 'Test Task',
     } as unknown as TaskDefinition;
 
     component.selectedTaskDefinition$.next(mockTaskDefinition);
@@ -48,7 +43,7 @@ describe('StaffGrantExtensionComponent', () => {
     // First select a task
     const mockTaskDefinition = {
       id: 1,
-      name: 'Test Task'
+      name: 'Test Task',
     } as unknown as TaskDefinition;
     component.selectedTaskDefinition$.next(mockTaskDefinition);
 

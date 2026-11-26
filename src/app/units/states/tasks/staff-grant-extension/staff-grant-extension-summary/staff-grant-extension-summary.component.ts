@@ -1,12 +1,11 @@
 // staff-grant-extension-summary.component.ts
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { ExtensionSummaryPayload } from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
-
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {ExtensionSummaryPayload} from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
 
 @Component({
   selector: 'f-staff-grant-extension-summary',
   templateUrl: './staff-grant-extension-summary.component.html',
-  styleUrls: ['./staff-grant-extension-summary.component.scss']
+  styleUrls: ['./staff-grant-extension-summary.component.scss'],
 })
 export class StaffGrantExtensionSummaryComponent implements OnInit, OnDestroy {
   @Input() summary!: ExtensionSummaryPayload | null;
@@ -21,13 +20,18 @@ export class StaffGrantExtensionSummaryComponent implements OnInit, OnDestroy {
   private timeoutId: ReturnType<typeof setTimeout> | null = null;
   private intervalId: ReturnType<typeof setInterval> | null = null;
 
-
   ngOnInit(): void {
     if (!this.summary) return;
 
     const createdAt = this.summary.createdAt ? new Date(this.summary.createdAt) : new Date();
-    this.expiryDate = new Date(createdAt.getTime() + (this.summary.weeksRequested * 7 * 24 * 60 * 60 * 1000));
-    this.expiryFormatted = this.expiryDate.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    this.expiryDate = new Date(
+      createdAt.getTime() + this.summary.weeksRequested * 7 * 24 * 60 * 60 * 1000,
+    );
+    this.expiryFormatted = this.expiryDate.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
 
     this.successCount = (this.summary.results?.successful ?? []).length;
     this.failedCount = (this.summary.results?.failed ?? []).length;
@@ -60,12 +64,15 @@ export class StaffGrantExtensionSummaryComponent implements OnInit, OnDestroy {
       this.timeoutId = setTimeout(() => this.dismiss(), msUntilExpiry);
     } else {
       // for long durations, poll daily until expiry
-      this.intervalId = setInterval(() => {
-        if (Date.now() >= (this.expiryDate!.getTime())) {
-          this.clearTimers();
-          this.dismiss();
-        }
-      }, 24 * 60 * 60 * 1000);
+      this.intervalId = setInterval(
+        () => {
+          if (Date.now() >= this.expiryDate!.getTime()) {
+            this.clearTimers();
+            this.dismiss();
+          }
+        },
+        24 * 60 * 60 * 1000,
+      );
     }
   }
 

@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { StaffGrantExtensionFormComponent } from './grant-extension-form.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {StaffGrantExtensionFormComponent} from './grant-extension-form.component';
 
 describe('StaffGrantExtensionFormComponent', () => {
   let component: StaffGrantExtensionFormComponent;
@@ -7,9 +7,8 @@ describe('StaffGrantExtensionFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StaffGrantExtensionFormComponent]
-    })
-    .compileComponents();
+      imports: [StaffGrantExtensionFormComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(StaffGrantExtensionFormComponent);
     component = fixture.componentInstance;

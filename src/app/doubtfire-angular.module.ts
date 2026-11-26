@@ -413,6 +413,9 @@ import {StaffTaskListComponent} from './units/states/tasks/inbox/directives/staf
 import {TaskClaimComponent} from './units/states/tasks/inbox/directives/task-claim/task-claim.component';
 import {InboxComponent} from './units/states/tasks/inbox/inbox.component';
 import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
+import {StaffGrantExtensionFormComponent} from './units/states/tasks/staff-grant-extension/grant-extension-form/grant-extension-form.component';
+import {StaffGrantExtensionSummaryComponent} from './units/states/tasks/staff-grant-extension/staff-grant-extension-summary/staff-grant-extension-summary.component';
+import {StaffGrantExtensionComponent} from './units/states/tasks/staff-grant-extension/staff-grant-extension.component';
 import {FTaskDetailsViewComponent} from './units/task-viewer/directives/task-details-view/task-details-view.component';
 import {FTaskSheetViewComponent} from './units/task-viewer/directives/task-sheet-view/task-sheet-view.component';
 import {FUnitTaskListComponent} from './units/task-viewer/directives/unit-task-list/unit-task-list.component';
@@ -435,9 +438,6 @@ const MY_DATE_FORMAT = {
     monthYearA11yLabel: 'MMMM yyyy',
   },
 };
-import {StaffGrantExtensionComponent} from './units/states/tasks/staff-grant-extension/staff-grant-extension.component';
-import {StaffGrantExtensionFormComponent} from './units/states/tasks/staff-grant-extension/grant-extension-form/grant-extension-form.component';
-import {StaffGrantExtensionSummaryComponent} from './units/states/tasks/staff-grant-extension/staff-grant-extension-summary/staff-grant-extension-summary.component';
 
 const DOUBTFIRE_GANTT_LOCALE = 'doubtfire-en-au';
 

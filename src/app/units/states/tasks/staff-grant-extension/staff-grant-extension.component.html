@@ -26,8 +26,12 @@
     <div class="panel-container" [class.disabled]="!isFormActive">
       <div class="panel-header">
         <h3>Grant Extension</h3>
-        <p *ngIf="selectedTaskDefinition" class="text-muted">Granting extension for: {{ selectedTaskDefinition.name }}</p>
-        <p *ngIf="!selectedTaskDefinition" class="text-muted">Select a task from the left to enable the form</p>
+        <p *ngIf="selectedTaskDefinition" class="text-muted">
+          Granting extension for: {{ selectedTaskDefinition.name }}
+        </p>
+        <p *ngIf="!selectedTaskDefinition" class="text-muted">
+          Select a task from the left to enable the form
+        </p>
       </div>
 
       <div class="form-container">
@@ -42,7 +46,8 @@
           <f-staff-grant-extension-form
             (extensionResult)="onExtensionResult($event)"
             [unitId]="unitId"
-            [taskDefinitionId]="taskDefinitionId">
+            [taskDefinitionId]="taskDefinitionId"
+          >
           </f-staff-grant-extension-form>
         </div>
         <div *ngIf="!isFormActive || !selectedTaskDefinition" class="form-disabled-message">

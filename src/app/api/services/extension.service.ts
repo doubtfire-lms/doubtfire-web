@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { UserService } from 'src/app/api/models/doubtfire-model';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {UserService} from 'src/app/api/models/doubtfire-model';
 
 interface GrantExtensionPayload {
   student_ids: number[];
@@ -11,12 +11,12 @@ interface GrantExtensionPayload {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExtensionService {
   constructor(
     private http: HttpClient,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   grantExtension(unitId: number, payload: GrantExtensionPayload): Observable<any> {
@@ -25,13 +25,9 @@ export class ExtensionService {
 
     const headers = new HttpHeaders({
       'Auth-Token': authToken,
-      'Username': username
+      'Username': username,
     });
 
-    return this.http.post(
-      `/api/units/${unitId}/staff-grant-extension`,
-      payload,
-      { headers }
-    );
+    return this.http.post(`/api/units/${unitId}/staff-grant-extension`, payload, {headers});
   }
 }
