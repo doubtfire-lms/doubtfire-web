@@ -10,7 +10,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {finalize} from 'rxjs/operators';
-import {ProjectService, Unit, UnitService} from 'src/app/api/models/doubtfire-model';
+import {Project, ProjectService, Unit, UnitService} from 'src/app/api/models/doubtfire-model';
 import {
   ExtensionServiceResult,
   ExtensionSummaryPayload,
@@ -42,8 +42,8 @@ export class StaffGrantExtensionFormComponent implements OnInit {
 
   @Input({required: true}) unit!: Unit;
   @Input() taskDefinitionId!: number;
-  @Input() students: {id: number; name: string}[] = [];
-  filteredStudents: {id: number; name: string}[] = [];
+  @Input() students: Project[] = [];
+  filteredStudents: Project[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -60,10 +60,7 @@ export class StaffGrantExtensionFormComponent implements OnInit {
 
     this.projectService.loadStudents(this.unit).subscribe({
       next: (projects) => {
-        this.students = (projects ?? []).map((project) => ({
-          id: project.student.id,
-          name: `${project.student.firstName} ${project.student.lastName}`,
-        }));
+        this.students = projects ?? [];
         this.filteredStudents = this.students;
       },
       error: () => {
@@ -90,14 +87,11 @@ export class StaffGrantExtensionFormComponent implements OnInit {
 
   // Filters students based on search query
   filterStudents(): void {
-    if (!this.searchQuery.trim()) {
+    const searchQuery = this.searchQuery.trim();
+    if (!searchQuery) {
       this.filteredStudents = this.students;
     } else {
-      this.filteredStudents = this.students.filter(
-        (student) =>
-          student.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          student.id.toString().includes(this.searchQuery),
-      );
+      this.filteredStudents = this.students.filter((student) => student.matches(searchQuery));
     }
   }
 

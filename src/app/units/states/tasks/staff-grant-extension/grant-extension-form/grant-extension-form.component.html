@@ -33,7 +33,7 @@
             [checked]="isStudentSelected(student.id)"
             (change)="toggleStudent(student.id)"
           >
-            {{ student.name }} ({{ student.id }})
+            {{ student.student.name }} ({{ student.id }})
           </mat-checkbox>
         } @empty {
           <p class="my-3 text-sm text-gray-600">No students match your search.</p>
