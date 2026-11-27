@@ -69,7 +69,7 @@
     "ngx-entity-service": "^0.0.44",
     "ngx-monaco-editor-v2-alternative": "^22.1.0",
     "ngx-skeleton-loader": "^14.0.0",
-    "postcss": "^8.5.31",
+    "postcss": "^8.5.33",
     "qrcode": "^1.5.4",
     "rxjs": "~7.8.2",
     "tslib": "^2.9.1",
