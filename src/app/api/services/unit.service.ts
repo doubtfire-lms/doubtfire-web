@@ -1,4 +1,4 @@
-import {CachedEntityService} from 'ngx-entity-service';
+import {CachedEntityService, RequestOptions} from 'ngx-entity-service';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, finalize, of, shareReplay, tap} from 'rxjs';
@@ -17,6 +17,10 @@ import {SidekiqJob} from 'src/app/api/models/sidekiq-job';
 import {AppInjector} from 'src/app/app-injector';
 import API_URL from 'src/app/config/constants/apiUrl';
 import {DoubtfireConstants} from 'src/app/config/constants/doubtfire-constants';
+import {
+  ExtensionServiceResult,
+  GrantExtensionPayload,
+} from 'src/app/units/states/tasks/staff-grant-extension/models/extension-results.model';
 import {GroupService} from './group.service';
 import {MappingFunctions} from './mapping-fn';
 import {TaskDefinitionService} from './task-definition.service';
@@ -64,6 +68,7 @@ export interface TaskCompletionStats {
 export class UnitService extends CachedEntityService<Unit> {
   protected readonly endpointFormat = 'units/:id:';
   public readonly rolloverEndpoint = 'units/:id:/rollover';
+  private readonly staffGrantExtensionEndpointFormat = 'units/:unitId:/staff-grant-extension';
   private readonly detailRequests: Map<number, Observable<Unit>> = new Map();
   private readonly unitsWithDetails: WeakSet<Unit> = new WeakSet();
 
@@ -356,6 +361,18 @@ export class UnitService extends CachedEntityService<Unit> {
       'gradeDefinitions',
       'enforceFeedbackBeforeDiscussedInClass',
     );
+  }
+
+  public grantExtension(
+    unit: Unit,
+    payload: GrantExtensionPayload,
+  ): Observable<ExtensionServiceResult> {
+    const options: RequestOptions<Unit> = {
+      endpointFormat: this.staffGrantExtensionEndpointFormat,
+      body: payload,
+    };
+
+    return this.post<ExtensionServiceResult>({unitId: unit.id}, options);
   }
 
   /**

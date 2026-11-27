@@ -1,0 +1,53 @@
+<section aria-label="Extension results" class="border-y border-gray-200 py-4">
+  <div class="mb-3">
+    <h4 class="mb-1 text-base font-medium">Extension results</h4>
+    <p class="m-0 text-sm text-gray-600">
+      Granted {{ summary.weeksRequested }} {{ summary.weeksRequested === 1 ? 'week' : 'weeks' }} to
+      {{ successCount }} student{{ successCount === 1 ? '' : 's' }}.
+    </p>
+  </div>
+
+  <div class="mb-4 grid grid-cols-3 gap-2 text-center">
+    <div class="rounded-lg bg-gray-50 p-2">
+      <div class="text-lg font-medium">{{ successCount }}</div>
+      <div class="text-xs text-gray-600">Granted</div>
+    </div>
+    <div class="rounded-lg bg-gray-50 p-2">
+      <div class="text-lg font-medium">{{ failedCount }}</div>
+      <div class="text-xs text-gray-600">Failed</div>
+    </div>
+    <div class="rounded-lg bg-gray-50 p-2">
+      <div class="text-lg font-medium">{{ skippedCount }}</div>
+      <div class="text-xs text-gray-600">Skipped</div>
+    </div>
+  </div>
+
+  @if (successCount) {
+    <h5 class="mb-1 text-sm font-medium">Granted extensions</h5>
+    <ul class="mb-3 list-inside list-disc text-sm">
+      @for (result of summary.results.successful; track result.student_id) {
+        <li>Student {{ result.student_id }}: {{ result.extension_response }}</li>
+      }
+    </ul>
+  }
+  @if (failedCount) {
+    <h5 class="mb-1 text-sm font-medium">Failed</h5>
+    <ul class="mb-3 list-inside list-disc text-sm">
+      @for (result of summary.results.failed; track result.student_id) {
+        <li>Student {{ result.student_id }}: {{ result.error }}</li>
+      }
+    </ul>
+  }
+  @if (skippedCount) {
+    <h5 class="mb-1 text-sm font-medium">Skipped</h5>
+    <ul class="list-inside list-disc text-sm">
+      @for (result of summary.results.skipped; track result.student_id) {
+        <li>Student {{ result.student_id }}: {{ result.reason }}</li>
+      }
+    </ul>
+  }
+
+  <div class="mt-2 flex justify-end">
+    <button mat-button type="button" (click)="dismiss()">Dismiss</button>
+  </div>
+</section>

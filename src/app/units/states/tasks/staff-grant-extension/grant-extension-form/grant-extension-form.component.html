@@ -1,0 +1,90 @@
+<form class="flex flex-col gap-4" [formGroup]="grantExtensionForm" (ngSubmit)="submitForm()">
+  <section aria-labelledby="student-selection-title">
+    <div class="mb-2 flex items-center justify-between gap-2">
+      <h3 class="m-0 text-base font-medium" id="student-selection-title">Students</h3>
+      <span class="text-sm text-gray-600">{{ selectedStudents.length }} selected</span>
+    </div>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Find students</mat-label>
+      <input
+        matInput
+        placeholder="Search by name or ID"
+        [ngModelOptions]="{standalone: true}"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="filterStudents()"
+      />
+    </mat-form-field>
+
+    <div class="overflow-hidden rounded-lg border border-gray-200">
+      <div class="border-b border-gray-200 px-3 py-2">
+        <mat-checkbox
+          [checked]="allFilteredSelected"
+          [disabled]="!filteredStudents.length"
+          (change)="toggleSelectAll()"
+        >
+          Select all
+        </mat-checkbox>
+      </div>
+      <div aria-label="Students" class="max-h-56 overflow-y-auto px-3 py-1" role="group">
+        @for (student of filteredStudents; track student.id) {
+          <mat-checkbox
+            class="block py-1"
+            [checked]="isStudentSelected(student.id)"
+            (change)="toggleStudent(student.id)"
+          >
+            {{ student.student.name }} ({{ student.id }})
+          </mat-checkbox>
+        } @empty {
+          <p class="my-3 text-sm text-gray-600">No students match your search.</p>
+        }
+      </div>
+    </div>
+    @if (
+      grantExtensionForm.get('students')?.touched && grantExtensionForm.get('students')?.invalid
+    ) {
+      <mat-error class="mt-2">Select at least one student.</mat-error>
+    }
+  </section>
+
+  <section aria-labelledby="extension-duration-title">
+    <div class="flex items-center justify-between gap-2">
+      <h3 class="m-0 text-base font-medium" id="extension-duration-title">Extension duration</h3>
+      <span class="text-sm font-medium">
+        {{ grantExtensionForm.get('extension')?.value }}
+        {{ grantExtensionForm.get('extension')?.value === 1 ? 'week' : 'weeks' }}
+      </span>
+    </div>
+    <mat-slider class="w-full" discrete max="4" min="1" step="1">
+      <input aria-label="Extension duration in weeks" formControlName="extension" matSliderThumb />
+    </mat-slider>
+    @if (
+      grantExtensionForm.get('extension')?.touched && grantExtensionForm.get('extension')?.invalid
+    ) {
+      <mat-error>Select a duration between one and four weeks.</mat-error>
+    }
+  </section>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Reason</mat-label>
+    <textarea
+      formControlName="reason"
+      matInput
+      maxlength="300"
+      placeholder="Explain why the extension is needed"
+      required
+      rows="4"
+    ></textarea>
+    <mat-hint align="end">{{ grantExtensionForm.get('reason')?.value?.length || 0 }}/300</mat-hint>
+    @if (grantExtensionForm.get('reason')?.touched && grantExtensionForm.get('reason')?.invalid) {
+      <mat-error>Provide a reason of no more than 300 characters.</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="flex justify-end gap-2">
+    <button mat-button type="button" [disabled]="isSubmitting" (click)="resetForm()">Reset</button>
+    <button color="primary" mat-flat-button type="submit" [disabled]="isSubmitting">
+      Task extension
+    </button>
+  </div>
+</form>

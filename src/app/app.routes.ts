@@ -33,6 +33,7 @@ import {PortfoliosComponent} from './units/states/portfolios/portfolios.componen
 import {RolloverComponent} from './units/states/rollover/rollover.component';
 import {StudentsListComponent} from './units/states/students-list/students-list.component';
 import {UnitTaskInboxStateComponent} from './units/states/tasks/inbox/unit-task-inbox-state.component';
+import {StaffGrantExtensionComponent} from './units/states/tasks/staff-grant-extension/staff-grant-extension.component';
 import {TaskViewerStateComponent} from './units/task-viewer/task-viewer-state.component';
 import {resolveUnitCodeContent} from './units/unit-code-content.guard';
 import {UnitRootStateComponent} from './units/unit-root-state.component';
@@ -288,6 +289,18 @@ export const routes: Routes = [
               task: 'Check-in',
               roleWhitelist: ['Admin', 'Auditor', 'Tutor', 'Convenor'],
             },
+          },
+          {
+            path: 'task-extensions',
+            component: StaffGrantExtensionComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Task Extensions', roleWhitelist: ['Tutor', 'Convenor', 'Admin']},
+          },
+          {
+            path: 'task-extensions/:taskAbbreviation',
+            component: StaffGrantExtensionComponent,
+            canActivate: [roleWhitelistGuard],
+            data: {task: 'Task Extensions', roleWhitelist: ['Tutor', 'Convenor', 'Admin']},
           },
           {
             path: 'tasks',
