@@ -343,6 +343,7 @@ import {StackedAreaStatusChartComponent} from './units/states/analytics/directiv
 import {TargetGradeSankeyComponent} from './units/states/analytics/directives/charts/target-grade-sankey/target-grade-sankey.component';
 import {TaskStatusSummaryChartsComponent} from './units/states/analytics/directives/charts/task-status-summary-charts/task-status-summary-charts.component';
 import {UnitAnalyticsComponent} from './units/states/analytics/unit-analytics-route.component';
+import {RoomTableMapperComponent} from './units/states/edit/directives/room-table-mapper/room-table-mapper.component';
 import {ChangeTargetGradeActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/change-target-grade-action/change-target-grade-action.component';
 import {CommunicationActionsComponent} from './units/states/edit/directives/unit-communications-editor/actions/communication-actions.component';
 import {EmailStaffActionComponent} from './units/states/edit/directives/unit-communications-editor/actions/email-staff-action/email-staff-action.component';
@@ -833,6 +834,7 @@ const DEFAULT_TOOLTIP_OPTIONS: MatTooltipDefaultOptions = {
     },
   ],
   imports: [
+    RoomTableMapperComponent,
     FlexLayoutModule,
     BrowserModule,
     BrowserAnimationsModule,

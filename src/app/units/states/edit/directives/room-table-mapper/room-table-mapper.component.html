@@ -1,0 +1,88 @@
+<section aria-label="Room table map" class="my-6">
+  <div class="flex flex-wrap items-center gap-3">
+    <h3 class="m-0">Room table map</h3>
+    <input
+      #fileInput
+      accept="image/png,image/jpeg"
+      hidden
+      type="file"
+      (change)="selectPlan(fileInput)"
+    />
+    <button mat-stroked-button type="button" [disabled]="loading()" (click)="fileInput.click()">
+      {{ loading() ? 'Opening image…' : 'Upload floor plan' }}
+    </button>
+    @if (editing()) {
+      <button mat-button type="button" [disabled]="!tables().length" (click)="undo()">
+        Undo last table
+      </button>
+      <button
+        mat-flat-button
+        type="button"
+        [disabled]="!tables().length"
+        (click)="editing.set(false)"
+      >
+        Done
+      </button>
+    } @else if (plan()) {
+      <button mat-button type="button" (click)="editing.set(true)">Edit tables</button>
+    }
+  </div>
+  @if (error()) {
+    <p role="alert">{{ error() }}</p>
+  }
+  @if (plan(); as floorPlan) {
+    @if (editing()) {
+      <p>Click the centre of each table in numbering order.</p>
+    }
+    <div
+      class="mt-3 w-full max-w-2xl"
+      [style.max-width]="'min(42rem, ' + (60 * floorPlan.width) / floorPlan.height + 'vh)'"
+    >
+      @if (editing()) {
+        @let radius = floorPlan.width * 0.015;
+        <svg
+          aria-label="Floor plan with numbered tables"
+          class="block w-full cursor-crosshair"
+          role="img"
+          [attr.viewBox]="'0 0 ' + floorPlan.width + ' ' + floorPlan.height"
+          (click)="addTable($event)"
+        >
+          <image
+            [attr.height]="floorPlan.height"
+            [attr.href]="floorPlan.url"
+            [attr.width]="floorPlan.width"
+          />
+          @for (table of tables(); track $index) {
+            <g
+              [attr.transform]="
+                'translate(' + table.x * floorPlan.width + ' ' + table.y * floorPlan.height + ')'
+              "
+            >
+              <circle
+                fill="#153c5c"
+                stroke="white"
+                [attr.r]="radius"
+                [attr.stroke-width]="radius * 0.12"
+              />
+              <text
+                dominant-baseline="central"
+                fill="white"
+                font-weight="bold"
+                text-anchor="middle"
+                [attr.font-size]="radius"
+              >
+                {{ $index + 1 }}
+              </text>
+            </g>
+          }
+        </svg>
+      } @else {
+        <div
+          #preview
+          role="img"
+          [attr.aria-label]="'Room diagram with ' + tables().length + ' numbered tables'"
+        ></div>
+      }
+    </div>
+  }
+</section>
