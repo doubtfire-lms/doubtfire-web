@@ -108,7 +108,7 @@
     "npm-run-all2": "^9.1.0",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.9.10",
-    "sass": "^1.107.1",
+    "sass": "^1.108.2",
     "tailwindcss": "^4.3.4",
     "ts-node": "~10.9",
     "typescript": "~6.0.3",
